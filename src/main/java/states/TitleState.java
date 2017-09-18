@@ -5,7 +5,7 @@ import packets.Packet;
 
 import java.lang.*;
 
-public class TitleState extends State {
+public class TitleState extends AbstractState {
   public TitleState(PendingStack stack) {
       super(stack);
       System.out.println("TitleState created");

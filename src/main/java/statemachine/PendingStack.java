@@ -1,10 +1,10 @@
 package statemachine;
 
-import states.AbstractState;
+import states.State;
 import packets.Packet;
 
 public interface PendingStack {
-    void pushState(AbstractState.StateId stateId);
+    void pushState(State.StateId stateId);
     void popState();
     void clearState();
     void update();

@@ -5,7 +5,7 @@ import packets.Packet;
 
 import java.lang.*;
 
-public class CharacterListState extends State {
+public class CharacterListState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public CharacterListState(PendingStack stack) {
         super(stack);

@@ -5,7 +5,7 @@ import packets.Packet;
 
 import java.lang.*;
 
-public class DungeonState extends State {
+public class DungeonState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public DungeonState(PendingStack stack) {
         super(stack);

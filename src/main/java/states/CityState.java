@@ -5,7 +5,7 @@ import packets.Packet;
 
 import java.lang.*;
 
-public class CityState extends State {
+public class CityState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public CityState(PendingStack stack) {
         super(stack);

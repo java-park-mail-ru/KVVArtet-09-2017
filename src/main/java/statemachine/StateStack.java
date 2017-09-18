@@ -1,6 +1,6 @@
 package statemachine;
 
-import states.AbstractState;
+import states.State;
 import states.StateFactory;
 import packets.Packet;
 
@@ -12,7 +12,7 @@ import java.lang.*;
 public class StateStack implements PendingStack {
 
     @Override
-    public void pushState(AbstractState.StateId stateId) {
+    public void pushState(State.StateId stateId) {
         this.pendingChanges.add(new PendingChange(StackActions.SA_PUSH, stateId));
         final String stateName = stateId.toString();
         System.out.println("push request for state " + stateName + " enqueued");
@@ -32,7 +32,7 @@ public class StateStack implements PendingStack {
 
     @Override
     public void update() {
-        for (AbstractState state : this.stack) {
+        for (State state : this.stack) {
             System.out.print("state update call: ");
             if (!state.update()) {
                 break;
@@ -44,7 +44,7 @@ public class StateStack implements PendingStack {
     @Override
     public void handlePacket(final Packet packet) {
         System.out.println("state handlePacket call: ");
-        for (AbstractState state : this.stack) {
+        for (State state : this.stack) {
             if (!state.handlePacket(packet)) {
                 break;
             }
@@ -73,7 +73,7 @@ public class StateStack implements PendingStack {
         }
     }
 
-    private void implementPush(AbstractState.StateId stateId) {
+    private void implementPush(State.StateId stateId) {
         this.stack.push(StateFactory.createState(stateId, this));
         System.out.println("push request for state " + stateId.toString() + " done");
     }
@@ -91,27 +91,27 @@ public class StateStack implements PendingStack {
     private enum StackActions { SA_PUSH, SA_POP, SA_CLEAR }
 
     private static class PendingChange {
-        PendingChange(StackActions action, AbstractState.StateId stateId) {
+        PendingChange(StackActions action, State.StateId stateId) {
           this.action = action;
           this.state = stateId;
         }
 
         PendingChange(StackActions action) {
-            this(action, AbstractState.StateId.SI_NONE);
+            this(action, State.StateId.SI_NONE);
         }
 
         StackActions getAction() {
             return this.action;
         }
 
-        AbstractState.StateId getState() {
+        State.StateId getState() {
             return this.state;
         }
 
         private final StackActions action;
-        private final AbstractState.StateId state;
+        private final State.StateId state;
     }
 
     final LinkedList<PendingChange> pendingChanges = new LinkedList<>();
-    final Stack<AbstractState> stack = new Stack<>();
+    final Stack<State> stack = new Stack<>();
 }

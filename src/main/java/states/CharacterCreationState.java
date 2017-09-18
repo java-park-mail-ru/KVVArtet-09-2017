@@ -5,7 +5,7 @@ import packets.Packet;
 
 import java.lang.*;
 
-public class CharacterCreationState extends State {
+public class CharacterCreationState extends AbstractState {
     public CharacterCreationState(PendingStack stack) {
         super(stack);
         System.out.println("CharacterCreationState created");

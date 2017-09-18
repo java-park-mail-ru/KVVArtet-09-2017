@@ -1,50 +1,14 @@
 package states;
 
-import statemachine.PendingStack;
 import packets.Packet;
 
-import java.lang.*;
+public interface State {
+    void requestStackPush(StateId stateId);
+    void requestStackPop();
+    void requestStackClear();
 
-public abstract class State implements AbstractState {
-  public State(PendingStack stack) {
-      this.stack = stack;
-      System.out.print("State created: ");
-  }
+    boolean update();
+    boolean handlePacket(final Packet packet);
 
-  @Override
-  public void finalize() {
-      System.out.println("State destroyed");
-  }
-
-  @Override
-  public void requestStackPush(AbstractState.StateId stateId) {
-      this.stack.pushState(stateId);
-      System.out.println("push request sent with state = " + stateId.toString());
-  }
-
-  @Override
-  public void requestStackPop() {
-      this.stack.popState();
-      System.out.println("pop request sent");
-  }
-
-  @Override
-  public void requestStackClear() {
-      this.stack.clearState();
-      System.out.println("clear request sent");
-  }
-
-  @Override
-  public boolean update() {
-      System.out.println("State updated");
-      return true;
-  }
-
-  @Override
-  public boolean handlePacket(final Packet packet) {
-      System.out.println("Package handled");
-      return true;
-  }
-
-  private final PendingStack stack;
+    enum StateId { SI_NONE, SI_TITLE, SI_SIGNUP, SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON, SI_CHARACTER_CREATION }
 }

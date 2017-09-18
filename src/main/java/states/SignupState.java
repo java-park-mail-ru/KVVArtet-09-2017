@@ -5,7 +5,7 @@ import packets.Packet;
 
 import java.lang.*;
 
-public class SignupState extends State {
+public class SignupState extends AbstractState {
     public SignupState(PendingStack stack) {
         super(stack);
         System.out.println("SignupState created");
