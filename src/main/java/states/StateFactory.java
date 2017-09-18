@@ -25,6 +25,8 @@ public final class StateFactory {
             case SI_DUNGEON:
                 state = StateFactory.createDungeonState(stack);
                 break;
+            case SI_CHARACTER_CREATION:
+                state = StateFactory.createCharacterCreationState(stack);
             default:
                 break;
         }
@@ -50,4 +52,6 @@ public final class StateFactory {
     private static AbstractState createDungeonState(PendingStack stack) {
         return new DungeonState(stack);
     }
+
+    private static AbstractState createCharacterCreationState(PendingStack stack) { return new CharacterCreationState(stack); }
 }

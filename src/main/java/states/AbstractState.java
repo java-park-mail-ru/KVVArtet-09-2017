@@ -10,5 +10,5 @@ public interface AbstractState {
     boolean update();
     boolean handlePacket(final Packet packet);
 
-    enum StateId { SI_NONE, SI_TITLE, SI_SIGNUP, SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON }
+    enum StateId { SI_NONE, SI_TITLE, SI_SIGNUP, SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON, SI_CHARACTER_CREATION }
 }

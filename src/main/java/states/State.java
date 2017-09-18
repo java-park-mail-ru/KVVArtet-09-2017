@@ -17,7 +17,7 @@ public abstract class State implements AbstractState {
   }
 
   @Override
-  public void requestStackPush(AbstractState.ID stateId) {
+  public void requestStackPush(AbstractState.StateId stateId) {
       this.stack.pushState(stateId);
       System.out.println("push request sent with state = " + stateId.toString());
   }
