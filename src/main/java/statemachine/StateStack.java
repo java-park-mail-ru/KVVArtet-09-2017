@@ -66,7 +66,7 @@ public class StateStack implements PendingStack {
 
         @Test
         public void freshStackTest() {
-            TEST_LOGGER.info("checking newly created state machine")
+            TEST_LOGGER.info("checking newly created state machine");
             assertTrue("in newly made stack shall be no pending changes enqueued", stack.pendingChanges.isEmpty());
             assertTrue("newly made stack shall contain no states", stack.stack.isEmpty());
             TEST_LOGGER.info("====");
