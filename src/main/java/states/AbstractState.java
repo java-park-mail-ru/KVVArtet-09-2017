@@ -11,16 +11,16 @@ public abstract class AbstractState implements State {
 
     @Override
     public void requestStackPush(State.StateId stateId) {
-        this.stack.pushState(stateId);
+        stack.pushState(stateId);
     }
 
     @Override
     public void requestStackPop() {
-        this.stack.popState();
+        stack.popState();
     }
 
     @Override
     public void requestStackClear() {
-        this.stack.clearState();
+        stack.clearState();
     }
 }
