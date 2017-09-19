@@ -1,5 +1,5 @@
 package packets;
 
-@SuppressWarnings("MarkerInterface")
+@SuppressWarnings({"MarkerInterface", "InterfaceNeverImplemented"})
 public interface Packet {
 }

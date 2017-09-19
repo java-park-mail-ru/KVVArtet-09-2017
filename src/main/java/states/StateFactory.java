@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import statemachine.PendingStack;
 
 public final class StateFactory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(StateFactory.class);
+
     private StateFactory() { }
 
     public static State createState(State.StateId stateId, PendingStack stack) {
@@ -71,6 +73,4 @@ public final class StateFactory {
         LOGGER.info("CharacterCreationState created");
         return state;
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(StateFactory.class);
 }

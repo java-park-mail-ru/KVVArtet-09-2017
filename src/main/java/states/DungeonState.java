@@ -1,10 +1,13 @@
 package states;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import packets.Packet;
 import statemachine.PendingStack;
 
 public class DungeonState extends AbstractState {
-    @SuppressWarnings("UseOfSystemOutOrSystemErr")
+    protected static final Logger LOGGER = LoggerFactory.getLogger(DungeonState.class);
+
     public DungeonState(PendingStack stack) {
         super(stack);
     }

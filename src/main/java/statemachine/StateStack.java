@@ -6,10 +6,14 @@ import packets.Packet;
 import states.State;
 import states.StateFactory;
 
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class StateStack implements PendingStack {
+    private final Deque<PendingChange> pendingChanges = new LinkedList<>();
+    private final Stack<State> stack = new Stack<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(StateStack.class);
 
     @Override
     public void pushState(State.StateId stateId) {
@@ -113,8 +117,4 @@ public class StateStack implements PendingStack {
         private final StackActions action;
         private final State.StateId state;
     }
-
-    private final LinkedList<PendingChange> pendingChanges = new LinkedList<>();
-    private final Stack<State> stack = new Stack<>();
-    private static final Logger LOGGER = LoggerFactory.getLogger(StateStack.class);
 }

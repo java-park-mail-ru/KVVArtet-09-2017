@@ -1,22 +1,26 @@
 package states;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import packets.Packet;
 import statemachine.PendingStack;
 
 public class CharacterCreationState extends AbstractState {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(CharacterCreationState.class);
+
     public CharacterCreationState(PendingStack stack) {
         super(stack);
     }
 
     @Override
     public boolean update() {
-        LOGGER.info("CharacterCreationState updated");
+        LOGGER.info("updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        LOGGER.info("CharacterCreationState handles packet");
+        LOGGER.info("handles packet");
         return true;
     }
 }
