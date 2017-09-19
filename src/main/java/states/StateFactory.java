@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import statemachine.PendingStack;
 
 public final class StateFactory {
-    private StateFactory() {}
+    private StateFactory() { }
 
     public static State createState(State.StateId stateId, PendingStack stack) {
         State state = null;
@@ -29,6 +29,7 @@ public final class StateFactory {
                 break;
             case SI_CHARACTER_CREATION:
                 state = StateFactory.createCharacterCreationState(stack);
+                break;
             default:
                 break;
         }
