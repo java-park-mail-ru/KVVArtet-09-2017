@@ -9,7 +9,6 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        // тут пример-пустышка - создаем стейт-машину и начинаем играть со стейтами
         final Result testResult = JUnitCore.runClasses(StateStack.StateStackTest.class);
         for (Failure fail : testResult.getFailures()) {
             LOGGER.error(fail.toString());

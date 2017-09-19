@@ -82,20 +82,24 @@ public class StateStack implements PendingStack {
                     case SA_PUSH:
                         final State.StateId randomState = pickRandomState();
                         stack.pushState(randomState);
-                        assertEquals("added change shall have exactly same state as generated", randomState, stack.pendingChanges.peekLast().getState());
+                        assertEquals("added change shall have exactly same state as generated",
+                                randomState, stack.pendingChanges.peekLast().getState());
                         break;
                     case SA_POP:
                         stack.popState();
-                        assertEquals("added change shall have exactly same state as generated", State.StateId.SI_NONE, stack.pendingChanges.peekLast().getState());
+                        assertEquals("added change shall have exactly same state as generated",
+                                State.StateId.SI_NONE, stack.pendingChanges.peekLast().getState());
                         break;
                     case SA_CLEAR:
                         stack.clearState();
-                        assertEquals("added change shall have exactly same state as generated", State.StateId.SI_NONE, stack.pendingChanges.peekLast().getState());
+                        assertEquals("added change shall have exactly same state as generated",
+                                State.StateId.SI_NONE, stack.pendingChanges.peekLast().getState());
                         break;
                     default:
                         break;
                 }
-                assertEquals("added change shall have exactly same action as generated", stack.pendingChanges.peekLast().getAction(), randomAction);
+                assertEquals("added change shall have exactly same action as generated",
+                        stack.pendingChanges.peekLast().getAction(), randomAction);
             }
             stack.update();
             assertTrue("after update() call changes queue shall be empty", stack.pendingChanges.isEmpty());
@@ -119,22 +123,28 @@ public class StateStack implements PendingStack {
                         assertNull("None state can not be created", generatedState);
                         break;
                     case SI_TITLE:
-                        assertEquals("Title state shall be created",  statesPackageName + "TitleState", generatedState.getClass().getName());
+                        assertEquals("Title state shall be created",
+                                statesPackageName + "TitleState", generatedState.getClass().getName());
                         break;
                     case SI_SIGNUP:
-                        assertEquals("Signup state shall be created", statesPackageName + "SignupState", generatedState.getClass().getName());
+                        assertEquals("Signup state shall be created",
+                                statesPackageName + "SignupState", generatedState.getClass().getName());
                         break;
                     case SI_CHARACTER_LIST:
-                        assertEquals("CharacterList state shall be created", statesPackageName + "CharacterListState", generatedState.getClass().getName());
+                        assertEquals("CharacterList state shall be created",
+                                statesPackageName + "CharacterListState", generatedState.getClass().getName());
                         break;
                     case SI_CITY:
-                        assertEquals("City state shall be created", statesPackageName + "CityState", generatedState.getClass().getName());
+                        assertEquals("City state shall be created",
+                                statesPackageName + "CityState", generatedState.getClass().getName());
                         break;
                     case SI_DUNGEON:
-                        assertEquals("Dungeon state shall be created", statesPackageName + "DungeonState", generatedState.getClass().getName());
+                        assertEquals("Dungeon state shall be created",
+                                statesPackageName + "DungeonState", generatedState.getClass().getName());
                         break;
                     case SI_CHARACTER_CREATION:
-                        assertEquals("CharacterCreation state shall be created", statesPackageName + "CharacterCreationState", generatedState.getClass().getName());
+                        assertEquals("CharacterCreation state shall be created",
+                                statesPackageName + "CharacterCreationState", generatedState.getClass().getName());
                         break;
                     default:
                         break;
@@ -187,7 +197,8 @@ public class StateStack implements PendingStack {
                 stack.popState();
             }
             stack.update();
-            assertTrue("changes queue shall be empty after changes implementation", stack.pendingChanges.isEmpty());
+            assertTrue("changes queue shall be empty after changes implementation",
+                    stack.pendingChanges.isEmpty());
             TEST_LOGGER.info("====");
         }
     }
