@@ -1,9 +1,7 @@
 package states;
 
-import statemachine.PendingStack;
 import packets.Packet;
-
-import java.lang.*;
+import statemachine.PendingStack;
 
 public class CityState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
@@ -13,13 +11,13 @@ public class CityState extends AbstractState {
 
     @Override
     public boolean update() {
-        logger.info("CityState updated");
+        LOGGER.info("CityState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        logger.info("CityState handles packet");
+        LOGGER.info("CityState handles packet");
         return true;
     }
 }

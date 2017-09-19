@@ -1,7 +1,7 @@
 package states;
 
-import statemachine.PendingStack;
 import packets.Packet;
+import statemachine.PendingStack;
 
 public class SignupState extends AbstractState {
     public SignupState(PendingStack stack) {
@@ -10,13 +10,13 @@ public class SignupState extends AbstractState {
 
     @Override
     public boolean update() {
-        logger.info("SignupState updated");
+        LOGGER.info("SignupState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        logger.info("SignupState handles packet");
+        LOGGER.info("SignupState handles packet");
         return true;
     }
 }

@@ -1,9 +1,7 @@
 package states;
 
-import statemachine.PendingStack;
 import packets.Packet;
-
-import java.lang.*;
+import statemachine.PendingStack;
 
 public class CharacterCreationState extends AbstractState {
     public CharacterCreationState(PendingStack stack) {
@@ -12,13 +10,13 @@ public class CharacterCreationState extends AbstractState {
 
     @Override
     public boolean update() {
-        logger.info("CharacterCreationState updated");
+        LOGGER.info("CharacterCreationState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        logger.info("CharacterCreationState handles packet");
+        LOGGER.info("CharacterCreationState handles packet");
         return true;
     }
 }

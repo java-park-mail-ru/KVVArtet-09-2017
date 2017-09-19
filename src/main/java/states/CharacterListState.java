@@ -1,9 +1,7 @@
 package states;
 
-import statemachine.PendingStack;
 import packets.Packet;
-
-import java.lang.*;
+import statemachine.PendingStack;
 
 public class CharacterListState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
@@ -13,13 +11,13 @@ public class CharacterListState extends AbstractState {
 
     @Override
     public boolean update() {
-        logger.info("CharacterListState updated");
+        LOGGER.info("CharacterListState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        logger.info("CharacterListState handles packet");
+        LOGGER.info("CharacterListState handles packet");
         return true;
     }
 }

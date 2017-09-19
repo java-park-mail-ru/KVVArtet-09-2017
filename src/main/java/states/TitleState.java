@@ -1,9 +1,7 @@
 package states;
 
-import statemachine.PendingStack;
 import packets.Packet;
-
-import java.lang.*;
+import statemachine.PendingStack;
 
 public class TitleState extends AbstractState {
   public TitleState(PendingStack stack) {
@@ -12,13 +10,13 @@ public class TitleState extends AbstractState {
 
   @Override
   public boolean update() {
-      logger.info("TitleState updated");
+      LOGGER.info("TitleState updated");
       return true;
   }
 
   @Override
   public boolean handlePacket(final Packet packet) {
-      logger.info("TitleState handles packet");
+      LOGGER.info("TitleState handles packet");
       return true;
   }
 }

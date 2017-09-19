@@ -1,8 +1,8 @@
 package states;
 
-import statemachine.PendingStack;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import statemachine.PendingStack;
 
 public final class StateFactory {
     private StateFactory() {}
@@ -36,40 +36,40 @@ public final class StateFactory {
     }
 
     private static State createTitleState(PendingStack stack) {
-        State state = new TitleState(stack);
-        logger.info("TitleState created");
+        final State state = new TitleState(stack);
+        LOGGER.info("TitleState created");
         return state;
     }
 
     private static State createSignupState(PendingStack stack) {
-        State state = new SignupState(stack);
-        logger.info("SignupState created");
+        final State state = new SignupState(stack);
+        LOGGER.info("SignupState created");
         return state;
     }
 
     private static State createCharacterListState(PendingStack stack) {
-        State state = new CharacterListState(stack);
-        logger.info("CharacterListState created");
+        final State state = new CharacterListState(stack);
+        LOGGER.info("CharacterListState created");
         return state;
     }
 
     private static State createCityState(PendingStack stack) {
-        State state = new CityState(stack);
-        logger.info("PendingState created");
+        final State state = new CityState(stack);
+        LOGGER.info("PendingState created");
         return state;
     }
 
     private static State createDungeonState(PendingStack stack) {
-        State state = new DungeonState(stack);
-        logger.info("DungeonState created");
+        final State state = new DungeonState(stack);
+        LOGGER.info("DungeonState created");
         return state;
     }
 
     private static State createCharacterCreationState(PendingStack stack) {
-        State state = new CharacterCreationState(stack);
-        logger.info("CharacterCreationState created");
+        final State state = new CharacterCreationState(stack);
+        LOGGER.info("CharacterCreationState created");
         return state;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(StateFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StateFactory.class);
 }
