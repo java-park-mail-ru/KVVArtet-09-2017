@@ -7,7 +7,8 @@ import packets.Packet;
 import java.util.Stack;
 import java.util.LinkedList;
 
-import java.lang.*;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class StateStack implements PendingStack {
 
@@ -15,25 +16,25 @@ public class StateStack implements PendingStack {
     public void pushState(State.StateId stateId) {
         this.pendingChanges.add(new PendingChange(StackActions.SA_PUSH, stateId));
         final String stateName = stateId.toString();
-        System.out.println("push request for state " + stateName + " enqueued");
+        logger.info("push request for state " + stateName + " enqueued");
     }
 
     @Override
     public void popState() {
         this.pendingChanges.add(new PendingChange(StackActions.SA_POP));
-        System.out.println("pop request enqueued");
+        logger.info("pop request enqueued");
     }
 
     @Override
     public void clearState() {
         this.pendingChanges.add(new PendingChange(StackActions.SA_CLEAR));
-        System.out.println("clear request enqueued");
+        logger.info("clear request enqueued");
     }
 
     @Override
     public void update() {
         for (State state : this.stack) {
-            System.out.print("state update call: ");
+            logger.info("state update call: ");
             if (!state.update()) {
                 break;
             }
@@ -43,7 +44,7 @@ public class StateStack implements PendingStack {
 
     @Override
     public void handlePacket(final Packet packet) {
-        System.out.println("state handlePacket call: ");
+        logger.info("state handlePacket call: ");
         for (State state : this.stack) {
             if (!state.handlePacket(packet)) {
                 break;
@@ -75,17 +76,17 @@ public class StateStack implements PendingStack {
 
     private void implementPush(State.StateId stateId) {
         this.stack.push(StateFactory.createState(stateId, this));
-        System.out.println("push request for state " + stateId.toString() + " done");
+        logger.info("push request for state " + stateId.toString() + " done");
     }
 
     private void implementPop() {
         this.stack.pop();
-        System.out.println("pop request done");
+        logger.info("pop request done");
     }
 
     private void implementClear() {
         this.stack.clear();
-        System.out.println("clear request done");
+        logger.info("clear request done");
     }
 
     private enum StackActions { SA_PUSH, SA_POP, SA_CLEAR }
@@ -114,4 +115,5 @@ public class StateStack implements PendingStack {
 
     final LinkedList<PendingChange> pendingChanges = new LinkedList<>();
     final Stack<State> stack = new Stack<>();
+    private static final Logger logger = LoggerFactory.getLogger(StateStack.class);
 }

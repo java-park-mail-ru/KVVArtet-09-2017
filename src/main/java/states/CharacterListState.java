@@ -9,18 +9,17 @@ public class CharacterListState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public CharacterListState(PendingStack stack) {
         super(stack);
-        System.out.println("CharacterListState created");
     }
 
     @Override
     public boolean update() {
-        System.out.println("CharacterListState updated");
+        logger.info("CharacterListState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        System.out.println("CharacterListState handles packet");
+        logger.info("CharacterListState handles packet");
         return true;
     }
 }

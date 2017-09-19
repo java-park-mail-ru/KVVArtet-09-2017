@@ -9,18 +9,17 @@ public class CityState extends AbstractState {
     @SuppressWarnings("UseOfSystemOutOrSystemErr")
     public CityState(PendingStack stack) {
         super(stack);
-        System.out.println("CityState created");
     }
 
     @Override
     public boolean update() {
-        System.out.println("CityState updated");
+        logger.info("CityState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        System.out.println("CityState handles packet");
+        logger.info("CityState handles packet");
         return true;
     }
 }

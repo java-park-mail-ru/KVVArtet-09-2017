@@ -8,18 +8,17 @@ import java.lang.*;
 public class CharacterCreationState extends AbstractState {
     public CharacterCreationState(PendingStack stack) {
         super(stack);
-        System.out.println("CharacterCreationState created");
     }
 
     @Override
     public boolean update() {
-        System.out.println("CharacterCreationState updated");
+        logger.info("CharacterCreationState updated");
         return true;
     }
 
     @Override
     public boolean handlePacket(final Packet packet) {
-        System.out.println("CharacterCreationState handles packet");
+        logger.info("CharacterCreationState handles packet");
         return true;
     }
 }

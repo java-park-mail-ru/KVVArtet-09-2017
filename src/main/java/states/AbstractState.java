@@ -3,48 +3,44 @@ package states;
 import statemachine.PendingStack;
 import packets.Packet;
 
-import java.lang.*;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public abstract class AbstractState implements State {
   public AbstractState(PendingStack stack) {
       this.stack = stack;
-      System.out.print("AbstractState created: ");
-  }
-
-  @Override
-  public void finalize() {
-      System.out.println("AbstractState destroyed");
   }
 
   @Override
   public void requestStackPush(State.StateId stateId) {
       this.stack.pushState(stateId);
-      System.out.println("push request sent with state = " + stateId.toString());
+      logger.info("push request sent with state = " + stateId.toString());
   }
 
   @Override
   public void requestStackPop() {
       this.stack.popState();
-      System.out.println("pop request sent");
+      logger.info("pop request sent");
   }
 
   @Override
   public void requestStackClear() {
       this.stack.clearState();
-      System.out.println("clear request sent");
+      logger.info("clear request sent");
   }
 
   @Override
   public boolean update() {
-      System.out.println("AbstractState updated");
+      logger.info("State updated");
       return true;
   }
 
   @Override
   public boolean handlePacket(final Packet packet) {
-      System.out.println("Package handled");
+      logger.info("Packet handled");
       return true;
   }
 
   private final PendingStack stack;
+  protected static final Logger logger = LoggerFactory.getLogger(AbstractState.class);
 }
