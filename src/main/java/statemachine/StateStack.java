@@ -6,13 +6,13 @@ import packets.Packet;
 import states.State;
 import states.StateFactory;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Stack;
 
 public class StateStack implements PendingStack {
     private final Deque<PendingChange> pendingChanges = new LinkedList<>();
-    private final Stack<State> stack = new Stack<>();
+    private final Deque<State> stack = new ArrayDeque<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(StateStack.class);
 
     @Override
