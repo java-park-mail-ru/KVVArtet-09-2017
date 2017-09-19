@@ -1,18 +1,21 @@
-import statemachine.PendingStack;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import statemachine.StateStack;
-import states.State;
 
 public class Main {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
         // тут пример-пустышка - создаем стейт-машину и начинаем играть со стейтами
-        final PendingStack stack = new StateStack();
-        stack.pushState(State.StateId.SI_TITLE);
-        stack.pushState(State.StateId.SI_SIGNUP);
-        stack.update();
-        stack.popState();
-        stack.pushState(State.StateId.SI_CHARACTER_LIST);
-        stack.update();
-        stack.clearState();
-        stack.update();
+        final Result testResult = JUnitCore.runClasses(StateStack.StateStackTest.class);
+        for (Failure fail : testResult.getFailures()) {
+            LOGGER.error(fail.toString());
+        }
+        LOGGER.info("====");
+        LOGGER.info("tests made: " + Integer.toString(testResult.getRunCount()));
+        LOGGER.info("tests failed: " + Integer.toString(testResult.getFailureCount()));
     }
 }
