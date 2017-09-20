@@ -9,7 +9,7 @@ public class User {
     private String password;
 
     @JsonCreator
-    public User(@JsonProperty("login") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
+    public User(@JsonProperty String login, @JsonProperty String email, @JsonProperty String password) {
         this.login = login;
         this.email = email;
         this.password = password;

@@ -21,7 +21,11 @@ public class UserController {
         return allUsersEmail.get(email);
     }
 
-    String getUserPassword(String username) {
+    String getUserPassword(String loginOrEmail) {
+        if(isUsernameExists(loginOrEmail)) {
+            return allUsers.get(loginOrEmail).getPassword();
+        }
+        String username = allUsersEmail.get(loginOrEmail);
         return allUsers.get(username).getPassword();
     }
 
@@ -41,6 +45,10 @@ public class UserController {
 
     boolean isEmailExists(String email) {
         return allUsersEmail.containsKey(email);
+    }
+
+    boolean isExist(String usernameOrEmail) {
+        return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
     }
 
     private void deleteUser(String username) {
