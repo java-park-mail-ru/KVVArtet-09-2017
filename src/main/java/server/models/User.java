@@ -7,14 +7,8 @@ public class User {
     private String email;
     private String password;
 
-    public User(String login, String email, String password) {
-        this.login = login;
-        this.email = email;
-        this.password = password;
-    }
-
     @JsonCreator
-    private void JsonParser(@JsonProperty("login") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
+    public User(@JsonProperty("login") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
         this.login = login;
         this.email = email;
         this.password = password;
