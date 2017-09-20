@@ -2,10 +2,7 @@ package server.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import server.models.ApiResponse;
 import server.models.User;
 
@@ -15,10 +12,12 @@ import java.util.Objects;
 @RestController
 public class AuthorizationController {
     private UserController userController = new UserController();
+    private final String frontendUrl = "http://KVVArtet-09-2017.herokuapp.com";
 
     public AuthorizationController() {
     }
 
+    @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
             path = {"/signup"},
             method = {RequestMethod.POST}
@@ -36,6 +35,7 @@ public class AuthorizationController {
         }
     }
 
+    @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
             path = {"/"},
             method = {RequestMethod.GET}
@@ -60,6 +60,7 @@ public class AuthorizationController {
         }
     }
 
+    @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
             path = {"/signout"},
             method = {RequestMethod.POST}
@@ -75,6 +76,7 @@ public class AuthorizationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS);
     }
 
+    @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
             path = {"/session"},
             method = {RequestMethod.GET}
@@ -88,6 +90,7 @@ public class AuthorizationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL);
     }
 
+    @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
             path = {"/settings"},
             method = {RequestMethod.POST}
