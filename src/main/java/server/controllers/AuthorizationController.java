@@ -1,16 +1,20 @@
 package server.controllers;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import javax.servlet.http.HttpSession;
-import server.models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import server.models.ApiResponse;
+import server.models.User;
+
+import javax.servlet.http.HttpSession;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+
 
 @RestController
 public class AuthorizationController {
@@ -25,19 +29,15 @@ public class AuthorizationController {
     )
     public ResponseEntity signUp(@RequestBody User user) {
 
-        List<String> responseBody = new LinkedList<>();
-
         String username = user.getLogin();
 
         if (userController.isUsernameExists(username)) {
-            responseBody.add("Unable to sign up. User with that name is already exist.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST);
         } else if (userController.isEmailExists(username)) {
-            responseBody.add("Unable to sign up. User with that email is already exist.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.EMAIL_EXIST);
         } else {
             userController.setUser(user);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNUP_SUCCESS);
         }
     }
 
@@ -47,8 +47,6 @@ public class AuthorizationController {
     )
     public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
 
-        List<String> responseBody = new LinkedList<>();
-
         String username = user.getLogin();
         String email = user.getEmail();
         String password = user.getPassword();
@@ -56,18 +54,15 @@ public class AuthorizationController {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
         if(userInCurrentSession == null){
-            responseBody.add("You already authorized :)");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED);
         }
 
         if (!userController.isUsernameExists(username) && !userController.isEmailExists(email)) {
-            responseBody.add("Your login or email doesn't exist");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST);
         } else if (!Objects.equals(userController.getUserPassword(username), password)) {
-            responseBody.add("Your password incorrect");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT);
         } else {
-            return ResponseEntity.ok(user);
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNIN_SUCCESS);
         }
     }
 
@@ -77,18 +72,14 @@ public class AuthorizationController {
     )
     public ResponseEntity signOut(@RequestBody HttpSession httpSession) {
 
-        List<String> responseBody = new LinkedList<>();
-
         String userInCurrentSession = (String) httpSession.getAttribute("username");
         if(userInCurrentSession == null){
-            responseBody.add("You are already log out, my friend");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
 
         httpSession.removeAttribute(userInCurrentSession);
 
-        responseBody.add("Now you out of session");
-        return ResponseEntity.ok(responseBody);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS);
     }
 
     @RequestMapping(
@@ -97,15 +88,13 @@ public class AuthorizationController {
     )
     public ResponseEntity requestUserInCurrentSession(@RequestBody User user, HttpSession httpSession) {
 
-        List<String> responseBody = new LinkedList<>();
 
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
         if(!userController.isUsernameExists(userInCurrentSession) || userInCurrentSession == null){
-            responseBody.add("You need to authorized first, my friend");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL);
     }
 
     @RequestMapping(
@@ -114,23 +103,20 @@ public class AuthorizationController {
     )
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
 
-        List<String> responseBody = new LinkedList<>();
 
         String lastUsername = (String) httpSession.getAttribute("username");
 
         if(lastUsername == null){
-            responseBody.add("You need to authorized first, my friend");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
 
         if(Objects.equals(lastUsername, user.getLogin())){
-            responseBody.add("Your login is the same");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.LOGIN_IS_THE_SAME);
         }
 
         userController.updateUser(lastUsername, user);
         httpSession.setAttribute("username", user.getLogin());
-        return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS);
     }
 
 

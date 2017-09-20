@@ -1,11 +1,13 @@
 package server.controllers;
 
+import server.models.User;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import server.models.User;
 
+@SuppressWarnings("unused")
 public class UserController {
     private Map<String, User> allUsers = new HashMap<>();
     private Map<String, String> allUsersEmail = new HashMap<>();
@@ -13,15 +15,15 @@ public class UserController {
     UserController() {}
 
     public String getUserEmail(String username) {
-        return ((User)allUsers.get(username)).getEmail();
+        return allUsers.get(username).getEmail();
     }
 
     public String getUserUsername(String email) {
-        return (String)allUsersEmail.get(email);
+        return allUsersEmail.get(email);
     }
 
     String getUserPassword(String username) {
-        return ((User)allUsers.get(username)).getPassword();
+        return allUsers.get(username).getPassword();
     }
 
     void setUser(User newUser) {
@@ -43,14 +45,12 @@ public class UserController {
     }
 
     private void deleteUser(String username) {
-        String email = ((User)allUsers.get(username)).getEmail();
+        String email = allUsers.get(username).getEmail();
         allUsersEmail.remove(email);
         allUsers.remove(username);
     }
 
-    public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        allUsers.forEach((key, value) -> users.add(value));
-        return users;
+    public ArrayList<User> getAllUsers() {
+        return (ArrayList<User>) allUsers.values();
     }
 }
