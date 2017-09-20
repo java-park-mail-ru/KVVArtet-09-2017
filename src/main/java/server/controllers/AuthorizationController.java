@@ -10,11 +10,7 @@ import server.models.ApiResponse;
 import server.models.User;
 
 import javax.servlet.http.HttpSession;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
-
-
 
 @RestController
 public class AuthorizationController {
@@ -28,7 +24,6 @@ public class AuthorizationController {
             method = {RequestMethod.POST}
     )
     public ResponseEntity signUp(@RequestBody User user) {
-
         String username = user.getLogin();
 
         if (userController.isUsernameExists(username)) {
@@ -43,10 +38,9 @@ public class AuthorizationController {
 
     @RequestMapping(
             path = {"/"},
-            method = {RequestMethod.POST}
+            method = {RequestMethod.GET}
     )
     public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
-
         String username = user.getLogin();
         String email = user.getEmail();
         String password = user.getPassword();
@@ -71,24 +65,21 @@ public class AuthorizationController {
             method = {RequestMethod.POST}
     )
     public ResponseEntity signOut(@RequestBody HttpSession httpSession) {
-
         String userInCurrentSession = (String) httpSession.getAttribute("username");
+
         if(userInCurrentSession == null){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
 
         httpSession.removeAttribute(userInCurrentSession);
-
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS);
     }
 
     @RequestMapping(
             path = {"/session"},
-            method = {RequestMethod.POST}
+            method = {RequestMethod.GET}
     )
-    public ResponseEntity requestUserInCurrentSession(@RequestBody User user, HttpSession httpSession) {
-
-
+    public ResponseEntity requestUserInCurrentSession(@RequestBody HttpSession httpSession) {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
         if(!userController.isUsernameExists(userInCurrentSession) || userInCurrentSession == null){
@@ -102,8 +93,6 @@ public class AuthorizationController {
             method = {RequestMethod.POST}
     )
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
-
-
         String lastUsername = (String) httpSession.getAttribute("username");
 
         if(lastUsername == null){
