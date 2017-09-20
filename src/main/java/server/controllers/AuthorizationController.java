@@ -22,9 +22,9 @@ public class AuthorizationController {
     @RequestMapping(
             path = {"/signup"},
             method = {RequestMethod.POST}
-    )dy User user) {
+    )
+    public ResponseEntity signUp(@RequestBody User user) {
 
-    public ResponseEntity signUp(@RequestBo
         List<String> responseBody = new LinkedList<>();
 
         String username = user.getLogin();

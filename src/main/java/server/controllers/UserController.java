@@ -50,9 +50,7 @@ public class UserController {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        allUsers.forEach((key, value) -> {
-            users.add(value);
-        });
+        allUsers.forEach((key, value) -> users.add(value));
         return users;
     }
 }
