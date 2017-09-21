@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @RestController
 public class AuthorizationController {
-    private UserController userController = new UserController();
+    private final UserController userController = new UserController();
     private final String frontendUrl = "http://KVVArtet-09-2017.herokuapp.com";
 
     AuthorizationController() {

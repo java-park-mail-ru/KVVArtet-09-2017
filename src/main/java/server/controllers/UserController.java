@@ -5,6 +5,7 @@ import server.models.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 @SuppressWarnings("unused")
 class UserController {
     private final Map<String, User> allUsers = new HashMap<>();
