@@ -18,9 +18,9 @@
 
     Authors: Max Vetrenko, Ruslan Diachenko, Roman Ivanov.
 
-, XmlHighlighting -->
+, XmlHighlighting, XmlHighlighting -->
 
-<!--suppress ALL -->
+<!--suppress ALL, XmlHighlighting -->
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
 

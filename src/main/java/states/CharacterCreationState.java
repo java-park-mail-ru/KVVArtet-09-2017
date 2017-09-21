@@ -6,9 +6,9 @@ import packets.Packet;
 import statemachine.PendingStack;
 
 public class CharacterCreationState extends AbstractState {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(CharacterCreationState.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CharacterCreationState.class);
 
-    public CharacterCreationState(PendingStack stack) {
+    CharacterCreationState(PendingStack stack) {
         super(stack);
     }
 

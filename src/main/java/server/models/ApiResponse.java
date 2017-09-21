@@ -15,8 +15,8 @@ public enum ApiResponse {
     CHANGE_PROFILE_SUCCESS(10, "Profile successfully changed"),
     REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested");
 
-    private Integer status;
-    private String response;
+    private final Integer status;
+    private final String response;
 
     ApiResponse(Integer status, String response) {
         this.status = status;

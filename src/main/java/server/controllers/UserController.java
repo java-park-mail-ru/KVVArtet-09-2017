@@ -5,11 +5,10 @@ import server.models.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 @SuppressWarnings("unused")
-public class UserController {
-    private Map<String, User> allUsers = new HashMap<>();
-    private Map<String, String> allUsersEmail = new HashMap<>();
+class UserController {
+    private final Map<String, User> allUsers = new HashMap<>();
+    private final Map<String, String> allUsersEmail = new HashMap<>();
 
     UserController() { }
 
