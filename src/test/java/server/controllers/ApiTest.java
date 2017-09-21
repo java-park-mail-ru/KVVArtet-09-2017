@@ -7,26 +7,26 @@ public class ApiTest {
     private AuthorizationController authorizationController = new AuthorizationController();
 
     @Test
-    void signUpTest(){
+    public void signUpTest(){
     }
 
     @Test
-    void signInTest(){
-
-    }
-
-    @Test
-    void signOutTest(){
+    public void signInTest(){
 
     }
 
     @Test
-    void requestUserSessionTest(){
+    public void signOutTest(){
 
     }
 
     @Test
-    void updateUserTest(){
+    public void requestUserSessionTest(){
+
+    }
+
+    @Test
+    public void updateUserTest(){
 
     }
 }
