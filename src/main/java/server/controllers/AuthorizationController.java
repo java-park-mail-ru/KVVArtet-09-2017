@@ -38,7 +38,7 @@ public class AuthorizationController {
 
     @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
-            path = {"/"},
+            path = {"/login"},
             method = {RequestMethod.POST}
     )
     public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
