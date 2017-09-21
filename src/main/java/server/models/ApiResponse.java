@@ -2,7 +2,7 @@ package server.models;
 
 @SuppressWarnings("unused")
 public enum ApiResponse {
-    USERNAME_EXIST(0,"User with that name is already exist"),
+    USERNAME_EXIST(0, "User with that name is already exist"),
     EMAIL_EXIST(1, "User with that email is already exist"),
     USER_ALREADY_AUTHORIZED(2, "User is already authorized"),
     LOGIN_OR_EMAIL_NOT_EXIST(3, "User's login or email doesn't exist"),
@@ -15,11 +15,19 @@ public enum ApiResponse {
     CHANGE_PROFILE_SUCCESS(10, "Profile successfully changed"),
     REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested");
 
-    Integer status;
-    String response;
+    private Integer status;
+    private String response;
 
-    ApiResponse(Integer status, String response){
+    ApiResponse(Integer status, String response) {
         this.status = status;
         this.response = response;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public String getResponse() {
+        return response;
     }
 }

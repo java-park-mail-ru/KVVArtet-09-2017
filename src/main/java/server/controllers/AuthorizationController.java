@@ -48,13 +48,13 @@ public class AuthorizationController {
 
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
-        if(userInCurrentSession == null){
+        if (userInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED);
         }
 
         String loginOrEmail;
 
-        if (username == null){
+        if (username == null) {
             loginOrEmail = email;
         } else {
             loginOrEmail = username;
@@ -77,7 +77,7 @@ public class AuthorizationController {
     public ResponseEntity signOut(@RequestBody HttpSession httpSession) {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
-        if(userInCurrentSession == null){
+        if (userInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
 
@@ -93,7 +93,7 @@ public class AuthorizationController {
     public ResponseEntity requestUserInCurrentSession(@RequestBody HttpSession httpSession) {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
-        if(!userController.isUsernameExists(userInCurrentSession) || userInCurrentSession == null){
+        if (!userController.isUsernameExists(userInCurrentSession) || userInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL);

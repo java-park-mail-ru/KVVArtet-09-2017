@@ -11,7 +11,7 @@ public class UserController {
     private Map<String, User> allUsers = new HashMap<>();
     private Map<String, String> allUsersEmail = new HashMap<>();
 
-    UserController() {}
+    UserController() { }
 
     public String getUserEmail(String username) {
         return allUsers.get(username).getEmail();
@@ -22,7 +22,7 @@ public class UserController {
     }
 
     String getUserPassword(String loginOrEmail) {
-        if(isUsernameExists(loginOrEmail)) {
+        if (isUsernameExists(loginOrEmail)) {
             return allUsers.get(loginOrEmail).getPassword();
         }
         String username = allUsersEmail.get(loginOrEmail);
