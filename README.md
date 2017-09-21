@@ -19,4 +19,6 @@ Dungeon crawler. Город с вендорами выступает в каче
 
 ## API
 
-В процессе
+Документация на API в файле [swagger.yml](swagger.yml).
+
+Для просмотра скопируйте его в [онлайн-редактор Swagger](http://editor.swagger.io/#).

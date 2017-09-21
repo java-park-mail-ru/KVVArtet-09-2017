@@ -9,7 +9,6 @@ import server.models.User;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
-
 @RestController
 public class AuthorizationController {
     private UserController userController = new UserController();

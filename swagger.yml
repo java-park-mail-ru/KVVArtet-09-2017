@@ -1,0 +1,216 @@
+swagger: '2.0'
+info:
+  title: Lands and Dungeons
+  description: |
+    Онлайновый rogue-like RPG проект от команды KVVArtet
+  version: "0.0.1"
+schemes:
+- http
+- https
+basePath: /api
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /signup:
+    post:
+      summary: Регистрация пользователя
+      description: |
+        Регистрация нового пользователя
+      operationId: signUp
+      parameters:
+      - name: user
+        in: body
+        description: |
+          Данные для регистрации
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        200:
+          description: |
+            Пользователь успешно зарегистрирован
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        400(1):
+          description: |
+            Имя пользователя уже занято
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        400(2):
+          description: |
+            Данный почтовый ящик уже использован для регистрации другого пользователя
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /:
+    get:
+      summary: Авторизация пользователя
+      description: |
+        Авторизация зарегистрированного пользователя
+      operationId: signIn
+      parameters:
+        - name: user
+          in: body
+          description: |
+            Данные для авторизации пользователя
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+          description: |
+            Авторизация успешно выполнена
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        403(1):
+          description: |
+            Данный пользователь уже авторизован
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        403(2):
+          description: |
+            Неверный пароль
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /signout:
+    post:
+      summary: Выход из текущей учетной записи
+      description: |
+        Выход из текущей учетной записи
+      operationId: signOut
+      parameters:
+        - name: session
+          in: body
+          description: |
+            Активная сессия
+          required: true
+          schema:
+            $ref: '#/definitions/HttpSession'
+      responses:
+        200:
+          description: |
+            Успешный выход из учетной записи
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        403:
+          description: |
+            Неавторизованный пользователь не может разлогиниться
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /session:
+    get:
+      summary: Получение данных о пользователе из сессии
+      description: |
+        Получение данных о пользователе из сессии
+      operationId: requestUserInCurrentSession
+      parameters:
+        - name: session
+          in: body
+          description: |
+            Активная сессия
+          required: true
+          schema:
+            $ref: '#/definitions/HttpSession'
+      responses:
+        200:
+          description: |
+            Пользователь авторизован
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        403:
+          description: |
+            Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/ApiResponse'
+  /settings:
+    post:
+      summary: Редактирование данных пользователя
+      description: |
+        Редактирование данных пользователя
+      operationId: changeUserProfile
+      parameters:
+      - name: user
+        description: |
+          Изменения для учетной записи
+        schema:
+          $ref: '#/definitions/User'
+      - name: session
+        description: |
+          Активная сессия
+        schema:
+          $ref: '#/definitions/HttpSession'
+      responses:
+        200:
+          description: |
+            Учетная запись успешно изменена
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        400:
+          description: |
+            Логин не изменился
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        403:
+          description: |
+            Пользователь не авторизован
+          schema:
+            $ref: '#/definitions/ApiResponse'
+definitions:
+  User:
+    type: object
+    description: |
+      модель пользователя
+    properties:
+      login:
+        type: string
+        description: |
+          Логин пользователя
+      email:
+        type: string
+        description: |
+          email пользователя
+      password:
+        type: string
+        description: |
+          пароль
+    required:
+      - login
+      - email
+      - password
+  ApiResponse:
+    type: object
+    description: |
+      ответ API
+    properties:
+      status:
+        type: integer
+        description: |
+          Код ответа.
+          0: Пользователь с таким именем уже существует
+          1: Данный адрес электронной почты уже зарегистрирован
+          2: Пользователь уже авторизован
+          3: Логин или почта не найдены
+          4: Неверный пароль
+          5: Пользователь успешно зарегистрирован
+          6: Пользователь успешно авторизован
+          7: Пользователь не авторизован
+          8: Выход из учетной записи успешен
+          9: Логин не изменен
+          10: Профиль успешно изменен
+          11: В сессии присутствует авторизованный пользователь
+      response:
+        type: string
+        description: |
+          Описание ответа. Несет информативный характер
+    required:
+      - status
+      - response
+  HttpSession:
+    type: object
+    description: |
+      объект HttpSession.
+      (https://docs/oracle.com/javaee/7/api/javax/servlet/http/HttpSession.html)
+      Хранит и управляет данными сеанса пользователя.
+      В нашем случае используется, чтобы получать информацию о пользователе
+      (сеанс авторизованного пользователя должен содержать в себе атрибут username).
