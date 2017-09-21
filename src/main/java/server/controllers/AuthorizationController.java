@@ -22,7 +22,7 @@ public class AuthorizationController {
             path = {"/signup"},
             method = {RequestMethod.POST}
     )
-    public ResponseEntity signUp(@RequestBody User user) {
+    public ResponseEntity signUp(@RequestBody User user, HttpSession httpSession) {
         String username = user.getLogin();
         String email = user.getEmail();
 
@@ -39,7 +39,7 @@ public class AuthorizationController {
     @CrossOrigin(origins = frontendUrl)
     @RequestMapping(
             path = {"/"},
-            method = {RequestMethod.GET}
+            method = {RequestMethod.POST}
     )
     public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
         String username = user.getLogin();
@@ -47,7 +47,7 @@ public class AuthorizationController {
         String password = user.getPassword();
 
         String userInCurrentSession = (String) httpSession.getAttribute("username");
-
+      
         if (userInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED);
         }
@@ -65,6 +65,7 @@ public class AuthorizationController {
         } else if (!Objects.equals(userController.getUserPassword(loginOrEmail), password)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT);
         } else {
+            httpSession.setAttribute("username", username);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNIN_SUCCESS);
         }
     }
@@ -74,14 +75,13 @@ public class AuthorizationController {
             path = {"/signout"},
             method = {RequestMethod.POST}
     )
-    public ResponseEntity signOut(@RequestBody HttpSession httpSession) {
+    public ResponseEntity signOut(HttpSession httpSession) {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
-
         if (userInCurrentSession == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
 
-        httpSession.removeAttribute(userInCurrentSession);
+        httpSession.removeAttribute("username");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS);
     }
 
@@ -90,13 +90,13 @@ public class AuthorizationController {
             path = {"/session"},
             method = {RequestMethod.GET}
     )
-    public ResponseEntity requestUserInCurrentSession(@RequestBody HttpSession httpSession) {
+    public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
 
-        if (!userController.isUsernameExists(userInCurrentSession) || userInCurrentSession == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
+        if (userInCurrentSession == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL + httpSession.getId());
     }
 
     @CrossOrigin(origins = frontendUrl)
