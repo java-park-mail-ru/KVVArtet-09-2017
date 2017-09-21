@@ -6,9 +6,9 @@ import packets.Packet;
 import statemachine.PendingStack;
 
 public class DungeonState extends AbstractState {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(DungeonState.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DungeonState.class);
 
-    public DungeonState(PendingStack stack) {
+    DungeonState(PendingStack stack) {
         super(stack);
     }
 

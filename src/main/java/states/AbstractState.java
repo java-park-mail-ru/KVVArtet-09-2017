@@ -5,7 +5,7 @@ import statemachine.PendingStack;
 public abstract class AbstractState implements State {
     private final PendingStack stack;
 
-    public AbstractState(PendingStack stack) {
+    AbstractState(PendingStack stack) {
       this.stack = stack;
   }
 

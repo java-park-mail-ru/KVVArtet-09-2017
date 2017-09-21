@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public class UserController {
-    private Map<String, User> allUsers = new HashMap<>();
-    private Map<String, String> allUsersEmail = new HashMap<>();
+class UserController {
+    private final Map<String, User> allUsers = new HashMap<>();
+    private final Map<String, String> allUsersEmail = new HashMap<>();
 
-    UserController() {}
+    UserController() { }
 
     public String getUserEmail(String username) {
         return allUsers.get(username).getEmail();
@@ -21,7 +21,11 @@ public class UserController {
         return allUsersEmail.get(email);
     }
 
-    String getUserPassword(String username) {
+    String getUserPassword(String loginOrEmail) {
+        if (isUsernameExists(loginOrEmail)) {
+            return allUsers.get(loginOrEmail).getPassword();
+        }
+        String username = allUsersEmail.get(loginOrEmail);
         return allUsers.get(username).getPassword();
     }
 
@@ -41,6 +45,10 @@ public class UserController {
 
     boolean isEmailExists(String email) {
         return allUsersEmail.containsKey(email);
+    }
+
+    boolean isExist(String usernameOrEmail) {
+        return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
     }
 
     private void deleteUser(String username) {

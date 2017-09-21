@@ -6,11 +6,11 @@ import states.State;
 
 import java.util.Random;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 public class StateStackTest {
     private StateStack stack;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     private State.StateId pickRandomState() {
         final State.StateId[] values = State.StateId.values();

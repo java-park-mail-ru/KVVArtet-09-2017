@@ -1,4 +1,5 @@
 package server.models;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +10,7 @@ public class User {
     private String password;
 
     @JsonCreator
-    public User(@JsonProperty("login") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
+    public User(@JsonProperty("username") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
         this.login = login;
         this.email = email;
         this.password = password;
