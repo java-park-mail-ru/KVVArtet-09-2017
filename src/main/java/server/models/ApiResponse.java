@@ -14,8 +14,7 @@ public enum ApiResponse {
     LOGIN_IS_THE_SAME(9, "User login is the same"),
     CHANGE_PROFILE_SUCCESS(10, "Profile successfully changed"),
     REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested, your ID is:");
-
-
+  
     private final Integer status;
     private final String response;
 
