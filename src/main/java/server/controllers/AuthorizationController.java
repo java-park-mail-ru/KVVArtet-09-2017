@@ -47,8 +47,8 @@ public class AuthorizationController {
         String password = user.getPassword();
 
         String userInCurrentSession = (String) httpSession.getAttribute("username");
-
-        if (userInCurrentSession != null) {
+      
+        if (userInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED);
         }
 
@@ -92,7 +92,6 @@ public class AuthorizationController {
     )
     public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
         String userInCurrentSession = (String) httpSession.getAttribute("username");
-
 
         if (userInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED);
