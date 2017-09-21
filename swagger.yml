@@ -44,7 +44,7 @@ paths:
           schema:
             $ref: '#/definitions/ApiResponse'
   /:
-    get:
+    post:
       summary: Авторизация пользователя
       description: |
         Авторизация зарегистрированного пользователя
