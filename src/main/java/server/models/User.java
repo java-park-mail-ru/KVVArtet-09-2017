@@ -8,7 +8,7 @@ public class User {
     private String login;
     private String email;
     private String password;
-    private Integer id;
+    private final Integer id;
     private static int instanceCounter;
 
     @JsonCreator
@@ -19,7 +19,9 @@ public class User {
         id = ++instanceCounter;
     }
 
-    public Integer getId() { return this.id; }
+    public Integer getId() {
+        return this.id;
+    }
 
     public String getLogin() {
         return this.login;

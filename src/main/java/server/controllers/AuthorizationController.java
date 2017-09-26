@@ -96,7 +96,8 @@ public class AuthorizationController {
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL + " " + httpSession.getId() + " " + userController.getUserById(userIdInCurrentSession).getLogin());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL
+                + " " + httpSession.getId() + " " + userController.getUserById(userIdInCurrentSession).getLogin());
     }
 
     @CrossOrigin(origins = frontendUrl)

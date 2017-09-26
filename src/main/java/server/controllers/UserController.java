@@ -30,18 +30,18 @@ class UserController {
         return allUsersByEmail.get(loginOrEmail).getPassword();
     }
 
-    User getUserById(Integer id){
+    User getUserById(Integer id) {
         return allUsersById.get(id);
     }
 
-    Integer getUserIdByLoginOrEmail(String loginOrEmail){
+    Integer getUserIdByLoginOrEmail(String loginOrEmail) {
         if (allUsersByLogin.containsKey(loginOrEmail)) {
             return allUsersByLogin.get(loginOrEmail).getId();
         }
         return allUsersByEmail.get(loginOrEmail).getId();
     }
 
-    void setUserByParam(String username, String email, String password){
+    void setUserByParam(String username, String email, String password) {
         User newUser = new User(username, email, password);
         Integer id = newUser.getId();
         allUsersByLogin.put(username, newUser);
@@ -79,7 +79,9 @@ class UserController {
         return allUsersByEmail.containsKey(email);
     }
 
-    boolean isIdExists(Integer id) { return allUsersById.containsKey(id); }
+    boolean isIdExists(Integer id) {
+        return allUsersById.containsKey(id);
+    }
 
     boolean isExist(String usernameOrEmail) {
         return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
