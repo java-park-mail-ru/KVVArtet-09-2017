@@ -22,7 +22,7 @@ public class AuthorizationController {
             path = {"/signup"},
             method = {RequestMethod.POST}
     )
-    public ResponseEntity signUp(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity signUp(@RequestBody User user) {
         String username = user.getLogin();
         String email = user.getEmail();
 
@@ -46,9 +46,9 @@ public class AuthorizationController {
         String email = user.getEmail();
         String password = user.getPassword();
 
-        String userInCurrentSession = (String) httpSession.getAttribute("username");
+        Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
       
-        if (userInCurrentSession == null) {
+        if (userIdInCurrentSession != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED);
         }
 
@@ -65,7 +65,7 @@ public class AuthorizationController {
         } else if (!Objects.equals(userController.getUserPassword(loginOrEmail), password)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT);
         } else {
-            httpSession.setAttribute("username", username);
+            httpSession.setAttribute("id", userController.getUserIdByLoginOrEmail(loginOrEmail));
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNIN_SUCCESS);
         }
     }
@@ -76,12 +76,12 @@ public class AuthorizationController {
             method = {RequestMethod.POST}
     )
     public ResponseEntity signOut(HttpSession httpSession) {
-        String userInCurrentSession = (String) httpSession.getAttribute("username");
-        if (userInCurrentSession == null) {
+        Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
+        if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
 
-        httpSession.removeAttribute("username");
+        httpSession.removeAttribute("id");
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS);
     }
 
@@ -91,12 +91,12 @@ public class AuthorizationController {
             method = {RequestMethod.GET}
     )
     public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
-        String userInCurrentSession = (String) httpSession.getAttribute("username");
+        Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
 
-        if (userInCurrentSession == null) {
+        if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL + httpSession.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL + " " + httpSession.getId() + " " + userController.getUserById(userIdInCurrentSession).getLogin());
     }
 
     @CrossOrigin(origins = frontendUrl)
@@ -105,7 +105,10 @@ public class AuthorizationController {
             method = {RequestMethod.POST}
     )
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
-        String lastUsername = (String) httpSession.getAttribute("username");
+        Integer id = (Integer) httpSession.getAttribute("id");
+        String lastUsername = userController.getUserById(id).getLogin();
+        String lastEmail = userController.getUserById(id).getEmail();
+        String lastPassword = userController.getUserById(id).getPassword();
 
         if (lastUsername == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED);
@@ -113,14 +116,14 @@ public class AuthorizationController {
 
         String username = user.getLogin();
         String email = user.getEmail();
+        String password = user.getPassword();
 
         if (userController.isUsernameExists(username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST);
         } else if (userController.isEmailExists(email)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.EMAIL_EXIST);
         } else {
-            userController.updateUser(lastUsername, user);
-            httpSession.setAttribute("username", user.getLogin());
+            userController.updateUser(lastUsername, username, lastEmail, email, lastPassword, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS);
         }
     }
