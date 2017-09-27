@@ -108,23 +108,18 @@ public class AuthorizationController {
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
         Integer id = (Integer) httpSession.getAttribute("id");
         String lastUsername = userController.getUserById(id).getLogin();
-        String lastEmail = userController.getUserById(id).getEmail();
-        String lastPassword = userController.getUserById(id).getPassword();
 
         if (lastUsername == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
         String username = user.getLogin();
-        String email = user.getEmail();
         String password = user.getPassword();
 
         if (userController.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
-        } else if (userController.isEmailExists(email) && !Objects.equals(lastEmail, email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.EMAIL_EXIST.getResponse());
         } else {
-            userController.updateUser(id, username, email, password);
+            userController.updateUser(id, username, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         }
     }

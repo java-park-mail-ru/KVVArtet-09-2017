@@ -55,17 +55,13 @@ class UserController {
         allUsersById.put(newUser.getId(), newUser);
     }
 
-    void updateUser(Integer id, String username, String email, String password) {
+    void updateUser(Integer id, String username, String password) {
         User updatedUser = allUsersById.get(id);
         String lastUsername = updatedUser.getLogin();
-        String lastEmail = updatedUser.getEmail();
         String lastPassword = updatedUser.getPassword();
 
         if (!Objects.equals(lastUsername, username)) {
             updatedUser.setLogin(username);
-        }
-        if (!Objects.equals(lastEmail, email)) {
-            updatedUser.setEmail(email);
         }
         if (!Objects.equals(lastPassword, password)) {
             updatedUser.setPassword(password);
