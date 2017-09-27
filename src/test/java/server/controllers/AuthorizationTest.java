@@ -1,5 +1,6 @@
 package server.controllers;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,15 +10,20 @@ import server.models.User;
 import static org.junit.Assert.*;
 
 public class AuthorizationTest {
-    private final MockHttpSession mockHttpSession = new MockHttpSession();
-    private final AuthorizationController authorizationController = new AuthorizationController();
+    private MockHttpSession mockHttpSession;
+    private AuthorizationController authorizationController;
+
+    @Before
+    public void init() {
+        mockHttpSession = new MockHttpSession();
+        authorizationController = new AuthorizationController();
+    }
 
     @Test
     public void signUpTest(){
         final User user = new User("xyz", "xyz@mail.ru", "xyz");
         ResponseEntity responseEntity = authorizationController.signUp(user);
         assertEquals("sign up shall return 200 code", HttpStatus.OK, responseEntity.getStatusCode());
-
     }
 
     @Test
