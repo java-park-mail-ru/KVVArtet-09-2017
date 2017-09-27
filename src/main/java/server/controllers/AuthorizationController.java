@@ -119,9 +119,9 @@ public class AuthorizationController {
         String email = user.getEmail();
         String password = user.getPassword();
 
-        if (userController.isUsernameExists(username)) {
+        if (userController.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST);
-        } else if (userController.isEmailExists(email)) {
+        } else if (userController.isEmailExists(email) && !Objects.equals(lastEmail, email)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.EMAIL_EXIST);
         } else {
             userController.updateUser(lastUsername, username, lastEmail, email, lastPassword, password);
