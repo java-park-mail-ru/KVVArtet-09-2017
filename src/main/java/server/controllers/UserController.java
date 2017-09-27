@@ -67,8 +67,8 @@ class UserController {
             updatedUser.setPassword(password);
         }
 
-        deleteUser(id);
-        setUser(updatedUser);
+        allUsersByLogin.remove(lastUsername);
+        allUsersByLogin.put(username, updatedUser);
     }
 
     boolean isUsernameExists(String username) {
