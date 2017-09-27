@@ -61,32 +61,32 @@ public class AuthorizationTest {
 
         User changedUserLogin = new User("xxx", "xyz@mail.ru", "xyz");
         responseEntity = authorizationController.changeUserProfile(changedUserLogin, mockHttpSession);
-        assertEquals("change login shall return 200 code, body is"
+        assertEquals("change login shall return 200 code, body is "
                 + responseEntity.getBody(), HttpStatus.OK, responseEntity.getStatusCode());
 
         User changedUserEmail = new User("xxx", "yxz@mail.ru", "xyz");
         responseEntity = authorizationController.changeUserProfile(changedUserEmail, mockHttpSession);
-        assertEquals("change email shall return 200 code, body is"
+        assertEquals("change email shall return 200 code, body is "
                 + responseEntity.getBody(), HttpStatus.OK, responseEntity.getStatusCode());
 
         User changedUserPassword = new User("xxx", "yxz@mail.ru", "zyx");
         responseEntity = authorizationController.changeUserProfile(changedUserPassword, mockHttpSession);
-        assertEquals("change password shall return 200 code, body is"
+        assertEquals("change password shall return 200 code, body is "
                 + responseEntity.getBody(), HttpStatus.OK, responseEntity.getStatusCode());
 
         User changedUserEmailAndLogin = new User("yyy", "yyy@mail.ru", "xyz");
         responseEntity = authorizationController.changeUserProfile(changedUserEmailAndLogin, mockHttpSession);
-        assertEquals("change email and login shall return 200 code, body is"
+        assertEquals("change email and login shall return 200 code, body is "
                 + responseEntity.getBody(), HttpStatus.OK, responseEntity.getStatusCode());
 
         User changedUserLoginAndPassword = new User("zzz", "yyy@mail.ru", "zxy");
         responseEntity = authorizationController.changeUserProfile(changedUserLoginAndPassword, mockHttpSession);
-        assertEquals("change login and password shall return 200 code, body is"
+        assertEquals("change login and password shall return 200 code, body is "
                 + responseEntity.getBody(), HttpStatus.OK, responseEntity.getStatusCode());
 
         User changedUserEverything = new User("xxx", "yxz@mail.ru", "xyz");
         responseEntity = authorizationController.changeUserProfile(changedUserEverything, mockHttpSession);
-        assertEquals("change everything shall return 200 code, body is"
+        assertEquals("change everything shall return 200 code, body is "
                 + responseEntity.getBody(), HttpStatus.OK, responseEntity.getStatusCode());
 
     }

@@ -55,8 +55,12 @@ class UserController {
         allUsersById.put(newUser.getId(), newUser);
     }
 
-    void updateUser(String lastUsername, String username, String lastEmail, String email, String lastPassword, String password) {
-        User updatedUser = allUsersByLogin.get(lastUsername);
+    void updateUser(Integer id, String username, String email, String password) {
+        User updatedUser = allUsersById.get(id);
+        String lastUsername = updatedUser.getLogin();
+        String lastEmail = updatedUser.getEmail();
+        String lastPassword = updatedUser.getPassword();
+
         if (!Objects.equals(lastUsername, username)) {
             updatedUser.setLogin(username);
         }
@@ -67,7 +71,7 @@ class UserController {
             updatedUser.setPassword(password);
         }
 
-        deleteUser(lastUsername);
+        deleteUser(id);
         setUser(updatedUser);
     }
 
@@ -87,9 +91,9 @@ class UserController {
         return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
     }
 
-    private void deleteUser(String username) {
-        User deletedUser = allUsersByLogin.get(username);
-        Integer id = deletedUser.getId();
+    private void deleteUser(Integer id) {
+        User deletedUser = allUsersById.get(id);
+        String username = deletedUser.getLogin();
         String email = deletedUser.getEmail();
 
         allUsersByEmail.remove(email);
