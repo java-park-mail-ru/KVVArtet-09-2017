@@ -100,12 +100,13 @@ public class AuthorizationController {
     )
     public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
+        String username = userController.getUserById(userIdInCurrentSession).getLogin();
 
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL.getResponse()
-                + " " + httpSession.getId() + " " + userController.getUserById(userIdInCurrentSession).getLogin());
+                + " " + userIdInCurrentSession + " " + username);
     }
 
     @CrossOrigin(origins = frontendUrl)
