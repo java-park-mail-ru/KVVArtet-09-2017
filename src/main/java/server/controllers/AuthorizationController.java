@@ -73,7 +73,8 @@ public class AuthorizationController {
         } else if (!Objects.equals(userController.getUserPassword(loginOrEmail), password)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT.getResponse());
         } else {
-            httpSession.setAttribute("id", userController.getUserIdByLoginOrEmail(loginOrEmail));
+            Integer id = userController.getUserIdByLoginOrEmail(loginOrEmail);
+            httpSession.setAttribute("id", id);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNIN_SUCCESS.getResponse());
         }
     }

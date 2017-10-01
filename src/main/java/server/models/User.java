@@ -3,20 +3,22 @@ package server.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 @SuppressWarnings("unused")
 public class User {
     private String login;
     private String email;
     private String password;
     private final Integer id;
-    private static int instanceCounter;
+    private static AtomicInteger instanceCounter;
 
     @JsonCreator
     public User(@JsonProperty("username") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
         this.login = login;
         this.email = email;
         this.password = password;
-        id = ++instanceCounter;
+        id = instanceCounter.getAndIncrement();
     }
 
     public Integer getId() {
