@@ -13,7 +13,8 @@ public enum ApiResponse {
     SIGNOUT_SUCCESS(8, "SignOut is successful"),
     LOGIN_IS_THE_SAME(9, "User login is the same"),
     CHANGE_PROFILE_SUCCESS(10, "Profile successfully changed"),
-    REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested, your ID is:");
+    REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested, your ID is:"),
+    PASSWORD_NOT_MATCH(12, "Password and password confirmation not match");
   
     private final Integer status;
     private final String response;

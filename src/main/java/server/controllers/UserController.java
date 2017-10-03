@@ -87,7 +87,7 @@ class UserController {
         return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
     }
 
-    private void deleteUser(Integer id) {
+    void deleteUser(Integer id) {
         User deletedUser = allUsersById.get(id);
         String username = deletedUser.getLogin();
         String email = deletedUser.getEmail();
