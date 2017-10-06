@@ -11,7 +11,7 @@ public class User {
     private String email;
     private String password;
     private final Integer id;
-    private static AtomicInteger instanceCounter = new AtomicInteger(0);
+    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
 
     @JsonCreator
     public User(@JsonProperty("username") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
