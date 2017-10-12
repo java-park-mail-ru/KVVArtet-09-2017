@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpSession;
 import server.models.User;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class AuthorizationTest {
     private MockHttpSession mockHttpSession;
     private AuthorizationController authorizationController;
+
     private User user;
     @Before
     public void init() {
