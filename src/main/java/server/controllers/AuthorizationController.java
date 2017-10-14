@@ -5,13 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.models.ApiResponse;
 import server.models.User;
+import server.services.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @RestController
 public class AuthorizationController {
-    private final UserController userController = new UserController();
+    private final UserService userController = new UserService();
     private final String frontendUrl = "http://KVVArtet-09-2017.herokuapp.com";
 
     AuthorizationController() {
