@@ -1,104 +1,145 @@
 package server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Service;
 import server.dao.UserDao;
 import server.models.User;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.util.*;
 
+@Service
 public class UserService extends JdbcDaoSupport implements UserDao {
-    private final Map<String, User> allUsersByLogin = new HashMap<>();
-    private final Map<String, User> allUsersByEmail = new HashMap<>();
-    private final Map<Integer, User> allUsersById = new HashMap<>();
 
     public UserService() { }
 
+    @Qualifier("dataSource")
+    @Autowired
     private DataSource dataSource;
 
     @PostConstruct
-    private void initialize(){
+    private void initialize() {
         setDataSource(dataSource);
     }
 
     @Override
-    public String getUserEmail(String username) {
-        return allUsersByLogin.get(username).getEmail();
-    }
-    @Override
-    public String getUserUsername(String email) {
-        return allUsersByEmail.get(email).getLogin();
-    }
-    @Override
-    public String getUserPassword(String loginOrEmail) {
-        if (isUsernameExists(loginOrEmail)) {
-            return allUsersByLogin.get(loginOrEmail).getPassword();
-        }
-        return allUsersByEmail.get(loginOrEmail).getPassword();
-    }
-    @Override
     public User getUserById(Integer id) {
-        return allUsersById.get(id);
+        String sql = "SELECT * FROM public.user WHERE id = ?";
+        return getJdbcTemplate().queryForObject(sql, new Object[]{id}, (rs, rwNumber) -> {
+                User user = new User();
+            user.setId(rs.getInt("id"));
+            user.setLogin(rs.getString("username"));
+            user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            return user;
+        });
     }
+
     @Override
-    public Integer getUserIdByLoginOrEmail(String loginOrEmail) {
-        if (allUsersByLogin.containsKey(loginOrEmail)) {
-            return allUsersByLogin.get(loginOrEmail).getId();
-        }
-        return allUsersByEmail.get(loginOrEmail).getId();
+    public Integer getUserIdByUsername(String username) {
+        String sql = "SELECT id FROM public.user WHERE username = ?";
+        return getJdbcTemplate().queryForObject(sql, Integer.class, username);
     }
+
+    @Override
+    public Integer getUserIdByEmail(String email) {
+        String sql = "SELECT id FROM public.user WHERE email = ?";
+        return getJdbcTemplate().queryForObject(sql, Integer.class, email);
+    }
+
+    @Override
+    public Integer getUserIdByUsernameOrEmail(String usernameOrEmail) {
+        Integer id = getUserIdByUsername(usernameOrEmail);
+        if (id > 0) {
+            return id;
+        }
+
+        id = getUserIdByEmail(usernameOrEmail);
+        if (id > 0) {
+            return id;
+        }
+
+        return 0;
+    }
+
     @Override
     public void setUser(User newUser) {
-        allUsersByLogin.put(newUser.getLogin(), newUser);
-        allUsersByEmail.put(newUser.getEmail(), newUser);
-        allUsersById.put(newUser.getId(), newUser);
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        getJdbcTemplate().update(con -> {
+            PreparedStatement pst = con.prepareStatement(
+                    "insert into public.user(login, email, password)" + " values(?,?,?)" + " returning id",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.setString(1, newUser.getLogin());
+            pst.setString(2, newUser.getEmail());
+            pst.setString(3, newUser.getPassword());
+            return pst;
+        }, keyHolder);
     }
+
     @Override
-    public void updateUser(Integer id, String username, String password) {
-        User updatedUser = allUsersById.get(id);
-        String lastUsername = updatedUser.getLogin();
-        String lastPassword = updatedUser.getPassword();
-
-        if (!Objects.equals(lastUsername, username)) {
-            updatedUser.setLogin(username);
-        }
-        if (!Objects.equals(lastPassword, password)) {
-            updatedUser.setPassword(password);
-        }
-
-        allUsersByLogin.remove(lastUsername);
-        allUsersByLogin.put(username, updatedUser);
+    public void updateUserPassword(Integer id, String password) {
+        String sql = "UPDATE public.user SET password = ? WHERE id = ?";
+        getJdbcTemplate().update(sql, id, password);
     }
+
+    @Override
+    public void updateUserLogin(Integer id, String username) {
+        String sql = "UPDATE public.user SET username = ? WHERE id = ?";
+        getJdbcTemplate().update(sql, id, username);
+    }
+
     @Override
     public boolean isUsernameExists(String username) {
-        return allUsersByLogin.containsKey(username);
+        String sql = "SELECT id from public.user WHERE username = ?";
+        Integer check = getJdbcTemplate().queryForObject(sql, Integer.class, username);
+        return check != null && check > 0;
     }
+
     @Override
     public boolean isEmailExists(String email) {
-        return allUsersByEmail.containsKey(email);
+        String sql = "SELECT id from public.user WHERE email = ?";
+        Integer check = getJdbcTemplate().queryForObject(sql, Integer.class, email);
+        return check != null && check > 0;
     }
+
     @Override
     public boolean isIdExists(Integer id) {
-        return allUsersById.containsKey(id);
+        String sql = "SELECT id from public.user WHERE id = ?";
+        Integer check = getJdbcTemplate().queryForObject(sql, Integer.class, id);
+        return check != null && check > 0;
     }
+
     @Override
     public boolean isExist(String usernameOrEmail) {
         return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
     }
+
     @Override
     public void deleteUser(Integer id) {
-        User deletedUser = allUsersById.get(id);
-        String username = deletedUser.getLogin();
-        String email = deletedUser.getEmail();
-
-        allUsersByEmail.remove(email);
-        allUsersByLogin.remove(username);
-        allUsersById.remove(id);
+        String sql = "DELETE FROM public.user WHERE id = ?";
+        getJdbcTemplate().update(sql, id);
     }
+
     @Override
     public List<User> getAllUsers() {
-        return (ArrayList<User>) allUsersByLogin.values();
+        String sql = "SELECT * FROM public.user";
+        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql);
+
+        List<User> result = new ArrayList<>();
+        for (Map<String, Object> row:rows) {
+            User user = new User();
+            user.setId((Integer) row.get("id"));
+            user.setLogin((String) row.get("username"));
+            user.setEmail((String) row.get("email"));
+            user.setPassword((String) row.get("password"));
+            result.add(user);
+        }
+
+        return result;
     }
 }

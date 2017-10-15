@@ -3,22 +3,23 @@ package server.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 @SuppressWarnings("unused")
 public class User {
     private String login;
     private String email;
     private String password;
-    private final Integer id;
-    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private Integer id;
 
     @JsonCreator
     public User(@JsonProperty("username") String login, @JsonProperty("email") String email, @JsonProperty("password") String password) {
         this.login = login;
         this.email = email;
         this.password = password;
-        id = INSTANCE_COUNTER.incrementAndGet();
+        this.id = 0;
+    }
+
+    public User() {
+
     }
 
     public Integer getId() {
@@ -35,6 +36,10 @@ public class User {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setLogin(String login) {

@@ -3,20 +3,22 @@ package server.dao;
 import server.models.User;
 import java.util.*;
 
+@SuppressWarnings("unused")
 public interface UserDao {
-
-        String getUserEmail(String username);
-        String getUserUsername(String email);
-
-        String getUserPassword(String loginOrEmail);
 
         User getUserById(Integer id);
 
-        Integer getUserIdByLoginOrEmail(String loginOrEmail);
+        Integer getUserIdByUsername(String username);
+
+        Integer getUserIdByEmail(String email);
+
+        Integer getUserIdByUsernameOrEmail(String usernameOrEmail);
 
         void setUser(User newUser);
 
-        void updateUser(Integer id, String username, String password);
+        void updateUserPassword(Integer id, String password);
+
+        void updateUserLogin(Integer id, String username);
 
         boolean isUsernameExists(String username);
 

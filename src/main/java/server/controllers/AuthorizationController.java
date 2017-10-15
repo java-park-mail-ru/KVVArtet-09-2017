@@ -43,9 +43,6 @@ public class AuthorizationController {
             method = {RequestMethod.POST}
     )
     public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
-        String username = user.getLogin();
-        String email = user.getEmail();
-        String password = user.getPassword();
 
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
       
@@ -53,21 +50,24 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED.getResponse());
         }
 
-        String loginOrEmail;
+        String usernameOrEmail;
 
-        if (username == null) {
-            loginOrEmail = email;
+        if (user.getLogin() == null) {
+            usernameOrEmail = user.getEmail();
         } else {
-            loginOrEmail = username;
+            usernameOrEmail = user.getLogin();
         }
 
-        if (!userController.isExist(loginOrEmail)) {
+        if (!userController.isExist(usernameOrEmail)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST.getResponse());
-        } else if (!Objects.equals(userController.getUserPassword(loginOrEmail), password)) {
+        }
+
+        Integer currentUserId = userController.getUserIdByUsernameOrEmail(usernameOrEmail);
+
+        if (!Objects.equals(userController.getUserById(currentUserId).getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT.getResponse());
         } else {
-            Integer id = userController.getUserIdByLoginOrEmail(loginOrEmail);
-            httpSession.setAttribute("id", id);
+            httpSession.setAttribute("id", currentUserId);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNIN_SUCCESS.getResponse());
         }
     }
@@ -111,6 +111,7 @@ public class AuthorizationController {
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
         Integer id = (Integer) httpSession.getAttribute("id");
         String lastUsername = userController.getUserById(id).getLogin();
+        String lastPassword = userController.getUserById(id).getPassword();
 
         if (lastUsername == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
@@ -121,9 +122,17 @@ public class AuthorizationController {
 
         if (userController.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
-        } else {
-            userController.updateUser(id, username, password);
+        } else if (!Objects.equals(lastUsername, username) && !(Objects.equals(password, password))) {
+            userController.updateUserLogin(id, username);
+            userController.updateUserPassword(id, password);
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
+        } else if (!Objects.equals(lastUsername, username)) {
+            userController.updateUserLogin(id, username);
+            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
+        } else if (!Objects.equals(lastPassword, password)) {
+            userController.updateUserPassword(id, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
     }
 }
