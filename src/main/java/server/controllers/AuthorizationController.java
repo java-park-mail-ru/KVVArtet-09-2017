@@ -11,37 +11,35 @@ import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @RestController
+@CrossOrigin(origins = AuthorizationController.FRONTED_URL)
 public class AuthorizationController {
-    private final UserService userController = new UserService();
-    private final String frontendUrl = "http://KVVArtet-09-2017.herokuapp.com";
+    private final UserService userService;
+    public static final String FRONTED_URL = "http://KVVArtet-09-2017.herokuapp.com";
 
-    AuthorizationController() {
-    }
+  
 
-    @CrossOrigin(origins = frontendUrl)
-    @RequestMapping(
-            path = {"/signup"},
-            method = {RequestMethod.POST}
-    )
+    public AuthorizationController(UserService userService) {
+		super();
+		this.userService = userService;
+	}
+
+
+    @PostMapping("/signup")
     public ResponseEntity signUp(@RequestBody User user) {
         String username = user.getLogin();
         String email = user.getEmail();
 
-        if (userController.isUsernameExists(username)) {
+        if (userService.isUsernameExists(username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
-        } else if (userController.isEmailExists(email)) {
+        } else if (userService.isEmailExists(email)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.EMAIL_EXIST.getResponse());
         } else {
-            userController.setUser(user);
+            userService.setUser(user);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNUP_SUCCESS.getResponse());
         }
     }
 
-    @CrossOrigin(origins = frontendUrl)
-    @RequestMapping(
-            path = {"/signin"},
-            method = {RequestMethod.POST}
-    )
+    @PostMapping("/signin")
     public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
 
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
@@ -58,13 +56,13 @@ public class AuthorizationController {
             usernameOrEmail = user.getLogin();
         }
 
-        if (!userController.isExist(usernameOrEmail)) {
+        if (!userService.isExist(usernameOrEmail)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST.getResponse());
         }
 
-        Integer currentUserId = userController.getUserIdByUsernameOrEmail(usernameOrEmail);
+        Integer currentUserId = userService.getUserIdByUsernameOrEmail(usernameOrEmail);
 
-        if (!Objects.equals(userController.getUserById(currentUserId).getPassword(), user.getPassword())) {
+        if (!Objects.equals(userService.getUserById(currentUserId).getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT.getResponse());
         } else {
             httpSession.setAttribute("id", currentUserId);
@@ -72,11 +70,7 @@ public class AuthorizationController {
         }
     }
 
-    @CrossOrigin(origins = frontendUrl)
-    @RequestMapping(
-            path = {"/signout"},
-            method = {RequestMethod.POST}
-    )
+    @PostMapping("/signout")
     public ResponseEntity signOut(HttpSession httpSession) {
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
         if (userIdInCurrentSession == null) {
@@ -87,14 +81,10 @@ public class AuthorizationController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS.getResponse());
     }
 
-    @CrossOrigin(origins = frontendUrl)
-    @RequestMapping(
-            path = {"/session"},
-            method = {RequestMethod.POST}
-    )
+    @PostMapping("/session")
     public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
-        String username = userController.getUserById(userIdInCurrentSession).getLogin();
+        String username = userService.getUserById(userIdInCurrentSession).getLogin();
 
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
@@ -103,15 +93,11 @@ public class AuthorizationController {
                 + " " + userIdInCurrentSession + "  Your login is " + username);
     }
 
-    @CrossOrigin(origins = frontendUrl)
-    @RequestMapping(
-            path = {"/settings"},
-            method = {RequestMethod.POST}
-    )
+    @PostMapping("/settings")
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
         Integer id = (Integer) httpSession.getAttribute("id");
-        String lastUsername = userController.getUserById(id).getLogin();
-        String lastPassword = userController.getUserById(id).getPassword();
+        String lastUsername = userService.getUserById(id).getLogin();
+        String lastPassword = userService.getUserById(id).getPassword();
 
         if (lastUsername == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
@@ -120,17 +106,17 @@ public class AuthorizationController {
         String username = user.getLogin();
         String password = user.getPassword();
 
-        if (userController.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
+        if (userService.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
         } else if (!Objects.equals(lastUsername, username) && !(Objects.equals(password, password))) {
-            userController.updateUserLogin(id, username);
-            userController.updateUserPassword(id, password);
+            userService.updateUserLogin(id, username);
+            userService.updateUserPassword(id, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         } else if (!Objects.equals(lastUsername, username)) {
-            userController.updateUserLogin(id, username);
+            userService.updateUserLogin(id, username);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         } else if (!Objects.equals(lastPassword, password)) {
-            userController.updateUserPassword(id, password);
+            userService.updateUserPassword(id, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());

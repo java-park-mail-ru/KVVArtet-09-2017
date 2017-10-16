@@ -2,6 +2,7 @@ package server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
@@ -14,23 +15,18 @@ import java.sql.PreparedStatement;
 import java.util.*;
 
 @Service
-public class UserService extends JdbcDaoSupport implements UserDao {
+public class UserService implements UserDao {
 
-    public UserService() { }
+    private final JdbcTemplate jdbcTemplate;
+    
+    public UserService(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-    @Qualifier("dataSource")
-    @Autowired
-    private DataSource dataSource;
-
-    @PostConstruct
-    private void initialize() {
-        setDataSource(dataSource);
-    }
-
-    @Override
+	@Override
     public User getUserById(Integer id) {
         String sql = "SELECT * FROM public.user WHERE id = ?";
-        return getJdbcTemplate().queryForObject(sql, new Object[]{id}, (rs, rwNumber) -> {
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rwNumber) -> {
                 User user = new User();
             user.setId(rs.getInt("id"));
             user.setLogin(rs.getString("username"));
@@ -43,13 +39,13 @@ public class UserService extends JdbcDaoSupport implements UserDao {
     @Override
     public Integer getUserIdByUsername(String username) {
         String sql = "SELECT id FROM public.user WHERE username = ?";
-        return getJdbcTemplate().queryForObject(sql, Integer.class, username);
+        return jdbcTemplate.queryForObject(sql, Integer.class, username);
     }
 
     @Override
     public Integer getUserIdByEmail(String email) {
         String sql = "SELECT id FROM public.user WHERE email = ?";
-        return getJdbcTemplate().queryForObject(sql, Integer.class, email);
+        return jdbcTemplate.queryForObject(sql, Integer.class, email);
     }
 
     @Override
@@ -70,9 +66,9 @@ public class UserService extends JdbcDaoSupport implements UserDao {
     @Override
     public void setUser(User newUser) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        getJdbcTemplate().update(con -> {
+        jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
-                    "insert into public.user(login, email, password)" + " values(?,?,?)" + " returning id",
+                    "insert into public.user(username, email, password)" + " values(?,?,?)" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, newUser.getLogin());
             pst.setString(2, newUser.getEmail());
@@ -84,33 +80,33 @@ public class UserService extends JdbcDaoSupport implements UserDao {
     @Override
     public void updateUserPassword(Integer id, String password) {
         String sql = "UPDATE public.user SET password = ? WHERE id = ?";
-        getJdbcTemplate().update(sql, id, password);
+        jdbcTemplate.update(sql, id, password);
     }
 
     @Override
     public void updateUserLogin(Integer id, String username) {
         String sql = "UPDATE public.user SET username = ? WHERE id = ?";
-        getJdbcTemplate().update(sql, id, username);
+        jdbcTemplate.update(sql, id, username);
     }
 
     @Override
     public boolean isUsernameExists(String username) {
-        String sql = "SELECT id from public.user WHERE username = ?";
-        Integer check = getJdbcTemplate().queryForObject(sql, Integer.class, username);
+        String sql = "SELECT count(*) from public.user WHERE username = ?";
+        Integer check = jdbcTemplate.queryForObject(sql, Integer.class, username);
         return check != null && check > 0;
     }
 
     @Override
     public boolean isEmailExists(String email) {
-        String sql = "SELECT id from public.user WHERE email = ?";
-        Integer check = getJdbcTemplate().queryForObject(sql, Integer.class, email);
+        String sql = "SELECT count(*) from public.user WHERE email = ?";
+        Integer check = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return check != null && check > 0;
     }
 
     @Override
     public boolean isIdExists(Integer id) {
-        String sql = "SELECT id from public.user WHERE id = ?";
-        Integer check = getJdbcTemplate().queryForObject(sql, Integer.class, id);
+        String sql = "SELECT count(*) from public.user WHERE id = ?";
+        Integer check = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return check != null && check > 0;
     }
 
@@ -122,13 +118,13 @@ public class UserService extends JdbcDaoSupport implements UserDao {
     @Override
     public void deleteUser(Integer id) {
         String sql = "DELETE FROM public.user WHERE id = ?";
-        getJdbcTemplate().update(sql, id);
+        jdbcTemplate.update(sql, id);
     }
 
     @Override
     public List<User> getAllUsers() {
         String sql = "SELECT * FROM public.user";
-        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql);
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 
         List<User> result = new ArrayList<>();
         for (Map<String, Object> row:rows) {
