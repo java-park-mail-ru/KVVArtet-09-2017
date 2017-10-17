@@ -78,8 +78,8 @@ public class UserService implements UserDao {
             pst.setInt(2, id);
             return pst;
         }, keyHolder);
-        return new User(keyHolder.getKey().intValue(), getUserById(id).getEmail(),
-                getUserById(id).getLogin(), getUserById(id).getPassword());
+        return new User(keyHolder.getKey().intValue(), getUserById(id).getLogin(),
+                getUserById(id).getEmail(), getUserById(id).getPassword());
     }
 
     @Override

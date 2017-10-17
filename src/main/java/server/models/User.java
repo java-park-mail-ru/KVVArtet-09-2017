@@ -10,24 +10,21 @@ public class User {
     private String password;
     private Integer id;
 
-    @JsonCreator
-    public User(@JsonProperty("username") String login, @JsonProperty("email") String email,
-                @JsonProperty("password") String password) {
+    public User(String login, String email, String password) {
         this.login = login;
         this.email = email;
         this.password = password;
         this.id = 0;
     }
 
-    @JsonCreator
-    public User(@JsonProperty("id") Integer id, @JsonProperty("username") String login,
-                @JsonProperty("email") String email, @JsonProperty("password") String password) {
+    public User(Integer id, String login, String email, String password) {
         this.login = login;
         this.email = email;
         this.password = password;
         this.id = id;
     }
 
+    @JsonCreator
     public User() {
 
     }
@@ -48,19 +45,23 @@ public class User {
         return this.password;
     }
 
-    public void setId(Integer id) {
+    @JsonCreator
+    public void setId(@JsonProperty("id") Integer id) {
         this.id = id;
     }
 
-    public void setLogin(String login) {
+    @JsonCreator
+    public void setLogin(@JsonProperty("username") String login) {
         this.login = login;
     }
 
-    public void setEmail(String email) {
+    @JsonCreator
+    public void setEmail(@JsonProperty("email") String email) {
         this.email = email;
     }
 
-    public void setPassword(String password) {
+    @JsonCreator
+    public void setPassword(@JsonProperty("password") String password) {
         this.password = password;
     }
 
@@ -75,10 +76,10 @@ public class User {
 
         User user = (User) obj;
 
-        return (login != null ? login.equals(user.login) : user.login == null) &&
-                (email != null ? email.equals(user.email) : user.email == null) &&
-                (password != null ? password.equals(user.password) : user.password == null) &&
-                (id != null ? id.equals(user.id) : user.id == null);
+        return (login != null ? login.equals(user.login) : user.login == null)
+                && (email != null ? email.equals(user.email) : user.email == null)
+                && (password != null ? password.equals(user.password) : user.password == null)
+                && (id != null ? id.equals(user.id) : user.id == null);
     }
 
     @Override
