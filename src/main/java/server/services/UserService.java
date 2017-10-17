@@ -1,33 +1,29 @@
 package server.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 import server.dao.UserDao;
 import server.models.User;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.util.*;
 
+@SuppressWarnings("ConstantConditions")
 @Service
 public class UserService implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     
     public UserService(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-	@Override
+    @Override
     public User getUserById(Integer id) {
         String sql = "SELECT * FROM public.user WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rwNumber) -> {
-                User user = new User();
+            User user = new User();
             user.setId(rs.getInt("id"));
             user.setLogin(rs.getString("username"));
             user.setEmail(rs.getString("email"));
@@ -50,21 +46,14 @@ public class UserService implements UserDao {
 
     @Override
     public Integer getUserIdByUsernameOrEmail(String usernameOrEmail) {
-        Integer id = getUserIdByUsername(usernameOrEmail);
-        if (id > 0) {
-            return id;
+        if (usernameOrEmail.contains("@")) {
+            return getUserIdByEmail(usernameOrEmail);
         }
-
-        id = getUserIdByEmail(usernameOrEmail);
-        if (id > 0) {
-            return id;
-        }
-
-        return 0;
+        return getUserIdByUsername(usernameOrEmail);
     }
 
     @Override
-    public void setUser(User newUser) {
+    public User setUser(User newUser) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
@@ -75,18 +64,37 @@ public class UserService implements UserDao {
             pst.setString(3, newUser.getPassword());
             return pst;
         }, keyHolder);
+        return new User(keyHolder.getKey().intValue(), newUser.getLogin(), newUser.getEmail(), newUser.getPassword());
     }
 
     @Override
-    public void updateUserPassword(Integer id, String password) {
-        String sql = "UPDATE public.user SET password = ? WHERE id = ?";
-        jdbcTemplate.update(sql, id, password);
+    public User updateUserPassword(Integer id, String password) {
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement pst = con.prepareStatement(
+                    "UPDATE public.user SET password = ? WHERE id = ?" + " returning id",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.setString(1, password);
+            pst.setInt(2, id);
+            return pst;
+        }, keyHolder);
+        return new User(keyHolder.getKey().intValue(), getUserById(id).getEmail(),
+                getUserById(id).getLogin(), getUserById(id).getPassword());
     }
 
     @Override
-    public void updateUserLogin(Integer id, String username) {
-        String sql = "UPDATE public.user SET username = ? WHERE id = ?";
-        jdbcTemplate.update(sql, id, username);
+    public User updateUserLogin(Integer id, String username) {
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement pst = con.prepareStatement(
+                    "UPDATE public.user SET username = ? WHERE id = ?" + " returning id",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.setString(1, username);
+            pst.setInt(2, id);
+            return pst;
+        }, keyHolder);
+        return new User(keyHolder.getKey().intValue(), getUserById(id).getLogin(),
+                getUserById(id).getEmail(), getUserById(id).getPassword());
     }
 
     @Override

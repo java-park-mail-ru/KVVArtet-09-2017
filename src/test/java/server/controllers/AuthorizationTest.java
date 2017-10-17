@@ -1,16 +1,12 @@
 package server.controllers;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import server.dao.UserDao;
 import server.models.User;
-import static org.junit.Assert.assertEquals;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,107 +24,89 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 @Transactional
 public class AuthorizationTest {
-	@Autowired
-	private MockMvc mockMvc;
-	@Autowired
-	private UserDao dao;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private UserDao dao;
 
-	@Autowired
-	private ObjectMapper mapper;
+    @Autowired
+    private ObjectMapper mapper;
 
-	@Test
-	public void signUpTest() throws Exception {
+    @Test
+    public void signUpTest() throws Exception {
 
-		mockMvc
-				.perform(post("/signup")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(mapper.writeValueAsString(new User("xyz", "xyz@mail.ru", "xyz"))))
-				.andExpect(status().isOk());
-	}
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("xyz", "xyz@mail.ru", "xyz"))))
+                .andExpect(status().isOk());
+    }
 
-	// @Test
-	// public void signInTest() {
-	// ResponseEntity responseEntity = authorizationController.signUp(user);
-	// assertEquals("sign up shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// mockHttpSession.setAttribute("id", null);
-	// responseEntity = authorizationController.signIn(user, mockHttpSession);
-	// assertEquals("sign in shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	// }
-	//
-	// @Test
-	// public void signOutTest() {
-	//
-	// ResponseEntity responseEntity = authorizationController.signUp(user);
-	// assertEquals("sign up shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// responseEntity = authorizationController.signIn(user, mockHttpSession);
-	// assertEquals("sign in shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// responseEntity = authorizationController.signOut(mockHttpSession);
-	// assertEquals("sign out shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	// }
-	//
-	// @Test
-	// public void changingUserUsernameTest() {
-	//
-	// ResponseEntity responseEntity = authorizationController.signUp(user);
-	// assertEquals("sign up shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// responseEntity = authorizationController.signIn(user, mockHttpSession);
-	// assertEquals("sign in shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// User changedUserLogin = new User("xxx", "xyz@mail.ru", "xyz");
-	// responseEntity =
-	// authorizationController.changeUserProfile(changedUserLogin,
-	// mockHttpSession);
-	// assertEquals("change login shall return 200 code, body is "
-	// + responseEntity.getBody(), HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	// }
-	//
-	// @Test
-	// public void changingUserPasswordTest() {
-	// ResponseEntity responseEntity = authorizationController.signUp(user);
-	// assertEquals("sign up shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// responseEntity = authorizationController.signIn(user, mockHttpSession);
-	// assertEquals("sign in shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// User changedUserPassword = new User("xyz", "xyz@mail.ru", "xxx");
-	// responseEntity =
-	// authorizationController.changeUserProfile(changedUserPassword,
-	// mockHttpSession);
-	// assertEquals("change password shall return 200 code, body is "
-	// + responseEntity.getBody(), HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	// }
-	//
-	// @Test
-	// public void changingUserLoginAndPasswordTest() {
-	// ResponseEntity responseEntity = authorizationController.signUp(user);
-	// assertEquals("sign up shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// responseEntity = authorizationController.signIn(user, mockHttpSession);
-	// assertEquals("sign in shall return 200 code", HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	//
-	// User changedUserLoginAndPassword = new User("xyz", "xyz@mail.ru", "zxy");
-	// responseEntity =
-	// authorizationController.changeUserProfile(changedUserLoginAndPassword,
-	// mockHttpSession);
-	// assertEquals("change login and password shall return 200 code, body is "
-	// + responseEntity.getBody(), HttpStatus.OK,
-	// responseEntity.getStatusCode());
-	// }
+    @Test
+    public void signInTest() throws Exception {
+        signUpTest();
+        mockMvc
+                .perform(post("/signin")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("xyz", "xyz@mail.ru", "xyz"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void sessionTest() throws Exception{
+        mockMvc
+                .perform(post("/session"))
+                .andExpect(status().isOk());
+    }
+
+//    @Test
+//    public void signOutTest() throws Exception {
+//
+//        mockMvc
+//                .perform(post("/signup")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(mapper.writeValueAsString(new User("xxx", "xxx@mail.ru", "xxx"))))
+//                .andExpect(status().isOk());
+//        mockMvc
+//                .perform(post("/signin")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(mapper.writeValueAsString(new User("xxx", "xxx@mail.ru", "xxx"))))
+//                .andExpect(status().isOk());
+//        mockMvc
+//                .perform(post("/signout"))
+//                .andExpect(status().isOk());
+//    }
+
+    @Test
+    public void changingUserUsernameTest() throws Exception {
+        signUpTest();
+        signInTest();
+        mockMvc
+                .perform(post("/settings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("zxy", "xyz@mail.ru", "xyz"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void changingUserPasswordTest() throws Exception {
+        signUpTest();
+        signInTest();
+        mockMvc
+                .perform(post("/settings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("xyz", "zxy@mail.ru", "xyz"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void changingUserLoginAndPasswordTest() throws Exception {
+        signUpTest();
+        signInTest();
+        mockMvc
+                .perform(post("/settings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("zzz", "zzz@mail.ru", "zzz"))))
+                .andExpect(status().isOk());
+    }
 }

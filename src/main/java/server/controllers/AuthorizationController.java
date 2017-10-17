@@ -14,14 +14,15 @@ import java.util.Objects;
 @CrossOrigin(origins = AuthorizationController.FRONTED_URL)
 public class AuthorizationController {
     private final UserService userService;
-    public static final String FRONTED_URL = "http://KVVArtet-09-2017.herokuapp.com";
+    @SuppressWarnings("WeakerAccess")
+    static final String FRONTED_URL = "http://KVVArtet-09-2017.herokuapp.com";
 
   
 
     public AuthorizationController(UserService userService) {
-		super();
-		this.userService = userService;
-	}
+        super();
+        this.userService = userService;
+    }
 
 
     @PostMapping("/signup")
@@ -84,11 +85,12 @@ public class AuthorizationController {
     @PostMapping("/session")
     public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
-        String username = userService.getUserById(userIdInCurrentSession).getLogin();
 
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
+
+        String username = userService.getUserById(userIdInCurrentSession).getLogin();
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL.getResponse()
                 + " " + userIdInCurrentSession + "  Your login is " + username);
     }
@@ -96,12 +98,13 @@ public class AuthorizationController {
     @PostMapping("/settings")
     public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
         Integer id = (Integer) httpSession.getAttribute("id");
+
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
+        }
+
         String lastUsername = userService.getUserById(id).getLogin();
         String lastPassword = userService.getUserById(id).getPassword();
-
-        if (lastUsername == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
-        }
 
         String username = user.getLogin();
         String password = user.getPassword();

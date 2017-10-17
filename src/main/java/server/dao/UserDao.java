@@ -14,11 +14,11 @@ public interface UserDao {
 
         Integer getUserIdByUsernameOrEmail(String usernameOrEmail);
 
-        void setUser(User newUser);
+        User setUser(User newUser);
 
-        void updateUserPassword(Integer id, String password);
+        User updateUserPassword(Integer id, String password);
 
-        void updateUserLogin(Integer id, String username);
+        User updateUserLogin(Integer id, String username);
 
         boolean isUsernameExists(String username);
 
