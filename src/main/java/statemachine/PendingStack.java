@@ -12,5 +12,5 @@ public interface PendingStack {
 
     void update();
 
-    void handlePacket(final Packet packet);
+    void handlePacket(Packet packet);
 }

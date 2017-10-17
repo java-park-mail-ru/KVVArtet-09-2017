@@ -55,13 +55,14 @@ public class UserService implements UserDao {
     @Override
     public User setUser(User newUser) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        final Integer three = 3;
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
                     "insert into public.user(username, email, password)" + " values(?,?,?)" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, newUser.getLogin());
             pst.setString(2, newUser.getEmail());
-            pst.setString(3, newUser.getPassword());
+            pst.setString(three, newUser.getPassword());
             return pst;
         }, keyHolder);
         return new User(keyHolder.getKey().intValue(), newUser.getLogin(), newUser.getEmail(), newUser.getPassword());

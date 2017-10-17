@@ -14,6 +14,6 @@ public interface State {
 
     boolean update();
 
-    boolean handlePacket(final Packet packet);
+    boolean handlePacket(Packet packet);
 
 }
