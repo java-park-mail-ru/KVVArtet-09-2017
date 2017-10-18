@@ -1,9 +1,7 @@
 package server.services;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.dao.UserDao;
@@ -22,11 +20,6 @@ public class UserService implements UserDao {
     public UserService(JdbcTemplate jdbcTemplate, PasswordEncoder encoder) {
         this.jdbcTemplate = jdbcTemplate;
         this.encoder = encoder;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -66,49 +59,48 @@ public class UserService implements UserDao {
     public User setUser(User newUser) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         final Integer three = 3;
-        newUser.setPassword(encoder.encode(newUser.getPassword()));
+        String encryptedPassword = encoder.encode(newUser.getPassword());
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
                     "insert into public.user(username, email, password)" + " values(?,?,?)" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, newUser.getLogin());
             pst.setString(2, newUser.getEmail());
-            pst.setString(three, newUser.getPassword());
+            pst.setString(three, encryptedPassword);
             return pst;
         }, keyHolder);
-        return new User(keyHolder.getKey().intValue(), newUser.getLogin(), newUser.getEmail(), newUser.getPassword());
+        return new User(keyHolder.getKey().intValue(), newUser.getLogin(), newUser.getEmail(), encryptedPassword);
     }
 
     @Override
-    public User updateUserPassword(Integer id, String password) {
+    public User updateUserPassword(User currentUser, String password) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        String encryptPassword = encoder.encode(password);
+        String encryptedPassword = encoder.encode(password);
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
                     "UPDATE public.user SET password = ? WHERE id = ?" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            pst.setString(1, encryptPassword);
-            pst.setInt(2, id);
+            pst.setString(1, encryptedPassword);
+            pst.setInt(2, currentUser.getId());
             return pst;
         }, keyHolder);
-        User currentUser = getUserById(id);
         return new User(keyHolder.getKey().intValue(), currentUser.getLogin(),
-                getUserById(id).getEmail(), getUserById(id).getPassword());
+                currentUser.getEmail(), encryptedPassword);
     }
 
     @Override
-    public User updateUserLogin(Integer id, String username) {
+    public User updateUserLogin(User currentUser, String username) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
                     "UPDATE public.user SET username = ? WHERE id = ?" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, username);
-            pst.setInt(2, id);
+            pst.setInt(2, currentUser.getId());
             return pst;
         }, keyHolder);
-        return new User(keyHolder.getKey().intValue(), getUserById(id).getLogin(),
-                getUserById(id).getEmail(), getUserById(id).getPassword());
+        return new User(keyHolder.getKey().intValue(), username,
+                currentUser.getEmail(), currentUser.getPassword());
     }
 
     @Override
@@ -134,7 +126,9 @@ public class UserService implements UserDao {
 
     @Override
     public boolean isExist(String usernameOrEmail) {
-        return isUsernameExists(usernameOrEmail) || isEmailExists(usernameOrEmail);
+        String sql = "SELECT count(*) from public.user WHERE username = ? OR email = ?";
+        Integer check = jdbcTemplate.queryForObject(sql, Integer.class, usernameOrEmail, usernameOrEmail);
+        return check != null && check > 0;
     }
 
     @Override

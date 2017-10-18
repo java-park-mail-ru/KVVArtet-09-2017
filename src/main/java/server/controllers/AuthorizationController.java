@@ -113,14 +113,14 @@ public class AuthorizationController {
         if (userService.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
         } else if (!Objects.equals(lastUsername, username) && !(Objects.equals(password, password))) {
-            userService.updateUserLogin(id, username);
-            userService.updateUserPassword(id, password);
+            userService.updateUserLogin(currentUser, username);
+            userService.updateUserPassword(currentUser, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         } else if (!Objects.equals(lastUsername, username)) {
-            userService.updateUserLogin(id, username);
+            userService.updateUserLogin(currentUser, username);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         } else if (!Objects.equals(lastPassword, password)) {
-            userService.updateUserPassword(id, password);
+            userService.updateUserPassword(currentUser, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());

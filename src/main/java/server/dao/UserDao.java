@@ -16,9 +16,9 @@ public interface UserDao {
 
         User setUser(User newUser);
 
-        User updateUserPassword(Integer id, String password);
+        User updateUserPassword(User user, String password);
 
-        User updateUserLogin(Integer id, String username);
+        User updateUserLogin(User user, String username);
 
         boolean isUsernameExists(String username);
 

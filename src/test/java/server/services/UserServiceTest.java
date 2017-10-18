@@ -1,4 +1,4 @@
-package server.controllers;
+package server.services;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -6,6 +6,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import server.dao.UserDao;
@@ -19,7 +20,8 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
 public class UserServiceTest {
-
+    @Autowired
+    private PasswordEncoder encoder;
     @Autowired
     private UserDao dao;
 
@@ -33,7 +35,7 @@ public class UserServiceTest {
         assertTrue(user.getId() > 0);
         assertEquals("testname", user.getLogin());
         assertEquals("testemail@mail.ru", user.getEmail());
-        assertEquals("testpassword", user.getPassword());
+        assertTrue(encoder.matches("testpassword",user.getPassword()));
         assertNotNull(dao.getAllUsers());
     }
 
@@ -45,7 +47,7 @@ public class UserServiceTest {
         assertTrue(user.getId() > 0);
         assertEquals("testname", user.getLogin());
         assertEquals("testemail@mail.ru", user.getEmail());
-        assertEquals("testpassword", user.getPassword());
+        assertTrue(encoder.matches("testpassword",user.getPassword()));
     }
 
     @Test
@@ -82,12 +84,12 @@ public class UserServiceTest {
     public void testUpdateUserLogin() {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User settedUser = dao.setUser(newUser);
-        User user = dao.updateUserLogin(settedUser.getId(), "testname2");
+        User user = dao.updateUserLogin(settedUser, "testname2");
 
         assertTrue(user.getId() > 0);
         assertEquals("testname2", user.getLogin());
         assertEquals("testemail@mail.ru", user.getEmail());
-        assertEquals("testpassword", user.getPassword());
+        assertTrue(encoder.matches("testpassword",user.getPassword()));
         assertNotNull(dao.getAllUsers());
     }
 
@@ -95,12 +97,12 @@ public class UserServiceTest {
     public void testUpdateUserPassword() {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User settedUser = dao.setUser(newUser);
-        User user = dao.updateUserPassword(settedUser.getId(), "testpassword2");
+        User user = dao.updateUserPassword(settedUser, "testpassword2");
 
         assertTrue(user.getId() > 0);
         assertEquals("testname", user.getLogin());
         assertEquals("testemail@mail.ru", user.getEmail());
-        assertEquals("testpassword2", user.getPassword());
+        assertTrue(encoder.matches("testpassword2",user.getPassword()));
         assertNotNull(dao.getAllUsers());
     }
 

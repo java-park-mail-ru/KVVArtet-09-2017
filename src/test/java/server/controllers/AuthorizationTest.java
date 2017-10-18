@@ -56,7 +56,7 @@ public class AuthorizationTest {
         }
         mockMvc.perform(post
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new User("xyz", "xyz@mail.ru", "xyz"))))
+                .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "testpassword"))))
                 .andExpect(status().isOk());
     }
 
@@ -88,7 +88,7 @@ public class AuthorizationTest {
                 .perform(post("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new User("zxy", "xyz@mail.ru", "xyz"))))
+                        .content(mapper.writeValueAsString(new User("testusername1", "testemail@mail.ru", "testpassword"))))
                 .andExpect(status().isOk());
     }
 
