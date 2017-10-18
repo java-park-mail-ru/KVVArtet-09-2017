@@ -78,7 +78,7 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
-        httpSession.removeAttribute("id");
+        httpSession.invalidate();
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.SIGNOUT_SUCCESS.getResponse());
     }
 
@@ -103,8 +103,9 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
-        String lastUsername = userService.getUserById(id).getLogin();
-        String lastPassword = userService.getUserById(id).getPassword();
+        User currentUser = userService.getUserById(id);
+        String lastUsername = currentUser.getLogin();
+        String lastPassword = currentUser.getPassword();
 
         String username = user.getLogin();
         String password = user.getPassword();

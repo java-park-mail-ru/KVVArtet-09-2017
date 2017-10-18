@@ -1,7 +1,10 @@
 package server.services;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.dao.UserDao;
 import server.models.User;
@@ -14,9 +17,16 @@ import java.util.*;
 public class UserService implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
-    
-    public UserService(JdbcTemplate jdbcTemplate) {
+    private final PasswordEncoder encoder;
+
+    public UserService(JdbcTemplate jdbcTemplate, PasswordEncoder encoder) {
         this.jdbcTemplate = jdbcTemplate;
+        this.encoder = encoder;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -56,6 +66,7 @@ public class UserService implements UserDao {
     public User setUser(User newUser) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         final Integer three = 3;
+        newUser.setPassword(encoder.encode(newUser.getPassword()));
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
                     "insert into public.user(username, email, password)" + " values(?,?,?)" + " returning id",
@@ -71,15 +82,17 @@ public class UserService implements UserDao {
     @Override
     public User updateUserPassword(Integer id, String password) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        String encryptPassword = encoder.encode(password);
         jdbcTemplate.update(con -> {
             PreparedStatement pst = con.prepareStatement(
                     "UPDATE public.user SET password = ? WHERE id = ?" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            pst.setString(1, password);
+            pst.setString(1, encryptPassword);
             pst.setInt(2, id);
             return pst;
         }, keyHolder);
-        return new User(keyHolder.getKey().intValue(), getUserById(id).getLogin(),
+        User currentUser = getUserById(id);
+        return new User(keyHolder.getKey().intValue(), currentUser.getLogin(),
                 getUserById(id).getEmail(), getUserById(id).getPassword());
     }
 

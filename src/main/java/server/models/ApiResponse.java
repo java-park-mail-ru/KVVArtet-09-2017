@@ -15,17 +15,11 @@ public enum ApiResponse {
     CHANGE_PROFILE_SUCCESS(10, "Profile successfully changed"),
     REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested, your ID is:"),
     PASSWORD_NOT_MATCH(12, "Password and password confirmation not match");
-  
-    private final Integer status;
+
     private final String response;
 
     ApiResponse(Integer status, String response) {
-        this.status = status;
         this.response = response;
-    }
-
-    public Integer getStatus() {
-        return status;
     }
 
     public String getResponse() {

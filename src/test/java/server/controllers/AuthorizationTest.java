@@ -70,23 +70,15 @@ public class AuthorizationTest {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void signOutTest() throws Exception {
-//
-//        mockMvc
-//                .perform(post("/signup")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(new User("xxx", "xxx@mail.ru", "xxx"))))
-//                .andExpect(status().isOk());
-//        mockMvc
-//                .perform(post("/signin")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(new User("xxx", "xxx@mail.ru", "xxx"))))
-//                .andExpect(status().isOk());
-//        mockMvc
-//                .perform(post("/signout"))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void signOutTest() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        signIn(session);
+        mockMvc
+                .perform(post("/signout")
+                .session(session))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void changingUserUsernameTest() throws Exception {
