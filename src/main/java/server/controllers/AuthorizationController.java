@@ -2,6 +2,7 @@ package server.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import server.models.ApiResponse;
 import server.models.User;
@@ -14,21 +15,34 @@ import java.util.Objects;
 @CrossOrigin(origins = AuthorizationController.FRONTED_URL)
 public class AuthorizationController {
     private final UserService userService;
+    private final PasswordEncoder encoder;
     @SuppressWarnings("WeakerAccess")
     static final String FRONTED_URL = "http://KVVArtet-09-2017.herokuapp.com";
 
   
 
-    public AuthorizationController(UserService userService) {
+    public AuthorizationController(UserService userService, PasswordEncoder encoder) {
         super();
         this.userService = userService;
+        this.encoder = encoder;
     }
 
 
     @PostMapping("/signup")
     public ResponseEntity signUp(@RequestBody User user) {
-        String username = user.getLogin();
+        String username = user.getUsername();
         String email = user.getEmail();
+        String password = user.getPassword();
+
+        if (username == null || email == null || password == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.FIELD_EMPTY.getResponse());
+        }
+
+        final Integer six = 6;
+
+        if (username.length() < six || username.contains("@") || !email.contains("@")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.SIGNUP_VALIDATION_FAILED.getResponse());
+        }
 
         if (userService.isUsernameExists(username)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
@@ -51,19 +65,21 @@ public class AuthorizationController {
 
         String usernameOrEmail;
 
-        if (user.getLogin() == null) {
+        if (user.getUsername() == null) {
             usernameOrEmail = user.getEmail();
         } else {
-            usernameOrEmail = user.getLogin();
+            usernameOrEmail = user.getUsername();
         }
 
         if (!userService.isExist(usernameOrEmail)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST.getResponse());
         }
 
-        Integer currentUserId = userService.getUserIdByUsernameOrEmail(usernameOrEmail);
+        User currentUser = userService.getUserByUsernameOrEmail(usernameOrEmail);
 
-        if (!Objects.equals(userService.getUserById(currentUserId).getPassword(), user.getPassword())) {
+        Integer currentUserId = currentUser.getId();
+
+        if (!encoder.matches(user.getPassword(), currentUser.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT.getResponse());
         } else {
             httpSession.setAttribute("id", currentUserId);
@@ -90,7 +106,7 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
-        String username = userService.getUserById(userIdInCurrentSession).getLogin();
+        String username = userService.getUserById(userIdInCurrentSession).getUsername();
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL.getResponse()
                 + " " + userIdInCurrentSession + "  Your login is " + username);
     }
@@ -104,22 +120,18 @@ public class AuthorizationController {
         }
 
         User currentUser = userService.getUserById(id);
-        String lastUsername = currentUser.getLogin();
+        String lastUsername = currentUser.getUsername();
         String lastPassword = currentUser.getPassword();
 
-        String username = user.getLogin();
+        String username = user.getUsername();
         String password = user.getPassword();
 
         if (userService.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.USERNAME_EXIST.getResponse());
-        } else if (!Objects.equals(lastUsername, username) && !(Objects.equals(password, password))) {
-            userService.updateUserLogin(currentUser, username);
-            userService.updateUserPassword(currentUser, password);
-            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USERNAME_EXIST.getResponse());
         } else if (!Objects.equals(lastUsername, username)) {
             userService.updateUserLogin(currentUser, username);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
-        } else if (!Objects.equals(lastPassword, password)) {
+        } else if (!encoder.matches(password, lastPassword)) {
             userService.updateUserPassword(currentUser, password);
             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.CHANGE_PROFILE_SUCCESS.getResponse());
         }

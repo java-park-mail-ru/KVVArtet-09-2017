@@ -39,8 +39,73 @@ public class AuthorizationTest {
         mockMvc
                 .perform(post("/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new User("xyz", "xyz@mail.ru", "xyz"))))
+                        .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "testpassword"))))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void signUpWithoutUsernameTest() throws Exception {
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User(null, "testemail@mail.ru", "testpassword"))))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void signUpWithoutEmailTest() throws Exception {
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("testusername", null, "testpassword"))))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void signUpWithoutPasswordTest() throws Exception {
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", null))))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void signUpWithUsernameThatExistTest() throws Exception {
+        dao.setUser(new User("reallytestusername", "reallytestemail@mail.ru", "reallytestpassword"));
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("reallytestusername", "testemail@mail.ru", "testpassword"))))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void signUpWithEmailThatExistTest() throws Exception {
+        dao.setUser(new User("reallytestusername", "reallytestemail@mail.ru", "reallytestpassword"));
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("testusername", "reallytestemail@mail.ru", "testpassword"))))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void signUpWithUsernameThatNotValidTest() throws Exception {
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("test@username", "testemail@mail.ru", "testpassword"))))
+                .andExpect(status().is(400));
+    }
+
+    @Test
+    public void signUpWithEmailhatNotValidTest() throws Exception {
+        mockMvc
+                .perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("testusername", "testemailmail.ru", "testpassword"))))
+                .andExpect(status().is(400));
     }
 
     @Test
@@ -61,13 +126,63 @@ public class AuthorizationTest {
     }
 
     @Test
-    public void sessionTest() throws Exception{
+    public void signInWithOnlyEmailTest() throws Exception {
+        signUpTest();
+        MockHttpServletRequestBuilder post = post("/signin");
+        mockMvc.perform(post
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User(null, "testemail@mail.ru", "testpassword"))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void signInWithNotExistUserTest() throws Exception {
+        signUpTest();
+        MockHttpServletRequestBuilder post = post("/signin");
+        mockMvc.perform(post
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("randomTestusername", "randomTestemail@mail.ru", "newTestpassword"))))
+                .andExpect(status().is(403));
+    }
+
+    @Test
+    public void signInWithOnlyUsernameTest() throws Exception {
+        signUpTest();
+        MockHttpServletRequestBuilder post = post("/signin");
+        mockMvc.perform(post
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "mistake"))))
+                .andExpect(status().is(403));
+    }
+
+    @Test
+    public void signInWithWrongPasswordTest() throws Exception {
+        signUpTest();
+        MockHttpServletRequestBuilder post = post("/signin");
+        mockMvc.perform(post
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(new User("randomTestusername", "randomTestemail@mail.ru", "newTestpassword"))))
+                .andExpect(status().is(403));
+    }
+
+    @Test
+    public void sessionTest() throws Exception {
         MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
                 .perform(post("/session")
-                .session(session))
+                        .session(session))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void sessionWithoutSessionIdTest() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        signIn(null);
+        mockMvc
+                .perform(post("/session")
+                        .session(session))
+                .andExpect(status().is(401));
     }
 
     @Test
@@ -76,8 +191,18 @@ public class AuthorizationTest {
         signIn(session);
         mockMvc
                 .perform(post("/signout")
-                .session(session))
+                        .session(session))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void signOutWithoutSessionIdThatMeansYouAreNotAuthorizedTest() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        signIn(null);
+        mockMvc
+                .perform(post("/signout")
+                        .session(session))
+                .andExpect(status().is(401));
     }
 
     @Test
@@ -93,6 +218,19 @@ public class AuthorizationTest {
     }
 
     @Test
+    public void changingUserUsernameWithExistUsernameTest() throws Exception {
+        dao.setUser(new User("reallytestusername", "reallytestemail@mail.ru", "reallytestpassword"));
+        MockHttpSession session = new MockHttpSession();
+        signIn(session);
+        mockMvc
+                .perform(post("/settings")
+                        .session(session)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(new User("reallytestusername", "testemail@mail.ru", "testpassword"))))
+                .andExpect(status().is(403));
+    }
+
+    @Test
     public void changingUserPasswordTest() throws Exception {
         MockHttpSession session = new MockHttpSession();
         signIn(session);
@@ -100,19 +238,7 @@ public class AuthorizationTest {
                 .perform(post("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new User("xyz", "zxy@mail.ru", "xyz"))))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void changingUserLoginAndPasswordTest() throws Exception {
-        MockHttpSession session = new MockHttpSession();
-        signIn(session);
-        mockMvc
-                .perform(post("/settings")
-                        .session(session)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new User("zzz", "zzz@mail.ru", "zzz"))))
+                        .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "sometestpassword"))))
                 .andExpect(status().isOk());
     }
 }

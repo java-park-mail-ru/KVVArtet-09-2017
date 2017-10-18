@@ -43,7 +43,7 @@ paths:
             Данный почтовый ящик уже использован для регистрации другого пользователя
           schema:
             $ref: '#/definitions/ApiResponse'
-  /login:
+  /username:
     post:
       summary: Авторизация пользователя
       description: |
@@ -162,7 +162,7 @@ definitions:
     description: |
       модель пользователя
     properties:
-      login:
+      username:
         type: string
         description: |
           Логин пользователя
@@ -175,7 +175,7 @@ definitions:
         description: |
           пароль
     required:
-      - login
+      - username
       - email
       - password
   ApiResponse:

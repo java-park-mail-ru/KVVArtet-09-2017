@@ -10,7 +10,7 @@ import server.models.User;
 import java.sql.PreparedStatement;
 import java.util.*;
 
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "Duplicates"})
 @Service
 public class UserService implements UserDao {
 
@@ -28,7 +28,20 @@ public class UserService implements UserDao {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, rwNumber) -> {
             User user = new User();
             user.setId(rs.getInt("id"));
-            user.setLogin(rs.getString("username"));
+            user.setUsername(rs.getString("username"));
+            user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            return user;
+        });
+    }
+
+    @Override
+    public User getUserByUsernameOrEmail(String usernameOrEmail) {
+        String sql = "SELECT * FROM public.user WHERE username = ? OR email = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{usernameOrEmail, usernameOrEmail}, (rs, rwNumber) -> {
+            User user = new User();
+            user.setId(rs.getInt("id"));
+            user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
             return user;
@@ -64,12 +77,12 @@ public class UserService implements UserDao {
             PreparedStatement pst = con.prepareStatement(
                     "insert into public.user(username, email, password)" + " values(?,?,?)" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            pst.setString(1, newUser.getLogin());
+            pst.setString(1, newUser.getUsername());
             pst.setString(2, newUser.getEmail());
             pst.setString(three, encryptedPassword);
             return pst;
         }, keyHolder);
-        return new User(keyHolder.getKey().intValue(), newUser.getLogin(), newUser.getEmail(), encryptedPassword);
+        return new User(keyHolder.getKey().intValue(), newUser.getUsername(), newUser.getEmail(), encryptedPassword);
     }
 
     @Override
@@ -84,7 +97,7 @@ public class UserService implements UserDao {
             pst.setInt(2, currentUser.getId());
             return pst;
         }, keyHolder);
-        return new User(keyHolder.getKey().intValue(), currentUser.getLogin(),
+        return new User(keyHolder.getKey().intValue(), currentUser.getUsername(),
                 currentUser.getEmail(), encryptedPassword);
     }
 
@@ -146,7 +159,7 @@ public class UserService implements UserDao {
         for (Map<String, Object> row:rows) {
             User user = new User();
             user.setId((Integer) row.get("id"));
-            user.setLogin((String) row.get("username"));
+            user.setUsername((String) row.get("username"));
             user.setEmail((String) row.get("email"));
             user.setPassword((String) row.get("password"));
             result.add(user);

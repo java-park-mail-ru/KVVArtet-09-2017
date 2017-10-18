@@ -33,7 +33,7 @@ public class UserServiceTest {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User user = dao.setUser(newUser);
         assertTrue(user.getId() > 0);
-        assertEquals("testname", user.getLogin());
+        assertEquals("testname", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());
         assertTrue(encoder.matches("testpassword",user.getPassword()));
         assertNotNull(dao.getAllUsers());
@@ -45,7 +45,18 @@ public class UserServiceTest {
         User settedUser = dao.setUser(newUser);
         User user = dao.getUserById(settedUser.getId());
         assertTrue(user.getId() > 0);
-        assertEquals("testname", user.getLogin());
+        assertEquals("testname", user.getUsername());
+        assertEquals("testemail@mail.ru", user.getEmail());
+        assertTrue(encoder.matches("testpassword",user.getPassword()));
+    }
+
+    @Test
+    public void testGetUserByUsernameOrEmail() {
+        User newUser = new User("testname", "testemail@mail.ru", "testpassword");
+        User settedUser = dao.setUser(newUser);
+        User user = dao.getUserByUsernameOrEmail(settedUser.getUsername());
+        assertTrue(user.getId() > 0);
+        assertEquals("testname", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());
         assertTrue(encoder.matches("testpassword",user.getPassword()));
     }
@@ -54,7 +65,7 @@ public class UserServiceTest {
     public void testGetUserIdByUsername() {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User settedUser = dao.setUser(newUser);
-        Integer id = dao.getUserIdByUsername(settedUser.getLogin());
+        Integer id = dao.getUserIdByUsername(settedUser.getUsername());
         assertTrue(id > 0);
         assertEquals(settedUser.getId(), id);
     }
@@ -72,7 +83,7 @@ public class UserServiceTest {
     public void testGetUserIdByUsernameOrEmail() {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User settedUser = dao.setUser(newUser);
-        Integer idFromLogin = dao.getUserIdByUsernameOrEmail(settedUser.getLogin());
+        Integer idFromLogin = dao.getUserIdByUsernameOrEmail(settedUser.getUsername());
         Integer idFromEmail = dao.getUserIdByUsernameOrEmail(settedUser.getEmail());
         assertTrue(idFromLogin > 0);
         assertEquals(settedUser.getId(), idFromLogin);
@@ -87,7 +98,7 @@ public class UserServiceTest {
         User user = dao.updateUserLogin(settedUser, "testname2");
 
         assertTrue(user.getId() > 0);
-        assertEquals("testname2", user.getLogin());
+        assertEquals("testname2", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());
         assertTrue(encoder.matches("testpassword",user.getPassword()));
         assertNotNull(dao.getAllUsers());
@@ -100,7 +111,7 @@ public class UserServiceTest {
         User user = dao.updateUserPassword(settedUser, "testpassword2");
 
         assertTrue(user.getId() > 0);
-        assertEquals("testname", user.getLogin());
+        assertEquals("testname", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());
         assertTrue(encoder.matches("testpassword2",user.getPassword()));
         assertNotNull(dao.getAllUsers());
@@ -117,7 +128,7 @@ public class UserServiceTest {
     public void testIsUsernameExists() {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User settedUser = dao.setUser(newUser);
-        assertTrue(dao.isUsernameExists(settedUser.getLogin()));
+        assertTrue(dao.isUsernameExists(settedUser.getUsername()));
     }
 
     @Test
@@ -131,7 +142,7 @@ public class UserServiceTest {
     public void testIsExists() {
         User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         User settedUser = dao.setUser(newUser);
-        assertTrue(dao.isExist(settedUser.getLogin()));
+        assertTrue(dao.isExist(settedUser.getUsername()));
         assertTrue(dao.isExist(settedUser.getEmail()));
     }
 
