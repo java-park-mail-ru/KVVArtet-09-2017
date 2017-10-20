@@ -17,7 +17,7 @@ public class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
     @SuppressWarnings("WeakerAccess")
-    static final String FRONTED_URL = "http://KVVArtet-09-2017.herokuapp.com";
+    static final String FRONTED_URL = "https://lands-dangeous.herokuapp.com/";
 
   
 
