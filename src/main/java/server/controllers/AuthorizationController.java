@@ -8,6 +8,7 @@ import server.models.ApiResponse;
 import server.models.User;
 import server.services.UserService;
 
+import javax.print.DocFlavor;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ public class AuthorizationController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity signUp(@RequestBody User user) {
+    public ResponseEntity<String> signUp(@RequestBody User user) {
         String username = user.getUsername();
         String email = user.getEmail();
         String password = user.getPassword();
@@ -55,7 +56,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity signIn(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity<String> signIn(@RequestBody User user, HttpSession httpSession) {
 
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
       
@@ -88,7 +89,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity signOut(HttpSession httpSession) {
+    public ResponseEntity<String> signOut(HttpSession httpSession) {
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
@@ -99,7 +100,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/session")
-    public ResponseEntity requestUserInCurrentSession(HttpSession httpSession) {
+    public ResponseEntity<String> requestUserInCurrentSession(HttpSession httpSession) {
         Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
 
         if (userIdInCurrentSession == null) {
@@ -112,7 +113,7 @@ public class AuthorizationController {
     }
 
     @PostMapping("/settings")
-    public ResponseEntity changeUserProfile(@RequestBody User user, HttpSession httpSession) {
+    public ResponseEntity<String> changeUserProfile(@RequestBody User user, HttpSession httpSession) {
         Integer id = (Integer) httpSession.getAttribute("id");
 
         if (id == null) {

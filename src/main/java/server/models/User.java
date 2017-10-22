@@ -24,7 +24,6 @@ public class User {
         this.id = id;
     }
 
-    @JsonCreator
     public User() {
 
     }
@@ -45,22 +44,18 @@ public class User {
         return this.password;
     }
 
-    @JsonSetter("id")
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @JsonSetter("username")
     public void setUsername(String username) {
         this.username = username;
     }
 
-    @JsonSetter("email")
     public void setEmail(String email) {
         this.email = email;
     }
 
-    @JsonSetter("password")
     public void setPassword(String password) {
         this.password = password;
     }
