@@ -1,8 +1,5 @@
 package server.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
 @SuppressWarnings("unused")
 public class User {
     private String username;
