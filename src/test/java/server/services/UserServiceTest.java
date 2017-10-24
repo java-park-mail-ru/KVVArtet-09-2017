@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional

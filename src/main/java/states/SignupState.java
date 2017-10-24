@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import packets.Packet;
 import statemachine.PendingStack;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class SignupState extends AbstractState {
     private static final Logger LOGGER = LoggerFactory.getLogger(SignupState.class);
 

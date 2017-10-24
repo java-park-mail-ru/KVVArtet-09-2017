@@ -5,12 +5,13 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import server.dao.UserDao;
+import server.mappers.UserMapper;
 import server.models.User;
 
 import java.sql.PreparedStatement;
-import java.util.*;
+import java.util.List;
 
-@SuppressWarnings({"ConstantConditions", "Duplicates"})
+@SuppressWarnings({"ConstantConditions", "Duplicates", "SqlDialectInspection", "SqlNoDataSourceInspection"})
 @Service
 public class UserService implements UserDao {
 
@@ -153,18 +154,6 @@ public class UserService implements UserDao {
     @Override
     public List<User> getAllUsers() {
         String sql = "SELECT * FROM public.user";
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
-
-        List<User> result = new ArrayList<>();
-        for (Map<String, Object> row:rows) {
-            User user = new User();
-            user.setId((Integer) row.get("id"));
-            user.setUsername((String) row.get("username"));
-            user.setEmail((String) row.get("email"));
-            user.setPassword((String) row.get("password"));
-            result.add(user);
-        }
-
-        return result;
+        return jdbcTemplate.query(sql, new UserMapper());
     }
 }
