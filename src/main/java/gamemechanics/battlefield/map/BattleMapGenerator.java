@@ -30,7 +30,7 @@ public final class BattleMapGenerator {
         Integer tilesMadePassable = 1;
         while (tilesMadePassable < passableTilesCount) {
             Integer direction = Directions.DIRECTIONS_COUNT;
-            while (!isDirecionValid(coords, mapSize, direction)) {
+            while (!isDirectionValid(coords, mapSize, direction)) {
                 direction = random.nextInt() % Directions.DIRECTIONS_COUNT;
             }
             List<Integer> movement = movementsMap.get(direction);
@@ -44,10 +44,13 @@ public final class BattleMapGenerator {
                 ++tilesMadePassable;
             }
         }
+
+        setAdjacencies(map);
+
         return map;
     }
 
-    private static Boolean isDirecionValid(List<Integer> coords, List<Integer> mapSize, Integer direction) {
+    private static Boolean isDirectionValid(List<Integer> coords, List<Integer> mapSize, Integer direction) {
         switch (direction) {
             case Directions.UP:
                 return coords.get(DigitsPairIndices.Y_COORD_INDEX) > 0;
@@ -87,5 +90,34 @@ public final class BattleMapGenerator {
         directionsMap.put(Directions.LEFT, leftMovement);
 
         return directionsMap;
+    }
+
+    private static void setAdjacencies(List<List<Tile>> map) {
+        for (Integer i = 0; i < map.size(); ++i) {
+            for (Integer j = 0; j < map.get(i).size(); ++j) {
+                List<Tile> adjacencies = new ArrayList<>(Directions.DIRECTIONS_COUNT);
+                for (Integer k = 0; k < Directions.DIRECTIONS_COUNT; ++k) {
+                    List<Integer> coordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+                    coordinates.set(DigitsPairIndices.X_COORD_INDEX,
+                            i + movementsMap.get(k).get(DigitsPairIndices.X_COORD_INDEX));
+                    coordinates.set(DigitsPairIndices.Y_COORD_INDEX,
+                            j + movementsMap.get(k).get(DigitsPairIndices.Y_COORD_INDEX));
+                    if (coordinates.get(DigitsPairIndices.X_COORD_INDEX) < 0
+                            || coordinates.get(DigitsPairIndices.X_COORD_INDEX) >= map.size()) {
+                        adjacencies.set(k, null);
+                    } else {
+                        if (coordinates.get(DigitsPairIndices.Y_COORD_INDEX) < 0
+                                || coordinates.get(DigitsPairIndices.Y_COORD_INDEX)
+                                >= map.get(coordinates.get(DigitsPairIndices.X_COORD_INDEX)).size()) {
+                            adjacencies.set(k, null);
+                        } else {
+                            adjacencies.set(k, map.get(coordinates.get(DigitsPairIndices.X_COORD_INDEX))
+                                    .get(coordinates.get(DigitsPairIndices.Y_COORD_INDEX)));
+                        }
+                    }
+                }
+                map.get(i).get(j).setAdjacentTiles(adjacencies);
+            }
+        }
     }
 }

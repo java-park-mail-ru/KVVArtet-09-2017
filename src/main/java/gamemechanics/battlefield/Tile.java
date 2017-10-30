@@ -1,6 +1,6 @@
 package gamemechanics.battlefield;
 
-import gamemechanics.globals.AdjacencyIndices;
+import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Countable;
 
@@ -14,7 +14,7 @@ public class Tile implements Countable {
 
     private Boolean isPassable;
     private AliveEntity inhabitant = null;
-    private final List<Tile> adjacentTiles = new ArrayList<>(AdjacencyIndices.AX_SIZE);
+    private final List<Tile> adjacentTiles = new ArrayList<>(Directions.DIRECTIONS_COUNT);
 
     public Tile() {
         this(false);
@@ -71,17 +71,17 @@ public class Tile implements Countable {
     }
 
     public Tile getAdjacent(Integer direction) {
-        if (direction < AdjacencyIndices.AX_UP || direction >= adjacentTiles.size()) {
+        if (direction < Directions.UP || direction >= adjacentTiles.size()) {
             return null;
         }
         return adjacentTiles.get(direction);
     }
 
     public void setAdjacentTiles(List<Tile> adjacencyList) {
-        Integer adjacencyIndex = AdjacencyIndices.AX_UP;
+        Integer adjacencyIndex = Directions.UP;
         for (Tile tile : adjacencyList) {
             adjacentTiles.set(adjacencyIndex++, tile);
-            if (adjacencyIndex == AdjacencyIndices.AX_SIZE) {
+            if (adjacencyIndex == Directions.DIRECTIONS_COUNT) {
                 break;
             }
         }

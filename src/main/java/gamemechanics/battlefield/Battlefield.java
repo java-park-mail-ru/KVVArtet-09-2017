@@ -105,6 +105,7 @@ public class Battlefield {
             if (activeBattler.isControlledByAI()) {
                 while (activeBattlerActionsPooled < ACTIONS_PER_TURN) {
                     pushAction(activeBattler.decision());
+                    actionsQueue.pollFirst().execute();
                 }
             }
 
@@ -179,6 +180,7 @@ public class Battlefield {
         for (AliveEntity battler : battlersQueue) {
             if (!battler.isAlive()) {
                 battlersQueue.remove(battler);
+                battlersMap.remove(battler);
             }
         }
     }
@@ -192,6 +194,7 @@ public class Battlefield {
     }
 
     private void generateLoot() {
+        // collect all loot lists from mobs and generate loot
         for (Integer i = 0; i < squads.get(Squad.MONSTER_SQUAD_ID).getSquadSize(); ++i) {
 
         }
@@ -209,9 +212,11 @@ public class Battlefield {
             default:
                 return;
         }
+        // reward winners with full-scale
         for (Integer i = 0; i < squads.get(teamID).getSquadSize(); ++i) {
 
         }
+        // also reward the team that's lost but with lesser reward
         for (Integer i = 0; i < squads.get(looseTeamID).getSquadSize(); ++i) {
 
         }

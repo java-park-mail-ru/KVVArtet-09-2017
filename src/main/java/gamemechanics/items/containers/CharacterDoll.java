@@ -1,8 +1,9 @@
 package gamemechanics.items.containers;
 
+import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.globals.CharacterRatings;
 import gamemechanics.globals.CharacterStats;
-import gamemechanics.globals.EquipmentSlots;
+import gamemechanics.globals.EquipmentSlot;
 import gamemechanics.interfaces.EquipableItem;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 public class CharacterDoll extends StorageBag {
 
     private static EmptyBagModel emptyCharacterDoll = new EmptyBagModel("Equipped items",
-            "Items put on character", EquipmentSlots.ES_SIZE);
+            "Items put on character", EquipmentSlot.ES_SIZE);
 
     public CharacterDoll() {
         super(emptyCharacterDoll);
@@ -25,7 +26,7 @@ public class CharacterDoll extends StorageBag {
         Integer statBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
-                statBonus += item.getStatBonus(statIndex);
+                statBonus += item.getAffection(AffectorCategories.AC_STATS_AFFECTOR, statIndex);
             }
         }
         return statBonus;
@@ -43,7 +44,7 @@ public class CharacterDoll extends StorageBag {
         Integer ratingBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
-                ratingBonus += item.getRatingBonus(ratingIndex);
+                ratingBonus += item.getAffection(AffectorCategories.AC_RATINGS_AFFECTOR, ratingIndex);
             }
         }
         return ratingBonus;
@@ -59,11 +60,13 @@ public class CharacterDoll extends StorageBag {
 
     public Integer getDamage() {
         Integer damage = 0;
-        if (getContents().get(EquipmentSlots.ES_MAINHAND) != null) {
-            damage += getContents().get(EquipmentSlots.ES_MAINHAND).getDamage();
+        if (getContents().get(EquipmentSlot.ES_MAINHAND.asInt()) != null) {
+            damage += getContents().get(EquipmentSlot.ES_MAINHAND.asInt())
+                    .getAffection(AffectorCategories.AC_DAMAGE_AFFECTOR);
         }
-        if (getContents().get(EquipmentSlots.ES_OFFHAND) != null) {
-            damage += getContents().get(EquipmentSlots.ES_OFFHAND).getDamage();
+        if (getContents().get(EquipmentSlot.ES_OFFHAND.asInt()) != null) {
+            damage += getContents().get(EquipmentSlot.ES_OFFHAND.asInt())
+                    .getAffection(AffectorCategories.AC_DAMAGE_AFFECTOR);
         }
         return damage;
     }
@@ -72,7 +75,7 @@ public class CharacterDoll extends StorageBag {
         Integer defense = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
-                defense += item.getDefense();
+                defense += item.getAffection(AffectorCategories.AC_DEFENSE_AFFECTOR);
             }
         }
         return defense;

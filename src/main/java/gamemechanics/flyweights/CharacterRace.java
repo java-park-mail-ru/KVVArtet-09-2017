@@ -1,40 +1,38 @@
 package gamemechanics.flyweights;
 
+import gamemechanics.components.affectors.Affector;
+import gamemechanics.interfaces.AffectorProvider;
 import gamemechanics.interfaces.GameEntity;
 
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CharacterRace implements GameEntity {
+public class CharacterRace implements GameEntity, AffectorProvider {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer raceID = instanceCounter.getAndIncrement();
 
     private final String name;
     private final String description;
 
-    private final List<Integer> statBonuses;
-    private final List<Integer> ratingBonuses;
+    public Map<Integer, Affector> affectors;
 
     public static class CharacterRaceModel {
         public String name;
         public String description;
-        public List<Integer> statBonuses;
-        public List<Integer> ratingBonuses;
+        public Map<Integer, Affector> affectors;
 
-        public CharacterRaceModel(String name, String description,
-                                  List<Integer> statBonuses, List<Integer> ratingBonuses) {
+        public CharacterRaceModel(String name, String description, Map<Integer, Affector> affectors) {
             this.name = name;
             this.description = description;
-            this.statBonuses = statBonuses;
-            this.ratingBonuses = ratingBonuses;
+            this.affectors = affectors;
         }
     }
 
     public CharacterRace(CharacterRaceModel model) {
         name = model.name;
         description = model.description;
-        statBonuses = model.statBonuses;
-        ratingBonuses = model.ratingBonuses;
+        affectors = model.affectors;
     }
 
     @Override
@@ -57,25 +55,26 @@ public class CharacterRace implements GameEntity {
         return description;
     }
 
-    public Integer getStatBonus(Integer statIndex) {
-        if (statIndex < 0 || statIndex >= statBonuses.size()) {
+    @Override
+    public Boolean hasAffector(Integer affectorKind) {
+        return affectors.containsKey(affectorKind);
+    }
+
+    @Override
+    public Set<Integer> getAvailableAffectors() {
+        return affectors.keySet();
+    }
+
+    @Override
+    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+        if (!hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
-        return statBonuses.get(statIndex);
+        return affectors.get(affectorKind).getAffection(affectionIndex);
     }
 
-    public List<Integer> getStatBonuses() {
-        return statBonuses;
-    }
-
-    public Integer getRatingBonus(Integer ratingIndex) {
-        if (ratingIndex < 0 || ratingIndex >= ratingBonuses.size()) {
-            return Integer.MIN_VALUE;
-        }
-        return ratingBonuses.get(ratingIndex);
-    }
-
-    public List<Integer> getRatingBonuses() {
-        return ratingBonuses;
+    @Override
+    public Integer getAffection(Integer affectorKind) {
+        return Integer.MIN_VALUE;
     }
 }
