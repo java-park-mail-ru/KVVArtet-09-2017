@@ -2,9 +2,9 @@ package gamemechanics.items;
 
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.affectors.AffectorCategories;
+import gamemechanics.components.properties.Property;
+import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.EquipmentKind;
-import gamemechanics.globals.ItemRarity;
 import gamemechanics.interfaces.EquipableItem;
 
 import java.util.Map;
@@ -19,31 +19,21 @@ public class IngameItem implements EquipableItem {
     private final String name;
     private final String description;
 
-    private Integer level;
-
-    private Integer price;
-    private final ItemRarity rarity;
-    private final Integer kind;
+    private final Map<Integer, Property> properties;
 
     private final Map<Integer, Affector> affectors;
 
     public static class ItemModel {
         public String name;
         public String description;
-        public Integer level;
-        public Integer price;
-        public ItemRarity rarity;
-        public Integer kind;
+        public Map<Integer, Property> properties;
         public Map<Integer, Affector> affectors;
 
-        public ItemModel(String name, String description, Integer level, Integer price,
-                         ItemRarity rarity, Integer kind, Map<Integer, Affector> affectors) {
+        public ItemModel(String name, String description,
+                         Map<Integer, Property> properties, Map<Integer, Affector> affectors) {
             this.name = name;
             this.description = description;
-            this.level = level;
-            this.price = price;
-            this.rarity = rarity;
-            this.kind = kind;
+            this.properties = properties;
             this.affectors = affectors;
         }
     }
@@ -51,10 +41,7 @@ public class IngameItem implements EquipableItem {
     public IngameItem(ItemModel model) {
         name = model.name;
         description = model.description;
-        level = model.level;
-        price = model.price;
-        rarity = model.rarity;
-        kind = model.kind;
+        properties = model.properties;
         affectors = model.affectors;
     }
 
@@ -80,22 +67,33 @@ public class IngameItem implements EquipableItem {
 
     @Override
     public Integer getLevel() {
-        return level;
+        return getProperty(PropertyCategories.PC_LEVEL);
     }
 
     @Override
-    public Integer getPrice() {
-        return price;
+    public Boolean hasProperty(Integer propertyKind) {
+        return properties.containsKey(propertyKind);
     }
 
     @Override
-    public ItemRarity getRarity() {
-        return rarity;
+    public Set<Integer> getAvailableProperties() {
+        return properties.keySet();
     }
 
     @Override
-    public Integer getKind() {
-        return kind;
+    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+        if (!hasAffector(propertyKind)) {
+            return Integer.MIN_VALUE;
+        }
+        return properties.get(propertyKind).getProperty(propertyIndex);
+    }
+
+    @Override
+    public Integer getProperty(Integer propertyKind) {
+        if (!hasAffector(propertyKind)) {
+            return Integer.MIN_VALUE;
+        }
+        return properties.get(propertyKind).getProperty();
     }
 
     @Override
@@ -135,16 +133,16 @@ public class IngameItem implements EquipableItem {
 
     @Override
     public Boolean isWeapon() {
-        return (kind & EquipmentKind.EK_WEAPON.asInt()) > 0;
+        return false;
     }
 
     @Override
     public Boolean isArmour() {
-        return (kind & EquipmentKind.EK_ARMOUR.asInt()) > 0;
+        return false;
     }
 
     @Override
     public Boolean isTrinket() {
-        return (kind & EquipmentKind.EK_TRINKET.asInt()) > 0;
+        return false;
     }
 }
