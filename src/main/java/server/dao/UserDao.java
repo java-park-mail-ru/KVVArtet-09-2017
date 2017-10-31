@@ -1,7 +1,8 @@
 package server.dao;
 
 import server.models.User;
-import java.util.*;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public interface UserDao {

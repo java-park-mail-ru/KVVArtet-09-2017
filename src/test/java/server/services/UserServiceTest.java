@@ -16,6 +16,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
@@ -160,8 +161,8 @@ public class UserServiceTest {
         User settedUser1 = dao.setUser(newUser1);
         User newUser2 = new User("testname2", "testemail2@mail.ru", "testpassword2");
         User settedUser2 = dao.setUser(newUser2);
-        List<User> users= dao.getAllUsers();
-        assertEquals(users.get(0), settedUser1);
-        assertEquals(users.get(1), settedUser2);
+        List<User> users = dao.getAllUsers();
+        assertEquals(users.get(users.size() - 2), settedUser1);
+        assertEquals(users.get(users.size() - 1), settedUser2);
     }
 }
