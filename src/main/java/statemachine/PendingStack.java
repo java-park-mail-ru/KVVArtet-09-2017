@@ -10,7 +10,9 @@ public interface PendingStack {
 
     void clearState();
 
+    @SuppressWarnings("unused")
     void update();
 
+    @SuppressWarnings("unused")
     void handlePacket(Packet packet);
 }
