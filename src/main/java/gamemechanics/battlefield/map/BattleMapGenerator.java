@@ -19,7 +19,7 @@ public final class BattleMapGenerator {
         for (Integer i = 0; i < map.size(); ++i) {
             map.set(i, new ArrayList<>(width));
             for (Integer j = 0; j < map.get(i).size(); ++j) {
-                map.get(i).set(j, new Tile());
+                map.get(i).set(j, new Tile(i, j));
             }
         }
         List<Integer> coords = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);

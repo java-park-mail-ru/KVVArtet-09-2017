@@ -3,6 +3,7 @@ package gamemechanics.components.properties;
 import gamemechanics.globals.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public final class PropertiesFactory {
     private PropertiesFactory() {}
@@ -45,6 +46,19 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_COORDINATES:
                 property = makeCoordinatesProperty();
+                break;
+            case PropertyCategories.PC_SKILL_POINTS:
+                property = makeSkillPointsProperty();
+                break;
+            case PropertyCategories.PC_ABILITIES_COOLDOWN:
+                property = makeAbilitiesCooldownProperty();
+                break;
+            case PropertyCategories.PC_INITIATIVE:
+                property = makeInitiativeProperty();
+                break;
+            case PropertyCategories.PC_SPEED:
+                property = makeSpeedProperty();
+                break;
             default:
                 break;
         }
@@ -97,5 +111,21 @@ public final class PropertiesFactory {
 
     private static Property makeCoordinatesProperty() {
         return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+    }
+
+    private static Property makeSkillPointsProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeAbilitiesCooldownProperty() {
+        return new AbilitiesCooldownProperty(new HashMap<>());
+    }
+
+    private static Property makeInitiativeProperty() {
+        return new SingleValueProperty(Constants.DEFAULT_INITIATIVE_VALUE);
+    }
+
+    private static Property makeSpeedProperty() {
+        return new SingleValueProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED);
     }
 }

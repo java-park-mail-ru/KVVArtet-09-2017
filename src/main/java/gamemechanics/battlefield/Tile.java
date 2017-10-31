@@ -1,5 +1,6 @@
 package gamemechanics.battlefield;
 
+import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Countable;
@@ -15,13 +16,16 @@ public class Tile implements Countable {
     private Boolean isPassable;
     private AliveEntity inhabitant = null;
     private final List<Tile> adjacentTiles = new ArrayList<>(Directions.DIRECTIONS_COUNT);
+    private final List<Integer> coordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
 
-    public Tile() {
-        this(false);
+    public Tile(Integer coordX, Integer coordY) {
+        this(false, coordX, coordY);
     }
 
-    public Tile(Boolean isPassable) {
+    public Tile(Boolean isPassable, Integer coordX, Integer coordY) {
         this.isPassable = isPassable;
+        this.coordinates.set(DigitsPairIndices.X_COORD_INDEX, coordX);
+        this.coordinates.set(DigitsPairIndices.Y_COORD_INDEX, coordY);
     }
 
     @Override
@@ -85,5 +89,16 @@ public class Tile implements Countable {
                 break;
             }
         }
+    }
+
+    public List<Integer> getCoordinates() {
+        return coordinates;
+    }
+
+    public Integer getCoordinate(Integer coordinateIndex) {
+        if (coordinateIndex < 0 || coordinateIndex >= coordinates.size()) {
+            return Integer.MIN_VALUE;
+        }
+        return coordinates.get(coordinateIndex);
     }
 }

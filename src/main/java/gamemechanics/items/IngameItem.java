@@ -5,6 +5,7 @@ import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.DigitsPairIndices;
+import gamemechanics.globals.EquipmentKind;
 import gamemechanics.interfaces.EquipableItem;
 
 import java.util.Map;
@@ -133,16 +134,19 @@ public class IngameItem implements EquipableItem {
 
     @Override
     public Boolean isWeapon() {
-        return false;
+        Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
+        return kind >= EquipmentKind.EK_SWORD.asInt() && kind <= EquipmentKind.EK_CROSSBOW.asInt();
     }
 
     @Override
     public Boolean isArmour() {
-        return false;
+        Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
+        return kind >= EquipmentKind.EK_CLOTH_ARMOUR.asInt() && kind <= EquipmentKind.EK_PLATE_ARMOUR.asInt();
     }
 
     @Override
     public Boolean isTrinket() {
-        return false;
+        Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
+        return kind == EquipmentKind.EK_TRINKET.asInt();
     }
 }

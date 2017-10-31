@@ -1,10 +1,12 @@
 package gamemechanics.battlefield.aliveentitiescontainers;
 
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.Countable;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Squad {
+public class Squad implements Countable {
     // PvE mode squad IDs
     public static final int PLAYERS_SQUAD_ID = 0;
     public static final int MONSTER_SQUAD_ID = 1;
@@ -13,12 +15,25 @@ public class Squad {
     public static final int TEAM_ONE_SQUAD_ID = 0;
     public static final int TEAM_TWO_SQUAD_ID = 1;
 
+    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
+    private final Integer ID = instanceCounter.getAndIncrement();
+
     private final List<AliveEntity> members;
     private final Integer squadID;
 
     public Squad(List<AliveEntity> members, Integer squadID) {
         this.members = members;
         this.squadID = squadID;
+    }
+
+    @Override
+    public Integer getInstancesCount() {
+        return instanceCounter.get();
+    }
+
+    @Override
+    public Integer getID() {
+        return ID;
     }
 
     public AliveEntity getMember(Integer memberIndex) {
@@ -32,6 +47,19 @@ public class Squad {
         if (member != null) {
             members.add(member);
         }
+    }
+
+    public void removeMember(AliveEntity member) {
+        if (member != null) {
+            members.remove(member);
+        }
+    }
+
+    public void removeMember(Integer memberIndex) {
+        if (memberIndex < 0 || memberIndex >= members.size()) {
+            return;
+        }
+        members.remove(memberIndex.intValue());
     }
 
     public Integer getSquadSize() {

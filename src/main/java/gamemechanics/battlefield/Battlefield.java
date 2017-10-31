@@ -4,6 +4,7 @@ import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.components.actionmakers.BattleActionMaker;
+import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.ActionMaker;
 import gamemechanics.interfaces.AliveEntity;
@@ -55,7 +56,7 @@ public class Battlefield {
         emplaceBattlers(model.spawnPoints);
         mapBattlers();
 
-        actionMaker = new BattleActionMaker(map, battlersMap);
+        actionMaker = new BattleActionMaker(map);
 
         switch (mode) {
             case PVE_GAME_MODE:
@@ -74,7 +75,6 @@ public class Battlefield {
         for (Squad squad : squads) {
             for (Integer i = 0; i < squad.getSquadSize(); ++i) {
                 if (squad.getMember(i) != null) {
-                    squad.getMember(i).setActionMaker(actionMaker);
                     battlersList.add(squad.getMember(i));
                 }
             }
@@ -104,7 +104,7 @@ public class Battlefield {
             AliveEntity activeBattler = battlersQueue.getFirst();
             if (activeBattler.isControlledByAI()) {
                 while (activeBattlerActionsPooled < ACTIONS_PER_TURN) {
-                    pushAction(activeBattler.decision());
+                    pushAction(activeBattler.makeDecision());
                     actionsQueue.pollFirst().execute();
                 }
             }
@@ -188,7 +188,7 @@ public class Battlefield {
     private void endBattleCleanup() {
         for (Squad squad : squads) {
             for (Integer i = 0; i < squad.getSquadSize(); ++i) {
-                squad.getMember(i).resetActionMaker();
+               squad.getMember(i).removeProperty(PropertyCategories.PC_COORDINATES);
             }
         }
     }
