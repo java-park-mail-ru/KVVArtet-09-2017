@@ -4,20 +4,15 @@ import gamemechanics.battlefield.Action;
 
 import java.util.List;
 
-public interface AliveEntity extends Levelable {
+public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Updateable {
     Boolean isAlive();
-    List<Integer> getHitpoints();
-    Integer getHitpointsPercentage();
-    void heal(Integer amount);
-    void wound(Integer amount);
+    void affectHitpoints(Integer amount);
 
-    Boolean isControlledByAI();
+    default Boolean isControlledByAI() { return false; }
 
-    default Action decision() {
+    default Action makeDecision() {
         return null;
     }
-
-    Integer getInitiative();
 
     Integer getDamage();
     List<Integer> getDamageMinMax();
@@ -25,18 +20,15 @@ public interface AliveEntity extends Levelable {
 
     Integer getCash();
 
-    void move(Integer targetX, Integer targetY);
-    void move(List<Integer> targetCoords);
+    Integer getInitiative();
 
-    void getAbility(Integer abilityIndex);
+    Ability getAbility(Integer abilityIndex);
 
-    void useAbility(Integer abilityIndex, Integer targetX, Integer targetY);
-    void useAbility(Integer abilityIndex, List<Integer> targetCoords);
+    Ability useAbility(Integer abilityIndex);
 
     Boolean addEffect(Effect effect);
     Boolean removeEffect(Integer effectIndex);
     Boolean removeAllEffects();
 
-    void setActionMaker(ActionMaker actionMaker);
-    void resetActionMaker();
+    Bag getBag(Integer bagIndex);
 }

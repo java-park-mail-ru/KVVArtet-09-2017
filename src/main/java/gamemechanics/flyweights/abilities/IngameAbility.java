@@ -1,13 +1,14 @@
 package gamemechanics.flyweights.abilities;
 
 import gamemechanics.battlefield.Tile;
-import gamemechanics.globals.DigitsPairIndices;
+import gamemechanics.components.affectors.Affector;
+import gamemechanics.components.properties.Property;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.AbilityEffect;
 import gamemechanics.interfaces.AliveEntity;
 
-import java.util.List;
-import java.util.Random;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class IngameAbility implements Ability {
@@ -17,32 +18,23 @@ public class IngameAbility implements Ability {
     private final String name;
     private final String description;
 
-    private final Integer maxDistance;
-    private final Integer area;
-    private final Integer categories;
-    private final Integer cooldown;
-    private final List<Integer> effect;
+    private final Map<Integer, Property> properties;
+    private final Map<Integer, Affector> affectors;
     private final AbilityEffect perform;
 
     public static class AbilityModel {
         public String name;
         public String description;
-        public Integer maxDistance;
-        public Integer area;
-        public Integer categories;
-        public Integer cooldown;
-        public List<Integer> effect;
+        public Map<Integer, Property> properties;
+        public Map<Integer, Affector> affectors;
         public AbilityEffect perform;
 
-        public AbilityModel(String name, String description, Integer maxDistance, Integer area,
-                            Integer categories, Integer cooldown, List<Integer> effect, AbilityEffect perform) {
+        public AbilityModel(String name, String description, Map<Integer, Property> properties,
+                            Map<Integer, Affector> affectors, AbilityEffect perform) {
             this.name = name;
             this.description = description;
-            this.maxDistance = maxDistance;
-            this.area = area;
-            this.categories = categories;
-            this.cooldown = cooldown;
-            this.effect = effect;
+            this.properties = properties;
+            this.affectors = affectors;
             this.perform = perform;
         }
     }
@@ -50,11 +42,8 @@ public class IngameAbility implements Ability {
     public IngameAbility(AbilityModel model) {
         name = model.name;
         description = model.description;
-        maxDistance = model.maxDistance;
-        area = model.area;
-        categories = model.categories;
-        cooldown = model.cooldown;
-        effect = model.effect;
+        properties = model.properties;
+        affectors = model.affectors;
         perform = model.perform;
     }
 
@@ -79,34 +68,59 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Integer getMaxDistance() {
-        return maxDistance;
+    public Boolean hasProperty(Integer propertyKind) {
+        return properties.containsKey(propertyKind);
     }
 
     @Override
-    public Integer getArea() {
-        return 0;
+    public Set<Integer> getAvailableProperties() {
+        return properties.keySet();
     }
 
     @Override
-    public Integer getCooldown() {
-        return cooldown;
+    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+        if (!hasProperty(propertyKind)) {
+            return Integer.MIN_VALUE;
+        }
+        return properties.get(propertyKind).getProperty(propertyIndex);
     }
 
     @Override
-    public Integer getCategories() {
-        return categories;
+    public Integer getProperty(Integer propertyKind) {
+        if (!hasProperty(propertyKind)) {
+            return Integer.MIN_VALUE;
+        }
+        return properties.get(propertyKind).getProperty();
+    }
+
+    @Override
+    public Boolean hasAffector(Integer affectorKind) {
+        return affectors.containsKey(affectorKind);
+    }
+
+    @Override
+    public Set<Integer> getAvailableAffectors() {
+        return affectors.keySet();
+    }
+
+    @Override
+    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+        if (!hasAffector(affectorKind)) {
+            return Integer.MIN_VALUE;
+        }
+        return affectors.get(affectorKind).getAffection(affectionIndex);
+    }
+
+    @Override
+    public Integer getAffection(Integer affectorKind) {
+        if (!hasAffector(affectorKind)) {
+            return Integer.MIN_VALUE;
+        }
+        return affectors.get(affectorKind).getAffection();
     }
 
     @Override
     public Boolean execute(AliveEntity sender, Tile target) {
-        return perform.execute(sender, target, effect);
-    }
-
-    protected Integer getEffect() {
-        Random random = new Random(System.currentTimeMillis());
-        return effect.get(DigitsPairIndices.MIN_VALUE_INDEX)
-                + random.nextInt(effect.get(DigitsPairIndices.MAX_VALUE_INDEX)
-                - effect.get(DigitsPairIndices.MIN_VALUE_INDEX));
+        return perform.execute(sender, target, affectors);
     }
 }

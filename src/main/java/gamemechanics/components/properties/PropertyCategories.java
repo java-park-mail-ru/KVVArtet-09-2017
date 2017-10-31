@@ -9,14 +9,27 @@ public class PropertyCategories {
     public static final int PC_BASE_DAMAGE = 5;
     public static final int PC_BASE_DEFENSE = 6;
     public static final int PC_LEVEL = 7;
+    public static final int PC_ABILITIES_COOLDOWN = 8;
+    public static final int PC_INITIATIVE = 9;
+    public static final int PC_SPEED = 10;
 
     // items-specific properties
-    public static final int PC_ITEM_KIND = 8;
-    public static final int PC_ITEM_SLOTS = 9;
-    public static final int PC_ITEM_PRICE = 10;
-    public static final int PC_ITEM_RARITY = 11;
+    public static final int PC_ITEM_KIND = 11;
+    public static final int PC_ITEM_SLOTS = 12;
+    public static final int PC_ITEM_PRICE = 13;
+    public static final int PC_ITEM_RARITY = 14;
 
     // battle participants-specific properties
-    public static final int PC_COORDINATES = 12;
+    public static final int PC_COORDINATES = 15;
 
+    // user characters-specific properties
+    public static final int PC_SKILL_POINTS = 16;
+
+    // NPC-specific properties
+    public static final int PC_CASH_XP_REWARD = 17;
+
+    //Ability-specific properties
+    public static final int PC_MAX_DISTANCE = 18;
+    public static final int PC_AREA = 19;
+    public static final int PC_INFLICTED_CATEGORIES = 20;
 }

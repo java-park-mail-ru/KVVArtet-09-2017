@@ -10,4 +10,7 @@ public class Constants {
 
     public static final int START_LEVEL = 1;
     public static final int FIRST_LEVEL_UP_CAP = 100;
+
+    public static final int DEFAULT_INITIATIVE_VALUE = 10;
+    public static final int DEFAULT_ALIVE_ENTITY_SPEED = 4;
 }

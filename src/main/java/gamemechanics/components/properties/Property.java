@@ -1,6 +1,7 @@
 package gamemechanics.components.properties;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Property {
     default Integer getProperty() {
@@ -23,5 +24,23 @@ public interface Property {
         return false;
     }
 
+    default Boolean setSingleProperty(Integer propertyIndex, Integer property) {
+        return false;
+    }
 
+    default Map<Integer, Integer> getPropertyMap() {
+        return null;
+    }
+
+    default Boolean setPropertyMap(Map<Integer, Integer> property) {
+        return false;
+    }
+
+    default Boolean modifyByPercentage(Float percentage) {
+        return false;
+    }
+
+    default Boolean modifyByAddition(Integer toAdd) {
+        return false;
+    }
 }
