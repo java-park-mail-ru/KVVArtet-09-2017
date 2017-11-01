@@ -3,15 +3,14 @@ package gamemechanics.battlefield;
 import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.components.actionmakers.BattleActionMaker;
+import gamemechanics.battlefield.map.helpers.Pathfinder;
 import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.ActionMaker;
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.Updateable;
 
 import java.util.*;
 
-public class Battlefield {
+public class Battlefield implements Updateable {
     private static final int SQUADS_COUNT = 2;
 
     private static final int INITIAL_TURN_NUMBER = 1;
@@ -22,11 +21,9 @@ public class Battlefield {
     public static final int PVP_GAME_MODE = 1;
 
     private final BattleMap map;
-
-    private final ActionMaker actionMaker;
+    private final Pathfinder pathfinder;
 
     private final List<Squad> squads = new ArrayList<>(SQUADS_COUNT);
-    private final Map<AliveEntity, Tile> battlersMap = new HashMap<>();
 
     private final Deque<AliveEntity> battlersQueue = new ArrayDeque<>();
 
@@ -52,11 +49,9 @@ public class Battlefield {
     public Battlefield(BattlefieldModel model) {
         map = model.map;
         mode = model.mode;
+        pathfinder = new Pathfinder(map);
 
         emplaceBattlers(model.spawnPoints);
-        mapBattlers();
-
-        actionMaker = new BattleActionMaker(map);
 
         switch (mode) {
             case PVE_GAME_MODE:
@@ -90,12 +85,9 @@ public class Battlefield {
     }
 
     public void update() {
+        ++turnCounter;
         while (!actionsQueue.isEmpty()) {
             actionsQueue.getFirst().execute();
-            if (actionsQueue.getFirst().isMovement()) {
-                battlersMap.replace(actionsQueue.getFirst().getSender().getInhabitant(),
-                        actionsQueue.getFirst().getTarget());
-            }
         }
 
         removeDead();
@@ -166,21 +158,10 @@ public class Battlefield {
         squads.set(Squad.MONSTER_SQUAD_ID, monsterSquad);
     }
 
-    private void mapBattlers() {
-        for (Integer i = 0; i < map.getSize().get(DigitsPairIndices.X_COORD_INDEX); ++i) {
-            for (Integer j = 0; j < map.getSize().get(DigitsPairIndices.Y_COORD_INDEX); ++j) {
-                if (map.getTile(i, j).isOccupied()) {
-                    battlersMap.put(map.getInhabitant(i, j), map.getTile(i, j));
-                }
-            }
-        }
-    }
-
     private void removeDead() {
         for (AliveEntity battler : battlersQueue) {
             if (!battler.isAlive()) {
                 battlersQueue.remove(battler);
-                battlersMap.remove(battler);
             }
         }
     }

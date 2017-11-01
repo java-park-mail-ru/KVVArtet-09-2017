@@ -5,6 +5,7 @@ import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Countable;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,8 +25,8 @@ public class Tile implements Countable {
 
     public Tile(Boolean isPassable, Integer coordX, Integer coordY) {
         this.isPassable = isPassable;
-        this.coordinates.set(DigitsPairIndices.X_COORD_INDEX, coordX);
-        this.coordinates.set(DigitsPairIndices.Y_COORD_INDEX, coordY);
+        this.coordinates.set(DigitsPairIndices.ROW_COORD_INDEX, coordX);
+        this.coordinates.set(DigitsPairIndices.COL_COORD_INDEX, coordY);
     }
 
     @Override
@@ -81,6 +82,19 @@ public class Tile implements Countable {
         return adjacentTiles.get(direction);
     }
 
+    public List<Tile> getAdjacentTiles() {
+        return adjacentTiles;
+    }
+
+    public Boolean isAdjacentTo(Tile tile) {
+        for (Tile adjTile : adjacentTiles) {
+            if (adjTile.equals(tile)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setAdjacentTiles(List<Tile> adjacencyList) {
         Integer adjacencyIndex = Directions.UP;
         for (Tile tile : adjacencyList) {
@@ -100,5 +114,16 @@ public class Tile implements Countable {
             return Integer.MIN_VALUE;
         }
         return coordinates.get(coordinateIndex);
+    }
+
+    public Integer getH(@NotNull Tile goal) {
+        return manhattanDistance(coordinates, goal.getCoordinates());
+    }
+
+    private Integer manhattanDistance(List<Integer> fromCoords, List<Integer> toCoords) {
+        return Math.abs(fromCoords.get(DigitsPairIndices.ROW_COORD_INDEX)
+                + toCoords.get(DigitsPairIndices.ROW_COORD_INDEX))
+                + Math.abs(fromCoords.get(DigitsPairIndices.COL_COORD_INDEX)
+                + toCoords.get(DigitsPairIndices.COL_COORD_INDEX));
     }
 }

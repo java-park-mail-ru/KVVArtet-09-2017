@@ -13,4 +13,6 @@ public class Constants {
 
     public static final int DEFAULT_INITIATIVE_VALUE = 10;
     public static final int DEFAULT_ALIVE_ENTITY_SPEED = 4;
+
+    public static final int DEFAULT_MOVEMENT_COST = 1;
 }
