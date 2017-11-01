@@ -2,6 +2,7 @@ package gamemechanics.battlefield;
 
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.Countable;
+import gamemechanics.interfaces.MapNode;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -9,17 +10,17 @@ public class Action implements Countable {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer actionID = instanceCounter.getAndIncrement();
 
-    private final Tile sender;
-    private final Tile target;
+    private final MapNode sender;
+    private final MapNode target;
     private final Ability ability;
 
-    public Action(Tile sender, Tile target, Ability ability) {
+    public Action(MapNode sender, MapNode target, Ability ability) {
         this.sender = sender;
         this.target = target;
         this.ability = ability;
     }
 
-    public Action(Tile sender, Tile target) {
+    public Action(MapNode sender, MapNode target) {
         this(sender, target, null);
     }
 
@@ -33,11 +34,11 @@ public class Action implements Countable {
         return actionID;
     }
 
-    public Tile getSender() {
+    public MapNode getSender() {
         return sender;
     }
 
-    public Tile getTarget() {
+    public MapNode getTarget() {
         return target;
     }
 

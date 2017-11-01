@@ -1,28 +1,28 @@
 package gamemechanics.battlefield.map;
 
-import gamemechanics.battlefield.Tile;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.MapNode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BattleMap {
-    private final List<List<Tile>> rows;
+    private final List<List<MapNode>> rows;
 
-    public BattleMap(List<List<Tile>> rows) {
+    public BattleMap(List<List<MapNode>> rows) {
         this.rows = rows;
     }
 
-    public List<Tile> getRow(Integer rowIndex) {
+    public List<MapNode> getRow(Integer rowIndex) {
         if (rowIndex >= 0 && rowIndex < rows.size()) {
             return rows.get(rowIndex);
         }
         return null;
     }
 
-    public Tile getTile(Integer rowIndex, Integer tileIndex) {
-        List<Tile> row = getRow(rowIndex);
+    public MapNode getTile(Integer rowIndex, Integer tileIndex) {
+        List<MapNode> row = getRow(rowIndex);
         if (row == null || tileIndex < 0) {
             return null;
         }
@@ -33,7 +33,7 @@ public class BattleMap {
     }
 
     public AliveEntity getInhabitant(Integer rowIndex, Integer tileIndex) {
-        Tile tile = getTile(rowIndex, tileIndex);
+        MapNode tile = getTile(rowIndex, tileIndex);
         if (tile == null) {
             return null;
         }
