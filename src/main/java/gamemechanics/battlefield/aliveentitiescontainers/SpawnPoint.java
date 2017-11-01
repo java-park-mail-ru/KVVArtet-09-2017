@@ -32,8 +32,8 @@ public class SpawnPoint {
         Integer halfSide = (spawnAreaSide - 1) / 2;
         // get all spawn area row centers
         Tile upperRow = center.getAdjacent(Directions.UP);
-        while (center.getCoordinate(DigitsPairIndices.X_COORD_INDEX)
-                - upperRow.getCoordinate(DigitsPairIndices.X_COORD_INDEX) < halfSide) {
+        while (center.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
+                - upperRow.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX) < halfSide) {
             if (upperRow == null) {
                 break;
             }
@@ -42,8 +42,8 @@ public class SpawnPoint {
         }
         rowCenters.add(center);
         Tile lowerRow = center.getAdjacent(Directions.DOWN);
-        while (lowerRow.getCoordinate(DigitsPairIndices.X_COORD_INDEX)
-                - center.getCoordinate(DigitsPairIndices.X_COORD_INDEX) < halfSide) {
+        while (lowerRow.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
+                - center.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX) < halfSide) {
             if (lowerRow == null) {
                 break;
             }
@@ -54,8 +54,8 @@ public class SpawnPoint {
         // via each row center get a spawn area row
         for (Tile tile : rowCenters) {
             Tile leftCol = tile.getAdjacent(Directions.LEFT);
-            while (tile.getCoordinate(DigitsPairIndices.Y_COORD_INDEX)
-                    - leftCol.getCoordinate(DigitsPairIndices.Y_COORD_INDEX) < halfSide) {
+            while (tile.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+                    - leftCol.getCoordinate(DigitsPairIndices.COL_COORD_INDEX) < halfSide) {
                 if (leftCol == null) {
                     break;
                 }
@@ -64,8 +64,8 @@ public class SpawnPoint {
             }
             spawnArea.add(tile);
             Tile rightCol = tile.getAdjacent(Directions.RIGHT);
-            while (rightCol.getCoordinate(DigitsPairIndices.Y_COORD_INDEX)
-                    - tile.getCoordinate(DigitsPairIndices.Y_COORD_INDEX) < halfSide) {
+            while (rightCol.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+                    - tile.getCoordinate(DigitsPairIndices.COL_COORD_INDEX) < halfSide) {
                 if (rightCol == null) {
                     break;
                 }

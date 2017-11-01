@@ -20,8 +20,8 @@ public class BattleActionMaker implements ActionMaker {
     @Override
     public Action makeAction(Ability ability, AliveEntity sender, List<Integer> targetCoords) {
         return new Action(map.getTile(sender.getProperty(PropertyCategories.PC_COORDINATES,
-                DigitsPairIndices.X_COORD_INDEX), sender.getProperty(PropertyCategories.PC_COORDINATES,
-                DigitsPairIndices.Y_COORD_INDEX)), map.getTile(targetCoords.get(DigitsPairIndices.X_COORD_INDEX),
-                targetCoords.get(DigitsPairIndices.Y_COORD_INDEX)), ability);
+                DigitsPairIndices.ROW_COORD_INDEX), sender.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.COL_COORD_INDEX)), map.getTile(targetCoords.get(DigitsPairIndices.ROW_COORD_INDEX),
+                targetCoords.get(DigitsPairIndices.COL_COORD_INDEX)), ability);
     }
 }

@@ -42,8 +42,8 @@ public class BattleMap {
 
     public List<Integer> getSize() {
         List<Integer> size = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-        size.set(DigitsPairIndices.X_COORD_INDEX, rows.size());
-        size.set(DigitsPairIndices.Y_COORD_INDEX, rows.get(0).size()); // we're assuming that all rows in the list have the same length
+        size.set(DigitsPairIndices.ROW_COORD_INDEX, rows.size());
+        size.set(DigitsPairIndices.COL_COORD_INDEX, rows.get(0).size()); // we're assuming that all rows in the list have the same length
         return size;
     }
 }
