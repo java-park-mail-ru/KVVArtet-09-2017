@@ -90,6 +90,15 @@ public class Battlefield implements Updateable {
             actionsQueue.getFirst().execute();
         }
 
+        for (Squad squad : squads) {
+            for (Integer i = 0; i < squad.getSquadSize(); ++i) {
+                AliveEntity member = squad.getMember(i);
+                if (member != null) {
+                    member.update();
+                }
+            }
+        }
+
         removeDead();
 
         if (!isBattleFinished()) {
@@ -105,9 +114,9 @@ public class Battlefield implements Updateable {
                 activeBattlerActionsPooled = 0;
                 battlersQueue.addLast(battlersQueue.pollFirst());
             }
+        } else {
+            onBattleEnd();
         }
-
-        onBattleEnd();
     }
 
     public Boolean isBattleFinished() {
