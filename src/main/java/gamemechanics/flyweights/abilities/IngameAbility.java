@@ -1,11 +1,11 @@
 package gamemechanics.flyweights.abilities;
 
-import gamemechanics.battlefield.Tile;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.AbilityEffect;
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.MapNode;
 
 import java.util.Map;
 import java.util.Set;
@@ -120,7 +120,7 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Boolean execute(AliveEntity sender, Tile target) {
+    public Boolean execute(AliveEntity sender, MapNode target) {
         return perform.execute(sender, target, affectors);
     }
 }
