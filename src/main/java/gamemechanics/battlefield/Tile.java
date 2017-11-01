@@ -1,22 +1,25 @@
 package gamemechanics.battlefield;
 
+import gamemechanics.components.properties.PropertiesFactory;
+import gamemechanics.components.properties.Property;
+import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.Countable;
+import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Tile implements Countable {
+public class Tile implements MapNode {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer tileID = instanceCounter.getAndIncrement();
 
     private Boolean isPassable;
     private AliveEntity inhabitant = null;
-    private final List<Tile> adjacentTiles = new ArrayList<>(Directions.DIRECTIONS_COUNT);
+    private final List<MapNode> adjacentTiles = new ArrayList<>(Directions.DIRECTIONS_COUNT);
     private final List<Integer> coordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
 
     public Tile(Integer coordX, Integer coordY) {
@@ -39,32 +42,45 @@ public class Tile implements Countable {
         return tileID;
     }
 
+    @Override
     public Boolean getIsPassable() {
         return isPassable;
     }
 
+    @Override
     public void setIsPassable(Boolean isPassable) {
         this.isPassable = isPassable;
     }
 
+    @Override
     public AliveEntity getInhabitant() {
         return inhabitant;
     }
 
+    @Override
     public Boolean isOccupied() {
         return inhabitant == null;
     }
 
+    @Override
     public Boolean occupy(AliveEntity stander) {
         Boolean isSuccessful = true;
         if (this.inhabitant == null) {
             this.inhabitant = stander;
+            if (stander.hasProperty(PropertyCategories.PC_COORDINATES)) {
+                stander.setProperty(PropertyCategories.PC_COORDINATES, coordinates);
+            } else {
+                Property coordinatesProperty = PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES);
+                coordinatesProperty.setPropertyList(coordinates);
+                stander.addProperty(PropertyCategories.PC_COORDINATES, coordinatesProperty);
+            }
         } else {
             isSuccessful = false;
         }
         return isSuccessful;
     }
 
+    @Override
     public Boolean free() {
         Boolean isSuccessful = true;
         if (inhabitant != null) {
@@ -75,19 +91,22 @@ public class Tile implements Countable {
         return isSuccessful;
     }
 
-    public Tile getAdjacent(Integer direction) {
+    @Override
+    public MapNode getAdjacent(Integer direction) {
         if (direction < Directions.UP || direction >= adjacentTiles.size()) {
             return null;
         }
         return adjacentTiles.get(direction);
     }
 
-    public List<Tile> getAdjacentTiles() {
+    @Override
+    public List<MapNode> getAdjacentTiles() {
         return adjacentTiles;
     }
 
-    public Boolean isAdjacentTo(Tile tile) {
-        for (Tile adjTile : adjacentTiles) {
+    @Override
+    public Boolean isAdjacentTo(MapNode tile) {
+        for (MapNode adjTile : adjacentTiles) {
             if (adjTile.equals(tile)) {
                 return true;
             }
@@ -95,9 +114,10 @@ public class Tile implements Countable {
         return false;
     }
 
-    public void setAdjacentTiles(List<Tile> adjacencyList) {
+    @Override
+    public void setAdjacentTiles(List<MapNode> adjacencyList) {
         Integer adjacencyIndex = Directions.UP;
-        for (Tile tile : adjacencyList) {
+        for (MapNode tile : adjacencyList) {
             adjacentTiles.set(adjacencyIndex++, tile);
             if (adjacencyIndex == Directions.DIRECTIONS_COUNT) {
                 break;
@@ -116,7 +136,8 @@ public class Tile implements Countable {
         return coordinates.get(coordinateIndex);
     }
 
-    public Integer getH(@NotNull Tile goal) {
+    @Override
+    public Integer getH(@NotNull MapNode goal) {
         return manhattanDistance(coordinates, goal.getCoordinates());
     }
 

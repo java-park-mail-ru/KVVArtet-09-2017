@@ -3,6 +3,7 @@ package gamemechanics.battlefield.map;
 import gamemechanics.battlefield.Tile;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
+import gamemechanics.interfaces.MapNode;
 
 import java.util.*;
 
@@ -11,11 +12,11 @@ public final class BattleMapGenerator {
 
     private BattleMapGenerator() {}
 
-    public static List<List<Tile>> generateBattleMap(Integer width, Integer height, Integer passableTilesCount) {
+    public static List<List<MapNode>> generateBattleMap(Integer width, Integer height, Integer passableTilesCount) {
         final List<Integer> mapSize = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         mapSize.set(DigitsPairIndices.ROW_COORD_INDEX, height);
         mapSize.set(DigitsPairIndices.COL_COORD_INDEX, width);
-        List<List<Tile>> map = new ArrayList<>(height);
+        List<List<MapNode>> map = new ArrayList<>(height);
         for (Integer i = 0; i < map.size(); ++i) {
             map.set(i, new ArrayList<>(width));
             for (Integer j = 0; j < map.get(i).size(); ++j) {
@@ -92,10 +93,10 @@ public final class BattleMapGenerator {
         return directionsMap;
     }
 
-    private static void setAdjacencies(List<List<Tile>> map) {
+    private static void setAdjacencies(List<List<MapNode>> map) {
         for (Integer i = 0; i < map.size(); ++i) {
             for (Integer j = 0; j < map.get(i).size(); ++j) {
-                List<Tile> adjacencies = new ArrayList<>(Directions.DIRECTIONS_COUNT);
+                List<MapNode> adjacencies = new ArrayList<>(Directions.DIRECTIONS_COUNT);
                 for (Integer k = 0; k < Directions.DIRECTIONS_COUNT; ++k) {
                     List<Integer> coordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
                     coordinates.set(DigitsPairIndices.ROW_COORD_INDEX,

@@ -1,9 +1,9 @@
 package gamemechanics.battlefield.map.helpers;
 
-import gamemechanics.battlefield.Tile;
 import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
+import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -19,26 +19,26 @@ public final class Pathfinder {
         this.map = map;
     }
 
-    public List<Tile> getPath(@NotNull Tile start, @NotNull Tile goal) {
+    public List<MapNode> getPath(@NotNull MapNode start, @NotNull MapNode goal) {
 
-        final Set<Tile> closed = new HashSet<>();
+        final Set<MapNode> closed = new HashSet<>();
 
-        final Map<Tile, Integer> gScore = new HashMap<>();
-        final Map<Tile, Integer> fScore = new HashMap<>();
+        final Map<MapNode, Integer> gScore = new HashMap<>();
+        final Map<MapNode, Integer> fScore = new HashMap<>();
 
         // map containing parent tiles for each tile in the route
-        final Map<Tile, Tile> routeMap = new HashMap<>();
+        final Map<MapNode, MapNode> routeMap = new HashMap<>();
 
-        final List<Tile> route = new LinkedList<>();
+        final List<MapNode> route = new LinkedList<>();
 
-        final PriorityQueue<Tile> open = new PriorityQueue<>(DEFAULT_OPEN_LIST_CAPACITY,
+        final PriorityQueue<MapNode> open = new PriorityQueue<>(DEFAULT_OPEN_LIST_CAPACITY,
                 Comparator.comparingInt(fScore::get));
 
         gScore.put(start, 0);
         fScore.put(start, start.getH(goal));
 
         while (!open.isEmpty()) {
-            Tile current = open.poll();
+            MapNode current = open.poll();
 
             if (current.equals(goal)) {
                 while (current != null) {
@@ -50,7 +50,7 @@ public final class Pathfinder {
 
             closed.add(current);
 
-            for (Tile adjacent : current.getAdjacentTiles()) {
+            for (MapNode adjacent : current.getAdjacentTiles()) {
                 if (closed.contains(adjacent)) {
                     continue;
                 }
@@ -76,15 +76,15 @@ public final class Pathfinder {
         return null;
     }
 
-    public List<Tile> getPath(List<Integer> fromPos, List<Integer> toPos) {
-        Tile fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
+    public List<MapNode> getPath(List<Integer> fromPos, List<Integer> toPos) {
+        MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
                 fromPos.get(DigitsPairIndices.COL_COORD_INDEX));
-        Tile toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
+        MapNode toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
                 toPos.get(DigitsPairIndices.COL_COORD_INDEX));
         return getPath(fromTile, toTile);
     }
 
-    private Integer getG(@NotNull Tile from, @NotNull Tile to, Integer fromCost) {
+    private Integer getG(@NotNull MapNode from, @NotNull MapNode to, Integer fromCost) {
         if (!from.isAdjacentTo(to)) {
             return Integer.MIN_VALUE;
         }

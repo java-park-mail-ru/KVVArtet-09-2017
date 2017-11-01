@@ -1,23 +1,21 @@
 package gamemechanics.battlefield.aliveentitiescontainers;
 
-import gamemechanics.battlefield.Tile;
-import gamemechanics.components.properties.PropertiesFactory;
-import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.MapNode;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class SpawnPoint {
-    private final Tile center;
+    private final MapNode center;
     private final Integer spawnAreaSide;
 
     private final Squad squad;
 
-    public SpawnPoint(Tile center, Integer spawnAreaSide, Squad squad) {
+    public SpawnPoint(MapNode center, Integer spawnAreaSide, Squad squad) {
         this.center = center;
         this.spawnAreaSide = spawnAreaSide;
         this.squad = squad;
@@ -28,10 +26,10 @@ public class SpawnPoint {
     }
 
     public Boolean emplaceSquad() {
-        List<Tile> rowCenters = new ArrayList<>();
+        List<MapNode> rowCenters = new ArrayList<>();
         Integer halfSide = (spawnAreaSide - 1) / 2;
         // get all spawn area row centers
-        Tile upperRow = center.getAdjacent(Directions.UP);
+        MapNode upperRow = center.getAdjacent(Directions.UP);
         while (center.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
                 - upperRow.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX) < halfSide) {
             if (upperRow == null) {
@@ -41,7 +39,7 @@ public class SpawnPoint {
             upperRow = upperRow.getAdjacent(Directions.UP);
         }
         rowCenters.add(center);
-        Tile lowerRow = center.getAdjacent(Directions.DOWN);
+        MapNode lowerRow = center.getAdjacent(Directions.DOWN);
         while (lowerRow.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
                 - center.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX) < halfSide) {
             if (lowerRow == null) {
@@ -50,10 +48,10 @@ public class SpawnPoint {
             rowCenters.add(lowerRow);
             lowerRow = lowerRow.getAdjacent(Directions.DOWN);
         }
-        List<Tile> spawnArea = new ArrayList<>();
+        List<MapNode> spawnArea = new ArrayList<>();
         // via each row center get a spawn area row
-        for (Tile tile : rowCenters) {
-            Tile leftCol = tile.getAdjacent(Directions.LEFT);
+        for (MapNode tile : rowCenters) {
+            MapNode leftCol = tile.getAdjacent(Directions.LEFT);
             while (tile.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
                     - leftCol.getCoordinate(DigitsPairIndices.COL_COORD_INDEX) < halfSide) {
                 if (leftCol == null) {
@@ -63,7 +61,7 @@ public class SpawnPoint {
                 leftCol = leftCol.getAdjacent(Directions.LEFT);
             }
             spawnArea.add(tile);
-            Tile rightCol = tile.getAdjacent(Directions.RIGHT);
+            MapNode rightCol = tile.getAdjacent(Directions.RIGHT);
             while (rightCol.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
                     - tile.getCoordinate(DigitsPairIndices.COL_COORD_INDEX) < halfSide) {
                 if (rightCol == null) {
@@ -85,12 +83,6 @@ public class SpawnPoint {
                 }
                 // placing battler on the tile and give him its coordinates
                 spawnArea.get(randomTileIndex).occupy(member);
-                if (!member.hasProperty(PropertyCategories.PC_COORDINATES)) {
-                    member.addProperty(PropertyCategories.PC_COORDINATES,
-                            PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES));
-                }
-                member.setProperty(PropertyCategories.PC_COORDINATES,
-                        spawnArea.get(randomTileIndex).getCoordinates());
             }
         }
         return true;
