@@ -119,13 +119,9 @@ public class IngameEffect implements Effect {
     }
 
     @Override
-    public Integer tick() {
+    public void tick() {
         if (duration > 0) {
             --duration;
         }
-        if (hasAffector(AffectorCategories.AC_OVER_TIME_AFFECTOR)) {
-            return getAffection(AffectorCategories.AC_OVER_TIME_AFFECTOR);
-        }
-        return 0;
     }
 }

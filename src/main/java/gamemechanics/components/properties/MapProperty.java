@@ -49,7 +49,40 @@ public class MapProperty implements Property {
     @Override
     public Boolean modifyByAddition(Integer toAdd) {
         for (Integer key : properties.keySet()) {
-            properties.replace(key, properties.get(key) + toAdd);
+            Boolean result = modifyByAddition(key, toAdd);
+            if (!result) {
+                return result;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean modifyByAddition(Integer propertyIndex, Integer toAdd) {
+        if (!properties.containsKey(propertyIndex)) {
+            return false;
+        }
+        properties.replace(propertyIndex, properties.get(propertyIndex) + toAdd);
+        return true;
+    }
+
+    @Override
+    public Boolean modifyByPercentage(Integer propertyIndex, Float percentage) {
+        if (!properties.containsKey(propertyIndex)) {
+            return false;
+        }
+        properties.replace(propertyIndex, Math.round(properties.get(propertyIndex).floatValue()
+                * (Constants.PERCENTAGE_CAP_FLOAT + percentage)));
+        return true;
+    }
+
+    @Override
+    public Boolean modifyByPercentage(Float percentage) {
+        for (Integer key : properties.keySet()) {
+            Boolean result = modifyByPercentage(key, percentage);
+            if (!result) {
+                return result;
+            }
         }
         return true;
     }

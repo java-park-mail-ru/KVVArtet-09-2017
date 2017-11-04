@@ -53,18 +53,42 @@ public class ListProperty implements Property {
     @Override
     public Boolean modifyByPercentage(Float percentage) {
         for (Integer propertyIndex = 0; propertyIndex < properties.size(); ++propertyIndex) {
-            Integer oldValue = properties.get(propertyIndex);
-            Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
-            properties.set(propertyIndex, Math.round(oldValue * resultPercentage));
+            Boolean result = modifyByPercentage(propertyIndex, percentage);
+            if (!result) {
+                return result;
+            }
         }
+        return true;
+    }
+
+    @Override
+    public Boolean modifyByPercentage(Integer propertyIndex, Float percentage) {
+        if (propertyIndex < 0 || propertyIndex >= properties.size()) {
+            return false;
+        }
+        Integer oldValue = properties.get(propertyIndex);
+        Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
+        properties.set(propertyIndex, Math.round(oldValue * resultPercentage));
         return true;
     }
 
     @Override
     public Boolean modifyByAddition(Integer toAdd) {
         for (Integer propertyIndex = 0; propertyIndex < properties.size(); ++propertyIndex) {
-            properties.set(propertyIndex, properties.get(propertyIndex) + toAdd);
+            Boolean result = modifyByAddition(propertyIndex, toAdd);
+            if (!result) {
+                return result;
+            }
         }
+        return true;
+    }
+
+    @Override
+    public Boolean modifyByAddition(Integer propertyIndex, Integer toAdd) {
+        if (propertyIndex < 0 || propertyIndex >= properties.size()) {
+            return false;
+        }
+        properties.set(propertyIndex, properties.get(propertyIndex) + toAdd);
         return true;
     }
 }

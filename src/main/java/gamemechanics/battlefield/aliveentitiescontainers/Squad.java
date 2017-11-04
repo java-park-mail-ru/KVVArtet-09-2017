@@ -1,5 +1,8 @@
 package gamemechanics.battlefield.aliveentitiescontainers;
 
+import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.components.properties.SingleValueProperty;
+import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Countable;
 
@@ -24,6 +27,11 @@ public class Squad implements Countable {
     public Squad(List<AliveEntity> members, Integer squadID) {
         this.members = members;
         this.squadID = squadID;
+        for (AliveEntity member : members) {
+            if (member != null) {
+                member.setProperty(PropertyCategories.PC_SQUAD_ID, this.squadID);
+            }
+        }
     }
 
     @Override
@@ -45,13 +53,21 @@ public class Squad implements Countable {
 
     public void addMember(AliveEntity member) {
         if (member != null) {
+            if (member.hasProperty(PropertyCategories.PC_SQUAD_ID)) {
+                member.setProperty(PropertyCategories.PC_SQUAD_ID, squadID);
+            } else {
+                member.addProperty(PropertyCategories.PC_SQUAD_ID, new SingleValueProperty(squadID));
+            }
             members.add(member);
         }
     }
 
     public void removeMember(AliveEntity member) {
         if (member != null) {
-            members.remove(member);
+            if (members.contains(member)) {
+                members.remove(member);
+                member.setProperty(PropertyCategories.PC_SQUAD_ID, Constants.UNDEFINED_SQUAD_ID);
+            }
         }
     }
 

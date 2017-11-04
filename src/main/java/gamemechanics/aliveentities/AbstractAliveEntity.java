@@ -1,18 +1,19 @@
 package gamemechanics.aliveentities;
 
+import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.CharacterRace;
+import gamemechanics.globals.Constants;
+import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Bag;
 import gamemechanics.interfaces.DecisionMaker;
 import gamemechanics.interfaces.Effect;
+import gamemechanics.items.containers.CharacterDoll;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractAliveEntity implements AliveEntity {
     private final String name;
@@ -49,12 +50,18 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     public static class UserCharacterModel extends AbstractAliveEntityModel {
         public CharacterClass characterClass;
         public CharacterRace characterRace;
+        public CharacterDoll equipment;
+        public Map<Integer, Map<Integer, Integer>> perkRanks;
 
         public UserCharacterModel(String name, String description, Map<Integer, Property> properties,
-                                   List<Bag> bags, CharacterClass characterClass, CharacterRace characterRace) {
+                                   List<Bag> bags, CharacterClass characterClass,
+                                  CharacterRace characterRace, CharacterDoll equipment,
+                                  Map<Integer, Map<Integer, Integer>> perkRanks) {
             super(name, description, properties, bags);
             this.characterClass = characterClass;
             this.characterRace = characterRace;
+            this.equipment = equipment;
+            this.perkRanks = perkRanks;
         }
     }
 
@@ -110,6 +117,13 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
+        if (propertyKind == PropertyCategories.PC_BASE_DAMAGE) {
+            Random random = new Random(System.currentTimeMillis());
+            List<Integer> damage = properties.get(propertyKind).getPropertyList();
+            return damage.get(DigitsPairIndices.MIN_VALUE_INDEX)
+                    + random.nextInt(damage.get(DigitsPairIndices.MAX_VALUE_INDEX)
+                    - damage.get(DigitsPairIndices.MIN_VALUE_INDEX));
+        }
         return properties.get(propertyKind).getProperty();
     }
 
@@ -156,6 +170,14 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
+    public Boolean setProperty(Integer propertyKind, Map<Integer, Integer> propertyValue) {
+        if (!hasProperty(propertyKind)) {
+            return false;
+        }
+        return properties.get(propertyKind).setPropertyMap(propertyValue);
+    }
+
+    @Override
     public Boolean modifyPropertyByPercentage(Integer propertyKind, Float percentage) {
         if (!hasProperty(propertyKind)) {
             return false;
@@ -164,11 +186,61 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
+    public Boolean modifyPropertyByPercentage(Integer propertyKind, Integer propertyIndex, Float percentage) {
+        if (!hasProperty(propertyKind)) {
+            return false;
+        }
+        return properties.get(propertyKind).modifyByPercentage(propertyIndex, percentage);
+    }
+
+    @Override
     public Boolean modifyPropertyByAddition(Integer propertyKind, Integer toAdd) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
         return properties.get(propertyKind).modifyByAddition(toAdd);
+    }
+
+    @Override
+    public Boolean modifyPropertyByAddition(Integer propertyKind, Integer propertyIndex, Integer toAdd) {
+        if (!hasProperty(propertyKind)) {
+            return false;
+        }
+        return properties.get(propertyKind).modifyByAddition(propertyIndex, toAdd);
+    }
+
+    @Override
+    public Boolean isAlive() {
+        return getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX) > 0;
+    }
+
+    @Override
+    public void affectHitpoints(Integer amount) {
+        if (!isAlive()) {
+            return;
+        }
+        if (amount > 0) {
+            Integer missingHitpoints = getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.MAX_VALUE_INDEX)
+                    - getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX);
+            if (missingHitpoints < amount) {
+                modifyPropertyByAddition(PropertyCategories.PC_HITPOINTS,
+                        DigitsPairIndices.CURRENT_VALUE_INDEX, missingHitpoints);
+            } else {
+                modifyPropertyByAddition(PropertyCategories.PC_HITPOINTS,
+                        DigitsPairIndices.CURRENT_VALUE_INDEX, amount);
+            }
+        } else {
+            modifyPropertyByAddition(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX,
+                    Math.round(amount.floatValue() * (Constants.PERCENTAGE_CAP_FLOAT - getDamageReduction())));
+        }
+    }
+
+    @Override
+    public Integer getCash() {
+        if (hasProperty(PropertyCategories.PC_CASH_AMOUNT)) {
+            return getProperty(PropertyCategories.PC_CASH_AMOUNT);
+        }
+        return 0;
     }
 
     @Override
@@ -199,6 +271,14 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
+    public Bag getBag(Integer bagIndex) {
+        if (bagIndex < 0 || bagIndex > bags.size()) {
+            return null;
+        }
+        return bags.get(bagIndex);
+    }
+
+    @Override
     public void update() {
         if (!isAlive()) {
             return;
@@ -212,16 +292,24 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         return getProperty(PropertyCategories.PC_INITIATIVE);
     }
 
+    @Override
+    public Integer getSpeed() {
+        return getProperty(PropertyCategories.PC_SPEED);
+    }
+
     private void tickEffects() {
-        for (Effect effect : effects) {
-            Integer hitpointsAffection = effect.tick();
-            if (hitpointsAffection != 0) {
-                affectHitpoints(hitpointsAffection);
-            }
-        }
         for (Effect effect : effects) {
             if (effect.isExpired()) {
                 effects.remove(effect);
+            }
+        }
+        for (Effect effect : effects) {
+            Integer hitpointsAffection = effect.getAffection(AffectorCategories.AC_OVER_TIME_AFFECTOR);
+            if (hitpointsAffection == Integer.MIN_VALUE) {
+                hitpointsAffection = 0;
+            }
+            if (hitpointsAffection != 0) {
+                affectHitpoints(hitpointsAffection);
             }
         }
     }
@@ -232,4 +320,10 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         }
         modifyPropertyByAddition(PropertyCategories.PC_ABILITIES_COOLDOWN, -1);
     }
+
+    protected List<Effect> getEffects() {
+        return effects;
+    }
+
+    protected abstract Float getDamageReduction();
 }

@@ -14,7 +14,7 @@ public class MapAffector implements Affector {
     @Override
     public Integer getAffection(Integer affectionIndex) {
         if (!affections.containsKey(affectionIndex)) {
-            return Integer.MIN_VALUE;
+            return 0;
         }
         return affections.get(affectionIndex);
     }
