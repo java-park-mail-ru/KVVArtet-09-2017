@@ -1,5 +1,6 @@
 package gamemechanics.components.properties;
 
+import gamemechanics.battlefield.map.tilesets.TilesetShapes;
 import gamemechanics.globals.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_XP_POINTS:
                 property = makeXpPointsProperty();
+                break;
+            case PropertyCategories.PC_CASH_AMOUNT:
+                property = makeCashAmountProperty();
                 break;
             case PropertyCategories.PC_BASE_DAMAGE:
                 property = makeBaseDamageProperty();
@@ -47,8 +51,14 @@ public final class PropertiesFactory {
             case PropertyCategories.PC_COORDINATES:
                 property = makeCoordinatesProperty();
                 break;
+            case PropertyCategories.PC_SQUAD_ID:
+                property = makeSquadIdProperty();
+                break;
             case PropertyCategories.PC_SKILL_POINTS:
                 property = makeSkillPointsProperty();
+                break;
+            case PropertyCategories.PC_BASE_HEALTH:
+                property = makeBaseHitpointsProperty();
                 break;
             case PropertyCategories.PC_ABILITIES_COOLDOWN:
                 property = makeAbilitiesCooldownProperty();
@@ -58,6 +68,17 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_SPEED:
                 property = makeSpeedProperty();
+                break;
+            case PropertyCategories.PC_MAX_DISTANCE:
+                property = makeMaxDistanceProperty();
+                break;
+            case PropertyCategories.PC_AREA:
+                property = makeAreaProperty();
+                break;
+            case PropertyCategories.PC_INFLICTED_CATEGORIES:
+                break;
+            case PropertyCategories.PC_AREA_SHAPE:
+                property = makeAreaShapeProperty();
                 break;
             default:
                 break;
@@ -113,6 +134,10 @@ public final class PropertiesFactory {
         return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
     }
 
+    private static Property makeSquadIdProperty() {
+        return new SingleValueProperty(Constants.UNDEFINED_SQUAD_ID);
+    }
+
     private static Property makeSkillPointsProperty() {
         return new SingleValueProperty(0);
     }
@@ -127,5 +152,25 @@ public final class PropertiesFactory {
 
     private static Property makeSpeedProperty() {
         return new SingleValueProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED);
+    }
+
+    private static Property makeBaseHitpointsProperty() {
+        return new SingleValueProperty(Constants.INITIAL_HITPOINTS_CAP);
+    }
+
+    private static Property makeCashAmountProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeMaxDistanceProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeAreaProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeAreaShapeProperty() {
+        return new SingleValueProperty(TilesetShapes.TS_POINT);
     }
 }

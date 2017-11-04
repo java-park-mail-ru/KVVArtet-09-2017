@@ -2,8 +2,6 @@ package gamemechanics.interfaces;
 
 import gamemechanics.battlefield.Action;
 
-import java.util.List;
-
 public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Updateable {
     Boolean isAlive();
     void affectHitpoints(Integer amount);
@@ -15,12 +13,13 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     }
 
     Integer getDamage();
-    List<Integer> getDamageMinMax();
     Integer getDefense();
 
     Integer getCash();
+    /* TODO - think about some Reward getReward() method */
 
     Integer getInitiative();
+    Integer getSpeed();
 
     Ability getAbility(Integer abilityIndex);
 

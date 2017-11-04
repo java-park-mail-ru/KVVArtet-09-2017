@@ -1,6 +1,7 @@
 package gamemechanics.items.containers;
 
 import gamemechanics.components.affectors.AffectorCategories;
+import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.CharacterRatings;
 import gamemechanics.globals.CharacterStats;
 import gamemechanics.globals.EquipmentSlot;
@@ -8,6 +9,7 @@ import gamemechanics.interfaces.EquipableItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CharacterDoll extends StorageBag {
 
@@ -75,9 +77,47 @@ public class CharacterDoll extends StorageBag {
         Integer defense = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
-                defense += item.getAffection(AffectorCategories.AC_DEFENSE_AFFECTOR);
+                defense += item.getAffection(AffectorCategories.AC_ARMOUR_DEFENSE_AFFECTOR);
             }
         }
         return defense;
+    }
+
+    public Integer getDefense(Integer armourKind) {
+        Integer armourKindDefense = 0;
+        for (EquipableItem item : getContents()) {
+            if (item != null) {
+                if (Objects.equals(item.getProperty(PropertyCategories.PC_ITEM_KIND), armourKind)) {
+                    armourKindDefense += item.getAffection(AffectorCategories.AC_ARMOUR_DEFENSE_AFFECTOR);
+                }
+            }
+        }
+        return armourKindDefense;
+    }
+
+    public Integer getEquipmentAffection(Integer affectorKind) {
+        Integer affection = 0;
+        for (EquipableItem item : getContents()) {
+            if (item != null) {
+                Integer itemBonus = item.getAffection(affectorKind);
+                if (itemBonus != Integer.MIN_VALUE) {
+                    affection += itemBonus;
+                }
+            }
+        }
+        return affection;
+    }
+
+    public Integer getEquipmentAffection(Integer affectorKind, Integer affectionIndex) {
+        Integer affection = 0;
+        for (EquipableItem item : getContents()) {
+            if (item != null) {
+                Integer itemBonus = item.getAffection(affectorKind, affectionIndex);
+                if (itemBonus != Integer.MIN_VALUE) {
+                    affection += itemBonus;
+                }
+            }
+        }
+        return affection;
     }
 }

@@ -10,7 +10,7 @@ import java.util.*;
 
 // pathfinding helper class
 // pathfinding is based on A* algorithm
-public final class Pathfinder {
+public final class Pathfinder implements PathfindingAlgorithm {
     private static final Integer DEFAULT_OPEN_LIST_CAPACITY = 16;
 
     private final BattleMap map;
@@ -19,7 +19,15 @@ public final class Pathfinder {
         this.map = map;
     }
 
-    public List<MapNode> getPath(@NotNull MapNode start, @NotNull MapNode goal) {
+    public Route getPath(List<Integer> fromPos, List<Integer> toPos) {
+        MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
+                fromPos.get(DigitsPairIndices.COL_COORD_INDEX));
+        MapNode toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
+                toPos.get(DigitsPairIndices.COL_COORD_INDEX));
+        return getPath(fromTile, toTile);
+    }
+
+    private Route getPath(@NotNull MapNode start, @NotNull MapNode goal) {
 
         final Set<MapNode> closed = new HashSet<>();
 
@@ -45,7 +53,7 @@ public final class Pathfinder {
                     route.add(0, current);
                     current = routeMap.get(current);
                 }
-                return route;
+                return new BattleMapRoute(route);
             }
 
             closed.add(current);
@@ -74,14 +82,6 @@ public final class Pathfinder {
         }
 
         return null;
-    }
-
-    public List<MapNode> getPath(List<Integer> fromPos, List<Integer> toPos) {
-        MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
-                fromPos.get(DigitsPairIndices.COL_COORD_INDEX));
-        MapNode toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
-                toPos.get(DigitsPairIndices.COL_COORD_INDEX));
-        return getPath(fromTile, toTile);
     }
 
     private Integer getG(@NotNull MapNode from, @NotNull MapNode to, Integer fromCost) {

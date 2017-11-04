@@ -40,7 +40,15 @@ public interface Property {
         return false;
     }
 
+    default Boolean modifyByPercentage(Integer itemIndex, Float percentage) {
+        return false;
+    }
+
     default Boolean modifyByAddition(Integer toAdd) {
+        return false;
+    }
+
+    default Boolean modifyByAddition(Integer propertyIndex, Integer toAdd) {
         return false;
     }
 }

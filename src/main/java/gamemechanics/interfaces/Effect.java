@@ -5,5 +5,5 @@ public interface Effect extends GameEntity, AffectorProvider {
     Boolean isExpired();
     Boolean isPerpetual();
 
-    Integer tick();
+    void tick();
 }

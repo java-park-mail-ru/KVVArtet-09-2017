@@ -6,6 +6,7 @@ import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.battlefield.map.helpers.Pathfinder;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.Updateable;
 
 import java.util.*;
@@ -29,6 +30,8 @@ public class Battlefield implements Updateable {
 
     private final Deque<Action> actionsQueue = new ArrayDeque<>();
     private Integer activeBattlerActionsPooled = 0;
+
+    private final List<Effect> appliedEffects = new ArrayList<>();
 
     private Integer turnCounter = INITIAL_TURN_NUMBER;
 
@@ -101,6 +104,12 @@ public class Battlefield implements Updateable {
 
         removeDead();
 
+        removeExpiredEffects();
+
+        for (Effect effect : appliedEffects) {
+            effect.tick();
+        }
+
         if (!isBattleFinished()) {
             AliveEntity activeBattler = battlersQueue.getFirst();
             if (activeBattler.isControlledByAI()) {
@@ -171,6 +180,14 @@ public class Battlefield implements Updateable {
         for (AliveEntity battler : battlersQueue) {
             if (!battler.isAlive()) {
                 battlersQueue.remove(battler);
+            }
+        }
+    }
+
+    private void removeExpiredEffects() {
+        for (Effect effect : appliedEffects) {
+            if (effect.isExpired()) {
+                appliedEffects.remove(effect);
             }
         }
     }
