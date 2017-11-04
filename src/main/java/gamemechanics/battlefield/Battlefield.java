@@ -180,6 +180,7 @@ public class Battlefield implements Updateable {
         for (AliveEntity battler : battlersQueue) {
             if (!battler.isAlive()) {
                 battlersQueue.remove(battler);
+                /* TODO: add XP rewards for killing */
             }
         }
     }
