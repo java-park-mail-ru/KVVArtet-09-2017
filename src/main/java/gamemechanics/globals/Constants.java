@@ -27,4 +27,6 @@ public class Constants {
     public static final int DEFAULT_ALIVE_ENTITY_SPEED = 4;
 
     public static final int DEFAULT_MOVEMENT_COST = 1;
+
+    public static final int MAXIMAL_FOV_DISTANCE = 12;
 }
