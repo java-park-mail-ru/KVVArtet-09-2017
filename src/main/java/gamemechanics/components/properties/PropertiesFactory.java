@@ -54,6 +54,9 @@ public final class PropertiesFactory {
             case PropertyCategories.PC_SQUAD_ID:
                 property = makeSquadIdProperty();
                 break;
+            case PropertyCategories.PC_OWNER_ID:
+                property = makeOwnerIdProperty();
+                break;
             case PropertyCategories.PC_SKILL_POINTS:
                 property = makeSkillPointsProperty();
                 break;
@@ -136,6 +139,10 @@ public final class PropertiesFactory {
 
     private static Property makeSquadIdProperty() {
         return new SingleValueProperty(Constants.UNDEFINED_SQUAD_ID);
+    }
+
+    private static Property makeOwnerIdProperty() {
+        return new SingleValueProperty(Constants.AI_CONTROLLED_NPC_ID);
     }
 
     private static Property makeSkillPointsProperty() {

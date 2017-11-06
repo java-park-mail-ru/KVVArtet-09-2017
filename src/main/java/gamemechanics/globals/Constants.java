@@ -4,6 +4,8 @@ public class Constants {
     public static final int WRONG_INDEX = Integer.MIN_VALUE;
     public static final int UNDEFINED_SQUAD_ID = -1;
 
+    public static final int AI_CONTROLLED_NPC_ID = -1;
+
     public static final int PERCENTAGE_CAP_INT = 100;
     public static final float PERCENTAGE_CAP_FLOAT = 1.0f;
     public static final float ONE_PERCENT_FLOAT = 0.01f;
