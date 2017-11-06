@@ -23,15 +23,16 @@ public class PropertyCategories {
     // battle participants-specific properties
     public static final int PC_COORDINATES = 16;
     public static final int PC_SQUAD_ID = 17;
+    public static final int PC_OWNER_ID = 18;
 
     // user characters-specific properties
-    public static final int PC_SKILL_POINTS = 18;
-    public static final int PC_BASE_HEALTH = 19;
+    public static final int PC_SKILL_POINTS = 19;
+    public static final int PC_BASE_HEALTH = 20;
 
     //Ability-specific properties
-    public static final int PC_MAX_DISTANCE = 20;
-    public static final int PC_AREA = 21;
-    public static final int PC_INFLICTED_CATEGORIES = 22;
-    public static final int PC_COOLDOWN = 23;
-    public static final int PC_AREA_SHAPE = 24;
+    public static final int PC_MAX_DISTANCE = 21;
+    public static final int PC_AREA = 22;
+    public static final int PC_INFLICTED_CATEGORIES = 23;
+    public static final int PC_COOLDOWN = 24;
+    public static final int PC_AREA_SHAPE = 25;
 }

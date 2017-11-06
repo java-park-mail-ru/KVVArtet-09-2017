@@ -1,12 +1,19 @@
 package gamemechanics.interfaces;
 
 import gamemechanics.battlefield.Action;
+import gamemechanics.components.properties.PropertyCategories;
 
 public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Updateable {
     Boolean isAlive();
     void affectHitpoints(Integer amount);
 
-    default Boolean isControlledByAI() { return false; }
+    default Integer getOwnerID() {
+        return getProperty(PropertyCategories.PC_OWNER_ID);
+    }
+
+    default Boolean isControlledByAI() {
+        return hasProperty(PropertyCategories.PC_OWNER_ID);
+    }
 
     default Action makeDecision() {
         return null;
