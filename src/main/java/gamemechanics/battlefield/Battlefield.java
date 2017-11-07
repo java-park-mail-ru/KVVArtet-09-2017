@@ -5,6 +5,7 @@ import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.battlefield.map.helpers.Pathfinder;
 import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.interfaces.Action;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.Updateable;

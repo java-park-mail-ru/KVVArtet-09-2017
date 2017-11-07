@@ -1,7 +1,7 @@
 package gamemechanics.interfaces;
 
-import gamemechanics.battlefield.Action;
+import gamemechanics.battlefield.BattleAction;
 
 public interface DecisionMaker extends Countable {
-    Action makeDecision();
+    BattleAction makeDecision();
 }

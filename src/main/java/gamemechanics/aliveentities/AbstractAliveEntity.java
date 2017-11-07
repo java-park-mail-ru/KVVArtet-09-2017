@@ -3,14 +3,10 @@ package gamemechanics.aliveentities;
 import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.CharacterRace;
 import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.Bag;
-import gamemechanics.interfaces.DecisionMaker;
-import gamemechanics.interfaces.Effect;
+import gamemechanics.interfaces.*;
 import gamemechanics.items.containers.CharacterDoll;
 
 import java.util.*;
@@ -21,6 +17,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
 
     private final Map<Integer, Property> properties;
     private final List<Bag> bags;
+    private final CharacterRole characterRole;
     private final List<Effect> effects = new ArrayList<>();
 
     private static class AbstractAliveEntityModel {
@@ -28,12 +25,16 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         public String description;
         public Map<Integer, Property> properties;
         public List<Bag> bags; // for monsters bags will contain generated loot
+        public CharacterRole characterRole; // character class for user characters and playable bots
+        // or an AI-driven role for monsters
 
-        private AbstractAliveEntityModel(String name, String description, Map<Integer, Property> properties, List<Bag> bags) {
+        private AbstractAliveEntityModel(String name, String description, Map<Integer, Property> properties,
+                                         List<Bag> bags, CharacterRole characterRole) {
             this.name = name;
             this.description = description;
             this.properties = properties;
             this.bags = bags;
+            this.characterRole = characterRole;
         }
     }
 
@@ -41,24 +42,22 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         public List<DecisionMaker> phases;
 
         public NPCModel(String name, String description, Map<Integer, Property> properties,
-                        List<Bag> bags, List<DecisionMaker> phases) {
-            super(name, description, properties, bags);
+                        List<Bag> bags, List<DecisionMaker> phases, CharacterRole characterRole) {
+            super(name, description, properties, bags, characterRole);
             this.phases = phases;
         }
     }
 
     public static class UserCharacterModel extends AbstractAliveEntityModel {
-        public CharacterClass characterClass;
         public CharacterRace characterRace;
         public CharacterDoll equipment;
         public Map<Integer, Map<Integer, Integer>> perkRanks;
 
         public UserCharacterModel(String name, String description, Map<Integer, Property> properties,
-                                   List<Bag> bags, CharacterClass characterClass,
+                                   List<Bag> bags, CharacterRole characterRole,
                                   CharacterRace characterRace, CharacterDoll equipment,
                                   Map<Integer, Map<Integer, Integer>> perkRanks) {
-            super(name, description, properties, bags);
-            this.characterClass = characterClass;
+            super(name, description, properties, bags, characterRole);
             this.characterRace = characterRace;
             this.equipment = equipment;
             this.perkRanks = perkRanks;
@@ -70,6 +69,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         description = model.description;
         properties = model.properties;
         bags = model.bags;
+        characterRole = model.characterRole;
     }
 
     public AbstractAliveEntity(UserCharacterModel model) {
@@ -77,6 +77,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         description = model.description;
         properties = model.properties;
         bags = model.bags;
+        characterRole = model.characterRole;
     }
 
     @Override
@@ -276,6 +277,11 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             return null;
         }
         return bags.get(bagIndex);
+    }
+
+    @Override
+    public CharacterRole getCharacterRole() {
+        return characterRole;
     }
 
     @Override

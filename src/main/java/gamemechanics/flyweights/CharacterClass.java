@@ -1,13 +1,13 @@
 package gamemechanics.flyweights;
 
 import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.GameEntity;
+import gamemechanics.interfaces.CharacterRole;
 import gamemechanics.interfaces.Perk;
 
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CharacterClass implements GameEntity {
+public class CharacterClass implements CharacterRole {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer characterClassID = instanceCounter.getAndIncrement();
 
@@ -59,18 +59,22 @@ public class CharacterClass implements GameEntity {
         return description;
     }
 
+    @Override
     public Ability getAbility(Integer abilityID) {
         return abilities.get(abilityID);
     }
 
-    public HashMap<Integer, Ability> getAllAbilitities() {
+    @Override
+    public HashMap<Integer, Ability> getAllAbilities() {
         return abilities;
     }
 
+    @Override
     public PerkBranch getBranch(Integer branchID) {
         return branches.get(branchID);
     }
 
+    @Override
     public Perk getPerk(Integer branchID, Integer perkID) {
         return branches.get(branchID).getPerk(perkID);
     }
