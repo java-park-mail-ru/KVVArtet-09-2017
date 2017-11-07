@@ -1,14 +1,14 @@
 package gamemechanics.battlefield;
 
 import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.Countable;
+import gamemechanics.interfaces.Action;
 import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.MapNode;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Action implements Countable {
+public class BattleAction implements Action {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer actionID = instanceCounter.getAndIncrement();
 
@@ -18,14 +18,14 @@ public class Action implements Countable {
     private final MapNode target;
     private final Ability ability;
 
-    public Action(MapNode sender, MapNode target, Ability ability, List<Effect> effectsList) {
+    public BattleAction(MapNode sender, MapNode target, Ability ability, List<Effect> effectsList) {
         this.sender = sender;
         this.target = target;
         this.ability = ability;
         this.effectsList = effectsList;
     }
 
-    public Action(MapNode sender, MapNode target, List<Effect> effectsList) {
+    public BattleAction(MapNode sender, MapNode target, List<Effect> effectsList) {
         this(sender, target, null, effectsList);
     }
 
@@ -39,14 +39,17 @@ public class Action implements Countable {
         return actionID;
     }
 
+    @Override
     public MapNode getSender() {
         return sender;
     }
 
+    @Override
     public MapNode getTarget() {
         return target;
     }
 
+    @Override
     public Ability getAbility() {
         return ability;
     }

@@ -1,9 +1,7 @@
 package gamemechanics.components.actionmakers;
 
-import gamemechanics.battlefield.Action;
+import gamemechanics.battlefield.BattleAction;
 import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.ActionMaker;
 import gamemechanics.interfaces.AliveEntity;
@@ -18,10 +16,7 @@ public class BattleActionMaker implements ActionMaker {
     }
 
     @Override
-    public Action makeAction(Ability ability, AliveEntity sender, List<Integer> targetCoords) {
-        return new Action(map.getTile(sender.getProperty(PropertyCategories.PC_COORDINATES,
-                DigitsPairIndices.ROW_COORD_INDEX), sender.getProperty(PropertyCategories.PC_COORDINATES,
-                DigitsPairIndices.COL_COORD_INDEX)), map.getTile(targetCoords.get(DigitsPairIndices.ROW_COORD_INDEX),
-                targetCoords.get(DigitsPairIndices.COL_COORD_INDEX)), ability);
+    public BattleAction makeAction(Ability ability, AliveEntity sender, List<Integer> targetCoords) {
+        return null;
     }
 }

@@ -1,6 +1,5 @@
 package gamemechanics.interfaces;
 
-import gamemechanics.battlefield.Action;
 import gamemechanics.components.properties.PropertyCategories;
 
 public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Updateable {
@@ -37,4 +36,6 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     Boolean removeAllEffects();
 
     Bag getBag(Integer bagIndex);
+
+    CharacterRole getCharacterRole();
 }

@@ -2,7 +2,6 @@ package gamemechanics.aliveentities;
 
 import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.CharacterRace;
 import gamemechanics.globals.*;
 import gamemechanics.interfaces.Ability;
@@ -18,7 +17,6 @@ public class UserCharacter extends AbstractAliveEntity {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer characterID = instanceCounter.getAndIncrement();
 
-    private final CharacterClass characterClass;
     private final CharacterRace characterRace;
 
     private final CharacterDoll equipment;
@@ -27,14 +25,9 @@ public class UserCharacter extends AbstractAliveEntity {
 
     public UserCharacter(UserCharacterModel model) {
         super(model);
-        characterClass = model.characterClass;
         characterRace = model.characterRace;
         equipment = model.equipment;
         perkRanks = model.perkRanks;
-    }
-
-    public CharacterClass getCharacterClass() {
-        return characterClass;
     }
 
     public CharacterRace getCharacterRace() {
@@ -94,10 +87,10 @@ public class UserCharacter extends AbstractAliveEntity {
 
     @Override
     public Ability useAbility(Integer abilityID) {
-        if (!characterClass.getAllAbilitities().containsKey(abilityID)) {
+        if (!getCharacterRole().getAllAbilities().containsKey(abilityID)) {
             return null;
         }
-        Ability ability = characterClass.getAbility(abilityID);
+        Ability ability = getCharacterRole().getAbility(abilityID);
         setProperty(PropertyCategories.PC_ABILITIES_COOLDOWN, abilityID,
                 ability.getProperty(PropertyCategories.PC_COOLDOWN));
         return ability;
@@ -105,10 +98,10 @@ public class UserCharacter extends AbstractAliveEntity {
 
     @Override
     public Ability getAbility(Integer abilityID) {
-        if (!characterClass.getAllAbilitities().containsKey(abilityID)) {
+        if (!getCharacterRole().getAllAbilities().containsKey(abilityID)) {
             return null;
         }
-        return characterClass.getAbility(abilityID);
+        return getCharacterRole().getAbility(abilityID);
     }
 
     private Integer calculateBonusDamage() {
@@ -229,7 +222,7 @@ public class UserCharacter extends AbstractAliveEntity {
         for (Integer branchID : perkRanks.keySet()) {
             for (Integer perkID : perkRanks.get(branchID).keySet()) {
                 if (perkRanks.get(branchID).get(perkID) > 0) {
-                    Integer perkBonus = characterClass.getPerk(branchID, perkID)
+                    Integer perkBonus = getCharacterRole().getPerk(branchID, perkID)
                             .getRankBasedAffection(affectorKind, perkRanks.get(branchID).get(perkID));
                     if (perkBonus != Integer.MIN_VALUE) {
                         perksAffection += perkBonus;
@@ -245,7 +238,7 @@ public class UserCharacter extends AbstractAliveEntity {
         for (Integer branchID : perkRanks.keySet()) {
             for (Integer perkID : perkRanks.get(branchID).keySet()) {
                 if (perkRanks.get(branchID).get(perkID) > 0) {
-                    Integer perkBonus = characterClass.getPerk(branchID, perkID)
+                    Integer perkBonus = getCharacterRole().getPerk(branchID, perkID)
                             .getRankBasedAffection(affectorKind,
                                     affectionIndex, perkRanks.get(branchID).get(perkID));
                     if (perkBonus != Integer.MIN_VALUE) {
