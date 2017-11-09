@@ -81,8 +81,8 @@ public class FoVTileset implements FieldOfVision {
             }
         }
 
-        Boolean isFullShadow(Integer start, Integer width) {
-            return shadows.size() == 1 && Objects.equals(shadows.get(0).start, start)
+        Boolean isFullShadow(Integer width) {
+            return shadows.size() == 1 && Objects.equals(shadows.get(0).start, 0)
                     && Objects.equals(shadows.get(0).end, width);
         }
     }
@@ -93,19 +93,19 @@ public class FoVTileset implements FieldOfVision {
         private final MapNode source;
         private final Integer direction;
 
-        public Octant(@NotNull MapNode source, Integer direction) {
+        Octant(@NotNull MapNode source, Integer direction) {
             this.source = source;
             this.direction = direction;
 
             getHalfCone();
         }
 
-        public List<MapNode> getVisibleNodes() {
+        List<MapNode> getVisibleNodes() {
             List<MapNode> visibleNodes = new LinkedList<>();
             ShadowLine shadows = new ShadowLine();
             for (List<MapNode> row : octant) {
                 for (MapNode node : row) {
-                    if (!shadows.isFullShadow(0, row.size())) {
+                    if (!shadows.isFullShadow(row.size())) {
                         List<Integer> relativeNodeCoordinates = getRelativeNodeCoordinates(node.getCoordinates());
                         Shadow projection = projectNode(
                                 relativeNodeCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),

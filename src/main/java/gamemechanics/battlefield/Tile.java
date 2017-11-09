@@ -106,12 +106,7 @@ public class Tile implements MapNode {
 
     @Override
     public Boolean isAdjacentTo(MapNode tile) {
-        for (MapNode adjTile : adjacentTiles) {
-            if (adjTile.equals(tile)) {
-                return true;
-            }
-        }
-        return false;
+        return adjacentTiles.contains(tile);
     }
 
     @Override

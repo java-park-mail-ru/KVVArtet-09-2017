@@ -61,7 +61,7 @@ public class CharacterClass implements CharacterRole {
 
     @Override
     public Ability getAbility(Integer abilityID) {
-        return abilities.get(abilityID);
+        return abilities.getOrDefault(abilityID, null);
     }
 
     @Override
