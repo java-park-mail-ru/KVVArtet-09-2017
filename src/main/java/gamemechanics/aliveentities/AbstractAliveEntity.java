@@ -72,7 +72,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         characterRole = model.characterRole;
     }
 
-    public AbstractAliveEntity(UserCharacterModel model) {
+    AbstractAliveEntity(UserCharacterModel model) {
         name = model.name;
         description = model.description;
         properties = model.properties;
@@ -327,9 +327,50 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         modifyPropertyByAddition(PropertyCategories.PC_ABILITIES_COOLDOWN, -1);
     }
 
-    protected List<Effect> getEffects() {
+    List<Effect> getEffects() {
         return effects;
     }
 
-    protected abstract Float getDamageReduction();
+    private Float getDamageReduction() {
+        Float damageReduction = ((Constants.MINIMAL_DAMAGE_REDUCTION * Constants.PERCENTAGE_CAP_INT
+                * getDefense().floatValue()) / getProperty(PropertyCategories.PC_BASE_DEFENSE))
+                * Constants.ONE_PERCENT_FLOAT;
+        if (damageReduction > Constants.PERCENTAGE_CAP_FLOAT) {
+            return Constants.PERCENTAGE_CAP_FLOAT;
+        }
+        if (damageReduction < Constants.MINIMAL_DAMAGE_REDUCTION) {
+            return Constants.MINIMAL_DAMAGE_REDUCTION;
+        }
+        return damageReduction;
+    }
+
+    Float intToFloatPercentage(Integer value) {
+        return value.floatValue() / Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue();
+    }
+
+    Integer getEffectsAffection(Integer affectorKind) {
+        Integer effectsAffection = 0;
+        for (Effect effect : getEffects()) {
+            if (!effect.isExpired()) {
+                Integer effectBonus = effect.getAffection(affectorKind);
+                if (effectBonus != Integer.MIN_VALUE) {
+                    effectsAffection += effectBonus;
+                }
+            }
+        }
+        return effectsAffection;
+    }
+
+    Integer getEffectsAffection(Integer affectorKind, Integer affectionIndex) {
+        Integer effectsAffection = 0;
+        for (Effect effect : getEffects()) {
+            if (!effect.isExpired()) {
+                Integer effectBonus = effect.getAffection(affectorKind, affectionIndex);
+                if (effectBonus != Integer.MIN_VALUE) {
+                    effectsAffection += effectBonus;
+                }
+            }
+        }
+        return effectsAffection;
+    }
 }

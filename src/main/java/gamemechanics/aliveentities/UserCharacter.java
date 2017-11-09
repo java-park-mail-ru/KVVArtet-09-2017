@@ -4,8 +4,6 @@ import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.flyweights.CharacterRace;
 import gamemechanics.globals.*;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.Effect;
 import gamemechanics.items.containers.CharacterDoll;
 
 import java.util.ArrayList;
@@ -83,25 +81,6 @@ public class UserCharacter extends AbstractAliveEntity {
             defense += calculateDefenseBonus(armourKind);
         }
         return defense;
-    }
-
-    @Override
-    public Ability useAbility(Integer abilityID) {
-        if (!getCharacterRole().getAllAbilities().containsKey(abilityID)) {
-            return null;
-        }
-        Ability ability = getCharacterRole().getAbility(abilityID);
-        setProperty(PropertyCategories.PC_ABILITIES_COOLDOWN, abilityID,
-                ability.getProperty(PropertyCategories.PC_COOLDOWN));
-        return ability;
-    }
-
-    @Override
-    public Ability getAbility(Integer abilityID) {
-        if (!getCharacterRole().getAllAbilities().containsKey(abilityID)) {
-            return null;
-        }
-        return getCharacterRole().getAbility(abilityID);
     }
 
     private Integer calculateBonusDamage() {
@@ -191,32 +170,6 @@ public class UserCharacter extends AbstractAliveEntity {
         return equipmentPercentage + perksPercentage + effectsPercentage;
     }
 
-    private Integer getEffectsAffection(Integer affectorKind) {
-        Integer effectsAffection = 0;
-        for (Effect effect : getEffects()) {
-            if (!effect.isExpired()) {
-                Integer effectBonus = effect.getAffection(affectorKind);
-                if (effectBonus != Integer.MIN_VALUE) {
-                    effectsAffection += effectBonus;
-                }
-            }
-        }
-        return effectsAffection;
-    }
-
-    private Integer getEffectsAffection(Integer affectorKind, Integer affectionIndex) {
-        Integer effectsAffection = 0;
-        for (Effect effect : getEffects()) {
-            if (!effect.isExpired()) {
-                Integer effectBonus = effect.getAffection(affectorKind, affectionIndex);
-                if (effectBonus != Integer.MIN_VALUE) {
-                    effectsAffection += effectBonus;
-                }
-            }
-        }
-        return effectsAffection;
-    }
-
     private Integer getPerksAffection(Integer affectorKind) {
         Integer perksAffection = 0;
         for (Integer branchID : perkRanks.keySet()) {
@@ -248,23 +201,5 @@ public class UserCharacter extends AbstractAliveEntity {
             }
         }
         return perksAffection;
-    }
-
-    private Float intToFloatPercentage(Integer value) {
-        return value.floatValue() / Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue();
-    }
-
-    @Override
-    protected Float getDamageReduction() {
-        Float damageReduction = ((Constants.MINIMAL_DAMAGE_REDUCTION * Constants.PERCENTAGE_CAP_INT
-                * getDefense().floatValue()) / getProperty(PropertyCategories.PC_BASE_DEFENSE))
-                * Constants.ONE_PERCENT_FLOAT;
-        if (damageReduction > Constants.PERCENTAGE_CAP_FLOAT) {
-            return Constants.PERCENTAGE_CAP_FLOAT;
-        }
-        if (damageReduction < Constants.MINIMAL_DAMAGE_REDUCTION) {
-            return Constants.MINIMAL_DAMAGE_REDUCTION;
-        }
-        return damageReduction;
     }
 }

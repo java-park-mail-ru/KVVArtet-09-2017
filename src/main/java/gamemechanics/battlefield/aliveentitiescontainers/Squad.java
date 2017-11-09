@@ -6,6 +6,7 @@ import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Countable;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -51,23 +52,19 @@ public class Squad implements Countable {
         return members.get(memberIndex);
     }
 
-    public void addMember(AliveEntity member) {
-        if (member != null) {
-            if (member.hasProperty(PropertyCategories.PC_SQUAD_ID)) {
-                member.setProperty(PropertyCategories.PC_SQUAD_ID, squadID);
-            } else {
-                member.addProperty(PropertyCategories.PC_SQUAD_ID, new SingleValueProperty(squadID));
-            }
-            members.add(member);
+    public void addMember(@NotNull AliveEntity member) {
+        if (member.hasProperty(PropertyCategories.PC_SQUAD_ID)) {
+            member.setProperty(PropertyCategories.PC_SQUAD_ID, squadID);
+        } else {
+            member.addProperty(PropertyCategories.PC_SQUAD_ID, new SingleValueProperty(squadID));
         }
+        members.add(member);
     }
 
-    public void removeMember(AliveEntity member) {
-        if (member != null) {
-            if (members.contains(member)) {
-                members.remove(member);
-                member.setProperty(PropertyCategories.PC_SQUAD_ID, Constants.UNDEFINED_SQUAD_ID);
-            }
+    public void removeMember(@NotNull AliveEntity member) {
+        if (members.contains(member)) {
+            members.remove(member);
+            member.setProperty(PropertyCategories.PC_SQUAD_ID, Constants.UNDEFINED_SQUAD_ID);
         }
     }
 
@@ -75,6 +72,8 @@ public class Squad implements Countable {
         if (memberIndex < 0 || memberIndex >= members.size()) {
             return;
         }
+        members.get(memberIndex)
+                .setProperty(PropertyCategories.PC_SQUAD_ID, Constants.UNDEFINED_SQUAD_ID);
         members.remove(memberIndex.intValue());
     }
 

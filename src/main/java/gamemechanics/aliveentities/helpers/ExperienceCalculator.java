@@ -1,4 +1,4 @@
-package gamemechanics.aliveentities;
+package gamemechanics.aliveentities.helpers;
 
 import gamemechanics.globals.Constants;
 

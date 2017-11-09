@@ -15,7 +15,7 @@ public class AreaEffectTileset extends MapNodeTileset {
     private final MapNode sender;
     private final List<Effect> effects;
     private final Integer healthAffection;
-    Set<Integer> affectedCategories;
+    private Set<Integer> affectedCategories;
 
     AreaEffectTileset(@NotNull MapNode sender, @NotNull MapNode target, Integer shape,
                       Integer size, @NotNull List<Effect> effects, Integer healthAffection,
@@ -24,6 +24,7 @@ public class AreaEffectTileset extends MapNodeTileset {
         this.sender = sender;
         this.effects = effects;
         this.healthAffection = healthAffection;
+        this.affectedCategories = affectedCategories;
     }
 
     @Override
