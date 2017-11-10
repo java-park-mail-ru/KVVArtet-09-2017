@@ -8,10 +8,15 @@ import gamemechanics.interfaces.MapNode;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
-// inspired on https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/ article
-
+/**
+ * Field of vision calculation class via shadow-casting
+ * inspired on https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/ article
+ * @see gamemechanics.battlefield.map.tilesets.FieldOfVision
+ */
 public class FoVTileset implements FieldOfVision {
-    // octant directions
+    /**
+     * octant directions starting from 0..45 degrees sector covering octant and going clockwise
+     */
     private static final int OD_NORTH = 0;
     private static final int OD_NORTH_EAST = 1;
     private static final int OD_EAST = 2;
@@ -21,9 +26,19 @@ public class FoVTileset implements FieldOfVision {
     private static final int OD_WEST = 6;
     private static final int OD_NORTH_WEST = 7;
 
+    /**
+     * nodes visible from the current PoV
+     */
     private final Map<List<Integer>, MapNode> fieldOfVision = new HashMap<>();
+
+    /**
+     * current PoV
+     */
     private MapNode currentPosition;
 
+    /**
+     * 1D projection of 2D {@link MapNode} coordinates from the current PoV
+     */
     private static class Shadow {
         Integer start;
         Integer end;
@@ -38,9 +53,20 @@ public class FoVTileset implements FieldOfVision {
         }
     }
 
+    /**
+     * aggregated shadow line from all obstacles
+     */
     private static class ShadowLine {
+        /**
+         * shadows from obstacles
+         */
         final List<Shadow> shadows = new LinkedList<>();
 
+        /**
+         * check if the node's projection is covered by current shadow line
+         * @param projection node coordinates projection from the current PoV
+         * @return true is this projection is covered by shadow line or false otherwise
+         */
         Boolean isInShadow(Shadow projection) {
             for (Shadow shadow : shadows) {
                 if (shadow.contains(projection)) {
@@ -50,6 +76,10 @@ public class FoVTileset implements FieldOfVision {
             return false;
         }
 
+        /**
+         * add a new shadow to the shadow line
+         * @param shadow shadow to add
+         */
         void add(Shadow shadow) {
             Integer position = 0;
             for (; position < shadows.size(); ++position) {
@@ -81,18 +111,42 @@ public class FoVTileset implements FieldOfVision {
             }
         }
 
+        /**
+         * check if the shadow line covers all observed row.
+         * @param width observed row's width
+         * @return true if the shadow line is represented by the single shadow
+         * and covers the whole row width
+         */
         Boolean isFullShadow(Integer width) {
             return shadows.size() == 1 && Objects.equals(shadows.get(0).start, 0)
                     && Objects.equals(shadows.get(0).end, width);
         }
     }
 
+    /**
+     * octant is a 45-degrees sector of the FoV
+     */
     private static class Octant {
+        /**
+         * octant's map nodes
+         */
         private final List<List<MapNode>> octant = new LinkedList<>();
 
+        /**
+         * current PoV
+         */
         private final MapNode source;
+
+        /**
+         * octant's direction
+         */
         private final Integer direction;
 
+        /**
+         * create new octant for given PoV in given direction
+         * @param source PoV to build an octant from
+         * @param direction direction to build an octant in
+         */
         Octant(@NotNull MapNode source, Integer direction) {
             this.source = source;
             this.direction = direction;
@@ -100,6 +154,10 @@ public class FoVTileset implements FieldOfVision {
             getHalfCone();
         }
 
+        /**
+         * get octant nodes visible from the current PoV
+         * @return list of visible nodes
+         */
         List<MapNode> getVisibleNodes() {
             List<MapNode> visibleNodes = new LinkedList<>();
             ShadowLine shadows = new ShadowLine();
@@ -226,11 +284,19 @@ public class FoVTileset implements FieldOfVision {
         }
     }
 
+    /**
+     * create and calculate FoV for the given PoV
+     * @param currentPosition point of view
+     */
     public FoVTileset(@NotNull MapNode currentPosition) {
         this.currentPosition = currentPosition;
         initializeFoV();
     }
 
+    /**
+     * move the PoV to the new position and re-calculate the FoV for it
+     * @param position new PoV coordinates, [rowCoordinate, colCoordinate]
+     */
     @Override
     public void refresh(List<Integer> position){
         movePoV(position);

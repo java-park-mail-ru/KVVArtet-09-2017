@@ -1,7 +1,14 @@
 package gamemechanics.interfaces;
 
-import gamemechanics.battlefield.BattleAction;
-
+/**
+ * interface for various monster AI implementations
+ */
 public interface DecisionMaker extends Countable {
-    BattleAction makeDecision();
+    /**
+     * choose the best possible {@link Action} based on current
+     * battle status
+     * @return chosen action
+     * @see Action
+     */
+    Action makeDecision();
 }
