@@ -100,7 +100,6 @@ public class NonPlayerCharacterRole implements CharacterRole {
         return affectors.get(affectorKind).getAffection(affectionIndex);
     }
 
-    @Override
     public Action makeDecision() {
         return null;
     }
