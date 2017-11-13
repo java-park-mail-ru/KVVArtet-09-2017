@@ -5,6 +5,7 @@ package gamemechanics.interfaces;
  */
 public interface Action extends Countable {
     MapNode getSender();
+
     MapNode getTarget();
 
     /**
@@ -18,9 +19,21 @@ public interface Action extends Countable {
 
     /**
      * is the action a movement action
-     * @return true if the action is a movement or false otherwise
+     * @return true if the action is a {@link gamemechanics.battlefield.map.actions.MovementAction}
+     * or false otherwise
      */
-    Boolean isMovement();
+    default Boolean isMovement() {
+        return false;
+    }
+
+    /**
+     * is the action a skip turn action
+     * @return true if the action is a {@link gamemechanics.battlefield.map.actions.SkipTurnAction}
+     * or false otherwise
+     */
+    default Boolean isSkip() {
+        return false;
+    }
 
     /**
      * execute action

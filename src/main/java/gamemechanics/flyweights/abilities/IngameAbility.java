@@ -2,9 +2,11 @@ package gamemechanics.flyweights.abilities;
 
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
-import gamemechanics.interfaces.*;
+import gamemechanics.interfaces.Ability;
+import gamemechanics.interfaces.AbilityEffect;
+import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.MapNode;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -118,7 +120,7 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Boolean execute(AliveEntity sender, MapNode target, List<Effect> effectsList) {
-        return perform.execute(sender, target, affectors, effectsList);
+    public Boolean execute(AliveEntity sender, MapNode target) {
+        return perform.execute(sender, target, affectors);
     }
 }

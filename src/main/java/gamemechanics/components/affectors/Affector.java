@@ -3,6 +3,7 @@ package gamemechanics.components.affectors;
 import java.util.List;
 import java.util.Map;
 
+/* TODO: Refactor this and Property to a uniform interface (but keep XxxProvider interfaces) */
 public interface Affector {
     default Integer getAffection(Integer affectionIndex) {
         return 0;

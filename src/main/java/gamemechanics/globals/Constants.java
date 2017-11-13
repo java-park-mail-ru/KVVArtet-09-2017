@@ -1,6 +1,6 @@
 package gamemechanics.globals;
 
-public class Constants {
+public final class Constants {
     public static final int WRONG_INDEX = Integer.MIN_VALUE;
     public static final int UNDEFINED_SQUAD_ID = -1;
 
