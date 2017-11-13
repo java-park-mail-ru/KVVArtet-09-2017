@@ -38,6 +38,10 @@ public final class AffectorsFactory {
                 break;
             case AffectorCategories.AC_ARMOUR_DEFENSE_AFFECTOR:
                 affector = makeArmourDefenseAffector();
+                break;
+            case AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR:
+                affector = makeAbilityHealthAffector();
+                break;
             default:
                 break;
         }
@@ -75,6 +79,10 @@ public final class AffectorsFactory {
     }
 
     private static Affector makeWeaponDamageAffector() {
+        return new ListAffector(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+    }
+
+    private static Affector makeAbilityHealthAffector() {
         return new ListAffector(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
     }
 

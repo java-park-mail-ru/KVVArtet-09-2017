@@ -1,7 +1,7 @@
 package gamemechanics.components.actionmakers;
 
-import gamemechanics.battlefield.BattleAction;
 import gamemechanics.battlefield.map.BattleMap;
+import gamemechanics.battlefield.map.actions.BattleAction;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.ActionMaker;
 import gamemechanics.interfaces.AliveEntity;

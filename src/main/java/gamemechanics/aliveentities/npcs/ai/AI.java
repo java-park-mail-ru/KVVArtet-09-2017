@@ -2,6 +2,7 @@ package gamemechanics.aliveentities.npcs.ai;
 
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
+import gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
 import gamemechanics.battlefield.map.tilesets.FieldOfVision;
 import gamemechanics.battlefield.map.tilesets.FoVTileset;
 import gamemechanics.components.properties.PropertyCategories;
@@ -31,13 +32,15 @@ public class AI implements DecisionMaker {
     private final Integer activeBehaviourID;
 
     private final BattleMap map;
+    private final PathfindingAlgorithm pathfinder;
 
     interface BehaviorFunction extends Function<AggregatedBattleState, Action> {}
 
-    public static class AggregatedBattleState {
+    static class AggregatedBattleState {
         AliveEntity self;
 
         final BattleMap map;
+        final PathfindingAlgorithm pathfinder;
         final FieldOfVision fov;
 
         final Squad allies;
@@ -54,6 +57,7 @@ public class AI implements DecisionMaker {
         final Map<Integer, Ability> abilities;
 
         AggregatedBattleState(@NotNull AliveEntity self, @NotNull BattleMap map,
+                              @NotNull PathfindingAlgorithm pathfinder,
                               @NotNull FieldOfVision fov, @NotNull Squad allies,
                               @NotNull Squad enemies, @NotNull List<Integer> alliesWeaknessOrder,
                               @NotNull List<Integer> alliesDistanceOrder,
@@ -64,6 +68,7 @@ public class AI implements DecisionMaker {
                               @NotNull Map<Integer, Ability> abilities) {
             this.self = self;
             this.map = map;
+            this.pathfinder = pathfinder;
             this.fov = fov;
             this.allies = allies;
             this.enemies = enemies;
@@ -79,6 +84,7 @@ public class AI implements DecisionMaker {
 
     public AI(@NotNull AliveEntity npc, @NotNull Squad allies,
               @NotNull Squad enemies, @NotNull BattleMap map,
+              @NotNull PathfindingAlgorithm pathfinder,
               @NotNull Map<Integer, Ability> abilities,
               @NotNull Map<Integer, BehaviorFunction> behaviours,
               Integer activeBehaviourID) {
@@ -86,6 +92,7 @@ public class AI implements DecisionMaker {
         this.allies = allies;
         this.enemies = enemies;
         this.map = map;
+        this.pathfinder = pathfinder;
         this.abilities = abilities;
         this.behaviours = behaviours;
         this.activeBehaviourID = activeBehaviourID;
@@ -109,6 +116,7 @@ public class AI implements DecisionMaker {
        return behaviours.get(activeBehaviourID).apply(aggregateBattleState());
     }
 
+    @Override
     public void updateAggro(Integer enemyID, Integer amount) {
         if (!aggro.containsKey(enemyID)) {
             return;
@@ -116,8 +124,16 @@ public class AI implements DecisionMaker {
         aggro.replace(enemyID, aggro.get(enemyID) + amount);
     }
 
+    @Override
+    public void updateDamageFrom(Integer enemyID, Integer amount) {
+        if (!gotDamageFrom.containsKey(enemyID)) {
+            return;
+        }
+        gotDamageFrom.replace(enemyID, gotDamageFrom.get(enemyID) + amount);
+    }
+
     private AggregatedBattleState aggregateBattleState() {
-        return new AggregatedBattleState(npc, map, lookAround(), allies, enemies,
+        return new AggregatedBattleState(npc, map, pathfinder, lookAround(), allies, enemies,
                 sortSquadByHitpoints(allies), sortSquadByDistance(allies),
                 sortSquadByHitpoints(enemies), sortSquadByDistance(enemies),
                 aggro, gotDamageFrom, abilities);
@@ -155,6 +171,7 @@ public class AI implements DecisionMaker {
                 unitsWeaknessOrder.add(weakestMemberIndex);
             }
         }
+
         return unitsWeaknessOrder;
     }
 
