@@ -39,5 +39,8 @@ public interface Action extends Countable {
      * execute action
      * @return true on execution success or false otherwise
      */
+    /* TODO: change return type from boolean to some ActionResult
+     * to store action results and prepare data for JSON response
+     */
     Boolean execute();
 }

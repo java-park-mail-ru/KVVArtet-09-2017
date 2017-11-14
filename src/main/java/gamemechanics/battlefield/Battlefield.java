@@ -94,14 +94,10 @@ public class Battlefield implements Updateable {
             actionsQueue.getFirst().execute();
         }
 
-        for (Squad squad : squads) {
-            for (Integer i = 0; i < squad.getSquadSize(); ++i) {
-                AliveEntity member = squad.getMember(i);
-                if (member != null) {
-                    member.update();
-                }
-            }
-        }
+        /* Note: now only updating an active battler per turn
+         * to prevent enormous ticking
+         */
+        battlersQueue.getFirst().update();
 
         removeDead();
 
@@ -123,6 +119,7 @@ public class Battlefield implements Updateable {
             if (activeBattlerActionsPooled == ACTIONS_PER_TURN) {
                 activeBattlerActionsPooled = 0;
                 battlersQueue.addLast(battlersQueue.pollFirst());
+                /* TODO: add active unit switch event to the log */
             }
         } else {
             onBattleEnd();
