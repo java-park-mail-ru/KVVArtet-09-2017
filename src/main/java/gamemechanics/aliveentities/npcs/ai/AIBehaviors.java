@@ -24,6 +24,10 @@ import java.util.*;
 public final class AIBehaviors {
     private static final Map<Integer, AI.BehaviorFunction> behaviors = initializeBehaviorFunctions();
 
+    private static final int ONE_ACTION_STEP_BONUS = 10;
+    private static final int STANDS_ON_ADJACENT_TILE = 17;
+    private static final int ONE_STEP_COST = 2;
+
     private AIBehaviors() {}
 
     /**
@@ -54,15 +58,23 @@ public final class AIBehaviors {
                         if (enemy.isAlive()) {
                             Integer enemyDistanceScore = getDistanceScore(enemy, aggregatedBattleState.self);
                             Integer enemyHealthScore = getHitpointsScore(enemy, aggregatedBattleState.self);
-                            if (enemyDistanceScore + enemyHealthScore > maximalScore) {
-                                maximalScore = enemyDistanceScore + enemyHealthScore;
+                            Integer enemyAggroScore = getAggroScore(enemy, aggregatedBattleState.self,
+                                    aggregatedBattleState.aggroMap);
+                            if (enemyDistanceScore + enemyHealthScore + enemyAggroScore > maximalScore) {
+                                maximalScore = enemyDistanceScore + enemyHealthScore + enemyAggroScore;
                                 enemyIdWithMaximalScore = enemyID;
                             } else {
-                                if (enemyDistanceScore + enemyHealthScore == maximalScore) {
+                                if (enemyDistanceScore + enemyHealthScore + enemyAggroScore == maximalScore) {
                                     if (enemyDistanceScore > getDistanceScore(aggregatedBattleState
                                             .enemies.getMember(enemyIdWithMaximalScore),
                                             aggregatedBattleState.self)) {
                                         enemyIdWithMaximalScore = enemyID;
+                                    } else {
+                                        if (aggregatedBattleState.aggroMap.get(enemy.getID())
+                                                > aggregatedBattleState.aggroMap.get(aggregatedBattleState.enemies
+                                                .getMember(enemyIdWithMaximalScore).getID())) {
+                                            enemyIdWithMaximalScore = enemyID;
+                                        }
                                     }
                                 }
                             }
@@ -172,11 +184,38 @@ public final class AIBehaviors {
     }
 
     private static Integer getDistanceScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
-        return 0;
+        Integer distance = Math.abs(unit.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.ROW_COORD_INDEX) - evaluator.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.ROW_COORD_INDEX)) + Math.abs(unit.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.COL_COORD_INDEX) - evaluator.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.COL_COORD_INDEX));
+        if (distance > 0) {
+            --distance;
+        }
+        Integer score = STANDS_ON_ADJACENT_TILE - ONE_ACTION_STEP_BONUS * distance;
+        if (distance <= Constants.DEFAULT_ALIVE_ENTITY_SPEED) {
+            score += ONE_ACTION_STEP_BONUS;
+        }
+        return score;
     }
 
     private static Integer getHitpointsScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
-        return 0;
+        return Math.round(unit.getProperty(PropertyCategories.PC_HITPOINTS,
+                DigitsPairIndices.CURRENT_VALUE_INDEX).floatValue()
+                / unit.getProperty(PropertyCategories.PC_HITPOINTS,
+                DigitsPairIndices.MAX_VALUE_INDEX).floatValue()
+                * Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue());
+    }
+
+    private static Integer getAggroScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator,
+                                         @NotNull Map<Integer, Integer> aggroMap) {
+        if (areAllies(unit, evaluator)) {
+            return 0;
+        }
+        return Math.round(aggroMap.getOrDefault(unit.getID(), 0).floatValue()
+                / evaluator.getProperty(PropertyCategories.PC_HITPOINTS,
+                DigitsPairIndices.MAX_VALUE_INDEX).floatValue()
+                * Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue());
     }
 
     private static Set<Ability> getHealingAbilities(Map<Integer, Ability> abilities) {
