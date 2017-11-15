@@ -45,6 +45,21 @@ public class BattleMapRoute implements Route {
 
     @Override
     public void walkThrough() {
-        walkThrough(route.size() -1);
+        walkThrough(route.size() - 1);
+    }
+
+    @Override
+    public List<Integer> getStartCoordinates() {
+        return route.get(0).getCoordinates();
+    }
+
+    @Override
+    public List<Integer> getGoalCoordinates(Integer distance) {
+        return route.get(distance).getCoordinates();
+    }
+
+    @Override
+    public List<Integer> getGoalCoordinates() {
+        return getGoalCoordinates(route.size() - 1);
     }
 }

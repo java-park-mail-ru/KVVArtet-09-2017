@@ -317,6 +317,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             if (hitpointsAffection != 0) {
                 affectHitpoints(hitpointsAffection);
             }
+            effect.tick();
         }
     }
 

@@ -1,10 +1,9 @@
-package gamemechanics.battlefield.actionresults;
+package gamemechanics.battlefield.actionresults.events;
 
 import gamemechanics.interfaces.MapNode;
 
 public interface TurnEvent {
     Integer getEventKind();
-    MapNode getFrom();
 
     default MapNode getWhere() {
         return null;

@@ -1,5 +1,7 @@
 package gamemechanics.interfaces;
 
+import gamemechanics.battlefield.actionresults.ActionResult;
+
 /**
  * interface for various battle actions
  */
@@ -37,10 +39,7 @@ public interface Action extends Countable {
 
     /**
      * execute action
-     * @return true on execution success or false otherwise
+     * @return {@link ActionResult}
      */
-    /* TODO: change return type from boolean to some ActionResult
-     * to store action results and prepare data for JSON response
-     */
-    Boolean execute();
+    ActionResult execute();
 }

@@ -1,5 +1,9 @@
 package gamemechanics.battlefield;
 
+import gamemechanics.battlefield.actionresults.ActionResult;
+import gamemechanics.battlefield.actionresults.events.EventCategories;
+import gamemechanics.battlefield.actionresults.events.EventsFactory;
+import gamemechanics.battlefield.actionresults.events.TurnEvent;
 import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
@@ -30,6 +34,7 @@ public class Battlefield implements Updateable {
     private final Deque<AliveEntity> battlersQueue = new ArrayDeque<>();
 
     private final Deque<Action> actionsQueue = new ArrayDeque<>();
+    private final List<ActionResult> battleLog = new ArrayList<>();
     private Integer activeBattlerActionsPooled = 0;
 
     private final List<Effect> appliedEffects = new ArrayList<>();
@@ -89,23 +94,22 @@ public class Battlefield implements Updateable {
     }
 
     public void update() {
+        if (actionsQueue.isEmpty()) {
+            return;
+        }
         ++turnCounter;
         while (!actionsQueue.isEmpty()) {
-            actionsQueue.getFirst().execute();
+            battleLog.add(actionsQueue.getFirst().execute());
         }
 
         /* Note: now only updating an active battler per turn
-         * to prevent enormous ticking
+         * to prevent enormous effects' ticking
          */
         battlersQueue.getFirst().update();
 
         removeDead();
-
         removeExpiredEffects();
-
-        for (Effect effect : appliedEffects) {
-            effect.tick();
-        }
+        processEvents();
 
         if (!isBattleFinished()) {
             AliveEntity activeBattler = battlersQueue.getFirst();
@@ -119,7 +123,8 @@ public class Battlefield implements Updateable {
             if (activeBattlerActionsPooled == ACTIONS_PER_TURN) {
                 activeBattlerActionsPooled = 0;
                 battlersQueue.addLast(battlersQueue.pollFirst());
-                /* TODO: add active unit switch event to the log */
+                // end turn event will be added to the last pooled action
+                battleLog.get(battleLog.size() - 1).addEvent(EventsFactory.makeEndTurnEvent());
             }
         } else {
             onBattleEnd();
@@ -150,6 +155,21 @@ public class Battlefield implements Updateable {
 
     public Boolean pushAction(/* JSON packet here */) {
         return false;
+    }
+
+    public Integer getBattleLogLength() {
+        return battleLog.size();
+    }
+
+    public List<ActionResult> getBattleLog() {
+        return battleLog;
+    }
+
+    public ActionResult getBattleLogEntry(Integer entryIndex) {
+        if (entryIndex < 0 || entryIndex >= battleLog.size()) {
+            return null;
+        }
+        return battleLog.get(entryIndex);
     }
 
     private void emplaceBattlers(List<SpawnPoint> spawnPoints) {
@@ -250,5 +270,22 @@ public class Battlefield implements Updateable {
     private void onBattleEnd() {
         endBattleCleanup();
         generateReward();
+    }
+
+    private void processEvents() {
+        for (ActionResult entry : battleLog) {
+            if (!entry.getIsProcessed()) {
+                for (Integer eventIndex = 0; eventIndex < entry.getEventsCount(); ++eventIndex) {
+                    TurnEvent event = entry.getEvent(eventIndex);
+                    if (event.getEventKind().equals(EventCategories.EC_ROLLBACK)) {
+                        if (activeBattlerActionsPooled > 0) {
+                            --activeBattlerActionsPooled;
+                            break;
+                        }
+                    }
+                }
+                entry.markProcessed();
+            }
+        }
     }
 }
