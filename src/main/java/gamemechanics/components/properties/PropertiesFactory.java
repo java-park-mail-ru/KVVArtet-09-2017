@@ -5,6 +5,7 @@ import gamemechanics.globals.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public final class PropertiesFactory {
     private PropertiesFactory() {}
@@ -79,6 +80,7 @@ public final class PropertiesFactory {
                 property = makeAreaProperty();
                 break;
             case PropertyCategories.PC_INFLICTED_CATEGORIES:
+                property = makeInflictedCategoriesProperty();
                 break;
             case PropertyCategories.PC_AREA_SHAPE:
                 property = makeAreaShapeProperty();
@@ -179,5 +181,9 @@ public final class PropertiesFactory {
 
     private static Property makeAreaShapeProperty() {
         return new SingleValueProperty(TilesetShapes.TS_POINT);
+    }
+
+    private static Property makeInflictedCategoriesProperty() {
+        return new SetProperty(new HashSet<>());
     }
 }

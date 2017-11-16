@@ -21,6 +21,8 @@ public class IngameAbility implements Ability {
 
     private final Map<Integer, Property> properties;
     private final Map<Integer, Affector> affectors;
+    /* TODO: add an Integer-Integer map containing applying effects' durations. Key shall be the same with the affector
+     basing on which we'll create an effect */
     private final AbilityBehavior perform;
 
     interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {}

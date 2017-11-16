@@ -1,6 +1,6 @@
 package gamemechanics.battlefield.map.tilesets;
 
-import gamemechanics.aliveentities.AliveEntitiesCategories;
+import gamemechanics.battlefield.BattlefieldObjectsCategories;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Effect;
@@ -11,10 +11,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/* TODO: refactor to more convenient usage */
+
 public class AreaEffectTileset extends MapNodeTileset {
     private final MapNode sender;
     private final List<Effect> effects;
-    private final Integer healthAffection;
+    private final Integer healthAffection; /* TODO: refactor to the List<Integer> and make it
+    generate affection for every tile */
     private Set<Integer> affectedCategories;
 
     AreaEffectTileset(@NotNull MapNode sender, @NotNull MapNode target, Integer shape,
@@ -37,13 +40,13 @@ public class AreaEffectTileset extends MapNodeTileset {
     }
 
     private void applyOnInhabitant(AliveEntity sender, AliveEntity target) {
-        if (affectedCategories.contains(AliveEntitiesCategories.AE_ENEMY) && !areOnSameSide(sender, target)) {
+        if (affectedCategories.contains(BattlefieldObjectsCategories.BO_ENEMY) && !areOnSameSide(sender, target)) {
             for (Effect effect : effects) {
                 target.addEffect(effect);
             }
             target.affectHitpoints(healthAffection);
         }
-        if (affectedCategories.contains(AliveEntitiesCategories.AE_ALLY) && areOnSameSide(sender, target)) {
+        if (affectedCategories.contains(BattlefieldObjectsCategories.BO_ALLY) && areOnSameSide(sender, target)) {
             for (Effect effect : effects) {
                 target.addEffect(effect);
             }
@@ -54,5 +57,9 @@ public class AreaEffectTileset extends MapNodeTileset {
     private Boolean areOnSameSide(AliveEntity lhs, AliveEntity rhs) {
         return Objects.equals(lhs.getProperty(PropertyCategories.PC_SQUAD_ID),
                 rhs.getProperty(PropertyCategories.PC_SQUAD_ID));
+    }
+
+    private Integer getAffection() {
+        return 0; /* TODO: refactor into random health affection generator */
     }
 }
