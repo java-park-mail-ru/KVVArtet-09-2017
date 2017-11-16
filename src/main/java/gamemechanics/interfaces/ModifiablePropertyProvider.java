@@ -1,5 +1,7 @@
 package gamemechanics.interfaces;
 
+import gamemechanics.components.properties.ListProperty;
+import gamemechanics.components.properties.MapProperty;
 import gamemechanics.components.properties.Property;
 
 import java.util.List;
@@ -53,11 +55,11 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @return true if the operation was successful
      * or false if there's no property registered under such index
      * or the property registered under such index is not
-     * a {@link gamemechanics.components.properties.ListProperty}
-     * or {@link gamemechanics.components.properties.MapProperty}
+     * a {@link ListProperty}
+     * or {@link MapProperty}
      * @see Property
-     * @see gamemechanics.components.properties.ListProperty
-     * @see gamemechanics.components.properties.MapProperty
+     * @see ListProperty
+     * @see MapProperty
      */
     Boolean setProperty(Integer propertyKind, Integer propertyIndex, Integer propertyValue);
 
@@ -67,9 +69,9 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @param propertyValue values list to set
      * @return true if the operation was successful
      * or false if there's either no property registered under such index
-     * or the property registered under such index is not a {@link gamemechanics.components.properties.ListProperty}
+     * or the property registered under such index is not a {@link ListProperty}
      * @see Property
-     * @see gamemechanics.components.properties.ListProperty
+     * @see ListProperty
      */
     Boolean setProperty(Integer propertyKind, List<Integer> propertyValue);
 
@@ -79,9 +81,9 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @param propertyValue values map to set
      * @return true if the operation was successful
      * or false if there's either no such property registered under such index
-     * or the property registered under such index is not a {@link gamemechanics.components.properties.MapProperty}
+     * or the property registered under such index is not a {@link MapProperty}
      * @see Property
-     * @see gamemechanics.components.properties.MapProperty
+     * @see MapProperty
      */
     Boolean setProperty(Integer propertyKind, Map<Integer, Integer> propertyValue);
 
@@ -108,11 +110,11 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *                   0.03f as an argument, not a 1.03f)
      * @return true if the operation was successful
      * or false if there's either no property registered under such index
-     * or the property registered under such index if not a {@link gamemechanics.components.properties.ListProperty}
-     * or {@link gamemechanics.components.properties.MapProperty}
+     * or the property registered under such index if not a {@link ListProperty}
+     * or {@link MapProperty}
      * @see Property
-     * @see gamemechanics.components.properties.ListProperty
-     * @see gamemechanics.components.properties.MapProperty
+     * @see ListProperty
+     * @see MapProperty
      */
     Boolean modifyPropertyByPercentage(Integer propertyKind, Integer propertyIndex, Float percentage);
 
@@ -133,11 +135,11 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @param toAdd amount to modify property's value on
      * @return true if the operation was successful
      * or false if there's either no property registered under such index
-     * or the property registered under such index is not a {@link gamemechanics.components.properties.ListProperty}
-     * or {@link gamemechanics.components.properties.MapProperty}
+     * or the property registered under such index is not a {@link ListProperty}
+     * or {@link MapProperty}
      * @see Property
-     * @see gamemechanics.components.properties.ListProperty
-     * @see gamemechanics.components.properties.MapProperty
+     * @see ListProperty
+     * @see MapProperty
      */
     Boolean modifyPropertyByAddition(Integer propertyKind, Integer propertyIndex, Integer toAdd);
 }

@@ -1,15 +1,16 @@
 package gamemechanics.flyweights.abilities;
 
+import gamemechanics.battlefield.actionresults.events.TurnEvent;
+import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
 import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.AbilityEffect;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 public class IngameAbility implements Ability {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
@@ -20,17 +21,19 @@ public class IngameAbility implements Ability {
 
     private final Map<Integer, Property> properties;
     private final Map<Integer, Affector> affectors;
-    private final AbilityEffect perform;
+    private final AbilityBehavior perform;
+
+    interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {}
 
     public static class AbilityModel {
         public String name;
         public String description;
         public Map<Integer, Property> properties;
         public Map<Integer, Affector> affectors;
-        public AbilityEffect perform;
+        public AbilityBehavior perform;
 
         public AbilityModel(String name, String description, Map<Integer, Property> properties,
-                            Map<Integer, Affector> affectors, AbilityEffect perform) {
+                            Map<Integer, Affector> affectors, AbilityBehavior perform) {
             this.name = name;
             this.description = description;
             this.properties = properties;
@@ -120,7 +123,17 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Boolean execute(AliveEntity sender, MapNode target) {
-        return perform.execute(sender, target, affectors);
+    public List<TurnEvent> execute(AggregatedAbilityAction action) {
+        return perform.apply(action);
+    }
+
+    @Override
+    public Map<Integer, Property> getPropertiesMap() {
+        return properties;
+    }
+
+    @Override
+    public Map<Integer, Affector> getAffectorsMap() {
+        return affectors;
     }
 }

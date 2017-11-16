@@ -1,5 +1,13 @@
 package gamemechanics.interfaces;
 
+import gamemechanics.battlefield.actionresults.events.TurnEvent;
+import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
+import gamemechanics.components.affectors.Affector;
+import gamemechanics.components.properties.Property;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * interface for various spells and combat abilities that may be used in the battle
  * abilities're flyweights that actually exist in single instance per one concrete
@@ -11,11 +19,11 @@ package gamemechanics.interfaces;
 public interface Ability extends GameEntity, PropertyProvider, AffectorProvider {
     /**
      * execute an ability
-     * @param sender ability's caster
-     * @param target map node to apply ability on (since we have some AoE abilities
-     *               it's easier to throw it on the node first and get the node's inhabitant
-     *               if needed
-     * @return true if execution was successful or false otherwise
+     * @param action {@link AggregatedAbilityAction} - action data needed to perform the ability
+     * @return list of {@link TurnEvent}s caused by ability. This list shall be added
+     * to {@link gamemechanics.battlefield.actionresults.ActionResult}'s event list
      */
-    Boolean execute(AliveEntity sender, MapNode target);
+    List<TurnEvent> execute(AggregatedAbilityAction action);
+    Map<Integer, Property> getPropertiesMap();
+    Map<Integer, Affector> getAffectorsMap();
 }

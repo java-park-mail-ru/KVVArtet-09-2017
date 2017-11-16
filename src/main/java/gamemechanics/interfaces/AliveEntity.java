@@ -1,5 +1,6 @@
 package gamemechanics.interfaces;
 
+import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.Constants;
 
@@ -26,7 +27,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
 
     /**
      * get entity's owner ID (used to define to whom the entity belongs to)
-     * @return value of corresponding {@link gamemechanics.components.properties.Property}.
+     * @return value of corresponding {@link Property}.
      * for AI-controlled NPCs it will return {@literal Constants.AI_CONTROLLED_NPC_ID}
      * @see Constants
      */
