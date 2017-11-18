@@ -4,8 +4,10 @@ import gamemechanics.battlefield.actionresults.events.TurnEvent;
 import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
+import gamemechanics.effects.IngameEffect;
 import gamemechanics.interfaces.Ability;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +23,7 @@ public class IngameAbility implements Ability {
 
     private final Map<Integer, Property> properties;
     private final Map<Integer, Affector> affectors;
-    /* TODO: add an Integer-Integer map containing applying effects' durations. Key shall be the same with the affector
-     basing on which we'll create an effect */
+    private final List<IngameEffect.EffectModel> appliedEffects;
     private final AbilityBehavior perform;
 
     interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {}
@@ -32,14 +33,19 @@ public class IngameAbility implements Ability {
         public String description;
         public Map<Integer, Property> properties;
         public Map<Integer, Affector> affectors;
+        public List<IngameEffect.EffectModel> appliedEffects;
         public AbilityBehavior perform;
 
-        public AbilityModel(String name, String description, Map<Integer, Property> properties,
-                            Map<Integer, Affector> affectors, AbilityBehavior perform) {
+        public AbilityModel(@NotNull String name, @NotNull String description,
+                            @NotNull Map<Integer, Property> properties,
+                            @NotNull Map<Integer, Affector> affectors,
+                            @NotNull List<IngameEffect.EffectModel> appliedEffects,
+                            @NotNull AbilityBehavior perform) {
             this.name = name;
             this.description = description;
             this.properties = properties;
             this.affectors = affectors;
+            this.appliedEffects = appliedEffects;
             this.perform = perform;
         }
     }
@@ -49,6 +55,7 @@ public class IngameAbility implements Ability {
         description = model.description;
         properties = model.properties;
         affectors = model.affectors;
+        appliedEffects = model.appliedEffects;
         perform = model.perform;
     }
 
@@ -137,5 +144,10 @@ public class IngameAbility implements Ability {
     @Override
     public Map<Integer, Affector> getAffectorsMap() {
         return affectors;
+    }
+
+    @Override
+    public List<IngameEffect.EffectModel> getAppliedEffects() {
+        return appliedEffects;
     }
 }

@@ -10,6 +10,8 @@ public final class Constants {
     public static final float PERCENTAGE_CAP_FLOAT = 1.0f;
     public static final float ONE_PERCENT_FLOAT = 0.01f;
 
+    public static final int CRITICAL_HIT_MULTIPLIER = 2;
+
     public static final int PERPETUAL_EFFECT_DURATION = -1;
 
     public static final int START_LEVEL = 1;

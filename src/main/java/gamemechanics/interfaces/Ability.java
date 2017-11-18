@@ -4,6 +4,7 @@ import gamemechanics.battlefield.actionresults.events.TurnEvent;
 import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
+import gamemechanics.effects.IngameEffect;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,5 @@ public interface Ability extends GameEntity, PropertyProvider, AffectorProvider 
     List<TurnEvent> execute(AggregatedAbilityAction action);
     Map<Integer, Property> getPropertiesMap();
     Map<Integer, Affector> getAffectorsMap();
+    List<IngameEffect.EffectModel> getAppliedEffects();
 }

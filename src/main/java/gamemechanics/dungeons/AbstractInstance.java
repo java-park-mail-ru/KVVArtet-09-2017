@@ -151,6 +151,6 @@ public abstract class AbstractInstance implements Instance {
 
     @Override
     public Boolean isInstanceFailed() {
-        return squads.get(0).areAllDead(); /* TODO: think about logic for PvE & PvP */
+        return squads.get(Squad.PLAYERS_SQUAD_ID).areAllDead(); /* TODO: think about logic for PvE & PvP */
     }
 }
