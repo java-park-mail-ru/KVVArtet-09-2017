@@ -1,6 +1,7 @@
 package gamemechanics.battlefield.actionresults;
 
 import gamemechanics.battlefield.actionresults.events.TurnEvent;
+import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.MapNode;
 
@@ -15,7 +16,7 @@ public class BattleActionResult implements ActionResult {
     private final List<TurnEvent> events;
     private Boolean isProcessed = false;
 
-    public BattleActionResult(@NotNull Integer actionID,@NotNull MapNode sender,
+    public BattleActionResult(@NotNull Integer actionID, @NotNull MapNode sender,
                               MapNode target, Ability ability,
                               @NotNull List<TurnEvent> events) {
         this.actionID = actionID;
@@ -59,8 +60,23 @@ public class BattleActionResult implements ActionResult {
     }
 
     @Override
-    public void addEvent(TurnEvent event) {
+    public void addEvent(@NotNull TurnEvent event) {
         events.add(event);
+    }
+
+    @Override
+    public void addEvent(@NotNull Integer position, @NotNull TurnEvent event) {
+        events.add(position, event);
+    }
+
+    @Override
+    public Integer getEventIndex(@NotNull TurnEvent event) {
+        for (Integer i = 0; i < events.size(); ++i) {
+            if (events.get(i) == event) {
+                return i;
+            }
+        }
+        return Constants.WRONG_INDEX;
     }
 
     @Override

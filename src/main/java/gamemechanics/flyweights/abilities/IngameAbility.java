@@ -26,7 +26,8 @@ public class IngameAbility implements Ability {
     private final List<IngameEffect.EffectModel> appliedEffects;
     private final AbilityBehavior perform;
 
-    interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {}
+    interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {
+    }
 
     public static class AbilityModel {
         public String name;

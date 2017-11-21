@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public final class PropertiesFactory {
-    private PropertiesFactory() {}
+    private PropertiesFactory() {
+    }
 
     public static Property makeProperty(Integer propertyIndex) {
         Property property = null;

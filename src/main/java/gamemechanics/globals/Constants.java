@@ -26,6 +26,9 @@ public final class Constants {
     public static final float MINIMAL_DAMAGE_REDUCTION = 0.05f;
 
     public static final float STATS_GROWTH_PER_LEVEL = 0.03f;
+    public static final float CASH_REWARD_GROWTH_PER_LEVEL = 0.025f;
+
+    public static final int INITIAL_CASH_REWARD = 5;
 
     public static final int DEFAULT_INITIATIVE_VALUE = 10;
     public static final int DEFAULT_ALIVE_ENTITY_SPEED = 4;

@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface Tileset {
     Integer getTilesCount();
+
     Boolean isValid();
-    default void applyEffects(@NotNull List<TurnEvent> events) {}
+
+    default void applyEffects(@NotNull List<TurnEvent> events) {
+    }
 }

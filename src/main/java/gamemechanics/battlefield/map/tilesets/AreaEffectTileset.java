@@ -25,8 +25,8 @@ public class AreaEffectTileset extends MapNodeTileset {
     private Set<Integer> affectedCategories;
 
     public AreaEffectTileset(Integer abilityID, @NotNull MapNode sender, @NotNull MapNode target, Integer shape,
-                      Integer size, @NotNull List<Effect> effects, @NotNull List<Integer> healthAffection,
-                      Set<Integer> affectedCategories) {
+                             Integer size, @NotNull List<Effect> effects, @NotNull List<Integer> healthAffection,
+                             Set<Integer> affectedCategories) {
         super(target, shape, calculateDirection(sender, target), size);
         this.abilityID = abilityID;
         this.sender = sender;
@@ -52,7 +52,7 @@ public class AreaEffectTileset extends MapNodeTileset {
                 && areOnSameSide(sender, target.getInhabitant()))) {
             for (Effect effect : effects) {
                 target.getInhabitant().addEffect(effect);
-                /* TODO: add an effect applying event to the events list */
+                events.add(EventsFactory.makeApplyEffectEvent(target, effect));
             }
             Integer healthAffection = getAffection(sender);
             target.getInhabitant().affectHitpoints(healthAffection);

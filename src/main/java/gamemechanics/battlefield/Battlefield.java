@@ -1,5 +1,7 @@
 package gamemechanics.battlefield;
 
+import gamemechanics.aliveentities.helpers.CashCalculator;
+import gamemechanics.aliveentities.helpers.ExperienceCalculator;
 import gamemechanics.battlefield.actionresults.ActionResult;
 import gamemechanics.battlefield.actionresults.events.EventCategories;
 import gamemechanics.battlefield.actionresults.events.EventsFactory;
@@ -9,6 +11,7 @@ import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.battlefield.map.helpers.Pathfinder;
 import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.Action;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Effect;
@@ -198,7 +201,6 @@ public class Battlefield implements Updateable {
         for (AliveEntity battler : battlersQueue) {
             if (!battler.isAlive()) {
                 battlersQueue.remove(battler);
-                /* TODO: add XP rewards for killing */
             }
         }
     }
@@ -214,7 +216,7 @@ public class Battlefield implements Updateable {
     private void endBattleCleanup() {
         for (Squad squad : squads) {
             for (Integer i = 0; i < squad.getSquadSize(); ++i) {
-               squad.getMember(i).removeProperty(PropertyCategories.PC_COORDINATES);
+                squad.getMember(i).removeProperty(PropertyCategories.PC_COORDINATES);
             }
         }
     }
@@ -277,13 +279,64 @@ public class Battlefield implements Updateable {
             if (!entry.getIsProcessed()) {
                 for (Integer eventIndex = 0; eventIndex < entry.getEventsCount(); ++eventIndex) {
                     TurnEvent event = entry.getEvent(eventIndex);
-                    if (event.getEventKind().equals(EventCategories.EC_ROLLBACK)) {
+                    if (event.getEventKind() == EventCategories.EC_ROLLBACK) {
                         if (activeBattlerActionsPooled > 0) {
                             --activeBattlerActionsPooled;
                             break;
                         }
                     }
+
+                    if (event.getEventKind() == EventCategories.EC_END_TURN) {
+                        break;
+                    }
+
+                    if (event.getEventKind() == EventCategories.EC_HITPOINTS_CHANGE) {
+                        if (event.getAmount() < 0 && !event.getWhere().getInhabitant().isAlive()) {
+                            Integer squadIdToReward = event.getWhere().getInhabitant()
+                                    .getProperty(PropertyCategories.PC_SQUAD_ID) == Squad.TEAM_ONE_SQUAD_ID
+                                    ? Squad.TEAM_TWO_SQUAD_ID : Squad.TEAM_ONE_SQUAD_ID;
+                            if (squadIdToReward == Squad.PLAYERS_SQUAD_ID || mode == PVP_GAME_MODE) {
+                                Integer averagePartyLevel = 0;
+                                for (Integer i = 0; i < squads.get(squadIdToReward).getSquadSize(); ++i) {
+                                    AliveEntity member = squads.get(squadIdToReward).getMember(i);
+                                    if (member != null) {
+                                        if (member.isAlive()) {
+                                            averagePartyLevel += member.getLevel();
+                                        }
+                                    }
+                                }
+                                Integer expAmount = ExperienceCalculator.getPartyBiasedXPReward(
+                                        ExperienceCalculator.getXPReward(averagePartyLevel
+                                                        / squads.get(squadIdToReward).getAliveMembersCount(),
+                                                event.getWhere().getInhabitant().getLevel()),
+                                        squads.get(squadIdToReward).getAliveMembersCount());
+                                Integer cashAmount = CashCalculator.getPartyBiasedCashReward(
+                                        CashCalculator.getCashReward(event.getWhere().getInhabitant().getLevel()),
+                                        squads.get(squadIdToReward).getAliveMembersCount());
+                                for (Integer i = 0; i < squads.get(squadIdToReward).getSquadSize(); ++i) {
+                                    AliveEntity member = squads.get(squadIdToReward).getMember(i);
+                                    if (member != null) {
+                                        if (member.isAlive() && member.hasProperty(PropertyCategories.PC_XP_POINTS)
+                                                && member.hasProperty(PropertyCategories.PC_CASH_AMOUNT)) {
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
+                                                    DigitsPairIndices.CURRENT_VALUE_INDEX, expAmount);
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
+                                                    cashAmount);
+                                            entry.addEvent(entry.getEventIndex(event) + 1,
+                                                    EventsFactory.makeRewardEvent(map.getTile(
+                                                            member.getProperty(PropertyCategories.PC_COORDINATES,
+                                                                    DigitsPairIndices.ROW_COORD_INDEX),
+                                                            member.getProperty(PropertyCategories.PC_COORDINATES,
+                                                                    DigitsPairIndices.COL_COORD_INDEX)),
+                                                            expAmount, cashAmount));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+
                 entry.markProcessed();
             }
         }

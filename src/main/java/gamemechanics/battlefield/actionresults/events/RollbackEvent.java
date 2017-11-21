@@ -1,7 +1,8 @@
 package gamemechanics.battlefield.actionresults.events;
 
 public class RollbackEvent implements TurnEvent {
-    public RollbackEvent() {}
+    public RollbackEvent() {
+    }
 
     @Override
     public Integer getEventKind() {

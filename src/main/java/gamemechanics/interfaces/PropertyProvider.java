@@ -8,12 +8,14 @@ import java.util.Set;
 
 /**
  * An interface providing access to entity's properties
+ *
  * @see Property
  */
 public interface PropertyProvider {
     /**
      * check if entity has any {@link Property} registered
      * under by given ID
+     *
      * @param propertyKind property ID to check
      * @return true if there's some property registered under such ID or false otherwise
      */
@@ -21,13 +23,15 @@ public interface PropertyProvider {
 
     /**
      * get all registered property IDs for the entity
+     *
      * @return set of registered properties' IDs
      */
     Set<Integer> getAvailableProperties();
 
     /**
      * get single value from multi-value property by its ID
-     * @param propertyKind ID of the property to get value from
+     *
+     * @param propertyKind  ID of the property to get value from
      * @param propertyIndex index of value to get from the property
      * @return requested value if both IDs are valid
      * or special constant if either at least one of IDs is invalid
@@ -41,6 +45,7 @@ public interface PropertyProvider {
 
     /**
      * get a single-value property's value by iD
+     *
      * @param propertyIndex ID of the property to get the value from
      * @return requested property's value if ID is valid
      * and the property is {@link gamemechanics.components.properties.SingleValueProperty}

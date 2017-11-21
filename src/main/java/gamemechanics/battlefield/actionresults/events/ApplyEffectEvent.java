@@ -1,21 +1,22 @@
 package gamemechanics.battlefield.actionresults.events;
 
+import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 
-public class CastEvent implements TurnEvent {
+public class ApplyEffectEvent implements TurnEvent {
     private final MapNode where;
-    private final Integer abilityID;
+    private final Effect appliedEffect;
 
-    public CastEvent(@NotNull MapNode where, @NotNull Integer abilityID) {
+    public ApplyEffectEvent(@NotNull MapNode where, @NotNull Effect appliedEffect) {
         this.where = where;
-        this.abilityID = abilityID;
+        this.appliedEffect = appliedEffect;
     }
 
     @Override
     public Integer getEventKind() {
-        return EventCategories.EC_CAST;
+        return EventCategories.EC_APPLY_EFFECT;
     }
 
     @Override

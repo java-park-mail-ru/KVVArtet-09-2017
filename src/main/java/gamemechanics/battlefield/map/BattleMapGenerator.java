@@ -10,7 +10,8 @@ import java.util.*;
 public final class BattleMapGenerator {
     private static final Map<Integer, List<Integer>> movementsMap = initDirectionsMap();
 
-    private BattleMapGenerator() {}
+    private BattleMapGenerator() {
+    }
 
     public static List<List<MapNode>> generateBattleMap(Integer width, Integer height, Integer passableTilesCount) {
         final List<Integer> mapSize = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);

@@ -25,7 +25,7 @@ public class SingleValueProperty implements Property {
 
     @Override
     public Boolean modifyByPercentage(Float percentage) {
-        property = Math.round(property *(percentage + Constants.PERCENTAGE_CAP_FLOAT));
+        property = Math.round(property * (percentage + Constants.PERCENTAGE_CAP_FLOAT));
         return true;
     }
 
