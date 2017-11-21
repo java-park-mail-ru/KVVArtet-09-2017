@@ -4,8 +4,11 @@ import gamemechanics.battlefield.actionresults.events.TurnEvent;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
+
 public interface ActionResult {
     Integer getActionID();
+
     MapNode getSender();
 
     default MapNode getTarget() {
@@ -17,9 +20,16 @@ public interface ActionResult {
     }
 
     Integer getEventsCount();
+
     TurnEvent getEvent(Integer eventIndex);
-    void addEvent(TurnEvent event);
+
+    void addEvent(@NotNull TurnEvent event);
+
+    void addEvent(Integer position, @NotNull TurnEvent event);
+
+    Integer getEventIndex(@NotNull TurnEvent event);
 
     Boolean getIsProcessed();
+
     void markProcessed();
 }

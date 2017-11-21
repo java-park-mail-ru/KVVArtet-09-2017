@@ -2,6 +2,7 @@ package gamemechanics.components.properties;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface Property {
     default Integer getProperty() {
@@ -33,6 +34,14 @@ public interface Property {
     }
 
     default Boolean setPropertyMap(Map<Integer, Integer> property) {
+        return false;
+    }
+
+    default Set<Integer> getPropertySet() {
+        return null;
+    }
+
+    default Boolean setPropertySet(Set<Integer> property) {
         return false;
     }
 

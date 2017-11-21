@@ -3,7 +3,6 @@ package gamemechanics.components.affectors;
 import java.util.List;
 import java.util.Map;
 
-/* TODO: Refactor this and Property to a uniform interface (but keep XxxProvider interfaces) */
 public interface Affector {
     default Integer getAffection(Integer affectionIndex) {
         return 0;
@@ -33,7 +32,11 @@ public interface Affector {
         return false;
     }
 
-    default Boolean modifyByPercentage(Float percentage) { return false; }
+    default Boolean modifyByPercentage(Float percentage) {
+        return false;
+    }
 
-    default Boolean modifyByAddition(Integer toAdd) { return false; }
+    default Boolean modifyByAddition(Integer toAdd) {
+        return false;
+    }
 }

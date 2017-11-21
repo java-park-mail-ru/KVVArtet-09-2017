@@ -4,18 +4,20 @@ import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 
-public class CastEvent implements TurnEvent {
+public class RewardEvent implements TurnEvent {
     private final MapNode where;
-    private final Integer abilityID;
+    private final Integer expAmount;
+    private final Integer goldAmount;
 
-    public CastEvent(@NotNull MapNode where, @NotNull Integer abilityID) {
+    public RewardEvent(@NotNull MapNode where, @NotNull Integer expAmount, @NotNull Integer goldAmount) {
         this.where = where;
-        this.abilityID = abilityID;
+        this.expAmount = expAmount;
+        this.goldAmount = goldAmount;
     }
 
     @Override
     public Integer getEventKind() {
-        return EventCategories.EC_CAST;
+        return EventCategories.EC_REWARD;
     }
 
     @Override

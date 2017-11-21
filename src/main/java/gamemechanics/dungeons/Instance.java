@@ -7,16 +7,21 @@ import java.util.List;
 
 public interface Instance extends Levelable {
     Integer getRoomsCount();
+
     Integer getClearedRoomsCount();
 
     Integer getBattleLogLength();
+
     List<ActionResult> getBattleLog();
+
     ActionResult getBattleLogEntry(Integer entryIndex);
 
     Integer getGameMode();
+
     List<Integer> getBattlingSquadsIds();
 
     Boolean isInstanceCleared();
+
     Boolean isInstanceFailed();
 
     void giveRewards();

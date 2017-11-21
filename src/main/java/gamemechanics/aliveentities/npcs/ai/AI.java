@@ -34,7 +34,8 @@ public class AI implements DecisionMaker {
     private final BattleMap map;
     private final PathfindingAlgorithm pathfinder;
 
-    interface BehaviorFunction extends Function<AggregatedBattleState, Action> {}
+    interface BehaviorFunction extends Function<AggregatedBattleState, Action> {
+    }
 
     static class AggregatedBattleState {
         AliveEntity self;
@@ -113,7 +114,7 @@ public class AI implements DecisionMaker {
 
     @Override
     public Action makeDecision() {
-       return behaviours.get(activeBehaviourID).apply(aggregateBattleState());
+        return behaviours.get(activeBehaviourID).apply(aggregateBattleState());
     }
 
     @Override
@@ -176,7 +177,7 @@ public class AI implements DecisionMaker {
     }
 
     private List<Integer> sortSquadByDistance(@NotNull Squad squad) {
-        if(squad.areAllDead()) {
+        if (squad.areAllDead()) {
             return null;
         }
 

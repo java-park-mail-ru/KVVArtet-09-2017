@@ -54,7 +54,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         public Map<Integer, Map<Integer, Integer>> perkRanks;
 
         public UserCharacterModel(String name, String description, Map<Integer, Property> properties,
-                                   List<Bag> bags, CharacterRole characterRole,
+                                  List<Bag> bags, CharacterRole characterRole,
                                   CharacterRace characterRace, CharacterDoll equipment,
                                   Map<Integer, Map<Integer, Integer>> perkRanks) {
             super(name, description, properties, bags, characterRole);
@@ -101,7 +101,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Set<Integer> getAvailableProperties(){
+    public Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 

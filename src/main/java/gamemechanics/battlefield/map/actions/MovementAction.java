@@ -1,10 +1,15 @@
 package gamemechanics.battlefield.map.actions;
 
 import com.sun.istack.internal.NotNull;
+import gamemechanics.battlefield.actionresults.ActionResult;
+import gamemechanics.battlefield.actionresults.BattleActionResult;
+import gamemechanics.battlefield.actionresults.events.EventsFactory;
 import gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
 import gamemechanics.battlefield.map.helpers.Route;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.interfaces.MapNode;
+
+import java.util.ArrayList;
 
 public class MovementAction extends AbstractAction {
     private final MapNode sender;
@@ -34,9 +39,11 @@ public class MovementAction extends AbstractAction {
     }
 
     @Override
-    public Boolean execute() {
+    public ActionResult execute() {
+        ActionResult result = new BattleActionResult(getID(), sender, target, null, new ArrayList<>());
         if (!sender.isOccupied()) {
-            return false;
+            result.addEvent(EventsFactory.makeRollbackEvent());
+            return result;
         }
         Route route = pathfinder.getPath(sender.getCoordinates(), target.getCoordinates());
         if (route.getLength() <= sender.getInhabitant().getProperty(PropertyCategories.PC_SPEED)) {
@@ -44,6 +51,7 @@ public class MovementAction extends AbstractAction {
         } else {
             route.walkThrough(sender.getInhabitant().getProperty(PropertyCategories.PC_SPEED));
         }
-        return true;
+        result.addEvent(EventsFactory.makeMovementEvent(route));
+        return result;
     }
 }

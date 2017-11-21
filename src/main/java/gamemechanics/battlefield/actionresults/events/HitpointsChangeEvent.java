@@ -22,4 +22,9 @@ public class HitpointsChangeEvent implements TurnEvent {
     public MapNode getWhere() {
         return where;
     }
+
+    @Override
+    public Integer getAmount() {
+        return amount;
+    }
 }
