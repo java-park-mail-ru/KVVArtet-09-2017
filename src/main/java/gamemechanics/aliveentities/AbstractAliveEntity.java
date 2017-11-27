@@ -9,6 +9,7 @@ import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.*;
 import gamemechanics.items.containers.CharacterDoll;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public abstract class AbstractAliveEntity implements AliveEntity {
@@ -28,8 +29,9 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         public CharacterRole characterRole; // character class for user characters and playable bots
         // or an AI-driven role for monsters
 
-        private AbstractAliveEntityModel(String name, String description, Map<Integer, Property> properties,
-                                         List<Bag> bags, CharacterRole characterRole) {
+        private AbstractAliveEntityModel(@NotNull String name, @NotNull String description,
+                                         @NotNull Map<Integer, Property> properties,
+                                         @NotNull List<Bag> bags, @NotNull CharacterRole characterRole) {
             this.name = name;
             this.description = description;
             this.properties = properties;
@@ -39,12 +41,21 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     public static class NPCModel extends AbstractAliveEntityModel {
-        public List<DecisionMaker> phases;
+        public DecisionMaker behavior;
 
-        public NPCModel(String name, String description, Map<Integer, Property> properties,
-                        List<Bag> bags, List<DecisionMaker> phases, CharacterRole characterRole) {
+        public NPCModel(@NotNull String name, @NotNull String description,
+                        @NotNull Map<Integer, Property> properties,
+                        @NotNull List<Bag> bags, @NotNull DecisionMaker behavior,
+                        @NotNull CharacterRole characterRole) {
             super(name, description, properties, bags, characterRole);
-            this.phases = phases;
+            this.behavior = behavior;
+        }
+
+        public NPCModel(@NotNull String name, @NotNull String description,
+                        @NotNull Map<Integer, Property> properties,
+                        @NotNull List<Bag> bags, @NotNull CharacterRole characterRole) {
+            super(name, description, properties, bags, characterRole);
+            this.behavior = null;
         }
     }
 
@@ -53,10 +64,11 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         public CharacterDoll equipment;
         public Map<Integer, Map<Integer, Integer>> perkRanks;
 
-        public UserCharacterModel(String name, String description, Map<Integer, Property> properties,
-                                  List<Bag> bags, CharacterRole characterRole,
-                                  CharacterRace characterRace, CharacterDoll equipment,
-                                  Map<Integer, Map<Integer, Integer>> perkRanks) {
+        public UserCharacterModel(@NotNull String name, @NotNull String description,
+                                  @NotNull Map<Integer, Property> properties,
+                                  @NotNull List<Bag> bags, @NotNull CharacterRole characterRole,
+                                  @NotNull CharacterRace characterRace, @NotNull CharacterDoll equipment,
+                                  @NotNull Map<Integer, Map<Integer, Integer>> perkRanks) {
             super(name, description, properties, bags, characterRole);
             this.characterRace = characterRace;
             this.equipment = equipment;
@@ -64,7 +76,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         }
     }
 
-    public AbstractAliveEntity(NPCModel model) {
+    public AbstractAliveEntity(@NotNull NPCModel model) {
         name = model.name;
         description = model.description;
         properties = model.properties;
@@ -72,7 +84,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         characterRole = model.characterRole;
     }
 
-    AbstractAliveEntity(UserCharacterModel model) {
+    AbstractAliveEntity(@NotNull UserCharacterModel model) {
         name = model.name;
         description = model.description;
         properties = model.properties;
@@ -245,10 +257,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean addEffect(Effect effect) {
-        if (effect == null) {
-            return false;
-        }
+    public Boolean addEffect(@NotNull Effect effect) {
         effects.add(effect);
         return true;
     }

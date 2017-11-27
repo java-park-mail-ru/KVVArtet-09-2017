@@ -1,5 +1,6 @@
 package gamemechanics.dungeons;
 
+import gamemechanics.aliveentities.npcs.ai.AI;
 import gamemechanics.battlefield.Battlefield;
 import gamemechanics.battlefield.actionresults.ActionResult;
 import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
@@ -53,10 +54,14 @@ public abstract class AbstractInstance implements Instance {
 
     /* TODO: modify data model as DungeonInstance class will be specified */
     public static class DungeonInstanceModel extends AbstractInstanceModel {
+        public Map<Integer, AI.BehaviorFunction> behaviors;
+
         public DungeonInstanceModel(@NotNull String name, @NotNull String description,
                                     Integer level, Integer roomsCount,
-                                    @NotNull List<CharactersParty> squads) {
+                                    @NotNull List<CharactersParty> squads,
+                                    @NotNull Map<Integer, AI.BehaviorFunction> behaviors) {
             super(name, description, Battlefield.PVE_GAME_MODE, level, roomsCount, squads);
+            this.behaviors = behaviors;
         }
     }
 
@@ -173,8 +178,6 @@ public abstract class AbstractInstance implements Instance {
         Integer mapWidth = map.getSize().get(DigitsPairIndices.ROW_COORD_INDEX);
         Integer mapHeight = map.getSize().get(DigitsPairIndices.COL_COORD_INDEX);
 
-        Integer unitsToEmplace = squad.getSquadSize();
-
         Integer halfWidthBegin = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
         Integer halfWidthEnd = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
 
@@ -182,7 +185,7 @@ public abstract class AbstractInstance implements Instance {
 
         Integer triesCount = 0;
 
-        MapNode spawnPointCenter = null;
+        MapNode spawnPointCenter;
         while (true) {
             if (triesCount > mapHeight * mapWidth) {
                 break;
@@ -206,7 +209,7 @@ public abstract class AbstractInstance implements Instance {
             }
             Set<MapNode> nodesToOccupy = new HashSet<>();
             for (MapNode rowCenter : rowCenters) {
-                if (rowCenter.getIsPassable() && ! rowCenter.isOccupied()
+                if (rowCenter.getIsPassable() && !rowCenter.isOccupied()
                         && !occupiedNodes.contains(rowCenter)) {
                     nodesToOccupy.add(rowCenter);
                 }
@@ -229,6 +232,7 @@ public abstract class AbstractInstance implements Instance {
                     }
                 }
             }
+
             if (nodesToOccupy.size() >= squad.getSquadSize()) {
                 occupiedNodes.addAll(nodesToOccupy);
                 return spawnPointCenter;

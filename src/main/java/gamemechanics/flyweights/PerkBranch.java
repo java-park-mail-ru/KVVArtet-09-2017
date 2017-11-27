@@ -3,12 +3,11 @@ package gamemechanics.flyweights;
 import gamemechanics.interfaces.GameEntity;
 import gamemechanics.interfaces.Perk;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PerkBranch implements GameEntity {
-    private final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer branchID = instanceCounter.getAndIncrement();
+    private final Integer branchID;
 
     private final String name;
     private final String description;
@@ -16,18 +15,22 @@ public class PerkBranch implements GameEntity {
     private final List<Perk> perks;
 
     public static class PerkBranchModel {
+        public Integer id;
         public String name;
         public String description;
         public List<Perk> perks;
 
-        public PerkBranchModel(String name, String description, List<Perk> perks) {
+        public PerkBranchModel(@NotNull Integer id, @NotNull String name,
+                               @NotNull String description, @NotNull List<Perk> perks) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.perks = perks;
         }
     }
 
-    public PerkBranch(PerkBranchModel model) {
+    public PerkBranch(@NotNull PerkBranchModel model) {
+        branchID = model.id;
         name = model.name;
         description = model.description;
         perks = model.perks;
@@ -35,7 +38,7 @@ public class PerkBranch implements GameEntity {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override

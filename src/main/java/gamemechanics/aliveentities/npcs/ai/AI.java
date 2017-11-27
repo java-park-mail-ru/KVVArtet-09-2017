@@ -34,7 +34,7 @@ public class AI implements DecisionMaker {
     private final BattleMap map;
     private final PathfindingAlgorithm pathfinder;
 
-    interface BehaviorFunction extends Function<AggregatedBattleState, Action> {
+    public interface BehaviorFunction extends Function<AggregatedBattleState, Action> {
     }
 
     static class AggregatedBattleState {

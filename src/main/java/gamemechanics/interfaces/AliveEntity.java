@@ -4,6 +4,8 @@ import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.Constants;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for user characters and various NPCs
  *
@@ -171,4 +173,12 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @see CharacterRole
      */
     CharacterRole getCharacterRole();
+
+    /**
+     * set unit's behavior (only for AI-driven units, DO NOT overload for any others)
+     *
+     * @param behavior AI to drive unit's behavior
+     */
+    default void setBehavior(@NotNull DecisionMaker behavior) {
+    }
 }
