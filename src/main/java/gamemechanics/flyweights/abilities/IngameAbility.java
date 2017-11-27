@@ -11,12 +11,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 public class IngameAbility implements Ability {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer abilityID = instanceCounter.getAndIncrement();
+    private final Integer abilityID;
 
     private final String name;
     private final String description;
@@ -30,6 +28,7 @@ public class IngameAbility implements Ability {
     }
 
     public static class AbilityModel {
+        public Integer id;
         public String name;
         public String description;
         public Map<Integer, Property> properties;
@@ -37,11 +36,13 @@ public class IngameAbility implements Ability {
         public List<IngameEffect.EffectModel> appliedEffects;
         public AbilityBehavior perform;
 
-        public AbilityModel(@NotNull String name, @NotNull String description,
+        public AbilityModel(@NotNull Integer id,
+                            @NotNull String name, @NotNull String description,
                             @NotNull Map<Integer, Property> properties,
                             @NotNull Map<Integer, Affector> affectors,
                             @NotNull List<IngameEffect.EffectModel> appliedEffects,
                             @NotNull AbilityBehavior perform) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.properties = properties;
@@ -51,7 +52,8 @@ public class IngameAbility implements Ability {
         }
     }
 
-    public IngameAbility(AbilityModel model) {
+    public IngameAbility(@NotNull AbilityModel model) {
+        abilityID = model.id;
         name = model.name;
         description = model.description;
         properties = model.properties;
@@ -62,7 +64,7 @@ public class IngameAbility implements Ability {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override

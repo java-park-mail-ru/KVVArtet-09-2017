@@ -2,6 +2,7 @@ package gamemechanics.interfaces;
 
 import gamemechanics.flyweights.PerkBranch;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -109,5 +110,9 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
     @Override
     default Integer getAffection(Integer affectorKind, Integer affectionIndex) {
         return 0;
+    }
+
+    default List<Integer> getBehaviorIds() {
+        return null;
     }
 }

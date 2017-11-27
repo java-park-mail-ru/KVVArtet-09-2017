@@ -71,4 +71,30 @@ public class CharactersParty implements Countable {
     public AliveEntity getMember(@NotNull Integer roleId) {
         return members.getOrDefault(roleId, null);
     }
+
+    public Boolean areAllDead() {
+        for (Integer roleId : members.keySet()) {
+            if (members.get(roleId) != null) {
+                if (members.get(roleId).isAlive()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public Integer getAverageLevel() {
+        Integer accumulatedLevel = 0;
+        Integer partySize = 0;
+        for (Integer roleId : members.keySet()) {
+            if (members.get(roleId) != null) {
+                ++partySize;
+                accumulatedLevel += members.get(roleId).getLevel();
+            }
+        }
+        if (partySize == 0) {
+            return 0;
+        }
+        return accumulatedLevel / partySize;
+    }
 }

@@ -2,51 +2,60 @@ package gamemechanics.aliveentities.npcs;
 
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.Action;
 import gamemechanics.interfaces.CharacterRole;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class NonPlayerCharacterRole implements CharacterRole {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer npcRoleID = instanceCounter.getAndIncrement();
+    private final Integer npcRoleID;
 
     private final String name;
     private final String description;
 
     // affectors modifying NPC's stats, defense and damage
     private final Map<Integer, Affector> affectors;
+    private final List<Integer> behaviorIds;
 
     // abilities list for that role;
     private final Map<Integer, Ability> abilities;
 
     public static class NPCRoleModel {
+        public Integer id;
         public String name;
         public String description;
         public Map<Integer, Affector> affectors;
+        public List<Integer> behaviorIds;
         public Map<Integer, Ability> abilities;
 
-        public NPCRoleModel(String name, String description, Map<Integer, Affector> affectors,
-                            Map<Integer, Ability> abilities) {
+        public NPCRoleModel(@NotNull Integer id,
+                            @NotNull String name, @NotNull String description,
+                            @NotNull Map<Integer, Affector> affectors,
+                            @NotNull List<Integer> behaviorIds,
+                            @NotNull Map<Integer, Ability> abilities) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.affectors = affectors;
+            this.behaviorIds = behaviorIds;
             this.abilities = abilities;
         }
     }
 
-    public NonPlayerCharacterRole(NPCRoleModel model) {
+    public NonPlayerCharacterRole(@NotNull NPCRoleModel model) {
+        npcRoleID = model.id;
         name = model.name;
         description = model.description;
         affectors = model.affectors;
+        behaviorIds = model.behaviorIds;
         abilities = model.abilities;
     }
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override
@@ -100,7 +109,8 @@ public class NonPlayerCharacterRole implements CharacterRole {
         return affectors.get(affectorKind).getAffection(affectionIndex);
     }
 
-    public Action makeDecision() {
-        return null;
+    @Override
+    public List<Integer> getBehaviorIds() {
+        return behaviorIds;
     }
 }

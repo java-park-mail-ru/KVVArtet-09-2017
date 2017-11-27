@@ -5,14 +5,13 @@ import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.Perk;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class IngamePerk implements Perk {
-    private final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer perkID = instanceCounter.getAndIncrement();
+    private final Integer perkID;
 
     private final String name;
     private final String description;
@@ -20,18 +19,23 @@ public class IngamePerk implements Perk {
     private final Map<Integer, Affector> affectors;
 
     public static class PerkModel {
+        public Integer id;
         public String name;
         public String description;
         Map<Integer, Affector> affectors;
 
-        public PerkModel(String name, String description, Map<Integer, Affector> affectors) {
+        public PerkModel(@NotNull Integer id,
+                         @NotNull String name, @NotNull String description,
+                         @NotNull Map<Integer, Affector> affectors) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.affectors = affectors;
         }
     }
 
-    public IngamePerk(PerkModel model) {
+    public IngamePerk(@NotNull PerkModel model) {
+        perkID = model.id;
         name = model.name;
         description = model.description;
         affectors = model.affectors;
@@ -39,7 +43,7 @@ public class IngamePerk implements Perk {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override
