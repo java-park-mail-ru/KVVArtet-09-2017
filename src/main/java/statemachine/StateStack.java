@@ -17,6 +17,8 @@ public class StateStack implements PendingStack {
 
     private enum StackActions { SA_PUSH, SA_POP, SA_CLEAR }
 
+    private enum ChangeStateMessages {ToCharacterListMessage.class, ToDungeonMessage.class, ToLobbyMessage.class}
+
     private static class PendingChange {
         private final StackActions action;
         private final State.StateId state;
