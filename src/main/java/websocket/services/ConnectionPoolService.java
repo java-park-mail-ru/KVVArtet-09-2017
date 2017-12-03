@@ -6,14 +6,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import websocket.ConnectionPool;
 import websocket.messages.Message;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ConnectionPoolService {
+
+    private ConnectionPool connectionPool = new ConnectionPool();
     private Map<Integer, SmartController> sessions = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
 
@@ -22,7 +27,9 @@ public class ConnectionPoolService {
     }
 
     public void registerUser(@NotNull Integer userId, @NotNull WebSocketSession webSocketSession) {
-        sessions.put(userId, (SmartController) sessions.get(userId).getWebSocketSession());
+        SmartController smartControllerForUser = connectionPool.getElement();
+        smartControllerForUser.setWebSocketSession(webSocketSession);
+        sessions.put(userId, smartControllerForUser);
     }
 
     public boolean isConnected(@NotNull Integer userId) {
@@ -31,7 +38,7 @@ public class ConnectionPoolService {
 
     public void removeUser(@NotNull Integer userId)
     {
-
+        connectionPool.addElement(sessions.get(userId));
         sessions.remove(userId);
     }
 

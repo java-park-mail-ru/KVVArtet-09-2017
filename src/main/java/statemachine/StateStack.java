@@ -2,9 +2,9 @@ package statemachine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import packets.Packet;
 import states.State;
 import states.StateFactory;
+import websocket.messages.Message;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -17,7 +17,10 @@ public class StateStack implements PendingStack {
 
     private enum StackActions { SA_PUSH, SA_POP, SA_CLEAR }
 
-    private enum ChangeStateMessages {ToCharacterListMessage.class, ToDungeonMessage.class, ToLobbyMessage.class}
+    private enum ChangeStateMessages {CharacterListRequestMessage, LobbyRequestMessage, StayInLineRequestMessage}
+
+
+
 
     private static class PendingChange {
         private final StackActions action;
@@ -69,15 +72,23 @@ public class StateStack implements PendingStack {
     }
 
     @Override
-    public void handlePacket(final Packet packet) {
+    public void handleMessage(final Message message) {
         LOGGER.info("state handlePacket call: ");
         for (State state : stack) {
-            if (!state.handlePacket(packet)) {
+            if (!state.handleMessage(message)) {
                 break;
             }
         }
         applyPendingChanges();
     }
+
+    //    public void mainStateHandler(Message message) {
+//        switch(message.getClass()) {
+//            case CharacterListRequestMessage:
+//            case LobbyRequestMessage:
+//            case StayInLineRequestMessage:
+//        }
+//    }
 
     public boolean isStackEmpty() {
         return stack.isEmpty();

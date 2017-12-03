@@ -17,9 +17,6 @@ public class SmartController {
     private StateStack stateMachine = new StateStack();
     private WebSocketSession webSocketSession;
 
-
-
-
     public Queue<Message> getMessageQueue() {
         return messageQueue;
     }

@@ -1,6 +1,6 @@
 package states;
 
-import packets.Packet;
+import websocket.messages.Message;
 
 @SuppressWarnings({"UnusedReturnValue", "SameReturnValue", "unused"})
 public interface State {
@@ -14,6 +14,6 @@ public interface State {
 
     boolean update();
 
-    boolean handlePacket(Packet packet);
+    boolean handleMessage(Message message);
 
 }
