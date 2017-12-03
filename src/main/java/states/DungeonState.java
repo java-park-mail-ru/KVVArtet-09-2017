@@ -2,7 +2,7 @@ package states;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import packets.Packet;
+import websocket.messages.Message;
 import statemachine.PendingStack;
 
 public class DungeonState extends AbstractState {
@@ -19,7 +19,7 @@ public class DungeonState extends AbstractState {
     }
 
     @Override
-    public boolean handlePacket(final Packet packet) {
+    public boolean handleMessage(final Message message) {
         LOGGER.info("DungeonState handles packet");
         return true;
     }
