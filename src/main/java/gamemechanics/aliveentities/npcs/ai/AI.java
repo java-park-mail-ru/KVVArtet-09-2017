@@ -14,9 +14,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
+@SuppressWarnings("NewClassNamingConvention")
 public class AI implements DecisionMaker {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer aiID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer aiID = INSTANCE_COUNTER.getAndIncrement();
 
     private final AliveEntity npc;
 
@@ -38,7 +39,7 @@ public class AI implements DecisionMaker {
     }
 
     static class AggregatedBattleState {
-        AliveEntity self;
+        final AliveEntity self;
 
         final BattleMap map;
         final PathfindingAlgorithm pathfinder;
@@ -104,7 +105,7 @@ public class AI implements DecisionMaker {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
@@ -150,8 +151,8 @@ public class AI implements DecisionMaker {
             return null;
         }
 
-        List<Integer> unitsWeaknessOrder = new ArrayList<>();
-        Set<Integer> uncheckedMembers = getAliveMembersIndices(squad);
+        final List<Integer> unitsWeaknessOrder = new ArrayList<>();
+        final Set<Integer> uncheckedMembers = getAliveMembersIndices(squad);
 
         while (!uncheckedMembers.isEmpty()) {
             Integer minimalHitpoints = Integer.MAX_VALUE;
@@ -159,7 +160,7 @@ public class AI implements DecisionMaker {
 
             for (Integer memberIndex : uncheckedMembers) {
                 if (!uncheckedMembers.contains(memberIndex) && squad.getMember(memberIndex).isAlive()) {
-                    Integer memberHitpoints = squad.getMember(memberIndex)
+                    final Integer memberHitpoints = squad.getMember(memberIndex)
                             .getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX);
                     if (minimalHitpoints > memberHitpoints) {
                         weakestMemberIndex = memberIndex;
@@ -181,14 +182,14 @@ public class AI implements DecisionMaker {
             return null;
         }
 
-        List<Integer> unitsDistanceOrder = new ArrayList<>();
-        Set<Integer> uncheckedUnits = getAliveMembersIndices(squad);
+        final List<Integer> unitsDistanceOrder = new ArrayList<>();
+        final Set<Integer> uncheckedUnits = getAliveMembersIndices(squad);
 
         while (!uncheckedUnits.isEmpty()) {
             Integer closestMemberIndex = squad.getSquadSize();
             Integer minimalDistance = Integer.MAX_VALUE;
 
-            MapNode npcTile = map.getTile(npc.getProperty(PropertyCategories.PC_COORDINATES,
+            final MapNode npcTile = map.getTile(npc.getProperty(PropertyCategories.PC_COORDINATES,
                     DigitsPairIndices.ROW_COORD_INDEX), npc.getProperty(PropertyCategories.PC_COORDINATES,
                     DigitsPairIndices.COL_COORD_INDEX));
             for (Integer memberIndex : uncheckedUnits) {
@@ -196,8 +197,8 @@ public class AI implements DecisionMaker {
                     closestMemberIndex = memberIndex;
                     break;
                 }
-                AliveEntity member = squad.getMember(memberIndex);
-                MapNode memberTile = map.getTile(member.getProperty(PropertyCategories.PC_COORDINATES,
+                final AliveEntity member = squad.getMember(memberIndex);
+                final MapNode memberTile = map.getTile(member.getProperty(PropertyCategories.PC_COORDINATES,
                         DigitsPairIndices.ROW_COORD_INDEX), member.getProperty(PropertyCategories.PC_COORDINATES,
                         DigitsPairIndices.COL_COORD_INDEX));
                 if (minimalDistance > npcTile.getH(memberTile)) {
@@ -219,7 +220,7 @@ public class AI implements DecisionMaker {
     }
 
     private Set<Integer> getAliveMembersIndices(@NotNull Squad squad) {
-        Set<Integer> aliveMembersSet = new HashSet<>();
+        final Set<Integer> aliveMembersSet = new HashSet<>();
 
         for (Integer memberIndex = 0; memberIndex < squad.getSquadSize(); ++memberIndex) {
             if (squad.getMember(memberIndex).isAlive()) {
@@ -230,9 +231,10 @@ public class AI implements DecisionMaker {
         return aliveMembersSet;
     }
 
-    private void initializeMap(Map<Integer, Integer> map) {
+    @SuppressWarnings("ParameterHidesMemberVariable")
+    private void initializeMap(@NotNull Map<Integer, Integer> map) {
         for (Integer memberIndex = 0; memberIndex < enemies.getSquadSize(); ++memberIndex) {
-            AliveEntity member = enemies.getMember(memberIndex);
+            final AliveEntity member = enemies.getMember(memberIndex);
             if (member != null) {
                 if (member.isAlive()) {
                     map.put(member.getID(), 0);

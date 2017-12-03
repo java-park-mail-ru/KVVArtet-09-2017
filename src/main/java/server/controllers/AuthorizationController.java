@@ -34,9 +34,9 @@ public class AuthorizationController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@RequestBody User user) {
-        String username = user.getUsername();
-        String email = user.getEmail();
-        String password = user.getPassword();
+        final String username = user.getUsername();
+        final String email = user.getEmail();
+        final String password = user.getPassword();
 
         if (username == null || email == null || password == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.FIELD_EMPTY.getResponse());
@@ -61,13 +61,13 @@ public class AuthorizationController {
     @PostMapping("/signin")
     public ResponseEntity<String> signIn(@RequestBody User user, HttpSession httpSession) {
 
-        Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
+        final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
       
         if (userIdInCurrentSession != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED.getResponse());
         }
 
-        String usernameOrEmail;
+        final String usernameOrEmail;
 
         if (user.getUsername() == null) {
             usernameOrEmail = user.getEmail();
@@ -79,9 +79,9 @@ public class AuthorizationController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST.getResponse());
         }
 
-        User currentUser = userService.getUserByUsernameOrEmail(usernameOrEmail);
+        final User currentUser = userService.getUserByUsernameOrEmail(usernameOrEmail);
 
-        Integer currentUserId = currentUser.getId();
+        final Integer currentUserId = currentUser.getId();
 
         if (!encoder.matches(user.getPassword(), currentUser.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.PASSWORD_INCORRECT.getResponse());
@@ -93,7 +93,7 @@ public class AuthorizationController {
 
     @PostMapping("/signout")
     public ResponseEntity<String> signOut(HttpSession httpSession) {
-        Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
+        final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
@@ -104,31 +104,31 @@ public class AuthorizationController {
 
     @PostMapping("/session")
     public ResponseEntity<String> requestUserInCurrentSession(HttpSession httpSession) {
-        Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
+        final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
 
         if (userIdInCurrentSession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
-        String username = userService.getUserById(userIdInCurrentSession).getUsername();
+        final String username = userService.getUserById(userIdInCurrentSession).getUsername();
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL.getResponse()
-                + " " + userIdInCurrentSession + "  Your login is " + username);
+                + ' ' + userIdInCurrentSession + "  Your login is " + username);
     }
 
     @PostMapping("/settings")
     public ResponseEntity<String> changeUserProfile(@RequestBody User user, HttpSession httpSession) {
-        Integer id = (Integer) httpSession.getAttribute("id");
+        final Integer id = (Integer) httpSession.getAttribute("id");
 
         if (id == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
-        User currentUser = userService.getUserById(id);
-        String lastUsername = currentUser.getUsername();
-        String lastPassword = currentUser.getPassword();
+        final User currentUser = userService.getUserById(id);
+        final String lastUsername = currentUser.getUsername();
+        final String lastPassword = currentUser.getPassword();
 
-        String username = user.getUsername();
-        String password = user.getPassword();
+        final String username = user.getUsername();
+        final String password = user.getPassword();
 
         if (userService.isUsernameExists(username) && !Objects.equals(lastUsername, username)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USERNAME_EXIST.getResponse());

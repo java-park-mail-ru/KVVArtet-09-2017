@@ -1,6 +1,8 @@
 package gamemechanics;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
@@ -23,13 +25,13 @@ public class PropertySerializationTest {
 
     @Test
     public void itemPartSerializationDeserialization() {
-        Random random = new Random(System.currentTimeMillis());
-        Map<Integer, Affector> testAffectors = new HashMap<>();
-        Map<Integer, Property> testProperty = new HashMap<>();
+        final Random random = new Random(System.currentTimeMillis());
+        final Map<Integer, Property> testProperty = new HashMap<>();
         testProperty.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(Constants.START_LEVEL));
-        ItemPart itemPart = new ItemPartAsset(0,"test asset", "test description",
+        final Map<Integer, Affector> testAffectors = new HashMap<>();
+        final ItemPart itemPart = new ItemPartAsset(0,"test asset", "test description",
                 ItemPart.FIRST_PART_ID, testAffectors, testProperty);
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         String jsonAsset = null;
         try {
             jsonAsset = mapper.writeValueAsString(itemPart);
@@ -39,8 +41,13 @@ public class PropertySerializationTest {
         assertNotEquals("data shall be written", jsonAsset, null);
         assertFalse("serialized json shall contain data", jsonAsset.isEmpty());
         ItemPart deserialized = null;
+        //noinspection TryWithIdenticalCatches
         try {
             deserialized = mapper.readValue(jsonAsset, ItemPartAsset.class);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

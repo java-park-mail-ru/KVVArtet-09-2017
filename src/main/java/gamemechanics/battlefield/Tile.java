@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Tile implements MapNode {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer tileID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer tileID = INSTANCE_COUNTER.getAndIncrement();
 
     private Boolean isPassable;
     private AliveEntity inhabitant = null;
@@ -37,7 +37,7 @@ public class Tile implements MapNode {
     @Override
     @JsonIgnore
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class Tile implements MapNode {
             if (stander.hasProperty(PropertyCategories.PC_COORDINATES)) {
                 stander.setProperty(PropertyCategories.PC_COORDINATES, coordinates);
             } else {
-                Property coordinatesProperty = PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES);
+                final Property coordinatesProperty = PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES);
                 coordinatesProperty.setPropertyList(coordinates);
                 stander.addProperty(PropertyCategories.PC_COORDINATES, coordinatesProperty);
             }
@@ -86,14 +86,10 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public Boolean free() {
-        Boolean isSuccessful = true;
+    public void free() {
         if (inhabitant != null) {
             inhabitant = null;
-        } else {
-            isSuccessful = false;
         }
-        return isSuccessful;
     }
 
     @Override

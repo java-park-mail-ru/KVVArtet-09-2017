@@ -1,5 +1,7 @@
 package gamemechanics.resources.assets;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
 import gamemechanics.globals.MappingIndices;
@@ -23,31 +25,36 @@ public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> imple
     }
 
     private void fillFromFile(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities) {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
+        //noinspection TryWithIdenticalCatches
         try {
-            ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
-            Map<Integer, GameResource> npcRoleResources = holder.getAllResources();
+            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final Map<Integer, GameResource> npcRoleResources = holder.getAllResources();
             for (Integer roleId : npcRoleResources.keySet()) {
-                GameResource npcRoleResource = npcRoleResources.get(roleId);
+                final GameResource npcRoleResource = npcRoleResources.get(roleId);
 
-                List<Integer> resourceBehaviorIds =
+                final List<Integer> resourceBehaviorIds =
                         npcRoleResource.getMapping(MappingIndices.NPC_ROLE_BEHAVIOR_MAPPING);
 
-                List<Integer> resourceAbilityIds =
+                final List<Integer> resourceAbilityIds =
                         npcRoleResource.getMapping(MappingIndices.NPC_ROLE_ABILITY_MAPPING);
-                Map<Integer, Ability> roleAbilities = new HashMap<>();
+                final Map<Integer, Ability> roleAbilities = new HashMap<>();
                 for (Integer abilityId : resourceAbilityIds) {
-                    Ability ability = abilities.getOrDefault(abilityId, null);
+                    final Ability ability = abilities.getOrDefault(abilityId, null);
                     if (ability != null) {
                         roleAbilities.put(ability.getID(), ability);
                     }
                 }
 
-                NonPlayerCharacterRole.NPCRoleModel model = new NonPlayerCharacterRole.NPCRoleModel(roleId,
+                final NonPlayerCharacterRole.NPCRoleModel model = new NonPlayerCharacterRole.NPCRoleModel(roleId,
                         npcRoleResource.getName(), npcRoleResource.getDescription(), npcRoleResource.getAllAffectors(),
                         resourceBehaviorIds, roleAbilities);
                 assets.put(model.id, new NonPlayerCharacterRole(model));
             }
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -84,7 +84,7 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     public Integer getProperty(@NotNull Integer propertyKind) {
-        Property property = properties.getOrDefault(propertyKind, null);
+        final Property property = properties.getOrDefault(propertyKind, null);
         if (property != null) {
             return property.getProperty();
         }
@@ -93,7 +93,7 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
-        Property property = properties.getOrDefault(propertyKind, null);
+        final Property property = properties.getOrDefault(propertyKind, null);
         if (property == null) {
             return Constants.WRONG_INDEX;
         }
@@ -124,7 +124,7 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     public Integer getAffection(@NotNull Integer affectorKind) {
-        Affector affector = affectors.getOrDefault(affectorKind, null);
+        final Affector affector = affectors.getOrDefault(affectorKind, null);
         if (affector == null) {
             return Constants.WRONG_INDEX;
         }
@@ -133,7 +133,7 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     public Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
-        Affector affector = affectors.getOrDefault(affectorKind, null);
+        final Affector affector = affectors.getOrDefault(affectorKind, null);
         if (affector == null) {
             return Constants.WRONG_INDEX;
         }

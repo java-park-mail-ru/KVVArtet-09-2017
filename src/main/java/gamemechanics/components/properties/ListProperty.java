@@ -42,39 +42,36 @@ public class ListProperty implements Property {
 
     @Override
     @JsonSetter("properties")
-    public Boolean setPropertyList(@NotNull List<Integer> property) {
+    public void setPropertyList(@NotNull List<Integer> property) {
         if (property == null) {
-            return false;
+            return;
         }
         if (property.size() != properties.size()) {
-            return false;
+            return;
         }
         for (Integer i = 0; i < properties.size(); ++i) {
             properties.set(i, property.get(i));
         }
-        return true;
     }
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer proeprtyValue) {
-        return false;
+    public void setSingleProperty(@NotNull Integer proeprtyValue) {
     }
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property) {
+    public void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property) {
         if (propertyIndex < 0 || property >= properties.size()) {
-            return false;
+            return;
         }
         properties.set(propertyIndex, property);
-        return true;
     }
 
     @Override
     public Boolean modifyByPercentage(Float percentage) {
         for (Integer propertyIndex = 0; propertyIndex < properties.size(); ++propertyIndex) {
-            Boolean result = modifyByPercentage(propertyIndex, percentage);
+            final Boolean result = modifyByPercentage(propertyIndex, percentage);
             if (!result) {
                 return result;
             }
@@ -87,21 +84,20 @@ public class ListProperty implements Property {
         if (propertyIndex < 0 || propertyIndex >= properties.size()) {
             return false;
         }
-        Integer oldValue = properties.get(propertyIndex);
-        Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
+        final Integer oldValue = properties.get(propertyIndex);
+        final Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
         properties.set(propertyIndex, Math.round(oldValue * resultPercentage));
         return true;
     }
 
     @Override
-    public Boolean modifyByAddition(Integer toAdd) {
+    public void modifyByAddition(Integer toAdd) {
         for (Integer propertyIndex = 0; propertyIndex < properties.size(); ++propertyIndex) {
-            Boolean result = modifyByAddition(propertyIndex, toAdd);
+            final Boolean result = modifyByAddition(propertyIndex, toAdd);
             if (!result) {
-                return result;
+                return;
             }
         }
-        return true;
     }
 
     @Override
@@ -119,6 +115,7 @@ public class ListProperty implements Property {
         return null;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
     public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
@@ -131,6 +128,7 @@ public class ListProperty implements Property {
         return null;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
     public Boolean setPropertySet(@NotNull Set<Integer> properties) {

@@ -6,17 +6,20 @@ import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.ActionMaker;
 import gamemechanics.interfaces.AliveEntity;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class BattleActionMaker implements ActionMaker {
+    @SuppressWarnings("FieldCanBeLocal")
     private final BattleMap map;
 
-    public BattleActionMaker(BattleMap map) {
+    public BattleActionMaker(@NotNull BattleMap map) {
         this.map = map;
     }
 
     @Override
-    public BattleAction makeAction(Ability ability, AliveEntity sender, List<Integer> targetCoords) {
+    public BattleAction makeAction(@NotNull Ability ability, @NotNull AliveEntity sender,
+                                   @NotNull List<Integer> targetCoords) {
         return null;
     }
 }

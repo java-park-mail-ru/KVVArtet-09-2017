@@ -15,10 +15,11 @@ public class PerkBranch implements GameEntity {
     private final List<Perk> perks;
 
     public static class PerkBranchModel {
-        public Integer id;
-        public String name;
-        public String description;
-        public List<Perk> perks;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        @SuppressWarnings("PublicField")
+        public final List<Perk> perks;
 
         public PerkBranchModel(@NotNull Integer id, @NotNull String name,
                                @NotNull String description, @NotNull List<Perk> perks) {

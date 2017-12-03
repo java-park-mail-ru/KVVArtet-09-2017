@@ -11,12 +11,11 @@ public class AbilitiesCooldownProperty extends MapProperty {
     }
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer toAdd) {
+    public void modifyByAddition(@NotNull Integer toAdd) {
         for (Integer key : getPropertyMap().keySet()) {
             if (getPropertyMap().get(key) > 0) {
                 getPropertyMap().replace(key, getPropertyMap().get(key) + toAdd);
             }
         }
-        return true;
     }
 }

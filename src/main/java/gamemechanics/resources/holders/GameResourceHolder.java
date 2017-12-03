@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class GameResourceHolder implements ResourceHolder {
-    private Map<Integer, GameResource> resources = new HashMap<>();
+    private final Map<Integer, GameResource> resources = new HashMap<>();
 
     public GameResourceHolder() {}
 

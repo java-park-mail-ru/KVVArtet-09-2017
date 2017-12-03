@@ -12,7 +12,7 @@ import java.util.*;
  * Field of vision calculation class via shadow-casting
  * inspired on https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/ article
  *
- * @see gamemechanics.battlefield.map.tilesets.FieldOfVision
+ * @see FieldOfVision
  */
 public class FoVTileset implements FieldOfVision {
     /**
@@ -165,16 +165,16 @@ public class FoVTileset implements FieldOfVision {
          * @return list of visible nodes
          */
         List<MapNode> getVisibleNodes() {
-            List<MapNode> visibleNodes = new LinkedList<>();
-            ShadowLine shadows = new ShadowLine();
+            final List<MapNode> visibleNodes = new LinkedList<>();
+            final ShadowLine shadows = new ShadowLine();
             for (List<MapNode> row : octant) {
                 for (MapNode node : row) {
                     if (!shadows.isFullShadow(row.size())) {
-                        List<Integer> relativeNodeCoordinates = getRelativeNodeCoordinates(node.getCoordinates());
-                        Shadow projection = projectNode(
+                        final List<Integer> relativeNodeCoordinates = getRelativeNodeCoordinates(node.getCoordinates());
+                        final Shadow projection = projectNode(
                                 relativeNodeCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
                                 relativeNodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX));
-                        Boolean nodeVisibility = !shadows.isInShadow(projection);
+                        final Boolean nodeVisibility = !shadows.isInShadow(projection);
                         if (!node.getIsPassable() && nodeVisibility) {
                             shadows.add(projection);
                         }
@@ -188,8 +188,8 @@ public class FoVTileset implements FieldOfVision {
         }
 
         private void getHalfCone() {
-            List<Integer> coneDirections = setConeDirections();
-            List<MapNode> coneHeads = new LinkedList<>();
+            final List<Integer> coneDirections = setConeDirections();
+            final List<MapNode> coneHeads = new LinkedList<>();
             coneHeads.add(source);
             MapNode nextHead = source.getAdjacent(coneDirections.get(0));
             while (nextHead != null) {
@@ -200,13 +200,13 @@ public class FoVTileset implements FieldOfVision {
                 nextHead = nextHead.getAdjacent(coneDirections.get(0));
             }
             for (MapNode head : coneHeads) {
-                List<MapNode> coneRow = getHalfConeRow(head, coneDirections.get(1));
+                final List<MapNode> coneRow = getHalfConeRow(head, coneDirections.get(1));
                 octant.add(coneRow);
             }
         }
 
         private List<Integer> setConeDirections() {
-            List<Integer> directions = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+            final List<Integer> directions = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
             switch (direction) {
                 case OD_NORTH:
                     directions.set(0, Directions.UP);
@@ -246,8 +246,9 @@ public class FoVTileset implements FieldOfVision {
             return directions;
         }
 
-        private List<MapNode> getHalfConeRow(@NotNull MapNode rowHead, Integer direction) {
-            List<MapNode> row = new LinkedList<>();
+        @SuppressWarnings("ParameterHidesMemberVariable")
+        private List<MapNode> getHalfConeRow(@NotNull MapNode rowHead, @NotNull Integer direction) {
+            final List<MapNode> row = new LinkedList<>();
             row.add(rowHead);
             MapNode nextNode = rowHead.getAdjacent(direction);
             while (nextNode != null) {
@@ -261,10 +262,11 @@ public class FoVTileset implements FieldOfVision {
         }
 
         private Shadow projectNode(Integer row, Integer column) {
-            Integer nominator = direction == OD_NORTH || direction == OD_SOUTH_EAST
+            //noinspection OverlyComplexBooleanExpression
+            final Integer nominator = direction == OD_NORTH || direction == OD_SOUTH_EAST
                     || direction == OD_SOUTH || direction == OD_NORTH_WEST ? column : row;
-            Integer denominator = nominator.equals(column) ? row : column;
-            Integer start = denominator > 0 ? nominator / (denominator + 2)
+            final Integer denominator = nominator.equals(column) ? row : column;
+            final Integer start = denominator > 0 ? nominator / (denominator + 2)
                     : nominator / (denominator - 2);
             Integer end = nominator > 0 ? nominator + 1 : nominator - 1;
             end = denominator > 0 ? end / (denominator + 1)
@@ -273,13 +275,14 @@ public class FoVTileset implements FieldOfVision {
         }
 
         private Integer getShadowLineCoordinateIndex() {
+            //noinspection OverlyComplexBooleanExpression
             return direction == OD_NORTH || direction == OD_SOUTH_EAST
                     || direction == OD_SOUTH || direction == OD_NORTH_WEST
                     ? DigitsPairIndices.ROW_COORD_INDEX : DigitsPairIndices.COL_COORD_INDEX;
         }
 
         private List<Integer> getRelativeNodeCoordinates(List<Integer> nodeCoordinates) {
-            List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+            final List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
             relativeCoordinates.set(DigitsPairIndices.ROW_COORD_INDEX,
                     nodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)
                             - source.getCoordinate(DigitsPairIndices.COL_COORD_INDEX));
@@ -319,8 +322,8 @@ public class FoVTileset implements FieldOfVision {
 
     private void initializeFoV() {
         for (Integer octantDirection = OD_NORTH; octantDirection <= OD_NORTH_WEST; ++octantDirection) {
-            Octant octant = new Octant(currentPosition, octantDirection);
-            List<MapNode> visibleNodes = octant.getVisibleNodes();
+            final Octant octant = new Octant(currentPosition, octantDirection);
+            final List<MapNode> visibleNodes = octant.getVisibleNodes();
             for (MapNode node : visibleNodes) {
                 if (!fieldOfVision.containsKey(node.getCoordinates())) {
                     fieldOfVision.put(node.getCoordinates(), node);
@@ -331,13 +334,13 @@ public class FoVTileset implements FieldOfVision {
 
     private void movePoV(List<Integer> goal) {
         while (currentPosition.getCoordinates() != goal) {
-            Integer rowDifference = currentPosition.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
+            final Integer rowDifference = currentPosition.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
                     - goal.get(DigitsPairIndices.ROW_COORD_INDEX);
             if (rowDifference != 0) {
                 currentPosition = currentPosition.getAdjacent(
                         rowDifference < 0 ? Directions.UP : Directions.DOWN);
             }
-            Integer colDifference = currentPosition.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+            final Integer colDifference = currentPosition.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
                     - goal.get(DigitsPairIndices.COL_COORD_INDEX);
             if (colDifference != 0) {
                 currentPosition = currentPosition.getAdjacent(colDifference < 0 ? Directions.LEFT : Directions.RIGHT);

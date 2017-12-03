@@ -57,23 +57,22 @@ public class SmartController {
         this.webSocketSession = webSocketSession;
     }
 
-    public SmartController() {
-
-    }
-
+    @SuppressWarnings("OverlyComplexMethod")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SmartController that = (SmartController) o;
+        //noinspection QuestionableName
+        final SmartController that = (SmartController) o;
 
-        if (messageQueue != null ? !messageQueue.equals(that.messageQueue) : that.messageQueue != null) return false;
-        if (activeChar != null ? !activeChar.equals(that.activeChar) : that.activeChar != null) return false;
-        if (characterList != null ? !characterList.equals(that.characterList) : that.characterList != null)
-            return false;
-        if (stateMachine != null ? !stateMachine.equals(that.stateMachine) : that.stateMachine != null) return false;
-        return webSocketSession != null ? webSocketSession.equals(that.webSocketSession) : that.webSocketSession == null;
+        //noinspection OverlyComplexBooleanExpression
+        return (messageQueue != null ? messageQueue.equals(that.messageQueue) : that.messageQueue == null)
+                && (activeChar != null ? activeChar.equals(that.activeChar) : that.activeChar == null)
+                && (characterList != null ? characterList.equals(that.characterList) : that.characterList == null)
+                && (stateMachine != null ? stateMachine.equals(that.stateMachine) : that.stateMachine == null)
+                && (webSocketSession != null ? webSocketSession.equals(that.webSocketSession)
+                : that.webSocketSession == null);
     }
 
     @Override

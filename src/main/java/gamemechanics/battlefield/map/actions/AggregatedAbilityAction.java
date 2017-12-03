@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("PublicField")
 public class AggregatedAbilityAction {
     public final MapNode sender;
     public final MapNode target;

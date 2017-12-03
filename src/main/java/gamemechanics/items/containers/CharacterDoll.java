@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class CharacterDoll extends StorageBag {
 
-    private static EmptyBagModel emptyCharacterDoll = new EmptyBagModel("Equipped items",
+    private static final EmptyBagModel EMPTY_CHARACTER_DOLL = new EmptyBagModel("Equipped items",
             "Items put on character", EquipmentSlot.ES_SIZE);
 
     public CharacterDoll() {
-        super(emptyCharacterDoll);
+        super(EMPTY_CHARACTER_DOLL);
     }
 
     public CharacterDoll(@NotNull FilledBagModel model) {
@@ -36,7 +36,7 @@ public class CharacterDoll extends StorageBag {
     }
 
     public List<Integer> getStatBonuses() {
-        List<Integer> statBonuses = new ArrayList<>(CharacterStats.CS_SIZE.asInt());
+        final List<Integer> statBonuses = new ArrayList<>(CharacterStats.CS_SIZE.asInt());
         for (Integer statIndex = 0; statIndex < CharacterStats.CS_SIZE.asInt(); ++statIndex) {
             statBonuses.set(statIndex, getStatBonus(statIndex));
         }
@@ -54,7 +54,7 @@ public class CharacterDoll extends StorageBag {
     }
 
     public List<Integer> getRatingBonuses() {
-        List<Integer> ratingBonuses = new ArrayList<>(CharacterRatings.CR_SIZE.asInt());
+        final List<Integer> ratingBonuses = new ArrayList<>(CharacterRatings.CR_SIZE.asInt());
         for (Integer ratingIndex = 0; ratingIndex < CharacterRatings.CR_SIZE.asInt(); ++ratingIndex) {
             ratingBonuses.set(ratingIndex, getRatingBonus(ratingIndex));
         }
@@ -100,7 +100,7 @@ public class CharacterDoll extends StorageBag {
         Integer affection = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
-                Integer itemBonus = item.getAffection(affectorKind);
+                final Integer itemBonus = item.getAffection(affectorKind);
                 if (itemBonus != Integer.MIN_VALUE) {
                     affection += itemBonus;
                 }
@@ -113,7 +113,7 @@ public class CharacterDoll extends StorageBag {
         Integer affection = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
-                Integer itemBonus = item.getAffection(affectorKind, affectionIndex);
+                final Integer itemBonus = item.getAffection(affectorKind, affectionIndex);
                 if (itemBonus != Integer.MIN_VALUE) {
                     affection += itemBonus;
                 }

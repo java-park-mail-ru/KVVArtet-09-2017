@@ -7,14 +7,15 @@ import gamemechanics.flyweights.CharacterRace;
 import gamemechanics.globals.*;
 import gamemechanics.items.containers.CharacterDoll;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserCharacter extends AbstractAliveEntity {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer characterID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer characterID = INSTANCE_COUNTER.getAndIncrement();
 
     private final CharacterRace characterRace;
 
@@ -22,7 +23,7 @@ public class UserCharacter extends AbstractAliveEntity {
 
     private final Map<Integer, Map<Integer, Integer>> perkRanks;
 
-    public UserCharacter(UserCharacterModel model) {
+    public UserCharacter(@NotNull UserCharacterModel model) {
         super(model);
         characterRace = model.characterRace;
         equipment = model.equipment;
@@ -40,13 +41,13 @@ public class UserCharacter extends AbstractAliveEntity {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
     public void levelUp() {
         modifyPropertyByAddition(PropertyCategories.PC_LEVEL, 1);
-        List<Integer> nextLevelUpCap = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        final List<Integer> nextLevelUpCap = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         for (Integer i = 0; i < nextLevelUpCap.size(); ++i) {
             nextLevelUpCap.set(i, getProperty(PropertyCategories.PC_XP_POINTS, i));
         }
@@ -66,7 +67,7 @@ public class UserCharacter extends AbstractAliveEntity {
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         return super.getProperty(propertyKind, propertyIndex)
                 + equipment.getEquipmentAffection(PropertyToAffectorMapper.getAffectorKind(propertyKind),
                 propertyIndex) + getPerksAffection(PropertyToAffectorMapper.getAffectorKind(propertyKind),
@@ -98,9 +99,9 @@ public class UserCharacter extends AbstractAliveEntity {
     }
 
     private Integer getStatsDamageBonus() {
-        Integer damageStatValue;
-        Integer damageStatIndex;
-        Boolean isArmed = equipment.getItem(EquipmentSlot.ES_MAINHAND.asInt()) != null;
+        final Integer damageStatValue;
+        final Integer damageStatIndex;
+        final Boolean isArmed = equipment.getItem(EquipmentSlot.ES_MAINHAND.asInt()) != null;
         // for ranged weapons bonus is based on agility, for melee weapons - on strength
         if (isArmed && equipment.getItem(EquipmentSlot.ES_MAINHAND.asInt())
                 .getProperty(PropertyCategories.PC_MAX_DISTANCE) > 1) {
@@ -110,7 +111,7 @@ public class UserCharacter extends AbstractAliveEntity {
             damageStatValue = equipment.getStatBonus(CharacterStats.CS_STRENGTH.asInt());
             damageStatIndex = CharacterStats.CS_STRENGTH.asInt();
         }
-        Float bonusPercentage = calculateStatBonusDamagePercentage(damageStatValue, damageStatIndex);
+        final Float bonusPercentage = calculateStatBonusDamagePercentage(damageStatValue, damageStatIndex);
         Integer baseDamage = equipment.getDamage();
         if (baseDamage == 0) {
             baseDamage = getProperty(PropertyCategories.PC_BASE_DAMAGE);
@@ -120,13 +121,13 @@ public class UserCharacter extends AbstractAliveEntity {
 
     private Integer getItemKindDamageBonus() {
         if (equipment.getItem(EquipmentSlot.ES_MAINHAND.asInt()) != null) {
-            Integer weaponKind = equipment.getItem(EquipmentSlot.ES_MAINHAND.asInt())
+            final Integer weaponKind = equipment.getItem(EquipmentSlot.ES_MAINHAND.asInt())
                     .getProperty(PropertyCategories.PC_ITEM_KIND);
-            Float equipmentPercentage = intToFloatPercentage(equipment.getEquipmentAffection(
+            final Float equipmentPercentage = intToFloatPercentage(equipment.getEquipmentAffection(
                     AffectorCategories.AC_DAMAGE_AFFECTOR, weaponKind));
-            Float effectsPercentage = intToFloatPercentage(getEffectsAffection(
+            final Float effectsPercentage = intToFloatPercentage(getEffectsAffection(
                     AffectorCategories.AC_DAMAGE_AFFECTOR, weaponKind));
-            Float perksPercentage = intToFloatPercentage(getPerksAffection(
+            final Float perksPercentage = intToFloatPercentage(getPerksAffection(
                     AffectorCategories.AC_DAMAGE_AFFECTOR, weaponKind));
             return Math.round(equipment.getDamage().floatValue() * (equipmentPercentage
                     + effectsPercentage + perksPercentage));
@@ -134,18 +135,22 @@ public class UserCharacter extends AbstractAliveEntity {
         return 0;
     }
 
-    private Float calculateStatBonusDamagePercentage(Integer statValue, Integer statIndex) {
-        Integer baseStatValue = getProperty(PropertyCategories.PC_STATS, statIndex);
-        return ((3.0f * statValue.floatValue()) / baseStatValue.floatValue()) - 1.0f;
+    @SuppressWarnings("NewMethodNamingConvention")
+    private Float calculateStatBonusDamagePercentage(@NotNull Integer statValue, @NotNull Integer statIndex) {
+        final Integer baseStatValue = getProperty(PropertyCategories.PC_STATS, statIndex);
+        final Float statBonusBaseMultiplier = 3.0f;
+        final Float statBonusBaseConstant = 1.0f;
+        return ((statBonusBaseMultiplier * statValue.floatValue()) / baseStatValue.floatValue())
+                - statBonusBaseConstant;
     }
 
-    private Integer calculateDefenseBonus(Integer armourKind) {
-        Integer bonus = equipment.getDefense(armourKind);
-        Float equipmentPercentage = intToFloatPercentage(equipment.getEquipmentAffection(
+    private Integer calculateDefenseBonus(@NotNull Integer armourKind) {
+        final Integer bonus = equipment.getDefense(armourKind);
+        final Float equipmentPercentage = intToFloatPercentage(equipment.getEquipmentAffection(
                 AffectorCategories.AC_DEFENSE_AFFECTOR, armourKind));
-        Float perksPercentage = intToFloatPercentage(getPerksAffection(
+        final Float perksPercentage = intToFloatPercentage(getPerksAffection(
                 AffectorCategories.AC_DEFENSE_AFFECTOR, armourKind));
-        Float effectsPercentage = intToFloatPercentage(getEffectsAffection(
+        final Float effectsPercentage = intToFloatPercentage(getEffectsAffection(
                 AffectorCategories.AC_DEFENSE_AFFECTOR, armourKind));
         return Math.round(bonus.floatValue() * (Constants.PERCENTAGE_CAP_FLOAT + equipmentPercentage
                 + perksPercentage + effectsPercentage));
@@ -167,25 +172,26 @@ public class UserCharacter extends AbstractAliveEntity {
         if (endurance < Constants.ENDURANCE_BONUS_JUMP_POINT) {
             return endurance * Constants.HITPOINTS_PER_FIRST_TWENTY_POINTS;
         }
-        Integer hitpointsBonus = Constants.ENDURANCE_BONUS_JUMP_POINT * Constants.HITPOINTS_PER_FIRST_TWENTY_POINTS;
+        final Integer hitpointsBonus = Constants.ENDURANCE_BONUS_JUMP_POINT * Constants.HITPOINTS_PER_FIRST_TWENTY_POINTS;
         return hitpointsBonus + Constants.HITPOINTS_PER_ENDURANCE_POINT
                 * (endurance - Constants.ENDURANCE_BONUS_JUMP_POINT);
     }
 
     private Float getHitpointsBonusPercentage() {
-        Float equipmentPercentage = intToFloatPercentage(equipment.getEquipmentAffection(
+        final Float equipmentPercentage = intToFloatPercentage(equipment.getEquipmentAffection(
                 AffectorCategories.AC_HEALTH_AFFECTOR));
-        Float perksPercentage = intToFloatPercentage(getPerksAffection(AffectorCategories.AC_HEALTH_AFFECTOR));
-        Float effectsPercentage = intToFloatPercentage(getEffectsAffection(AffectorCategories.AC_HEALTH_AFFECTOR));
+        final Float perksPercentage = intToFloatPercentage(getPerksAffection(AffectorCategories.AC_HEALTH_AFFECTOR));
+        final Float effectsPercentage = intToFloatPercentage(getEffectsAffection(AffectorCategories.AC_HEALTH_AFFECTOR));
         return equipmentPercentage + perksPercentage + effectsPercentage;
     }
 
-    private Integer getPerksAffection(Integer affectorKind) {
+    @SuppressWarnings("SameParameterValue")
+    private Integer getPerksAffection(@NotNull Integer affectorKind) {
         Integer perksAffection = 0;
         for (Integer branchID : perkRanks.keySet()) {
             for (Integer perkID : perkRanks.get(branchID).keySet()) {
                 if (perkRanks.get(branchID).get(perkID) > 0) {
-                    Integer perkBonus = getCharacterRole().getPerk(branchID, perkID)
+                    final Integer perkBonus = getCharacterRole().getPerk(branchID, perkID)
                             .getRankBasedAffection(affectorKind, perkRanks.get(branchID).get(perkID));
                     if (perkBonus != Integer.MIN_VALUE) {
                         perksAffection += perkBonus;
@@ -196,12 +202,12 @@ public class UserCharacter extends AbstractAliveEntity {
         return perksAffection;
     }
 
-    private Integer getPerksAffection(Integer affectorKind, Integer affectionIndex) {
+    private Integer getPerksAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         Integer perksAffection = 0;
         for (Integer branchID : perkRanks.keySet()) {
             for (Integer perkID : perkRanks.get(branchID).keySet()) {
                 if (perkRanks.get(branchID).get(perkID) > 0) {
-                    Integer perkBonus = getCharacterRole().getPerk(branchID, perkID)
+                    final Integer perkBonus = getCharacterRole().getPerk(branchID, perkID)
                             .getRankBasedAffection(affectorKind,
                                     affectionIndex, perkRanks.get(branchID).get(perkID));
                     if (perkBonus != Integer.MIN_VALUE) {

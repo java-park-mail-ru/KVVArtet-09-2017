@@ -28,7 +28,8 @@ public interface Affector {
 
     Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections);
 
-    Boolean modifyByPercentage(@NotNull Float percentage);
+    void modifyByPercentage(@NotNull Float percentage);
 
+    @SuppressWarnings("SameReturnValue")
     Boolean modifyByAddition(@NotNull Integer toAdd);
 }

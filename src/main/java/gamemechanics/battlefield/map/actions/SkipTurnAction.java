@@ -32,7 +32,7 @@ public class SkipTurnAction extends AbstractAction {
 
     @Override
     public ActionResult execute() {
-        ActionResult result = new BattleActionResult(getID(), sender, null, null, new ArrayList<>());
+        final ActionResult result = new BattleActionResult(getID(), sender, null, null, new ArrayList<>());
         result.addEvent(EventsFactory.makeEndTurnEvent());
         return result;
     }
