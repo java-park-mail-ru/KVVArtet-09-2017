@@ -12,6 +12,7 @@ public interface Action extends Countable {
 
     /**
      * get the {@link Ability} that's being implemented during the action
+     *
      * @return null if it's a movement or skip turn actions or {@link Ability} otherwise
      * @see Ability
      */
@@ -21,6 +22,7 @@ public interface Action extends Countable {
 
     /**
      * is the action a movement action
+     *
      * @return true if the action is a {@link gamemechanics.battlefield.map.actions.MovementAction}
      * or false otherwise
      */
@@ -30,6 +32,7 @@ public interface Action extends Countable {
 
     /**
      * is the action a skip turn action
+     *
      * @return true if the action is a {@link gamemechanics.battlefield.map.actions.SkipTurnAction}
      * or false otherwise
      */
@@ -39,6 +42,7 @@ public interface Action extends Countable {
 
     /**
      * execute action
+     *
      * @return {@link ActionResult}
      */
     ActionResult execute();

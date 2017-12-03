@@ -4,27 +4,29 @@ import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.CharacterRole;
 import gamemechanics.interfaces.Perk;
 
-import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 public class CharacterClass implements CharacterRole {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer characterClassID = instanceCounter.getAndIncrement();
+    private final Integer characterClassID;
 
     private final String name;
     private final String description;
 
-    private final HashMap<Integer, Ability> abilities;
-    private final HashMap<Integer, PerkBranch> branches;
+    private final Map<Integer, Ability> abilities;
+    private final Map<Integer, PerkBranch> branches;
 
     public static class CharacterClassModel {
+        public Integer id;
         public String name;
         public String description;
-        public HashMap<Integer, Ability> abilities;
-        public HashMap<Integer, PerkBranch> branches;
+        public Map<Integer, Ability> abilities;
+        public Map<Integer, PerkBranch> branches;
 
-        public CharacterClassModel(String name, String description,
-                                   HashMap<Integer, Ability> abilities, HashMap<Integer, PerkBranch> branches) {
+        public CharacterClassModel(@NotNull Integer id, @NotNull String name,
+                                   @NotNull String description, @NotNull Map<Integer, Ability> abilities,
+                                   @NotNull Map<Integer, PerkBranch> branches) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.abilities = abilities;
@@ -32,7 +34,8 @@ public class CharacterClass implements CharacterRole {
         }
     }
 
-    public CharacterClass(CharacterClassModel model) {
+    public CharacterClass(@NotNull CharacterClassModel model) {
+        characterClassID = model.id;
         name = model.name;
         description = model.description;
         abilities = model.abilities;
@@ -41,7 +44,7 @@ public class CharacterClass implements CharacterRole {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class CharacterClass implements CharacterRole {
     }
 
     @Override
-    public HashMap<Integer, Ability> getAllAbilities() {
+    public Map<Integer, Ability> getAllAbilities() {
         return abilities;
     }
 

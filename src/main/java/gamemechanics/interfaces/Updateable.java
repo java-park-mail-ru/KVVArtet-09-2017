@@ -8,11 +8,14 @@ public interface Updateable {
     /**
      * routine to repeat on each battle turn
      */
-    default void update() {} // for battle turns
+    default void update() {
+    } // for battle turns
 
     /**
      * routine to repeat on each server tick (once per given timestep)
+     *
      * @param timestep fixed timestep value
      */
-    default void update(Integer timestep) {} // for any other occasions;
+    default void update(Integer timestep) {
+    } // for any other occasions;
 }

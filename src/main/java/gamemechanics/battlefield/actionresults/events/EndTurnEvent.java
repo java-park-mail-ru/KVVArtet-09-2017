@@ -1,7 +1,8 @@
 package gamemechanics.battlefield.actionresults.events;
 
 public class EndTurnEvent implements TurnEvent {
-    public EndTurnEvent() {}
+    public EndTurnEvent() {
+    }
 
     @Override
     public Integer getEventKind() {

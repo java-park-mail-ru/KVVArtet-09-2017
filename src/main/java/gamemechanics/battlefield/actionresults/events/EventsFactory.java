@@ -1,12 +1,14 @@
 package gamemechanics.battlefield.actionresults.events;
 
 import gamemechanics.battlefield.map.helpers.Route;
+import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 
 public final class EventsFactory {
-    private EventsFactory() {}
+    private EventsFactory() {
+    }
 
     public static TurnEvent makeMovementEvent(@NotNull Route route) {
         return new MoveEvent(route);
@@ -18,6 +20,15 @@ public final class EventsFactory {
 
     public static TurnEvent makeCastEvent(@NotNull MapNode where, Integer abilityID) {
         return new CastEvent(where, abilityID);
+    }
+
+    public static TurnEvent makeRewardEvent(@NotNull MapNode where, @NotNull Integer expAmount,
+                                            @NotNull Integer cashAmount) {
+        return new RewardEvent(where, expAmount, cashAmount);
+    }
+
+    public static TurnEvent makeApplyEffectEvent(@NotNull MapNode where, @NotNull Effect effect) {
+        return new ApplyEffectEvent(where, effect);
     }
 
     public static TurnEvent makeEndTurnEvent() {

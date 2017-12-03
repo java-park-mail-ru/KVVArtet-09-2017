@@ -7,12 +7,14 @@ package gamemechanics.interfaces;
 public interface Countable {
     /**
      * get entity's ID.
+     *
      * @return entity's ID
      */
     Integer getID();
 
     /**
      * get number of the entities instantiated since the last server restart.
+     *
      * @return number of entities of an implementing class instantiated
      */
     Integer getInstancesCount();

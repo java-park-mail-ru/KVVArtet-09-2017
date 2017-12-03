@@ -5,9 +5,11 @@ import gamemechanics.globals.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public final class PropertiesFactory {
-    private PropertiesFactory() {}
+    private PropertiesFactory() {
+    }
 
     public static Property makeProperty(Integer propertyIndex) {
         Property property = null;
@@ -79,10 +81,13 @@ public final class PropertiesFactory {
                 property = makeAreaProperty();
                 break;
             case PropertyCategories.PC_INFLICTED_CATEGORIES:
+                property = makeInflictedCategoriesProperty();
                 break;
             case PropertyCategories.PC_AREA_SHAPE:
                 property = makeAreaShapeProperty();
                 break;
+            case PropertyCategories.PC_ITEM_BLUEPRINT_ID:
+                property = makeItemBlueprintIdProperty();
             default:
                 break;
         }
@@ -179,5 +184,13 @@ public final class PropertiesFactory {
 
     private static Property makeAreaShapeProperty() {
         return new SingleValueProperty(TilesetShapes.TS_POINT);
+    }
+
+    private static Property makeInflictedCategoriesProperty() {
+        return new SetProperty(new HashSet<>());
+    }
+
+    private static Property makeItemBlueprintIdProperty() {
+        return new SingleValueProperty(0);
     }
 }

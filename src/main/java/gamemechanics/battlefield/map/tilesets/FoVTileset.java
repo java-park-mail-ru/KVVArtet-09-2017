@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * Field of vision calculation class via shadow-casting
  * inspired on https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/ article
+ *
  * @see gamemechanics.battlefield.map.tilesets.FieldOfVision
  */
 public class FoVTileset implements FieldOfVision {
@@ -64,6 +65,7 @@ public class FoVTileset implements FieldOfVision {
 
         /**
          * check if the node's projection is covered by current shadow line
+         *
          * @param projection node coordinates projection from the current PoV
          * @return true is this projection is covered by shadow line or false otherwise
          */
@@ -78,6 +80,7 @@ public class FoVTileset implements FieldOfVision {
 
         /**
          * add a new shadow to the shadow line
+         *
          * @param shadow shadow to add
          */
         void add(Shadow shadow) {
@@ -113,6 +116,7 @@ public class FoVTileset implements FieldOfVision {
 
         /**
          * check if the shadow line covers all observed row.
+         *
          * @param width observed row's width
          * @return true if the shadow line is represented by the single shadow
          * and covers the whole row width
@@ -144,7 +148,8 @@ public class FoVTileset implements FieldOfVision {
 
         /**
          * create new octant for given PoV in given direction
-         * @param source PoV to build an octant from
+         *
+         * @param source    PoV to build an octant from
          * @param direction direction to build an octant in
          */
         Octant(@NotNull MapNode source, Integer direction) {
@@ -156,6 +161,7 @@ public class FoVTileset implements FieldOfVision {
 
         /**
          * get octant nodes visible from the current PoV
+         *
          * @return list of visible nodes
          */
         List<MapNode> getVisibleNodes() {
@@ -254,9 +260,9 @@ public class FoVTileset implements FieldOfVision {
             return row;
         }
 
-        private Shadow projectNode(Integer row,  Integer column) {
+        private Shadow projectNode(Integer row, Integer column) {
             Integer nominator = direction == OD_NORTH || direction == OD_SOUTH_EAST
-                    || direction ==OD_SOUTH || direction == OD_NORTH_WEST ? column : row;
+                    || direction == OD_SOUTH || direction == OD_NORTH_WEST ? column : row;
             Integer denominator = nominator.equals(column) ? row : column;
             Integer start = denominator > 0 ? nominator / (denominator + 2)
                     : nominator / (denominator - 2);
@@ -286,6 +292,7 @@ public class FoVTileset implements FieldOfVision {
 
     /**
      * create and calculate FoV for the given PoV
+     *
      * @param currentPosition point of view
      */
     public FoVTileset(@NotNull MapNode currentPosition) {
@@ -295,10 +302,11 @@ public class FoVTileset implements FieldOfVision {
 
     /**
      * move the PoV to the new position and re-calculate the FoV for it
+     *
      * @param position new PoV coordinates, [rowCoordinate, colCoordinate]
      */
     @Override
-    public void refresh(List<Integer> position){
+    public void refresh(List<Integer> position) {
         movePoV(position);
         fieldOfVision.clear();
         initializeFoV();

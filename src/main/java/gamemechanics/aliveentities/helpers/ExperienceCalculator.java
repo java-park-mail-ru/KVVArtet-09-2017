@@ -18,7 +18,8 @@ public final class ExperienceCalculator {
     private static final float ZERO_DIFFERENCE_MIN_VALUE = 5.0f;
     private static final float ZERO_DIFFERENCE_MAX_VALUE = 17.0f;
 
-    private ExperienceCalculator() {}
+    private ExperienceCalculator() {
+    }
 
     public static Integer getNewLevelUpCap(Integer level) {
         return LEVEL_UP_CAP_CALCULATION_CONSTANT * level * getXPReward(level, level);

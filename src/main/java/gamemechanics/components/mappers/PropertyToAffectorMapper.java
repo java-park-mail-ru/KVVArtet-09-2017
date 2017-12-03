@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class PropertyToAffectorMapper {
-    private  PropertyToAffectorMapper() {}
+    private PropertyToAffectorMapper() {
+    }
 
     private static final Map<Integer, Integer> propertyAffectorMapping = initMap();
 

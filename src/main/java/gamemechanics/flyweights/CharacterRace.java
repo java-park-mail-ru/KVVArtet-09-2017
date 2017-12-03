@@ -4,13 +4,12 @@ import gamemechanics.components.affectors.Affector;
 import gamemechanics.interfaces.AffectorProvider;
 import gamemechanics.interfaces.GameEntity;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CharacterRace implements GameEntity, AffectorProvider {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer raceID = instanceCounter.getAndIncrement();
+    private final Integer raceID;
 
     private final String name;
     private final String description;
@@ -18,18 +17,23 @@ public class CharacterRace implements GameEntity, AffectorProvider {
     public Map<Integer, Affector> affectors;
 
     public static class CharacterRaceModel {
+        public Integer id;
         public String name;
         public String description;
         public Map<Integer, Affector> affectors;
 
-        public CharacterRaceModel(String name, String description, Map<Integer, Affector> affectors) {
+        public CharacterRaceModel(@NotNull Integer id,
+                                  @NotNull String name, @NotNull String description,
+                                  @NotNull Map<Integer, Affector> affectors) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.affectors = affectors;
         }
     }
 
-    public CharacterRace(CharacterRaceModel model) {
+    public CharacterRace(@NotNull CharacterRaceModel model) {
+        raceID = model.id;
         name = model.name;
         description = model.description;
         affectors = model.affectors;
@@ -37,7 +41,7 @@ public class CharacterRace implements GameEntity, AffectorProvider {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override

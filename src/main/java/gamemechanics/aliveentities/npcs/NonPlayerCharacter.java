@@ -2,15 +2,21 @@ package gamemechanics.aliveentities.npcs;
 
 import gamemechanics.aliveentities.AbstractAliveEntity;
 import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.interfaces.Action;
+import gamemechanics.interfaces.DecisionMaker;
 
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NonPlayerCharacter extends AbstractAliveEntity {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
     private final Integer npcID = instanceCounter.getAndIncrement();
 
-    public NonPlayerCharacter(NPCModel model) {
+    private DecisionMaker behavior;
+
+    public NonPlayerCharacter(@NotNull NPCModel model) {
         super(model);
+        behavior = model.behavior;
     }
 
     @Override
@@ -31,5 +37,10 @@ public class NonPlayerCharacter extends AbstractAliveEntity {
     @Override
     public Integer getDefense() {
         return getProperty(PropertyCategories.PC_BASE_DEFENSE);
+    }
+
+    @Override
+    public Action makeDecision() {
+        return behavior.makeDecision();
     }
 }

@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class AffectorsFactory {
-    private AffectorsFactory() {}
+    private AffectorsFactory() {
+    }
 
     public static Affector getAffector(Integer affectorID) {
         Affector affector = null;

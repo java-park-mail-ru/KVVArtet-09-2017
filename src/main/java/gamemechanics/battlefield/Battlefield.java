@@ -1,5 +1,8 @@
 package gamemechanics.battlefield;
 
+import gamemechanics.aliveentities.helpers.CashCalculator;
+import gamemechanics.aliveentities.helpers.ExperienceCalculator;
+import gamemechanics.aliveentities.npcs.ai.AI;
 import gamemechanics.battlefield.actionresults.ActionResult;
 import gamemechanics.battlefield.actionresults.events.EventCategories;
 import gamemechanics.battlefield.actionresults.events.EventsFactory;
@@ -9,11 +12,14 @@ import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.battlefield.map.helpers.Pathfinder;
 import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.globals.Constants;
+import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.Action;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.Updateable;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class Battlefield implements Updateable {
@@ -25,6 +31,8 @@ public class Battlefield implements Updateable {
 
     public static final int PVE_GAME_MODE = 0;
     public static final int PVP_GAME_MODE = 1;
+
+    private final Map<Integer, AI.BehaviorFunction> behaviors;
 
     private final BattleMap map;
     private final Pathfinder pathfinder;
@@ -44,18 +52,22 @@ public class Battlefield implements Updateable {
     private final Integer mode;
 
     public static class BattlefieldModel {
+        public Map<Integer, AI.BehaviorFunction> behaviors;
         public BattleMap map;
         public List<SpawnPoint> spawnPoints;
         public Integer mode;
 
-        public BattlefieldModel(BattleMap map, List<SpawnPoint> spawnPoints, Integer mode) {
+        public BattlefieldModel(@NotNull Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
+                                @NotNull List<SpawnPoint> spawnPoints, @NotNull Integer mode) {
+            this.behaviors = behaviors;
             this.map = map;
             this.spawnPoints = spawnPoints;
             this.mode = mode;
         }
     }
 
-    public Battlefield(BattlefieldModel model) {
+    public Battlefield(@NotNull BattlefieldModel model) {
+        behaviors = model.behaviors;
         map = model.map;
         mode = model.mode;
         pathfinder = new Pathfinder(map);
@@ -86,6 +98,24 @@ public class Battlefield implements Updateable {
         battlersList.sort(Comparator.comparingInt(AliveEntity::getInitiative));
         for (AliveEntity battler : battlersList) {
             battlersQueue.addFirst(battler);
+        }
+
+        Squad monsterSquad = squads.get(Squad.MONSTER_SQUAD_ID);
+        for (Integer i = 0; i < monsterSquad.getSquadSize(); ++i) {
+            Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
+            Integer activeBehaviorId = Constants.WRONG_INDEX;
+            for (Integer behaviorId : monsterSquad.getMember(i).getCharacterRole().getBehaviorIds()) {
+                if (behaviors.containsKey(behaviorId)) {
+                    if (activeBehaviorId == Constants.WRONG_INDEX) {
+                        activeBehaviorId = behaviorId;
+                    }
+                    monsterBehaviors.put(behaviorId, behaviors.get(behaviorId));
+                }
+            }
+            monsterSquad.getMember(i).setBehavior(new AI(monsterSquad.getMember(i),
+                    monsterSquad, squads.get(Squad.PLAYERS_SQUAD_ID), map, pathfinder,
+                    monsterSquad.getMember(i).getCharacterRole().getAllAbilities(),
+                    monsterBehaviors, activeBehaviorId));
         }
     }
 
@@ -198,7 +228,6 @@ public class Battlefield implements Updateable {
         for (AliveEntity battler : battlersQueue) {
             if (!battler.isAlive()) {
                 battlersQueue.remove(battler);
-                /* TODO: add XP rewards for killing */
             }
         }
     }
@@ -214,7 +243,7 @@ public class Battlefield implements Updateable {
     private void endBattleCleanup() {
         for (Squad squad : squads) {
             for (Integer i = 0; i < squad.getSquadSize(); ++i) {
-               squad.getMember(i).removeProperty(PropertyCategories.PC_COORDINATES);
+                squad.getMember(i).removeProperty(PropertyCategories.PC_COORDINATES);
             }
         }
     }
@@ -277,13 +306,64 @@ public class Battlefield implements Updateable {
             if (!entry.getIsProcessed()) {
                 for (Integer eventIndex = 0; eventIndex < entry.getEventsCount(); ++eventIndex) {
                     TurnEvent event = entry.getEvent(eventIndex);
-                    if (event.getEventKind().equals(EventCategories.EC_ROLLBACK)) {
+                    if (event.getEventKind() == EventCategories.EC_ROLLBACK) {
                         if (activeBattlerActionsPooled > 0) {
                             --activeBattlerActionsPooled;
                             break;
                         }
                     }
+
+                    if (event.getEventKind() == EventCategories.EC_END_TURN) {
+                        break;
+                    }
+
+                    if (event.getEventKind() == EventCategories.EC_HITPOINTS_CHANGE) {
+                        if (event.getAmount() < 0 && !event.getWhere().getInhabitant().isAlive()) {
+                            Integer squadIdToReward = event.getWhere().getInhabitant()
+                                    .getProperty(PropertyCategories.PC_SQUAD_ID) == Squad.TEAM_ONE_SQUAD_ID
+                                    ? Squad.TEAM_TWO_SQUAD_ID : Squad.TEAM_ONE_SQUAD_ID;
+                            if (squadIdToReward == Squad.PLAYERS_SQUAD_ID || mode == PVP_GAME_MODE) {
+                                Integer averagePartyLevel = 0;
+                                for (Integer i = 0; i < squads.get(squadIdToReward).getSquadSize(); ++i) {
+                                    AliveEntity member = squads.get(squadIdToReward).getMember(i);
+                                    if (member != null) {
+                                        if (member.isAlive()) {
+                                            averagePartyLevel += member.getLevel();
+                                        }
+                                    }
+                                }
+                                Integer expAmount = ExperienceCalculator.getPartyBiasedXPReward(
+                                        ExperienceCalculator.getXPReward(averagePartyLevel
+                                                        / squads.get(squadIdToReward).getAliveMembersCount(),
+                                                event.getWhere().getInhabitant().getLevel()),
+                                        squads.get(squadIdToReward).getAliveMembersCount());
+                                Integer cashAmount = CashCalculator.getPartyBiasedCashReward(
+                                        CashCalculator.getCashReward(event.getWhere().getInhabitant().getLevel()),
+                                        squads.get(squadIdToReward).getAliveMembersCount());
+                                for (Integer i = 0; i < squads.get(squadIdToReward).getSquadSize(); ++i) {
+                                    AliveEntity member = squads.get(squadIdToReward).getMember(i);
+                                    if (member != null) {
+                                        if (member.isAlive() && member.hasProperty(PropertyCategories.PC_XP_POINTS)
+                                                && member.hasProperty(PropertyCategories.PC_CASH_AMOUNT)) {
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
+                                                    DigitsPairIndices.CURRENT_VALUE_INDEX, expAmount);
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
+                                                    cashAmount);
+                                            entry.addEvent(entry.getEventIndex(event) + 1,
+                                                    EventsFactory.makeRewardEvent(map.getTile(
+                                                            member.getProperty(PropertyCategories.PC_COORDINATES,
+                                                                    DigitsPairIndices.ROW_COORD_INDEX),
+                                                            member.getProperty(PropertyCategories.PC_COORDINATES,
+                                                                    DigitsPairIndices.COL_COORD_INDEX)),
+                                                            expAmount, cashAmount));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+
                 entry.markProcessed();
             }
         }

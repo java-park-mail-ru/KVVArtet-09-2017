@@ -1,6 +1,7 @@
 package gamemechanics.aliveentities;
 
 import gamemechanics.components.affectors.AffectorCategories;
+import gamemechanics.components.mappers.PropertyToAffectorMapper;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.flyweights.CharacterRace;
 import gamemechanics.globals.*;
@@ -62,6 +63,15 @@ public class UserCharacter extends AbstractAliveEntity {
                 calculateActualHealthCap());
         affectHitpoints(getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.MAX_VALUE_INDEX)
                 - getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.MIN_VALUE_INDEX));
+    }
+
+    @Override
+    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+        return super.getProperty(propertyKind, propertyIndex)
+                + equipment.getEquipmentAffection(PropertyToAffectorMapper.getAffectorKind(propertyKind),
+                propertyIndex) + getPerksAffection(PropertyToAffectorMapper.getAffectorKind(propertyKind),
+                propertyIndex) + getEffectsAffection(PropertyToAffectorMapper.getAffectorKind(propertyKind),
+                propertyIndex);
     }
 
     @Override

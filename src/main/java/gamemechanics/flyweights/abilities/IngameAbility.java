@@ -1,55 +1,70 @@
 package gamemechanics.flyweights.abilities;
 
+import gamemechanics.battlefield.actionresults.events.TurnEvent;
+import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
+import gamemechanics.effects.IngameEffect;
 import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.AbilityEffect;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 public class IngameAbility implements Ability {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer abilityID = instanceCounter.getAndIncrement();
+    private final Integer abilityID;
 
     private final String name;
     private final String description;
 
     private final Map<Integer, Property> properties;
     private final Map<Integer, Affector> affectors;
-    private final AbilityEffect perform;
+    private final List<IngameEffect.EffectModel> appliedEffects;
+    private final AbilityBehavior perform;
+
+    interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {
+    }
 
     public static class AbilityModel {
+        public Integer id;
         public String name;
         public String description;
         public Map<Integer, Property> properties;
         public Map<Integer, Affector> affectors;
-        public AbilityEffect perform;
+        public List<IngameEffect.EffectModel> appliedEffects;
+        public AbilityBehavior perform;
 
-        public AbilityModel(String name, String description, Map<Integer, Property> properties,
-                            Map<Integer, Affector> affectors, AbilityEffect perform) {
+        public AbilityModel(@NotNull Integer id,
+                            @NotNull String name, @NotNull String description,
+                            @NotNull Map<Integer, Property> properties,
+                            @NotNull Map<Integer, Affector> affectors,
+                            @NotNull List<IngameEffect.EffectModel> appliedEffects,
+                            @NotNull AbilityBehavior perform) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.properties = properties;
             this.affectors = affectors;
+            this.appliedEffects = appliedEffects;
             this.perform = perform;
         }
     }
 
-    public IngameAbility(AbilityModel model) {
+    public IngameAbility(@NotNull AbilityModel model) {
+        abilityID = model.id;
         name = model.name;
         description = model.description;
         properties = model.properties;
         affectors = model.affectors;
+        appliedEffects = model.appliedEffects;
         perform = model.perform;
     }
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return 0;
     }
 
     @Override
@@ -120,7 +135,22 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Boolean execute(AliveEntity sender, MapNode target) {
-        return perform.execute(sender, target, affectors);
+    public List<TurnEvent> execute(AggregatedAbilityAction action) {
+        return perform.apply(action);
+    }
+
+    @Override
+    public Map<Integer, Property> getPropertiesMap() {
+        return properties;
+    }
+
+    @Override
+    public Map<Integer, Affector> getAffectorsMap() {
+        return affectors;
+    }
+
+    @Override
+    public List<IngameEffect.EffectModel> getAppliedEffects() {
+        return appliedEffects;
     }
 }

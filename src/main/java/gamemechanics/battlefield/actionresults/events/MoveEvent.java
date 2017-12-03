@@ -13,10 +13,8 @@ public class MoveEvent implements TurnEvent {
 
     @Override
     public Integer getEventKind() {
-        return  EventCategories.EC_MOVE;
+        return EventCategories.EC_MOVE;
     }
-
-    /* TODO: think on overloading getWhere() to grab the destination coords */
 
     public Route getRoute() {
         return route;

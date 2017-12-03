@@ -28,10 +28,12 @@ public final class AIBehaviors {
     private static final int STANDS_ON_ADJACENT_TILE = 17;
     private static final int ONE_STEP_COST = 2;
 
-    private AIBehaviors() {}
+    private AIBehaviors() {
+    }
 
     /**
      * get an AI behavior by given ID
+     *
      * @param behaviorID ID of the wanted behavior
      * @return null if ID is invalid or {@link AI.BehaviorFunction} registered
      * under given ID otherwise
@@ -66,7 +68,7 @@ public final class AIBehaviors {
                             } else {
                                 if (enemyDistanceScore + enemyHealthScore + enemyAggroScore == maximalScore) {
                                     if (enemyDistanceScore > getDistanceScore(aggregatedBattleState
-                                            .enemies.getMember(enemyIdWithMaximalScore),
+                                                    .enemies.getMember(enemyIdWithMaximalScore),
                                             aggregatedBattleState.self)) {
                                         enemyIdWithMaximalScore = enemyID;
                                     } else {
@@ -91,7 +93,7 @@ public final class AIBehaviors {
                                 DigitsPairIndices.ROW_COORD_INDEX), aggregatedBattleState.self
                                 .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX))
                         .getH(aggregatedBattleState.map.getTile(targetEnemy
-                                .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
+                                        .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
                                 targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
                                         DigitsPairIndices.COL_COORD_INDEX)));
 
@@ -140,7 +142,7 @@ public final class AIBehaviors {
                                             DigitsPairIndices.ROW_COORD_INDEX),
                                     targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
                                             DigitsPairIndices.COL_COORD_INDEX)),
-                            bestAttack);
+                            bestAttack, aggregatedBattleState.pathfinder);
                 }
                 return choice;
             }
@@ -192,7 +194,7 @@ public final class AIBehaviors {
         if (distance > 0) {
             --distance;
         }
-        Integer score = STANDS_ON_ADJACENT_TILE - ONE_ACTION_STEP_BONUS * distance;
+        Integer score = STANDS_ON_ADJACENT_TILE - ONE_STEP_COST * distance;
         if (distance <= Constants.DEFAULT_ALIVE_ENTITY_SPEED) {
             score += ONE_ACTION_STEP_BONUS;
         }

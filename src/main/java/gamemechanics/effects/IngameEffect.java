@@ -112,7 +112,7 @@ public class IngameEffect implements Effect {
                     + random.nextInt(affector.getAffection(DigitsPairIndices.MAX_VALUE_INDEX
                     - DigitsPairIndices.MIN_VALUE_INDEX));
         }
-        if((affectorKind & AffectorCategories.AC_SINGLE_VALUE_AFFECTORS) != 0) {
+        if ((affectorKind & AffectorCategories.AC_SINGLE_VALUE_AFFECTORS) != 0) {
             return affectors.get(affectorKind).getAffection();
         }
         return Integer.MIN_VALUE;
