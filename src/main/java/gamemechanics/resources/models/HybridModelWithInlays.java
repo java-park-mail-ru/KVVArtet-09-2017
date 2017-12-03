@@ -1,5 +1,6 @@
 package gamemechanics.resources.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
 
@@ -11,13 +12,14 @@ import java.util.Map;
 public class HybridModelWithInlays extends HybridModel {
     private final List<GameResource> inlaidModels = new ArrayList<>();
 
-    public HybridModelWithInlays(@NotNull Integer modelD,
-                                 @NotNull String name, @NotNull String description,
-                                 @NotNull Map<Integer, Property> properties,
-                                 @NotNull Map<Integer, Affector> affectors,
-                                 @NotNull Map<Integer, List<Integer>> mappings,
-                                 @NotNull List<GameResource> inlaidModels) {
-        super(modelD, name, description, properties, affectors, mappings);
+    public HybridModelWithInlays(@JsonProperty("modelId") @NotNull Integer modelID,
+                                 @JsonProperty("name") @NotNull String name,
+                                 @JsonProperty("description") @NotNull String description,
+                                 @JsonProperty("properties") @NotNull Map<Integer, Property> properties,
+                                 @JsonProperty("affectors") @NotNull Map<Integer, Affector> affectors,
+                                 @JsonProperty("mappings") @NotNull Map<Integer, List<Integer>> mappings,
+                                 @JsonProperty("inlaid") @NotNull List<GameResource> inlaidModels) {
+        super(modelID, name, description, properties, affectors, mappings);
         this.inlaidModels.addAll(inlaidModels);
     }
 
@@ -30,6 +32,7 @@ public class HybridModelWithInlays extends HybridModel {
     }
 
     @Override
+    @JsonProperty("inlaid")
     public List<GameResource> getAllInlaid() {
         return inlaidModels;
     }

@@ -1,5 +1,6 @@
 package gamemechanics.battlefield.actionresults;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gamemechanics.battlefield.actionresults.events.TurnEvent;
 import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.Ability;
@@ -47,12 +48,13 @@ public class BattleActionResult implements ActionResult {
     }
 
     @Override
+    @JsonIgnore
     public Integer getEventsCount() {
         return events.size();
     }
 
     @Override
-    public TurnEvent getEvent(Integer eventIndex) {
+    public TurnEvent getEvent(@NotNull Integer eventIndex) {
         if (eventIndex < 0 || eventIndex >= events.size()) {
             return null;
         }

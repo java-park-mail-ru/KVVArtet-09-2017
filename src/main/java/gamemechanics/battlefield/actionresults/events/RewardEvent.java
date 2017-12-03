@@ -24,4 +24,12 @@ public class RewardEvent implements TurnEvent {
     public MapNode getWhere() {
         return where;
     }
+
+    public Integer getExpAmount() {
+        return expAmount;
+    }
+
+    public Integer getGoldAmount() {
+        return goldAmount;
+    }
 }

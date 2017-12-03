@@ -7,6 +7,7 @@ import gamemechanics.globals.CharacterStats;
 import gamemechanics.globals.EquipmentSlot;
 import gamemechanics.interfaces.EquipableItem;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,11 +21,11 @@ public class CharacterDoll extends StorageBag {
         super(emptyCharacterDoll);
     }
 
-    public CharacterDoll(FilledBagModel model) {
+    public CharacterDoll(@NotNull FilledBagModel model) {
         super(model);
     }
 
-    public Integer getStatBonus(Integer statIndex) {
+    public Integer getStatBonus(@NotNull Integer statIndex) {
         Integer statBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -42,7 +43,7 @@ public class CharacterDoll extends StorageBag {
         return statBonuses;
     }
 
-    public Integer getRatingBonus(Integer ratingIndex) {
+    public Integer getRatingBonus(@NotNull Integer ratingIndex) {
         Integer ratingBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -64,11 +65,11 @@ public class CharacterDoll extends StorageBag {
         Integer damage = 0;
         if (getContents().get(EquipmentSlot.ES_MAINHAND.asInt()) != null) {
             damage += getContents().get(EquipmentSlot.ES_MAINHAND.asInt())
-                    .getAffection(AffectorCategories.AC_DAMAGE_AFFECTOR);
+                    .getAffection(AffectorCategories.AC_WEAPON_DAMAGE_AFFECTOR);
         }
         if (getContents().get(EquipmentSlot.ES_OFFHAND.asInt()) != null) {
             damage += getContents().get(EquipmentSlot.ES_OFFHAND.asInt())
-                    .getAffection(AffectorCategories.AC_DAMAGE_AFFECTOR);
+                    .getAffection(AffectorCategories.AC_WEAPON_DAMAGE_AFFECTOR);
         }
         return damage;
     }
@@ -83,7 +84,7 @@ public class CharacterDoll extends StorageBag {
         return defense;
     }
 
-    public Integer getDefense(Integer armourKind) {
+    public Integer getDefense(@NotNull Integer armourKind) {
         Integer armourKindDefense = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -95,7 +96,7 @@ public class CharacterDoll extends StorageBag {
         return armourKindDefense;
     }
 
-    public Integer getEquipmentAffection(Integer affectorKind) {
+    public Integer getEquipmentAffection(@NotNull Integer affectorKind) {
         Integer affection = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -108,7 +109,7 @@ public class CharacterDoll extends StorageBag {
         return affection;
     }
 
-    public Integer getEquipmentAffection(Integer affectorKind, Integer affectionIndex) {
+    public Integer getEquipmentAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         Integer affection = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {

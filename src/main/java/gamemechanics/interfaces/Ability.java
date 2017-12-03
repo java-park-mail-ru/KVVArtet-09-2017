@@ -1,11 +1,15 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import gamemechanics.battlefield.actionresults.events.TurnEvent;
 import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
 import gamemechanics.effects.IngameEffect;
+import gamemechanics.flyweights.abilities.IngameAbility;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +22,10 @@ import java.util.Map;
  * @see PropertyProvider
  * @see AffectorProvider
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(IngameAbility.class),
+})
 public interface Ability extends GameEntity, PropertyProvider, AffectorProvider {
     /**
      * execute an ability
@@ -26,7 +34,7 @@ public interface Ability extends GameEntity, PropertyProvider, AffectorProvider 
      * @return list of {@link TurnEvent}s caused by ability. This list shall be added
      * to {@link gamemechanics.battlefield.actionresults.ActionResult}'s event list
      */
-    List<TurnEvent> execute(AggregatedAbilityAction action);
+    List<TurnEvent> execute(@NotNull AggregatedAbilityAction action);
 
     Map<Integer, Property> getPropertiesMap();
 

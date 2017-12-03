@@ -1,5 +1,6 @@
 package gamemechanics.battlefield.actionresults.events;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
@@ -21,5 +22,10 @@ public class CastEvent implements TurnEvent {
     @Override
     public MapNode getWhere() {
         return where;
+    }
+
+    @JsonProperty("abilityId")
+    public Integer getAbilityID() {
+        return abilityID;
     }
 }

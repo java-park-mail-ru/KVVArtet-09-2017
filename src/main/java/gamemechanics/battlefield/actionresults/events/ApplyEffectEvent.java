@@ -1,5 +1,6 @@
 package gamemechanics.battlefield.actionresults.events;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.MapNode;
 
@@ -22,5 +23,10 @@ public class ApplyEffectEvent implements TurnEvent {
     @Override
     public MapNode getWhere() {
         return where;
+    }
+
+    @JsonProperty("effect")
+    public Effect getAppliedEffect() {
+        return appliedEffect;
     }
 }

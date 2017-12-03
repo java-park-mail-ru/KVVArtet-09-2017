@@ -2,6 +2,7 @@ package gamemechanics.dungeons;
 
 import gamemechanics.aliveentities.npcs.ai.AI;
 import gamemechanics.battlefield.Battlefield;
+import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
@@ -80,5 +81,20 @@ public class DungeonInstance extends AbstractInstance {
             spawnPoints.add(spawnPoint);
         }
         return spawnPoints;
+    }
+
+    @Override
+    public CharactersParty getParty(@NotNull Integer partyIndex) {
+        return null;
+    }
+
+    @Override
+    public void giveRewards() {
+
+    }
+
+    @Override
+    public Boolean handlePacket() {
+        return true;
     }
 }

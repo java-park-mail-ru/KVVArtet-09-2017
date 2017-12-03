@@ -1,5 +1,11 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gamemechanics.flyweights.perks.IngamePerk;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for various character classes' perks.
  * Perk is an object permanently affecting character's stats or altering some skills.
@@ -10,6 +16,10 @@ package gamemechanics.interfaces;
  * @see gamemechanics.aliveentities.UserCharacter
  * @see CharacterRole
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(IngamePerk.class),
+})
 public interface Perk extends GameEntity, AffectorProvider {
     /**
      * get a rank-based single affection value from the multi-value affector
@@ -24,7 +34,8 @@ public interface Perk extends GameEntity, AffectorProvider {
      * @see gamemechanics.components.affectors.ListAffector
      * @see gamemechanics.components.affectors.MapAffector
      */
-    Integer getRankBasedAffection(Integer affectorKind, Integer affectorIndex, Integer perkRank);
+    Integer getRankBasedAffection(@NotNull Integer affectorKind, @NotNull Integer affectorIndex,
+                                  @NotNull Integer perkRank);
 
     /**
      * get a rank-based affection value from the single-value affector by its ID
@@ -37,5 +48,5 @@ public interface Perk extends GameEntity, AffectorProvider {
      * @see gamemechanics.components.affectors.Affector
      * @see gamemechanics.components.affectors.SingleValueAffector
      */
-    Integer getRankBasedAffection(Integer affectorKind, Integer perkRank);
+    Integer getRankBasedAffection(@NotNull Integer affectorKind, @NotNull Integer perkRank);
 }

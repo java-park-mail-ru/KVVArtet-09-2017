@@ -1,5 +1,9 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gamemechanics.battlefield.Tile;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -9,6 +13,10 @@ import java.util.List;
  * @see Countable
  * @see gamemechanics.battlefield.map.BattleMap
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(Tile.class),
+})
 public interface MapNode extends Countable {
     /**
      * check if the node is passable
@@ -22,7 +30,7 @@ public interface MapNode extends Countable {
      *
      * @param isPassable new node passability value
      */
-    void setIsPassable(Boolean isPassable);
+    void setIsPassable(@NotNull Boolean isPassable);
 
     /**
      * get {@link AliveEntity} standing on the node
@@ -45,7 +53,7 @@ public interface MapNode extends Countable {
      * @param stander {@link AliveEntity} trying to occupy the node
      * @return true if the node was empty and passable or false otherwise
      */
-    Boolean occupy(AliveEntity stander);
+    Boolean occupy(@NotNull AliveEntity stander);
 
     /**
      * remove node's inhabitant if there's one
@@ -60,7 +68,7 @@ public interface MapNode extends Countable {
      * @param direction node's side from where to take an adjacent node
      * @return null if there's no adjacent node from that side or {@link MapNode} otherwise
      */
-    MapNode getAdjacent(Integer direction);
+    MapNode getAdjacent(@NotNull Integer direction);
 
     /**
      * get all nodes adjacent to this one
@@ -76,14 +84,14 @@ public interface MapNode extends Countable {
      * @param node node to check adjacency with
      * @return true if nodes're adjacent or false otherwise
      */
-    Boolean isAdjacentTo(MapNode node);
+    Boolean isAdjacentTo(@NotNull MapNode node);
 
     /**
      * set nodes adjacent to this node
      *
      * @param node list of adjacent nodes
      */
-    void setAdjacentTiles(List<MapNode> node);
+    void setAdjacentTiles(@NotNull List<MapNode> node);
 
     /**
      * get node's coordinates
@@ -99,7 +107,7 @@ public interface MapNode extends Countable {
      * @return special constant if the index is invalid
      * or either nodes rowCoordinate or colCoordinate value otherwise
      */
-    Integer getCoordinate(Integer coordinateIndex);
+    Integer getCoordinate(@NotNull Integer coordinateIndex);
 
     /**
      * calculate heuristic value for the given node to this node

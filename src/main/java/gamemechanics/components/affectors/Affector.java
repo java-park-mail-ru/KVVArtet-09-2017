@@ -1,42 +1,34 @@
 package gamemechanics.components.affectors;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(SingleValueAffector.class),
+        @JsonSubTypes.Type(ListAffector.class),
+        @JsonSubTypes.Type(MapAffector.class),
+})
 public interface Affector {
-    default Integer getAffection(Integer affectionIndex) {
-        return 0;
-    }
+    Integer getAffection(@NotNull Integer affectionIndex);
 
-    default Integer getAffection() {
-        return 0;
-    }
+    Integer getAffection();
 
-    default Boolean setSingleAffection(Integer affection) {
-        return false;
-    }
+    Boolean setSingleAffection(@NotNull Integer affection);
 
-    default List<Integer> getAffectionsList() {
-        return null;
-    }
+    List<Integer> getAffectionsList();
 
-    default Boolean setAffectionsList(List<Integer> affections) {
-        return false;
-    }
+    Boolean setAffectionsList(@NotNull List<Integer> affections);
 
-    default Map<Integer, Integer> getAffectionsMap() {
-        return null;
-    }
+    Map<Integer, Integer> getAffectionsMap();
 
-    default Boolean setAffectionsMap(Map<Integer, Integer> affections) {
-        return false;
-    }
+    Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections);
 
-    default Boolean modifyByPercentage(Float percentage) {
-        return false;
-    }
+    Boolean modifyByPercentage(@NotNull Float percentage);
 
-    default Boolean modifyByAddition(Integer toAdd) {
-        return false;
-    }
+    Boolean modifyByAddition(@NotNull Integer toAdd);
 }

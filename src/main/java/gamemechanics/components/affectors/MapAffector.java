@@ -1,18 +1,35 @@
 package gamemechanics.components.affectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import gamemechanics.globals.Constants;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 public class MapAffector implements Affector {
     private final Map<Integer, Integer> affections;
 
-    public MapAffector(Map<Integer, Integer> affections) {
+    public MapAffector(@JsonProperty("affections") @NotNull Map<Integer, Integer> affections) {
         this.affections = affections;
     }
 
     @Override
-    public Integer getAffection(Integer affectionIndex) {
+    @JsonIgnore
+    public Integer getAffection() {
+        return 0;
+    }
+
+    @Override
+    @JsonIgnore
+    public Boolean setSingleAffection(@NotNull Integer affection) {
+        return false;
+    }
+
+    @Override
+    public Integer getAffection(@NotNull Integer affectionIndex) {
         if (!affections.containsKey(affectionIndex)) {
             return 0;
         }
@@ -20,12 +37,14 @@ public class MapAffector implements Affector {
     }
 
     @Override
+    @JsonProperty("affections")
     public Map<Integer, Integer> getAffectionsMap() {
         return affections;
     }
 
     @Override
-    public Boolean setAffectionsMap(Map<Integer, Integer> affections) {
+    @JsonSetter("affections")
+    public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
         if (this.affections.keySet() != affections.keySet()) {
             return false;
         }
@@ -36,7 +55,19 @@ public class MapAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByPercentage(Float percentage) {
+    @JsonIgnore
+    public List<Integer> getAffectionsList() {
+        return null;
+    }
+
+    @Override
+    @JsonIgnore
+    public Boolean setAffectionsList(@NotNull List<Integer> affections) {
+        return false;
+    }
+
+    @Override
+    public Boolean modifyByPercentage(@NotNull Float percentage) {
         for (Integer key : affections.keySet()) {
             Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
             affections.replace(key, Math.round(affections.get(key) * resultPercentage));
@@ -45,7 +76,7 @@ public class MapAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByAddition(Integer toAdd) {
+    public Boolean modifyByAddition(@NotNull Integer toAdd) {
         for (Integer key : affections.keySet()) {
             affections.replace(key, affections.get(key) + toAdd);
         }

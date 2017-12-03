@@ -1,5 +1,7 @@
 package gamemechanics.resources.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.properties.Property;
 
@@ -15,11 +17,12 @@ public class HybridModel extends AbstractModel {
 
     private final Map<Integer, List<Integer>> mappings = new HashMap<>();
 
-    public HybridModel(@NotNull Integer modelID,
-                       @NotNull String name, @NotNull String description,
-                       @NotNull Map<Integer, Property> properties,
-                       @NotNull Map<Integer, Affector> affectors,
-                       @NotNull Map<Integer, List<Integer>> mappings) {
+    public HybridModel(@JsonProperty("modelId") @NotNull Integer modelID,
+                       @JsonProperty("name") @NotNull String name,
+                       @JsonProperty("description") @NotNull String description,
+                       @JsonProperty("properties") @NotNull Map<Integer, Property> properties,
+                       @JsonProperty("affectors") @NotNull Map<Integer, Affector> affectors,
+                       @JsonProperty("mappings") @NotNull Map<Integer, List<Integer>> mappings) {
         super(modelID, name, description);
         this.properties.putAll(properties);
         this.affectors.putAll(affectors);
@@ -36,11 +39,14 @@ public class HybridModel extends AbstractModel {
         return properties.getOrDefault(propertyIndex, null);
     }
 
+    @Override
+    @JsonIgnore
     public Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
+    @JsonProperty("properties")
     public Map<Integer, Property> getAllProperties() {
         return properties;
     }
@@ -61,6 +67,7 @@ public class HybridModel extends AbstractModel {
     }
 
     @Override
+    @JsonProperty("affectors")
     public Map<Integer, Affector> getAllAffectors() {
         return affectors;
     }
@@ -71,6 +78,7 @@ public class HybridModel extends AbstractModel {
     }
 
     @Override
+    @JsonIgnore
     public Set<Integer> getAvailableMappings() {
         return mappings.keySet();
     }
@@ -81,7 +89,14 @@ public class HybridModel extends AbstractModel {
     }
 
     @Override
+    @JsonProperty("mappings")
     public Map<Integer, List<Integer>> getAllMappings() {
         return mappings;
+    }
+
+    @Override
+    @JsonIgnore
+    public List<GameResource> getAllInlaid() {
+        return null;
     }
 }

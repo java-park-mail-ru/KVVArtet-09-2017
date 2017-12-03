@@ -1,11 +1,23 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gamemechanics.items.containers.CharacterDoll;
+import gamemechanics.items.containers.StorageBag;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for various item containers.
  *
  * @see GameEntity
  * @see EquipableItem
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(StorageBag.class),
+        @JsonSubTypes.Type(CharacterDoll.class),
+})
 public interface Bag extends GameEntity {
     /**
      * get total slots count
@@ -28,7 +40,7 @@ public interface Bag extends GameEntity {
      * @param toPos   second slot's index
      * @return true if the swap was successful or false otherwise
      */
-    Boolean swap(Integer fromPos, Integer toPos);
+    Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos);
 
     /**
      * swap two slots in different bag
@@ -38,7 +50,7 @@ public interface Bag extends GameEntity {
      * @param toPos   index of the second slot to swap (in another bag)
      * @return true if the swap was successful or false otherwise
      */
-    Boolean swap(Integer fromPos, Bag toBag, Integer toPos);
+    Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos);
 
     /**
      * put a new item in the bag
@@ -47,7 +59,7 @@ public interface Bag extends GameEntity {
      * @return true if there're free slots in the bag or false otherwise
      * @see EquipableItem
      */
-    Boolean addItem(EquipableItem item);
+    Boolean addItem(@NotNull EquipableItem item);
 
     /**
      * put a new item  in the concrete slot
@@ -57,7 +69,7 @@ public interface Bag extends GameEntity {
      * @return true if the chosen slot's free or false otherwise
      * @see EquipableItem
      */
-    Boolean addItem(EquipableItem item, Integer toPos);
+    Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos);
 
     /**
      * remove the item from the bag
@@ -67,7 +79,7 @@ public interface Bag extends GameEntity {
      * @return true if the removal was successful or false
      * if the removal wasn't confirmed or the chosen slot was empty
      */
-    Boolean throwAway(Integer fromPos, Boolean isConfirmed);
+    Boolean throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed);
 
     /**
      * get the item from the bag by slot index
@@ -77,5 +89,5 @@ public interface Bag extends GameEntity {
      * (null if the slot's empty or {@link EquipableItem} otherwise)
      * @see EquipableItem
      */
-    EquipableItem getItem(Integer itemIndex);
+    EquipableItem getItem(@NotNull Integer itemIndex);
 }
