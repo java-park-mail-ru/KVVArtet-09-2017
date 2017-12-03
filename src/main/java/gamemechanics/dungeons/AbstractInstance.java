@@ -15,8 +15,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractInstance implements Instance {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer instanceID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer instanceID = INSTANCE_COUNTER.getAndIncrement();
 
     private final String name;
     private final String description;
@@ -33,16 +33,17 @@ public abstract class AbstractInstance implements Instance {
     Battlefield currentRoom;
 
     private static class AbstractInstanceModel {
-        public String name;
-        public String description;
-        public Integer level;
-        public Integer gameMode;
-        public Integer roomsCount;
-        public List<CharactersParty> squads;
+        public final String name;
+        public final String description;
+        public final Integer level;
+        public final Integer gameMode;
+        public final Integer roomsCount;
+        @SuppressWarnings("PublicField")
+        public final List<CharactersParty> squads;
 
-        private AbstractInstanceModel(@NotNull String name, @NotNull String description,
-                                      Integer gameMode, Integer level, Integer roomsCount,
-                                      @NotNull List<CharactersParty> squads) {
+        AbstractInstanceModel(@NotNull String name, @NotNull String description,
+                              @NotNull Integer gameMode, @NotNull Integer level,
+                              @NotNull Integer roomsCount, @NotNull List<CharactersParty> squads) {
             this.name = name;
             this.description = description;
             this.level = level;
@@ -54,10 +55,11 @@ public abstract class AbstractInstance implements Instance {
 
     /* TODO: modify data model as DungeonInstance class will be specified */
     public static class DungeonInstanceModel extends AbstractInstanceModel {
-        public Map<Integer, AI.BehaviorFunction> behaviors;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, AI.BehaviorFunction> behaviors;
 
         public DungeonInstanceModel(@NotNull String name, @NotNull String description,
-                                    Integer level, Integer roomsCount,
+                                    @NotNull Integer level, @NotNull Integer roomsCount,
                                     @NotNull List<CharactersParty> squads,
                                     @NotNull Map<Integer, AI.BehaviorFunction> behaviors) {
             super(name, description, Battlefield.PVE_GAME_MODE, level, roomsCount, squads);
@@ -95,7 +97,7 @@ public abstract class AbstractInstance implements Instance {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
@@ -150,7 +152,7 @@ public abstract class AbstractInstance implements Instance {
 
     @Override
     public List<Integer> getBattlingSquadsIds() {
-        List<Integer> ids = new ArrayList<>();
+        final List<Integer> ids = new ArrayList<>();
         for (CharactersParty squad : squads) {
             if (squad != null) {
                 ids.add(squad.getID());
@@ -169,32 +171,32 @@ public abstract class AbstractInstance implements Instance {
         return squads.get(Squad.PLAYERS_SQUAD_ID).areAllDead();
     }
 
+    @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
     MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
                               @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
         }
 
-        Integer mapWidth = map.getSize().get(DigitsPairIndices.ROW_COORD_INDEX);
-        Integer mapHeight = map.getSize().get(DigitsPairIndices.COL_COORD_INDEX);
+        final Integer mapWidth = map.getSize().get(DigitsPairIndices.ROW_COORD_INDEX);
+        final Integer mapHeight = map.getSize().get(DigitsPairIndices.COL_COORD_INDEX);
 
-        Integer halfWidthBegin = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
-        Integer halfWidthEnd = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
+        final Integer halfWidthBegin = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
+        final Integer halfWidthEnd = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
 
-        Random random = new Random(System.currentTimeMillis());
+        final Random random = new Random(System.currentTimeMillis());
 
         Integer triesCount = 0;
 
-        MapNode spawnPointCenter;
         while (true) {
             if (triesCount > mapHeight * mapWidth) {
                 break;
             }
-            spawnPointCenter = map.getTile(halfWidthBegin + random.nextInt(halfWidthEnd
+            final MapNode spawnPointCenter = map.getTile(halfWidthBegin + random.nextInt(halfWidthEnd
                     - halfWidthBegin), random.nextInt(mapHeight));
-            Set<MapNode> rowCenters = new HashSet<>();
+            final Set<MapNode> rowCenters = new HashSet<>();
             rowCenters.add(spawnPointCenter);
-            Integer halfSide = (sideSize - 1) / 2;
+            final Integer halfSide = (sideSize - 1) / 2;
             MapNode upperRowCenter = spawnPointCenter.getAdjacent(Directions.UP);
             MapNode lowerRowCenter = spawnPointCenter.getAdjacent(Directions.DOWN);
             for (Integer i = 0; i < halfSide; ++i) {
@@ -207,7 +209,7 @@ public abstract class AbstractInstance implements Instance {
                     lowerRowCenter = lowerRowCenter.getAdjacent(Directions.DOWN);
                 }
             }
-            Set<MapNode> nodesToOccupy = new HashSet<>();
+            final Set<MapNode> nodesToOccupy = new HashSet<>();
             for (MapNode rowCenter : rowCenters) {
                 if (rowCenter.getIsPassable() && !rowCenter.isOccupied()
                         && !occupiedNodes.contains(rowCenter)) {

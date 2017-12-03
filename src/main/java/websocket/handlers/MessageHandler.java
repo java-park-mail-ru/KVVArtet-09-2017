@@ -1,6 +1,7 @@
 package websocket.handlers;
 
 import websocket.messages.Message;
+
 import javax.validation.constraints.NotNull;
 
 public abstract class MessageHandler<T> {
@@ -14,6 +15,7 @@ public abstract class MessageHandler<T> {
         try {
             handle(clazz.cast(message), userId);
         } catch (ClassCastException e) {
+            e.printStackTrace();
             throw new Exception("Message is not convertible");
         }
     }

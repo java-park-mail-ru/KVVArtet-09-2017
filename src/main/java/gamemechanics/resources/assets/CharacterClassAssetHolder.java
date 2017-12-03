@@ -1,5 +1,7 @@
 package gamemechanics.resources.assets;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.PerkBranch;
@@ -27,39 +29,44 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
 
     private void fillFromFile(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities,
                               @NotNull Map<Integer, PerkBranch> perkBranches) {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
+        //noinspection TryWithIdenticalCatches
         try {
-            ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
-            Map<Integer, GameResource> characterClassResources = holder.getAllResources();
+            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final Map<Integer, GameResource> characterClassResources = holder.getAllResources();
             for (Integer classId : characterClassResources.keySet()) {
-                GameResource characterClassResource = characterClassResources.get(classId);
+                final GameResource characterClassResource = characterClassResources.get(classId);
 
-                Map<Integer, Ability> classAbilities = new HashMap<>();
-                List<Integer> resourceAbilities =
+                final Map<Integer, Ability> classAbilities = new HashMap<>();
+                final List<Integer> resourceAbilities =
                         characterClassResource.getMapping(MappingIndices.ABILITIES_MAPPING);
                 for (Integer abilityId : resourceAbilities) {
-                    Ability ability = abilities.getOrDefault(abilityId, null);
+                    final Ability ability = abilities.getOrDefault(abilityId, null);
                     if (ability != null) {
                         classAbilities.put(ability.getID(), ability);
                     }
                 }
 
-                Map<Integer, PerkBranch> classBranches = new HashMap<>();
-                List<Integer> resourceBranches =
+                final Map<Integer, PerkBranch> classBranches = new HashMap<>();
+                final List<Integer> resourceBranches =
                         characterClassResource.getMapping(MappingIndices.PERK_BRANCHES_MAPPING);
                 for (Integer branchId : resourceBranches) {
-                    PerkBranch branch = perkBranches.getOrDefault(branchId, null);
+                    final PerkBranch branch = perkBranches.getOrDefault(branchId, null);
                     if (branch != null) {
                         classBranches.put(branch.getID(), branch);
                     }
                 }
 
-                CharacterClass.CharacterClassModel model =
+                final CharacterClass.CharacterClassModel model =
                         new CharacterClass.CharacterClassModel(characterClassResource.getID(),
                                 characterClassResource.getName(), characterClassResource.getDescription(),
                                 classAbilities, classBranches);
                 assets.put(model.id, new CharacterClass(model));
             }
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

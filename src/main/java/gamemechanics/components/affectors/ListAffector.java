@@ -42,6 +42,7 @@ public class ListAffector implements Affector {
         return affections;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affections")
     public Boolean setAffectionsList(@NotNull List<Integer> affections) {
@@ -60,6 +61,7 @@ public class ListAffector implements Affector {
         return null;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
     public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
@@ -67,13 +69,12 @@ public class ListAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Float percentage) {
+    public void modifyByPercentage(@NotNull Float percentage) {
         for (Integer affectionIndex = 0; affectionIndex < affections.size(); ++affectionIndex) {
-            Integer oldValue = affections.get(affectionIndex);
-            Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
+            final Integer oldValue = affections.get(affectionIndex);
+            final Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
             affections.set(affectionIndex, Math.round(oldValue * resultPercentage));
         }
-        return true;
     }
 
     @Override

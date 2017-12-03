@@ -19,10 +19,10 @@ import java.util.*;
  * (note: it's in WIP state at this moment,
  * and requires some refactoring)<br/><br/>
  * --<br/><br/>
- * goal is to make behaviors JSON-serializable and human-readable to allow in-situ editing.
+ * goal is to make BEHAVIORS JSON-serializable and human-readable to allow in-situ editing.
  */
 public final class AIBehaviors {
-    private static final Map<Integer, AI.BehaviorFunction> behaviors = initializeBehaviorFunctions();
+    private static final Map<Integer, AI.BehaviorFunction> BEHAVIORS = initializeBehaviorFunctions();
 
     private static final int ONE_ACTION_STEP_BONUS = 10;
     private static final int STANDS_ON_ADJACENT_TILE = 17;
@@ -39,28 +39,28 @@ public final class AIBehaviors {
      * under given ID otherwise
      */
     public static AI.BehaviorFunction getBehavior(Integer behaviorID) {
-        return behaviors.getOrDefault(behaviorID, null);
+        return BEHAVIORS.getOrDefault(behaviorID, null);
     }
 
-    /* TODO: find a better way to write and put behaviors in the map that that */
+    /* TODO: find a better way to write and put BEHAVIORS in the map that that */
+    @SuppressWarnings("OverlyComplexMethod")
     private static Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
-        Map<Integer, AI.BehaviorFunction> behaviorFunctionMap = new HashMap<>();
+        final Map<Integer, AI.BehaviorFunction> behaviorFunctionMap = new HashMap<>();
 
         behaviorFunctionMap.put(BehaviorCategories.BC_COMMON_MONSTER_AI, aggregatedBattleState -> {
-            Set<Ability> attacks = getDamagingAbilities(aggregatedBattleState
+            final Set<Ability> attacks = getDamagingAbilities(aggregatedBattleState
                     .self.getCharacterRole().getAllAbilities());
             if (!attacks.isEmpty()) {
-                Action choice = null;
                 Integer maximalScore = Integer.MIN_VALUE;
                 Integer enemyIdWithMaximalScore = Constants.WRONG_INDEX;
 
                 for (Integer enemyID = 0; enemyID < aggregatedBattleState.enemies.getSquadSize(); ++enemyID) {
-                    AliveEntity enemy = aggregatedBattleState.enemies.getMember(enemyID);
+                    final AliveEntity enemy = aggregatedBattleState.enemies.getMember(enemyID);
                     if (enemy != null) {
                         if (enemy.isAlive()) {
-                            Integer enemyDistanceScore = getDistanceScore(enemy, aggregatedBattleState.self);
-                            Integer enemyHealthScore = getHitpointsScore(enemy, aggregatedBattleState.self);
-                            Integer enemyAggroScore = getAggroScore(enemy, aggregatedBattleState.self,
+                            final Integer enemyDistanceScore = getDistanceScore(enemy, aggregatedBattleState.self);
+                            final Integer enemyHealthScore = getHitpointsScore(enemy, aggregatedBattleState.self);
+                            final Integer enemyAggroScore = getAggroScore(enemy, aggregatedBattleState.self,
                                     aggregatedBattleState.aggroMap);
                             if (enemyDistanceScore + enemyHealthScore + enemyAggroScore > maximalScore) {
                                 maximalScore = enemyDistanceScore + enemyHealthScore + enemyAggroScore;
@@ -84,11 +84,11 @@ public final class AIBehaviors {
                     }
                 }
 
-                AliveEntity targetEnemy = aggregatedBattleState.enemies.getMember(enemyIdWithMaximalScore);
+                final AliveEntity targetEnemy = aggregatedBattleState.enemies.getMember(enemyIdWithMaximalScore);
 
                 Integer maxAttackDamage = Integer.MIN_VALUE;
                 Ability bestAttack = null;
-                Integer distanceToTarget = aggregatedBattleState.map
+                final Integer distanceToTarget = aggregatedBattleState.map
                         .getTile(aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                                 DigitsPairIndices.ROW_COORD_INDEX), aggregatedBattleState.self
                                 .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX))
@@ -119,6 +119,7 @@ public final class AIBehaviors {
                     }
                 }
 
+                Action choice = null;
                 if (bestAttack == null) {
                     choice = new MovementAction(aggregatedBattleState.map.getTile(
                             aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
@@ -169,13 +170,15 @@ public final class AIBehaviors {
     }
 
     private static Integer evaluateAlly(@NotNull AliveEntity ally, @NotNull AliveEntity evaluator) {
-        Integer score = 0;
+        //noinspection UnnecessaryLocalVariable
+        final Integer score = 0;
         /* TODO: for future use in more complicated AIs */
         return score;
     }
 
     private static Integer evaluateEnemy(@NotNull AliveEntity enemy, @NotNull AliveEntity npc) {
-        Integer score = 0;
+        //noinspection UnnecessaryLocalVariable
+        final Integer score = 0;
         /* TODO: for future use in more complicated AIs */
         return score;
     }
@@ -221,10 +224,10 @@ public final class AIBehaviors {
     }
 
     private static Set<Ability> getHealingAbilities(Map<Integer, Ability> abilities) {
-        Set<Ability> healingAbilities = new HashSet<>();
+        final Set<Ability> healingAbilities = new HashSet<>();
 
         for (Integer abilityID : abilities.keySet()) {
-            Ability ability = abilities.get(abilityID);
+            final Ability ability = abilities.get(abilityID);
             if (ability.hasAffector(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR)) {
                 if (ability.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
                         DigitsPairIndices.MIN_VALUE_INDEX) > 0) {
@@ -237,10 +240,10 @@ public final class AIBehaviors {
     }
 
     private static Set<Ability> getDamagingAbilities(Map<Integer, Ability> abilities) {
-        Set<Ability> damagingAbilities = new HashSet<>();
+        final Set<Ability> damagingAbilities = new HashSet<>();
 
         for (Integer abilityID : abilities.keySet()) {
-            Ability ability = abilities.get(abilityID);
+            final Ability ability = abilities.get(abilityID);
             if (ability.hasAffector(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR)) {
                 if (ability.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
                         DigitsPairIndices.MIN_VALUE_INDEX) < 0) {

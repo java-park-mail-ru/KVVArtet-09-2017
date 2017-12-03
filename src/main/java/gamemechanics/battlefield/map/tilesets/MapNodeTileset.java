@@ -55,13 +55,16 @@ public abstract class MapNodeTileset implements Tileset {
                 break;
             case TilesetShapes.TS_POINT:
                 makePointTileset(center);
+                break;
+            default:
+                break;
         }
     }
 
     private void makeSquareTileset(@NotNull MapNode center, Integer size) {
-        Integer halfSide = (size - 1) / 2;
+        final Integer halfSide = (size - 1) / 2;
         // grabbing row centers, first upper rows, then lower ones
-        List<MapNode> rowCenters = new ArrayList<>();
+        final List<MapNode> rowCenters = new ArrayList<>();
         MapNode rowCenter = center.getAdjacent(Directions.UP);
         while (rowCenter != null) {
             if (center.getH(rowCenter) > halfSide) {
@@ -86,7 +89,7 @@ public abstract class MapNodeTileset implements Tileset {
     }
 
     private void makeConeTileset(@NotNull MapNode center, Integer direction, Integer size, Boolean isReverse) {
-        List<MapNode> centralCol = getTilesetLine(center, direction, size);
+        final List<MapNode> centralCol = getTilesetLine(center, direction, size);
         if (centralCol == null) {
             return;
         }
@@ -94,10 +97,10 @@ public abstract class MapNodeTileset implements Tileset {
         if (isReverse) {
             for (MapNode colCenter : centralCol) {
                 if (center != colCenter) {
-                    Boolean isHorizontal = direction == Directions.LEFT || direction == Directions.RIGHT;
-                    MapNode colHeadLeft = getReverseConeColumnHead(colCenter,
+                    final Boolean isHorizontal = direction == Directions.LEFT || direction == Directions.RIGHT;
+                    final MapNode colHeadLeft = getReverseConeColumnHead(colCenter,
                             isHorizontal ? Directions.UP : Directions.LEFT);
-                    MapNode colHeadRight = getReverseConeColumnHead(colCenter,
+                    final MapNode colHeadRight = getReverseConeColumnHead(colCenter,
                             isHorizontal ? Directions.DOWN : Directions.RIGHT);
                     getReverseConeColumn(colHeadLeft, direction, size - colCenter.getH(colHeadLeft));
                     getReverseConeColumn(colHeadRight, direction, size - colCenter.getH(colHeadRight));
@@ -145,7 +148,7 @@ public abstract class MapNodeTileset implements Tileset {
         if (direction >= Directions.DIRECTIONS_COUNT || direction < 0) {
             return null;
         }
-        List<MapNode> line = new ArrayList<>();
+        final List<MapNode> line = new ArrayList<>();
         if (startPoint.getIsPassable()) {
             line.add(startPoint);
         } else {
@@ -189,7 +192,7 @@ public abstract class MapNodeTileset implements Tileset {
                 }
                 return;
             }
-            List<MapNode> column = getTilesetLine(colHead, direction,
+            final List<MapNode> column = getTilesetLine(colHead, direction,
                     size);
             if (column != null) {
                 for (MapNode node : column) {
@@ -202,7 +205,7 @@ public abstract class MapNodeTileset implements Tileset {
     }
 
     private void getTileRowFromRowCenter(@NotNull MapNode rowCenter, Integer size, Boolean isHorizontal) {
-        Integer halfSize = (size - 1) / 2;
+        final Integer halfSize = (size - 1) / 2;
         if (halfSize <= 0) {
             return;
         }
@@ -235,11 +238,11 @@ public abstract class MapNodeTileset implements Tileset {
         if (sender.equals(target)) {
             return Directions.DIRECTIONS_COUNT;
         }
-        List<Integer> coordinatesDiff = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        final List<Integer> coordinatesDiff = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         for (Integer i = DigitsPairIndices.ROW_COORD_INDEX; i < DigitsPairIndices.PAIR_SIZE; ++i) {
             coordinatesDiff.set(i, target.getCoordinate(i) - sender.getCoordinate(i));
         }
-        Integer majorDiffIndex = coordinatesDiff.get(DigitsPairIndices.ROW_COORD_INDEX)
+        final Integer majorDiffIndex = coordinatesDiff.get(DigitsPairIndices.ROW_COORD_INDEX)
                 >= coordinatesDiff.get(DigitsPairIndices.COL_COORD_INDEX) ? DigitsPairIndices.ROW_COORD_INDEX
                 : DigitsPairIndices.COL_COORD_INDEX;
         if (majorDiffIndex == DigitsPairIndices.ROW_COORD_INDEX) {

@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public final class ExperienceCalculator {
 
+    @SuppressWarnings("FieldNamingConvention")
     private static final int LEVEL_UP_CAP_CALCULATION_CONSTANT = 8;
     private static final int BASE_XP_REWARD = 45;
     private static final int XP_CALCULATION_CONSTANT = 5;
@@ -27,7 +28,7 @@ public final class ExperienceCalculator {
 
     public static Integer getXPReward(Integer killerLevel, Integer killedLevel) {
         if (!Objects.equals(killerLevel, killedLevel)) {
-            Integer levelDifference = killedLevel - killerLevel;
+            final Integer levelDifference = killedLevel - killerLevel;
             if (Math.abs(levelDifference) > NO_XP_LEVEL_DIFFERENCE_CAP) {
                 return 0;
             }
@@ -51,7 +52,7 @@ public final class ExperienceCalculator {
     }
 
     private static Float zeroDifferenceValue(Integer level) {
-        Float calculatedZeroDifference = Integer.valueOf(Math.floorDiv(level, ZERO_DIFFERENCE_LEVEL_STEP)).floatValue();
+        final Float calculatedZeroDifference = Integer.valueOf(Math.floorDiv(level, ZERO_DIFFERENCE_LEVEL_STEP)).floatValue();
         if (calculatedZeroDifference > ZERO_DIFFERENCE_MAX_VALUE) {
             return ZERO_DIFFERENCE_MAX_VALUE;
         }

@@ -92,8 +92,8 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     /**
      * gets entity's cash amount
      *
-     * @return cash in character's purse for {@link gamemechanics.aliveentities.UserCharacter}
-     * or cash reward for defeating the NPC for {@link gamemechanics.aliveentities.npcs.NonPlayerCharacter}
+     * @return cash in character's purse for {@link UserCharacter}
+     * or cash reward for defeating the NPC for {@link NonPlayerCharacter}
      */
     Integer getCash();
 
@@ -136,7 +136,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @see Ability
      */
     default Ability useAbility(@NotNull Integer abilityID) {
-        Ability ability = getAbility(abilityID);
+        final Ability ability = getAbility(abilityID);
         if (ability != null) {
             setProperty(PropertyCategories.PC_ABILITIES_COOLDOWN, abilityID,
                     ability.getProperty(PropertyCategories.PC_COOLDOWN));
@@ -148,10 +148,9 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * add an {@link Effect} to the entity
      *
      * @param effect {@link Effect} to add
-     * @return true if adding was successful or false otherwise
      * @see Effect
      */
-    Boolean addEffect(@NotNull Effect effect);
+    void addEffect(@NotNull Effect effect);
 
     /**
      * remove an effect from entity's active effects list by index

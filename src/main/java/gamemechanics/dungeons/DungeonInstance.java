@@ -28,21 +28,21 @@ public class DungeonInstance extends AbstractInstance {
     }
 
     private Battlefield generateNewRoom() {
-        List<Squad> squadList = new ArrayList<>();
+        final List<Squad> squadList = new ArrayList<>();
         squadList.add(getParty(Squad.PLAYERS_SQUAD_ID).toSquad());
-        Integer packsCount = generatePacksCount();
+        final Integer packsCount = generatePacksCount();
         for (Integer i = 0; i < packsCount; ++i) {
-            Squad monstersSquad = generateMonsterSquad(getParty(Squad.PLAYERS_SQUAD_ID).getAverageLevel());
+            final Squad monstersSquad = generateMonsterSquad(getParty(Squad.PLAYERS_SQUAD_ID).getAverageLevel());
             squadList.add(monstersSquad);
         }
 
-        BattleMap newMap = new BattleMap(BattleMapGenerator.generateBattleMap(Constants.DEFAULT_COLS_COUNT,
+        final BattleMap newMap = new BattleMap(BattleMapGenerator.generateBattleMap(Constants.DEFAULT_COLS_COUNT,
                 Constants.DEFAULT_ROWS_COUNT, Constants.DEFAULT_ROWS_COUNT
                         * Constants.DEFAULT_COLS_COUNT - Constants.DEFAULT_WALLS_COUNT));
 
-        List<SpawnPoint> spawnPoints = initializeSpawnPoints(squadList, newMap);
+        final List<SpawnPoint> spawnPoints = initializeSpawnPoints(squadList, newMap);
 
-        Battlefield.BattlefieldModel newRoomModel = new Battlefield.BattlefieldModel(behaviors, newMap,
+        final Battlefield.BattlefieldModel newRoomModel = new Battlefield.BattlefieldModel(behaviors, newMap,
                 spawnPoints, getGameMode());
         return new Battlefield(newRoomModel);
     }
@@ -54,9 +54,9 @@ public class DungeonInstance extends AbstractInstance {
 
     private Squad generateMonsterSquad(@NotNull Integer level) {
         Integer chanceToContinue = Constants.PERCENTAGE_CAP_INT;
-        Random random = new Random(System.currentTimeMillis());
+        final Random random = new Random(System.currentTimeMillis());
 
-        List<AliveEntity> monsters = new ArrayList<>();
+        final List<AliveEntity> monsters = new ArrayList<>();
         while (true) {
             if (random.nextInt(Constants.PERCENTAGE_CAP_INT) > chanceToContinue) {
                 break;
@@ -68,15 +68,16 @@ public class DungeonInstance extends AbstractInstance {
         return new Squad(monsters, Squad.MONSTER_SQUAD_ID);
     }
 
+    @SuppressWarnings("SameReturnValue")
     private AliveEntity generateMonster(@NotNull Integer level) {
         return null;
     }
 
     private List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
-        List<SpawnPoint> spawnPoints = new ArrayList<>();
-        Set<MapNode> reservedNodes = new HashSet<>();
+        final List<SpawnPoint> spawnPoints = new ArrayList<>();
+        final Set<MapNode> reservedNodes = new HashSet<>();
         for (Squad squad : squadList) {
-            SpawnPoint spawnPoint = new SpawnPoint(emplaceSpawnPoint(squad, Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE,
+            final SpawnPoint spawnPoint = new SpawnPoint(emplaceSpawnPoint(squad, Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE,
                     map, reservedNodes), Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
             spawnPoints.add(spawnPoint);
         }

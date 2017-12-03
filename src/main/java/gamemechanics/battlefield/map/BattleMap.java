@@ -22,7 +22,7 @@ public class BattleMap {
     }
 
     public MapNode getTile(Integer rowIndex, Integer tileIndex) {
-        List<MapNode> row = getRow(rowIndex);
+        final List<MapNode> row = getRow(rowIndex);
         if (row == null || tileIndex < 0) {
             return null;
         }
@@ -33,7 +33,7 @@ public class BattleMap {
     }
 
     public AliveEntity getInhabitant(Integer rowIndex, Integer tileIndex) {
-        MapNode tile = getTile(rowIndex, tileIndex);
+        final MapNode tile = getTile(rowIndex, tileIndex);
         if (tile == null) {
             return null;
         }
@@ -41,7 +41,7 @@ public class BattleMap {
     }
 
     public List<Integer> getSize() {
-        List<Integer> size = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        final List<Integer> size = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         size.set(DigitsPairIndices.ROW_COORD_INDEX, rows.size());
         size.set(DigitsPairIndices.COL_COORD_INDEX, rows.get(0).size()); // we're assuming that all rows in the list have the same length
         return size;

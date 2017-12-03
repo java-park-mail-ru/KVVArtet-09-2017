@@ -17,19 +17,19 @@ import java.util.List;
 import java.util.Map;
 
 public final class AbilityBehaviors {
-    private static final Map<Integer, IngameAbility.AbilityBehavior> behaviors = initializeBehaviors();
+    private static final Map<Integer, IngameAbility.AbilityBehavior> BEHAVIORS = initializeBehaviors();
 
     public static final int BASIC_ABILITY_BEHAVIOR = 0;
 
     public static IngameAbility.AbilityBehavior getBehavior(Integer behaviorIndex) {
-        return behaviors.getOrDefault(behaviorIndex, null);
+        return BEHAVIORS.getOrDefault(behaviorIndex, null);
     }
 
     private static Map<Integer, IngameAbility.AbilityBehavior> initializeBehaviors() {
-        Map<Integer, IngameAbility.AbilityBehavior> behaviorMap = new HashMap<>();
+        final Map<Integer, IngameAbility.AbilityBehavior> behaviorMap = new HashMap<>();
 
         behaviorMap.put(BASIC_ABILITY_BEHAVIOR, aggregatedAbilityAction -> {
-            List<TurnEvent> causedEvents = new ArrayList<>();
+            final List<TurnEvent> causedEvents = new ArrayList<>();
 
             if (aggregatedAbilityAction.sender.isOccupied()) {
                 if (!aggregatedAbilityAction.target.isOccupied() && !aggregatedAbilityAction.abilityProperties
@@ -38,7 +38,7 @@ public final class AbilityBehaviors {
                     causedEvents.add(EventsFactory.makeRollbackEvent());
                     return causedEvents;
                 }
-                Tileset affectedArea = new AreaEffectTileset(aggregatedAbilityAction.abilityID,
+                final Tileset affectedArea = new AreaEffectTileset(aggregatedAbilityAction.abilityID,
                         aggregatedAbilityAction.sender,
                         aggregatedAbilityAction.target,
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_AREA_SHAPE).getProperty(),
@@ -60,7 +60,7 @@ public final class AbilityBehaviors {
     }
 
     private static List<Effect> makeEffects(@NotNull List<IngameEffect.EffectModel> effectModels) {
-        List<Effect> effects = new ArrayList<>(effectModels.size());
+        final List<Effect> effects = new ArrayList<>(effectModels.size());
         for (Integer i = 0; i < effectModels.size(); ++i) {
             effects.set(i, new IngameEffect(effectModels.get(i)));
         }

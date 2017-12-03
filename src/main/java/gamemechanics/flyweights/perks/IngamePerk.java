@@ -19,10 +19,10 @@ public class IngamePerk implements Perk {
     private final Map<Integer, Affector> affectors;
 
     public static class PerkModel {
-        public Integer id;
-        public String name;
-        public String description;
-        Map<Integer, Affector> affectors;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        final Map<Integer, Affector> affectors;
 
         public PerkModel(@NotNull Integer id,
                          @NotNull String name, @NotNull String description,
@@ -77,7 +77,7 @@ public class IngamePerk implements Perk {
             return Integer.MIN_VALUE;
         }
         if ((affectorKind & AffectorCategories.AC_REDUCABLE_AFFECTORS) != 0) {
-            Random random = new Random(System.currentTimeMillis());
+            final Random random = new Random(System.currentTimeMillis());
             return affectors.get(affectorKind).getAffection(DigitsPairIndices.MIN_VALUE_INDEX)
                     + random.nextInt(affectors.get(affectorKind).getAffection(DigitsPairIndices.MAX_VALUE_INDEX)
                     - affectors.get(affectorKind).getAffection(DigitsPairIndices.MIN_VALUE_INDEX));

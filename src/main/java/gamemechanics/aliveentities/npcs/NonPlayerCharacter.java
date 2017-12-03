@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NonPlayerCharacter extends AbstractAliveEntity {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer npcID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer npcID = INSTANCE_COUNTER.getAndIncrement();
 
-    private DecisionMaker behavior;
+    private final DecisionMaker behavior;
 
     public NonPlayerCharacter(@NotNull NPCModel model) {
         super(model);
@@ -21,7 +21,7 @@ public class NonPlayerCharacter extends AbstractAliveEntity {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override

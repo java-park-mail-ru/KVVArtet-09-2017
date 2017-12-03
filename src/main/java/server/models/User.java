@@ -57,6 +57,7 @@ public class User {
         this.password = password;
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -66,8 +67,9 @@ public class User {
             return false;
         }
 
-        User user = (User) obj;
+        final User user = (User) obj;
 
+        //noinspection OverlyComplexBooleanExpression
         return (username != null ? username.equals(user.username) : user.username == null)
                 && (email != null ? email.equals(user.email) : user.email == null)
                 && (password != null ? password.equals(user.password) : user.password == null)

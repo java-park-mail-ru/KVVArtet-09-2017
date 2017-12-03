@@ -41,7 +41,7 @@ public class BattleAction extends AbstractAction {
 
     @Override
     public ActionResult execute() {
-        ActionResult result;
+        final ActionResult result;
         if (isSenderValid()) {
             result = new BattleActionResult(getID(), sender, target, ability,
                     ability.execute(aggregateActionData()));
