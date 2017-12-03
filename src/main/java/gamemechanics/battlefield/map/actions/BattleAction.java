@@ -57,7 +57,7 @@ public class BattleAction extends AbstractAction {
     }
 
     private AggregatedAbilityAction aggregateActionData() {
-        return new AggregatedAbilityAction(sender, target,
-                ability.getAffectorsMap(), ability.getPropertiesMap(), pathfinder);
+        return new AggregatedAbilityAction(sender, target, ability.getID(),
+                ability.getAffectorsMap(), ability.getPropertiesMap(), ability.getAppliedEffects(), pathfinder);
     }
 }

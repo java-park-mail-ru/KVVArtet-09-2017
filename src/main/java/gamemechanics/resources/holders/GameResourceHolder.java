@@ -1,5 +1,7 @@
 package gamemechanics.resources.holders;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
@@ -12,12 +14,17 @@ public class GameResourceHolder implements ResourceHolder {
 
     public GameResourceHolder() {}
 
+    public GameResourceHolder(@JsonProperty("resources") @NotNull Map<Integer, GameResource> resources) {
+        this.resources.putAll(resources);
+    }
+
     @Override
     public Boolean hasResource(@NotNull Integer resourceIndex) {
         return resources.containsKey(resourceIndex);
     }
 
     @Override
+    @JsonIgnore
     public Set<Integer> getAvailableResources() {
         return resources.keySet();
     }
@@ -28,6 +35,7 @@ public class GameResourceHolder implements ResourceHolder {
     }
 
     @Override
+    @JsonProperty("resources")
     public Map<Integer, GameResource> getAllResources() {
         return resources;
     }

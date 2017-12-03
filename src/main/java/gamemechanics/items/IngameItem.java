@@ -1,13 +1,17 @@
 package gamemechanics.items;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.components.affectors.Affector;
 import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.EquipmentKind;
 import gamemechanics.interfaces.EquipableItem;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -15,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class IngameItem implements EquipableItem {
     private final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer itemID = instanceCounter.getAndIncrement();
+    private final Integer itemID;
 
     private final String name;
     private final String description;
@@ -25,21 +29,32 @@ public class IngameItem implements EquipableItem {
     private final Map<Integer, Affector> affectors;
 
     public static class ItemModel {
+        public Integer id;
         public String name;
         public String description;
         public Map<Integer, Property> properties;
         public Map<Integer, Affector> affectors;
 
-        public ItemModel(String name, String description,
-                         Map<Integer, Property> properties, Map<Integer, Affector> affectors) {
+        public ItemModel(@NotNull Integer id,
+                         @NotNull String name, @NotNull String description,
+                         @NotNull Map<Integer, Property> properties,
+                         @NotNull Map<Integer, Affector> affectors) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.properties = properties;
             this.affectors = affectors;
         }
+
+        public ItemModel(@NotNull String name, @NotNull String description,
+                         @NotNull Map<Integer, Property> properties,
+                         @NotNull Map<Integer, Affector> affectors) {
+            this(Constants.UNDEFINED_ID, name, description, properties, affectors);
+        }
     }
 
-    public IngameItem(ItemModel model) {
+    public IngameItem(@NotNull ItemModel model) {
+        itemID = model.id == Constants.UNDEFINED_ID ? instanceCounter.getAndIncrement() : model.id;
         name = model.name;
         description = model.description;
         properties = model.properties;
@@ -47,11 +62,13 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
+    @JsonIgnore
     public Integer getInstancesCount() {
         return instanceCounter.get();
     }
 
     @Override
+    @JsonProperty("id")
     public Integer getID() {
         return itemID;
     }
@@ -67,22 +84,24 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
+    @JsonIgnore
     public Integer getLevel() {
         return getProperty(PropertyCategories.PC_LEVEL);
     }
 
     @Override
-    public Boolean hasProperty(Integer propertyKind) {
+    public Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
+    @JsonIgnore
     public Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         if (!hasAffector(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -90,7 +109,7 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind) {
+    public Integer getProperty(@NotNull Integer propertyKind) {
         if (!hasAffector(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -98,17 +117,18 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Boolean hasAffector(Integer affectorKind) {
+    public Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
+    @JsonIgnore
     public Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind) {
+    public Integer getAffection(@NotNull Integer affectorKind) {
         if (!hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -125,7 +145,7 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    public Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if ((affectorKind & AffectorCategories.AC_MULTI_VALUE_AFFECTORS) == 0 || !hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -147,6 +167,6 @@ public class IngameItem implements EquipableItem {
     @Override
     public Boolean isTrinket() {
         Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
-        return kind == EquipmentKind.EK_TRINKET.asInt();
+        return kind.equals(EquipmentKind.EK_TRINKET.asInt());
     }
 }

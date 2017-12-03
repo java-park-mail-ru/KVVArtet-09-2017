@@ -1,5 +1,6 @@
 package gamemechanics.items.loot;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ public class IngameLootContainer implements LootContainer {
     }
 
     @Override
+    @JsonProperty("items")
     public List<EquipableItem> getItemsList() {
         return lootList;
     }
@@ -47,6 +49,7 @@ public class IngameLootContainer implements LootContainer {
     }
 
     @Override
+    @JsonProperty("cash")
     public Integer getCashReward() {
         return goldReward;
     }
@@ -57,6 +60,7 @@ public class IngameLootContainer implements LootContainer {
     }
 
     @Override
+    @JsonProperty("experience")
     public Integer getExpReward() {
         return expReward;
     }

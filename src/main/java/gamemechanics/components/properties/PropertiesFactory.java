@@ -86,6 +86,8 @@ public final class PropertiesFactory {
             case PropertyCategories.PC_AREA_SHAPE:
                 property = makeAreaShapeProperty();
                 break;
+            case PropertyCategories.PC_ITEM_BLUEPRINT_ID:
+                property = makeItemBlueprintIdProperty();
             default:
                 break;
         }
@@ -186,5 +188,9 @@ public final class PropertiesFactory {
 
     private static Property makeInflictedCategoriesProperty() {
         return new SetProperty(new HashSet<>());
+    }
+
+    private static Property makeItemBlueprintIdProperty() {
+        return new SingleValueProperty(0);
     }
 }

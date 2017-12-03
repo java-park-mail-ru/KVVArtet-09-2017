@@ -1,5 +1,10 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gamemechanics.aliveentities.UserCharacter;
+import gamemechanics.aliveentities.npcs.NonPlayerCharacter;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.Constants;
@@ -13,6 +18,11 @@ import javax.validation.constraints.NotNull;
  * @see ModifiablePropertyProvider
  * @see Updateable
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(UserCharacter.class),
+        @JsonSubTypes.Type(NonPlayerCharacter.class),
+})
 public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Updateable {
     /**
      * check if entity is alive or not
@@ -28,7 +38,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @param amount amount of heal or damage dealt to the entity
      *               (note: values below 0 mean damage, values above 0 mean healing)
      */
-    void affectHitpoints(Integer amount);
+    void affectHitpoints(@NotNull Integer amount);
 
     /**
      * get entity's owner ID (used to define to whom the entity belongs to)
@@ -110,7 +120,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @return null if entity's {@link CharacterRole} doesn't have an {@link Ability} with such ID or
      * requested {@link Ability} otherwise
      */
-    default Ability getAbility(Integer abilityID) {
+    default Ability getAbility(@NotNull Integer abilityID) {
         if (!getCharacterRole().getAllAbilities().containsKey(abilityID)) {
             return null;
         }
@@ -125,7 +135,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @return null if ID was invalid or {@link Ability} otherwise
      * @see Ability
      */
-    default Ability useAbility(Integer abilityID) {
+    default Ability useAbility(@NotNull Integer abilityID) {
         Ability ability = getAbility(abilityID);
         if (ability != null) {
             setProperty(PropertyCategories.PC_ABILITIES_COOLDOWN, abilityID,
@@ -141,7 +151,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @return true if adding was successful or false otherwise
      * @see Effect
      */
-    Boolean addEffect(Effect effect);
+    Boolean addEffect(@NotNull Effect effect);
 
     /**
      * remove an effect from entity's active effects list by index
@@ -149,7 +159,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @param effectIndex index of the {@link Effect} to remove
      * @return true if the removal was successful or false otherwise
      */
-    Boolean removeEffect(Integer effectIndex);
+    Boolean removeEffect(@NotNull Integer effectIndex);
 
     /**
      * clear the entity's active effects list
@@ -164,7 +174,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @param bagIndex index of the bag to get
      * @return null if index is invalid of entity's {@link Bag} otherwise
      */
-    Bag getBag(Integer bagIndex);
+    Bag getBag(@NotNull Integer bagIndex);
 
     /**
      * get user character class, NPC monster's role or NPC hero's class
@@ -179,6 +189,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      *
      * @param behavior AI to drive unit's behavior
      */
+    @JsonIgnore
     default void setBehavior(@NotNull DecisionMaker behavior) {
     }
 }

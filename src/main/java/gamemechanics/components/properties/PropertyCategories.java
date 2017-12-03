@@ -20,6 +20,8 @@ public class PropertyCategories {
     public static final int PC_ITEM_PRICE = 14;
     public static final int PC_ITEM_RARITY = 15;
 
+    public static final int PC_ITEM_BLUEPRINT_ID = 26;
+
     // battle participants-specific properties
     public static final int PC_COORDINATES = 16;
     public static final int PC_SQUAD_ID = 17;

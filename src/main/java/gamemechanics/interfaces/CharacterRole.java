@@ -1,7 +1,13 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
+import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.PerkBranch;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +17,11 @@ import java.util.Set;
  * user characters' and friendly NPCs' classes, NPC monsters' roles etc.
  * Implementations shall always provide access to the {@link Ability} list of that role.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(CharacterClass.class),
+        @JsonSubTypes.Type(NonPlayerCharacterRole.class),
+})
 public interface CharacterRole extends GameEntity, AffectorProvider {
     /**
      * get an ability from available abilities list
@@ -18,7 +29,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @param abilityID ID of ability to get
      * @return null if there's no {@link Ability} with such ID or {@link Ability} otherwise
      */
-    Ability getAbility(Integer abilityID);
+    Ability getAbility(@NotNull Integer abilityID);
 
     /**
      * get all abilities available for that role
@@ -36,7 +47,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * or {@link PerkBranch} otherwise
      * @see PerkBranch
      */
-    default PerkBranch getBranch(Integer branchID) {
+    default PerkBranch getBranch(@NotNull Integer branchID) {
         return null;
     }
 
@@ -51,7 +62,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @see PerkBranch
      * @see Perk
      */
-    default Perk getPerk(Integer branchID, Integer perkID) {
+    default Perk getPerk(@NotNull Integer branchID, @NotNull Integer perkID) {
         return null;
     }
 
@@ -66,7 +77,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @see gamemechanics.components.affectors.Affector
      */
     @Override
-    default Boolean hasAffector(Integer affectorKind) {
+    default Boolean hasAffector(@NotNull Integer affectorKind) {
         return false;
     }
 
@@ -78,6 +89,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @see AffectorProvider
      */
     @Override
+    @JsonIgnore
     default Set<Integer> getAvailableAffectors() {
         return null;
     }
@@ -92,7 +104,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @see AffectorProvider
      */
     @Override
-    default Integer getAffection(Integer affectorKind) {
+    default Integer getAffection(@NotNull Integer affectorKind) {
         return 0;
     }
 
@@ -108,10 +120,11 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @see AffectorProvider
      */
     @Override
-    default Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    default Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         return 0;
     }
 
+    @JsonIgnore
     default List<Integer> getBehaviorIds() {
         return null;
     }

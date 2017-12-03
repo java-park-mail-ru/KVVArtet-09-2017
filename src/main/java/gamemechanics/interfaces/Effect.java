@@ -1,5 +1,9 @@
 package gamemechanics.interfaces;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import gamemechanics.effects.IngameEffect;
+
 /**
  * interface for various effects (DoTs/HoTs, buffs/debuffs, etc.)
  * that may be applied on {@link AliveEntity} during the battle.
@@ -8,6 +12,10 @@ package gamemechanics.interfaces;
  * @see AffectorProvider
  * @see AliveEntity
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(IngameEffect.class),
+})
 public interface Effect extends GameEntity, AffectorProvider {
     /**
      * get effect's duration

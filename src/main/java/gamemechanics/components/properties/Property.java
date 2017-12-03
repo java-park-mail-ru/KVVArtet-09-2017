@@ -1,63 +1,40 @@
 package gamemechanics.components.properties;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(SingleValueProperty.class),
+        @JsonSubTypes.Type(ListProperty.class),
+        @JsonSubTypes.Type(MapProperty.class),
+        @JsonSubTypes.Type(SetProperty.class),
+})
 public interface Property {
-    default Integer getProperty() {
-        return 0;
-    }
+    Integer getProperty();
+    Boolean setSingleProperty(@NotNull Integer property);
 
-    default Integer getProperty(Integer propertyIndex) {
-        return 0;
-    }
+    Integer getProperty(@NotNull Integer propertyIndex);
 
-    default Boolean setSingleProperty(Integer property) {
-        return false;
-    }
+    List<Integer> getPropertyList();
+    Boolean setPropertyList(@NotNull List<Integer> properties);
+    Boolean setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property);
 
-    default List<Integer> getPropertyList() {
-        return null;
-    }
+    Map<Integer, Integer> getPropertyMap();
+    Boolean setPropertyMap(@NotNull Map<Integer, Integer> property);
 
-    default Boolean setPropertyList(List<Integer> properties) {
-        return false;
-    }
+    Set<Integer> getPropertySet();
+    Boolean setPropertySet(@NotNull Set<Integer> property);
 
-    default Boolean setSingleProperty(Integer propertyIndex, Integer property) {
-        return false;
-    }
+    Boolean modifyByPercentage(@NotNull Float percentage);
+    Boolean modifyByPercentage(@NotNull Integer itemIndex, @NotNull Float percentage);
 
-    default Map<Integer, Integer> getPropertyMap() {
-        return null;
-    }
-
-    default Boolean setPropertyMap(Map<Integer, Integer> property) {
-        return false;
-    }
-
-    default Set<Integer> getPropertySet() {
-        return null;
-    }
-
-    default Boolean setPropertySet(Set<Integer> property) {
-        return false;
-    }
-
-    default Boolean modifyByPercentage(Float percentage) {
-        return false;
-    }
-
-    default Boolean modifyByPercentage(Integer itemIndex, Float percentage) {
-        return false;
-    }
-
-    default Boolean modifyByAddition(Integer toAdd) {
-        return false;
-    }
-
-    default Boolean modifyByAddition(Integer propertyIndex, Integer toAdd) {
-        return false;
-    }
+    Boolean modifyByAddition(@NotNull Integer toAdd);
+    Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd);
 }
+

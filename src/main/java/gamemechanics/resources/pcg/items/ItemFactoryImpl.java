@@ -1,0 +1,338 @@
+package gamemechanics.resources.pcg.items;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gamemechanics.components.affectors.*;
+import gamemechanics.components.properties.*;
+import gamemechanics.globals.Constants;
+import gamemechanics.globals.EquipmentKind;
+import gamemechanics.globals.ItemRarity;
+import gamemechanics.interfaces.EquipableItem;
+import gamemechanics.items.IngameItem;
+
+import javax.validation.constraints.NotNull;
+import java.util.*;
+
+public class ItemFactoryImpl implements ItemsFactory {
+    private final Map<Integer, Map<Integer, ItemPart>> itemParts;
+
+    public ItemFactoryImpl(@JsonProperty("itemParts") @NotNull Map<Integer, Map<Integer, ItemPart>> itemParts) {
+        this.itemParts = itemParts;
+    }
+
+    @Override
+    public EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
+        Random random = new Random(System.currentTimeMillis());
+        Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL) ?
+                blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty() :
+                random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
+
+        Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY) ?
+                blueprint.getProperties().get(PropertyCategories.PC_ITEM_RARITY).getProperty() :
+                ItemRarity.IR_UNDEFINED.asInt();
+
+        Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND) ?
+                blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty() :
+                EquipmentKind.EK_UNDEFINED.asInt();
+
+        List<ItemPart> itemParts = getItemParts(level, rarity, kind, blueprint.getItemParts());
+        return new IngameItem(makeItemModel(level, rarity, itemParts));
+    }
+
+    private List<ItemPart> getItemParts(@NotNull Integer level, @NotNull Integer rarity, @NotNull Integer kind,
+                                        @NotNull Map<Integer, Integer> itemParts) {
+        Random random = new Random(System.currentTimeMillis());
+
+        List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer itemPartIndex = ItemPart.FIRST_PART_ID; itemPartIndex < ItemPart.ITEM_PARTS_COUNT;
+             ++itemPartIndex) {
+            Map<Integer, ItemPart> partsScope = this.itemParts.get(itemPartIndex);
+            List<Integer> scopePartsIds = new ArrayList<>(partsScope.keySet());
+
+            Integer partId = itemParts.get(itemPartIndex);
+            if (partId < Constants.MIN_ID_VALUE) {
+                while(true) {
+                    Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
+                    if (kind.equals(EquipmentKind.EK_UNDEFINED.asInt())) {
+                        kind = partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND);
+                        partId = tmpId;
+                        break;
+                    }
+                    if (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND).equals(kind)) {
+                        partId = tmpId;
+                        break;
+                    }
+                }
+                scopePartsIds.set(itemPartIndex, partId);
+            }
+        }
+
+        return parts;
+    }
+
+    private IngameItem.ItemModel makeItemModel(@NotNull Integer level, @NotNull Integer rarity,
+                                               @NotNull List<ItemPart> parts) {
+        Random random = new Random(System.currentTimeMillis());
+        Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
+        List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer i = 0; i < parts.size(); ++i) {
+            if (rarity.equals(ItemRarity.IR_UNDEFINED.asInt())) {
+                partRarities.set(i, random.nextInt(ItemRarity.IR_SIZE.asInt()));
+            } else {
+                partRarities.set(i, rarity);
+            }
+        }
+
+        StringBuilder name = new StringBuilder();
+        for (ItemPart part : parts) {
+            name.append(part.getName());
+            name.append(" ");
+        }
+        name.deleteCharAt(name.length() - 1);
+
+        StringBuilder description = new StringBuilder();
+        for (ItemPart part : parts) {
+            description.append(part.getDescription());
+            description.append(" ");
+        }
+        description.deleteCharAt(description.length() - 1);
+
+        Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
+        Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
+
+        return new IngameItem.ItemModel(name.toString(), description.toString(), mergedProperties, mergedAffectors);
+    }
+
+    private Map<Integer, Affector> mergeAffectors(@NotNull List<ItemPart> parts,
+                                                  @NotNull List<Integer> rarities,
+                                                  @NotNull Float growth) {
+        Map<Integer, Affector> mergedAffectors = new HashMap<>();
+
+        Set<Integer> affectorIds = new HashSet<>();
+        for (ItemPart itemPart : parts) {
+            if (affectorIds.isEmpty()) {
+                affectorIds.addAll(itemPart.getAvailableAffectors());
+            } else {
+                for (Integer affectorId : itemPart.getAvailableAffectors()) {
+                    if (!affectorIds.contains(affectorId)) {
+                        affectorIds.add(affectorId);
+                    }
+                }
+            }
+        }
+
+        for (Integer affectorId : affectorIds) {
+            List<Affector> affectors = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+            for (ItemPart part : parts) {
+                if (part.getAvailableAffectors().contains(affectorId)) {
+                    affectors.set(part.getPartIndex(), part.getAllAffectors().get(affectorId));
+                }
+            }
+            List<Integer> affectionsList = new ArrayList<>();
+            Map<Integer, Integer> affectionsMap = new HashMap<>();
+            Integer affection = null;
+
+            for (Integer i = 0; i < affectors.size(); ++i) {
+                Affector affector = affectors.get(i);
+                if (affector == null) {
+                    continue;
+                }
+                if (affector.getAffectionsList() != null) {
+                    if (affectionsList.isEmpty()) {
+                        affectionsList.addAll(affector.getAffectionsList());
+                        for (Integer j = 0; j < affectionsList.size(); ++j) {
+                            affectionsList.set(j, applyRarityBonus(affectionsList.get(j), rarities.get(i)));
+                        }
+                    } else {
+                        if (affectionsList.size() == affector.getAffectionsList().size()) {
+                            for (Integer j = 0; j < affectionsList.size(); ++j) {
+                                affectionsList.set(j, affectionsList.get(j)
+                                        + applyRarityBonus(affector.getAffection(j), rarities.get(i)));
+                            }
+                        }
+                    }
+                } else if (affector.getAffectionsMap() != null) {
+                    if (affectionsMap.isEmpty()) {
+                        affectionsMap.putAll(affector.getAffectionsMap());
+                        for (Integer affectionId : affectionsMap.keySet()) {
+                            affectionsMap.replace(affectionId, applyRarityBonus(affectionsMap.get(affectionId),
+                                    rarities.get(i)));
+                        }
+                    } else {
+                        if (affectionsMap.keySet().equals(affector.getAffectionsMap().keySet())) {
+                            for (Integer affectionId : affectionsMap.keySet()) {
+                                affectionsMap.replace(affectionId, affectionsMap.get(affectionId)
+                                        + applyRarityBonus(affector.getAffection(affectionId), rarities.get(i)));
+                            }
+                        }
+                    }
+                } else {
+                    if (affection == null) {
+                        affection = applyRarityBonus(affector.getAffection(), rarities.get(i));
+                    } else {
+                        affection += applyRarityBonus(affector.getAffection(), rarities.get(i));
+                    }
+                }
+            }
+
+            Affector affector = null;
+            if (!affectionsList.isEmpty()) {
+                affector = new ListAffector(affectionsList);
+            } else if (!affectionsMap.isEmpty()) {
+                affector = new MapAffector(affectionsMap);
+            } else {
+                affector = new SingleValueAffector(affection);
+            }
+
+            // apply level-up growth to level-dependent affectors
+            if (affectorId == AffectorCategories.AC_WEAPON_DAMAGE_AFFECTOR
+                    || affectorId == AffectorCategories.AC_ARMOUR_DEFENSE_AFFECTOR
+                    || affectorId == AffectorCategories.AC_STATS_AFFECTOR) {
+                affector.modifyByPercentage(growth);
+            }
+
+            mergedAffectors.put(affectorId, affector);
+        }
+        return mergedAffectors;
+    }
+
+    private Map<Integer, Property> mergeProperties(@NotNull List<ItemPart> parts,
+                                                   @NotNull List<Integer> rarities,
+                                                   @NotNull Float growth) {
+        Map<Integer, Property> mergedProperties = new HashMap<>();
+
+        Set<Integer> propertyIds = new HashSet<>();
+        for (ItemPart part : parts) {
+            if (propertyIds.isEmpty()) {
+                propertyIds.addAll(part.getAvailableProperties());
+            } else {
+                for (Integer propertyId : part.getAvailableProperties()) {
+                    if (!propertyIds.contains(propertyId)) {
+                        propertyIds.add(propertyId);
+                    }
+                }
+            }
+        }
+
+        for (Integer propertyId : propertyIds) {
+            List<Property> partProperties = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+            for (ItemPart part : parts) {
+                if (part.getAvailableProperties().contains(propertyId)) {
+                    partProperties.set(part.getPartIndex(), part.getAllProperties().get(propertyId));
+                }
+            }
+
+            List<Integer> propertiesList = new ArrayList<>();
+            Map<Integer, Integer> propertiesMap = new HashMap<>();
+            Set<Integer> propertiesSet = new HashSet<>();
+            Integer propertyValue = null;
+            for (Integer i = 0; i < partProperties.size(); ++i) {
+                Property property = partProperties.get(i);
+                if (property == null) {
+                    continue;
+                }
+
+                if (property.getPropertyList() != null) {
+                    if (propertiesList.isEmpty()) {
+                        propertiesList.addAll(property.getPropertyList());
+                        for (Integer j = 0; j < propertiesList.size(); ++j) {
+                            if (isPropertyAlterable(propertyId)) {
+                                propertiesList.set(j, applyRarityBonus(propertiesList.get(j), rarities.get(i)));
+                            }
+                        }
+                    } else if (propertiesList.size() == property.getPropertyList().size()) {
+                        for (Integer j = 0; j < propertiesList.size(); ++j) {
+                            if (isPropertyAlterable(propertyId)) {
+                                propertiesList.set(j, propertiesList.get(j)
+                                        + applyRarityBonus(property.getProperty(j), rarities.get(i)));
+                            } else if (!isPropertyNonSummable(propertyId)) {
+                                propertiesList.set(j, propertiesList.get(j) + property.getProperty(j));
+                            }
+                        }
+                    }
+                } else if (property.getPropertyMap() != null) {
+                    if (propertiesMap.isEmpty()) {
+                        propertiesMap.putAll(property.getPropertyMap());
+                        if (isPropertyAlterable(propertyId)) {
+                            for (Integer propertyIndex : propertiesMap.keySet()) {
+                                propertiesMap.replace(propertyIndex,
+                                        applyRarityBonus(propertiesMap.get(propertyIndex), rarities.get(i)));
+                            }
+                        }
+                    } else if (propertiesMap.keySet() == property.getPropertyMap().keySet()) {
+                        for (Integer propertyIndex : propertiesMap.keySet()) {
+                            if (isPropertyAlterable(propertyId)) {
+                                propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
+                                        + applyRarityBonus(property.getProperty(propertyIndex), rarities.get(i)));
+                            } else if (!isPropertyNonSummable(propertyId)) {
+                                propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
+                                        + property.getProperty(propertyIndex));
+                            }
+                        }
+                    }
+                } else if (property.getPropertySet() != null) {
+                    if (propertiesSet.isEmpty()) {
+                        propertiesSet.addAll(property.getPropertySet());
+                    } else {
+                        for (Integer propertySetValue : property.getPropertySet()) {
+                            if (!propertiesSet.contains(propertySetValue)) {
+                                propertiesSet.add(propertySetValue);
+                            }
+                        }
+                    }
+                } else {
+                    if (propertyValue == null) {
+                        if (isPropertyAlterable(propertyId)) {
+                            propertyValue = applyRarityBonus(property.getProperty(), rarities.get(i));
+                        } else {
+                            propertyValue = property.getProperty();
+                        }
+                    } else if (!isPropertyNonSummable(propertyId)) {
+                        if (isPropertyAlterable(propertyId)) {
+                            propertyValue += applyRarityBonus(property.getProperty(), rarities.get(i));
+                        } else {
+                            propertyValue += property.getProperty();
+                        }
+                    }
+                }
+            }
+
+            Property mergedProperty = null;
+            if (!propertiesList.isEmpty()) {
+                mergedProperty = new ListProperty(propertiesList);
+            } else if (!propertiesMap.isEmpty()) {
+                mergedProperty = new MapProperty(propertiesMap);
+            } else if (!propertiesSet.isEmpty()) {
+                mergedProperty = new SetProperty(propertiesSet);
+            } else {
+                mergedProperty = new SingleValueProperty(propertyValue);
+            }
+
+            if (isPropertyLevelable(propertyId)) {
+                mergedProperty.modifyByPercentage(growth);
+            }
+
+            mergedProperties.put(propertyId, mergedProperty);
+        }
+
+        return mergedProperties;
+    }
+
+    private Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
+        return propertyKind == PropertyCategories.PC_LEVEL || propertyKind == PropertyCategories.PC_ITEM_KIND
+                || propertyKind == PropertyCategories.PC_ITEM_SLOTS;
+    }
+
+    private Boolean isPropertyAlterable(@NotNull Integer propertyKind) {
+        return propertyKind == PropertyCategories.PC_STATS || propertyKind == PropertyCategories.PC_RATINGS
+                || propertyKind == PropertyCategories.PC_ITEM_PRICE;
+    }
+
+    private Boolean isPropertyLevelable(@NotNull Integer propertyKind) {
+        return propertyKind == PropertyCategories.PC_STATS || propertyKind == PropertyCategories.PC_ITEM_PRICE;
+    }
+
+    private Integer applyRarityBonus(@NotNull Integer baseValue, @NotNull Integer rarity) {
+        return Long.valueOf(Math.round(baseValue.floatValue() * Math.pow(Constants.STATS_GROWTH_PER_LEVEL,
+                rarity.floatValue() - ItemRarity.IR_COMMON.asInt().floatValue()))).intValue();
+    }
+}

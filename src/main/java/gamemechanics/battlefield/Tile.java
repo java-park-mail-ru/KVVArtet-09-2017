@@ -1,5 +1,7 @@
 package gamemechanics.battlefield;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.components.properties.PropertiesFactory;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
@@ -22,22 +24,24 @@ public class Tile implements MapNode {
     private final List<MapNode> adjacentTiles = new ArrayList<>(Directions.DIRECTIONS_COUNT);
     private final List<Integer> coordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
 
-    public Tile(Integer coordX, Integer coordY) {
+    public Tile(@NotNull Integer coordX, @NotNull Integer coordY) {
         this(false, coordX, coordY);
     }
 
-    public Tile(Boolean isPassable, Integer coordX, Integer coordY) {
+    public Tile(@NotNull Boolean isPassable, @NotNull Integer coordX, @NotNull Integer coordY) {
         this.isPassable = isPassable;
         this.coordinates.set(DigitsPairIndices.ROW_COORD_INDEX, coordX);
         this.coordinates.set(DigitsPairIndices.COL_COORD_INDEX, coordY);
     }
 
     @Override
+    @JsonIgnore
     public Integer getInstancesCount() {
         return instanceCounter.get();
     }
 
     @Override
+    @JsonProperty("id")
     public Integer getID() {
         return tileID;
     }
@@ -48,11 +52,12 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public void setIsPassable(Boolean isPassable) {
+    public void setIsPassable(@NotNull Boolean isPassable) {
         this.isPassable = isPassable;
     }
 
     @Override
+    @JsonIgnore
     public AliveEntity getInhabitant() {
         return inhabitant;
     }
@@ -63,7 +68,7 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public Boolean occupy(AliveEntity stander) {
+    public Boolean occupy(@NotNull AliveEntity stander) {
         Boolean isSuccessful = true;
         if (this.inhabitant == null) {
             this.inhabitant = stander;
@@ -92,7 +97,7 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public MapNode getAdjacent(Integer direction) {
+    public MapNode getAdjacent(@NotNull Integer direction) {
         if (direction < Directions.UP || direction >= adjacentTiles.size()) {
             return null;
         }
@@ -100,17 +105,18 @@ public class Tile implements MapNode {
     }
 
     @Override
+    @JsonIgnore
     public List<MapNode> getAdjacentTiles() {
         return adjacentTiles;
     }
 
     @Override
-    public Boolean isAdjacentTo(MapNode tile) {
+    public Boolean isAdjacentTo(@NotNull MapNode tile) {
         return adjacentTiles.contains(tile);
     }
 
     @Override
-    public void setAdjacentTiles(List<MapNode> adjacencyList) {
+    public void setAdjacentTiles(@NotNull List<MapNode> adjacencyList) {
         Integer adjacencyIndex = Directions.UP;
         for (MapNode tile : adjacencyList) {
             adjacentTiles.set(adjacencyIndex++, tile);
@@ -120,11 +126,13 @@ public class Tile implements MapNode {
         }
     }
 
+    @Override
     public List<Integer> getCoordinates() {
         return coordinates;
     }
 
-    public Integer getCoordinate(Integer coordinateIndex) {
+    @Override
+    public Integer getCoordinate(@NotNull Integer coordinateIndex) {
         if (coordinateIndex < 0 || coordinateIndex >= coordinates.size()) {
             return Integer.MIN_VALUE;
         }
@@ -136,7 +144,7 @@ public class Tile implements MapNode {
         return manhattanDistance(coordinates, goal.getCoordinates());
     }
 
-    private Integer manhattanDistance(List<Integer> fromCoords, List<Integer> toCoords) {
+    private Integer manhattanDistance(@NotNull List<Integer> fromCoords, @NotNull List<Integer> toCoords) {
         return Math.abs(fromCoords.get(DigitsPairIndices.ROW_COORD_INDEX)
                 + toCoords.get(DigitsPairIndices.ROW_COORD_INDEX))
                 + Math.abs(fromCoords.get(DigitsPairIndices.COL_COORD_INDEX)

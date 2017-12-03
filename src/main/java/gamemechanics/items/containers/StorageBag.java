@@ -1,16 +1,19 @@
 package gamemechanics.items.containers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.Bag;
 import gamemechanics.interfaces.EquipableItem;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StorageBag implements Bag {
     private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer bagID = instanceCounter.getAndIncrement();
+    private final Integer bagID;
 
     private final String name;
     private final String description;
@@ -22,7 +25,7 @@ public class StorageBag implements Bag {
         public String description;
         public Integer bagSize;
 
-        public EmptyBagModel(String name, String description, Integer bagSize) {
+        public EmptyBagModel(@NotNull String name, @NotNull String description, @NotNull Integer bagSize) {
             this.name = name;
             this.description = description;
             this.bagSize = bagSize;
@@ -30,35 +33,42 @@ public class StorageBag implements Bag {
     }
 
     public static class FilledBagModel {
+        public Integer id;
         public String name;
         public String description;
         public List<EquipableItem> contents;
 
-        public FilledBagModel(String name, String description, List<EquipableItem> contents) {
+        public FilledBagModel(@NotNull Integer id, @NotNull String name,
+                              @NotNull String description, @NotNull List<EquipableItem> contents) {
+            this.id = id;
             this.name = name;
             this.description = description;
             this.contents = contents;
         }
     }
 
-    public StorageBag(EmptyBagModel model) {
+    public StorageBag(@NotNull EmptyBagModel model) {
+        bagID = instanceCounter.getAndIncrement();
         name = model.name;
         description = model.description;
         contents = new ArrayList<>(model.bagSize);
     }
 
-    public StorageBag(FilledBagModel model) {
+    public StorageBag(@NotNull FilledBagModel model) {
+        bagID = model.id;
         name = model.name;
         description = model.description;
         contents = model.contents;
     }
 
     @Override
+    @JsonIgnore
     public Integer getInstancesCount() {
         return instanceCounter.get();
     }
 
     @Override
+    @JsonProperty("id")
     public Integer getID() {
         return bagID;
     }
@@ -74,11 +84,13 @@ public class StorageBag implements Bag {
     }
 
     @Override
+    @JsonProperty("slotsCount")
     public Integer getSlotsCount() {
         return contents.size();
     }
 
     @Override
+    @JsonProperty("freeSlots")
     public Integer getFreeSlotsCount() {
         Integer freeSlotsCount = 0;
         for (EquipableItem item : contents) {
@@ -90,7 +102,7 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean swap(Integer fromPos, Integer toPos) {
+    public Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos) {
         if (fromPos < 0 || toPos < 0 || fromPos >= contents.size() || toPos >= contents.size()) {
             return false;
         }
@@ -102,7 +114,7 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean swap(Integer fromPos, Bag toBag, Integer toPos) {
+    public Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos) {
         if (fromPos < 0 || fromPos >= contents.size() || toBag == null || toPos < 0) {
             return false;
         }
@@ -117,13 +129,13 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean addItem(EquipableItem item) {
+    public Boolean addItem(@NotNull EquipableItem item) {
         Integer putIndex = getFirstFreeSlot();
         return addItem(item, putIndex);
     }
 
     @Override
-    public Boolean addItem(EquipableItem item, Integer toPos) {
+    public Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos) {
         if (toPos < 0 || toPos >= contents.size()) {
             return false;
         }
@@ -135,7 +147,7 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean throwAway(Integer fromPos, Boolean isConfirmed) {
+    public Boolean throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed) {
         if (!isConfirmed || fromPos < 0 || fromPos >= contents.size()) {
             return false;
         }
@@ -144,17 +156,19 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public EquipableItem getItem(Integer itemIndex) {
+    public EquipableItem getItem(@NotNull Integer itemIndex) {
         if (itemIndex < 0 || itemIndex >= contents.size()) {
             return null;
         }
         return contents.get(itemIndex);
     }
 
+    @JsonProperty("items")
     protected List<EquipableItem> getContents() {
         return contents;
     }
 
+    @JsonIgnore
     private Integer getFirstFreeSlot() {
         if (contents.isEmpty()) {
             return Constants.WRONG_INDEX;
