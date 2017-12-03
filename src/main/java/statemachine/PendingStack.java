@@ -1,6 +1,6 @@
 package statemachine;
 
-import packets.Packet;
+import websocket.messages.Message;
 import states.State;
 
 public interface PendingStack {
@@ -14,5 +14,5 @@ public interface PendingStack {
     void update();
 
     @SuppressWarnings("unused")
-    void handlePacket(Packet packet);
+    void handleMessage(Message message);
 }

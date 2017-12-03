@@ -2,8 +2,8 @@ package states;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import packets.Packet;
 import statemachine.PendingStack;
+import websocket.messages.Message;
 
 public class TitleState extends AbstractState {
   private static final Logger LOGGER = LoggerFactory.getLogger(TitleState.class);
@@ -19,7 +19,7 @@ public class TitleState extends AbstractState {
   }
 
   @Override
-  public boolean handlePacket(final Packet packet) {
+  public boolean handleMessage(final Message message) {
       LOGGER.info("handles packet");
       return true;
   }
