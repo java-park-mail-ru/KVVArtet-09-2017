@@ -17,11 +17,13 @@ public class CharacterClass implements CharacterRole {
     private final Map<Integer, PerkBranch> branches;
 
     public static class CharacterClassModel {
-        public Integer id;
-        public String name;
-        public String description;
-        public Map<Integer, Ability> abilities;
-        public Map<Integer, PerkBranch> branches;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, Ability> abilities;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, PerkBranch> branches;
 
         public CharacterClassModel(@NotNull Integer id, @NotNull String name,
                                    @NotNull String description, @NotNull Map<Integer, Ability> abilities,

@@ -23,13 +23,16 @@ public interface Instance extends Levelable, Updateable {
 
     List<Integer> getBattlingSquadsIds();
 
+    @SuppressWarnings("SameReturnValue")
     CharactersParty getParty(@NotNull Integer partyIndex);
 
     Boolean isInstanceCleared();
 
     Boolean isInstanceFailed();
 
+    @SuppressWarnings("EmptyMethod")
     void giveRewards();
 
+    @SuppressWarnings("SameReturnValue")
     Boolean handlePacket(/* JSON packet here as arg */);
 }

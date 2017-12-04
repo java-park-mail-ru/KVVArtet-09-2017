@@ -6,14 +6,15 @@ import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.Effect;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class IngameEffect implements Effect {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer effectID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer effectID = INSTANCE_COUNTER.getAndIncrement();
 
     private final String name;
     private final String description;
@@ -23,15 +24,17 @@ public class IngameEffect implements Effect {
     private final Map<Integer, Affector> affectors;
 
     public static class EffectModel {
-        public String name;
-        public String description;
+        public final String name;
+        public final String description;
 
-        public Integer duration;
+        public final Integer duration;
 
-        public Map<Integer, Affector> affectors;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, Affector> affectors;
 
-        public EffectModel(String name, String description, Integer duration,
-                           Map<Integer, Affector> affectors) {
+        public EffectModel(@NotNull String name, @NotNull String description,
+                           @NotNull Integer duration,
+                           @NotNull Map<Integer, Affector> affectors) {
             this.name = name;
             this.description = description;
             this.duration = duration;
@@ -48,7 +51,7 @@ public class IngameEffect implements Effect {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
@@ -106,8 +109,8 @@ public class IngameEffect implements Effect {
             return Integer.MIN_VALUE;
         }
         if ((affectorKind & AffectorCategories.AC_REDUCABLE_AFFECTORS) != 0) {
-            Random random = new Random(System.currentTimeMillis());
-            Affector affector = affectors.get(affectorKind);
+            final Random random = new Random(System.currentTimeMillis());
+            final Affector affector = affectors.get(affectorKind);
             return affector.getAffection(DigitsPairIndices.MIN_VALUE_INDEX)
                     + random.nextInt(affector.getAffection(DigitsPairIndices.MAX_VALUE_INDEX
                     - DigitsPairIndices.MIN_VALUE_INDEX));

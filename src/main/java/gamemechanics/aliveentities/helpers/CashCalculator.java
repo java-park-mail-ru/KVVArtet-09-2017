@@ -7,7 +7,7 @@ public final class CashCalculator {
     }
 
     public static Integer getCashReward(Integer killedLevel) {
-        Float multiplier = Constants.CASH_REWARD_GROWTH_PER_LEVEL * Integer.valueOf(killedLevel
+        final Float multiplier = Constants.CASH_REWARD_GROWTH_PER_LEVEL * Integer.valueOf(killedLevel
                 - Constants.START_LEVEL).floatValue();
         return Math.round(multiplier * Integer.valueOf(Constants.INITIAL_CASH_REWARD).floatValue());
     }

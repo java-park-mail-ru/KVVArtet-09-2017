@@ -19,25 +19,21 @@ public final class Pathfinder implements PathfindingAlgorithm {
         this.map = map;
     }
 
+    @Override
     public Route getPath(List<Integer> fromPos, List<Integer> toPos) {
-        MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
+        final MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
                 fromPos.get(DigitsPairIndices.COL_COORD_INDEX));
-        MapNode toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
+        final MapNode toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
                 toPos.get(DigitsPairIndices.COL_COORD_INDEX));
         return getPath(fromTile, toTile);
     }
 
     private Route getPath(@NotNull MapNode start, @NotNull MapNode goal) {
 
-        final Set<MapNode> closed = new HashSet<>();
-
         final Map<MapNode, Integer> gScore = new HashMap<>();
         final Map<MapNode, Integer> fScore = new HashMap<>();
 
         // map containing parent tiles for each tile in the route
-        final Map<MapNode, MapNode> routeMap = new HashMap<>();
-
-        final List<MapNode> route = new LinkedList<>();
 
         final PriorityQueue<MapNode> open = new PriorityQueue<>(DEFAULT_OPEN_LIST_CAPACITY,
                 Comparator.comparingInt(fScore::get));
@@ -45,6 +41,9 @@ public final class Pathfinder implements PathfindingAlgorithm {
         gScore.put(start, 0);
         fScore.put(start, start.getH(goal));
 
+        final Set<MapNode> closed = new HashSet<>();
+        final Map<MapNode, MapNode> routeMap = new HashMap<>();
+        final List<MapNode> route = new LinkedList<>();
         while (!open.isEmpty()) {
             MapNode current = open.poll();
 
@@ -66,9 +65,9 @@ public final class Pathfinder implements PathfindingAlgorithm {
                     closed.add(adjacent);
                     continue;
                 }
-                Integer tentativeG = gScore.get(current)
+                final Integer tentativeG = gScore.get(current)
                         + getG(current, adjacent, gScore.get(current));
-                Boolean contains = open.contains(adjacent);
+                final Boolean contains = open.contains(adjacent);
                 if (!contains || tentativeG < gScore.get(adjacent)) {
                     gScore.put(adjacent, tentativeG);
                     fScore.put(adjacent, tentativeG + adjacent.getH(goal));

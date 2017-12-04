@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CharactersParty implements Countable {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer partyID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer partyID = INSTANCE_COUNTER.getAndIncrement();
 
     private final Map<Integer, AliveEntity> members;
 
@@ -26,7 +26,7 @@ public class CharactersParty implements Countable {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CharactersParty implements Countable {
     }
 
     public Squad toSquad(Integer squadId) {
-        List<AliveEntity> membersList = new ArrayList<>();
+        final List<AliveEntity> membersList = new ArrayList<>();
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
                 membersList.add(members.get(roleId));
@@ -52,7 +52,7 @@ public class CharactersParty implements Countable {
         return members.getOrDefault(roleId, null) != null;
     }
 
-    public Boolean AddMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
+    public Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
         if (hasRole(roleId) || !members.containsKey(roleId)) {
             return false;
         }

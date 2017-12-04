@@ -5,7 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.socket.*;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import server.models.User;
 import server.services.UserService;
@@ -22,12 +24,9 @@ public class GameSocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSocketHandler.class);
     private static final CloseStatus ACCESS_DENIED = new CloseStatus(4500, "Not logged in. Access denied");
 
-    @NotNull
-    private UserService userService;
-    @NotNull
-    private final MessageHandlerContainer messageHandlerContainer;
-    @NotNull
-    private final ConnectionPoolService connectionPoolService;
+    private @NotNull UserService userService;
+    private final @NotNull MessageHandlerContainer messageHandlerContainer;
+    private final @NotNull ConnectionPoolService connectionPoolService;
 
     private final ObjectMapper objectMapper;
 
@@ -77,7 +76,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
             return;
         }
         try {
-            //noinspection ConstantConditions
             messageHandlerContainer.handle(message, user.getId());
         } catch (Exception e) {
             LOGGER.error("Can't handle message of type " + message.getClass().getName() + " with content: " + text, e);

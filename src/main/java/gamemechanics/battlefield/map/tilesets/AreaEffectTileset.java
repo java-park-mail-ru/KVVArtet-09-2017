@@ -22,7 +22,7 @@ public class AreaEffectTileset extends MapNodeTileset {
     private final MapNode sender;
     private final List<Effect> effects;
     private final List<Integer> healthAffection;
-    private Set<Integer> affectedCategories;
+    private final Set<Integer> affectedCategories;
 
     public AreaEffectTileset(Integer abilityID, @NotNull MapNode sender, @NotNull MapNode target, Integer shape,
                              Integer size, @NotNull List<Effect> effects, @NotNull List<Integer> healthAffection,
@@ -46,7 +46,10 @@ public class AreaEffectTileset extends MapNodeTileset {
         }
     }
 
-    private void applyOnInhabitant(AliveEntity sender, @NotNull MapNode target, @NotNull List<TurnEvent> events) {
+    @SuppressWarnings("ParameterHidesMemberVariable")
+    private void applyOnInhabitant(@NotNull AliveEntity sender, @NotNull MapNode target,
+                                   @NotNull List<TurnEvent> events) {
+        //noinspection OverlyComplexBooleanExpression
         if ((affectedCategories.contains(BattlefieldObjectsCategories.BO_ENEMY) && !areOnSameSide(sender,
                 target.getInhabitant())) || (affectedCategories.contains(BattlefieldObjectsCategories.BO_ALLY)
                 && areOnSameSide(sender, target.getInhabitant()))) {
@@ -54,9 +57,9 @@ public class AreaEffectTileset extends MapNodeTileset {
                 target.getInhabitant().addEffect(effect);
                 events.add(EventsFactory.makeApplyEffectEvent(target, effect));
             }
-            Integer healthAffection = getAffection(sender);
-            target.getInhabitant().affectHitpoints(healthAffection);
-            events.add(EventsFactory.makeHitpointsChangeEvent(target, healthAffection));
+            final Integer healthAffectionValue = getAffection(sender);
+            target.getInhabitant().affectHitpoints(healthAffectionValue);
+            events.add(EventsFactory.makeHitpointsChangeEvent(target, healthAffectionValue));
         }
     }
 
@@ -65,12 +68,13 @@ public class AreaEffectTileset extends MapNodeTileset {
                 rhs.getProperty(PropertyCategories.PC_SQUAD_ID));
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     private Integer getAffection(@NotNull AliveEntity sender) {
-        Random random = new Random(System.currentTimeMillis());
+        final Random random = new Random(System.currentTimeMillis());
         Integer resultingHealthAffection = healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX) +
                 random.nextInt(healthAffection.get(DigitsPairIndices.MAX_VALUE_INDEX)
                         - healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX));
-        Integer criticalChance = sender.getProperty(PropertyCategories.PC_RATINGS,
+        final Integer criticalChance = sender.getProperty(PropertyCategories.PC_RATINGS,
                 CharacterRatings.CR_CRITICAL_HIT.asInt());
         if (random.nextInt(Constants.PERCENTAGE_CAP_INT) < criticalChance) {
             resultingHealthAffection *= Constants.CRITICAL_HIT_MULTIPLIER;

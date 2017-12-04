@@ -11,17 +11,17 @@ public final class PropertyToAffectorMapper {
     private PropertyToAffectorMapper() {
     }
 
-    private static final Map<Integer, Integer> propertyAffectorMapping = initMap();
+    private static final Map<Integer, Integer> PROPERTY_AFFECTOR_MAPPING = initMap();
 
-    public static final Integer getAffectorKind(Integer propertyKind) {
-        if (!propertyAffectorMapping.containsKey(propertyKind)) {
+    public static Integer getAffectorKind(Integer propertyKind) {
+        if (!PROPERTY_AFFECTOR_MAPPING.containsKey(propertyKind)) {
             return Constants.WRONG_INDEX;
         }
-        return propertyAffectorMapping.get(propertyKind);
+        return PROPERTY_AFFECTOR_MAPPING.get(propertyKind);
     }
 
     private static Map<Integer, Integer> initMap() {
-        Map<Integer, Integer> mapping = new HashMap<>();
+        final Map<Integer, Integer> mapping = new HashMap<>();
         mapping.put(PropertyCategories.PC_STATS, AffectorCategories.AC_STATS_AFFECTOR);
         mapping.put(PropertyCategories.PC_RATINGS, AffectorCategories.AC_RATINGS_AFFECTOR);
         mapping.put(PropertyCategories.PC_HITPOINTS, AffectorCategories.AC_HEALTH_AFFECTOR);

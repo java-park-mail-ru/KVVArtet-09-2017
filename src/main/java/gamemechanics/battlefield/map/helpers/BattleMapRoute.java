@@ -29,7 +29,7 @@ public class BattleMapRoute implements Route {
 
     @Override
     public void walkThrough(Integer distance) {
-        AliveEntity pedestrian = route.get(SOURCE_TILE_INDEX).getInhabitant();
+        final AliveEntity pedestrian = route.get(SOURCE_TILE_INDEX).getInhabitant();
         if (pedestrian == null) {
             return;
         }

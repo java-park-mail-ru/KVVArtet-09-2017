@@ -42,6 +42,7 @@ public class MapAffector implements Affector {
         return affections;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affections")
     public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
@@ -60,6 +61,7 @@ public class MapAffector implements Affector {
         return null;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
     public Boolean setAffectionsList(@NotNull List<Integer> affections) {
@@ -67,12 +69,11 @@ public class MapAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Float percentage) {
+    public void modifyByPercentage(@NotNull Float percentage) {
         for (Integer key : affections.keySet()) {
-            Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
+            final Float resultPercentage = percentage + Constants.PERCENTAGE_CAP_FLOAT;
             affections.replace(key, Math.round(affections.get(key) * resultPercentage));
         }
-        return true;
     }
 
     @Override

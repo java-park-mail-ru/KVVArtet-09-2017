@@ -24,6 +24,7 @@ public final class Constants {
 
     public static final int INITIAL_HITPOINTS_CAP = 100;
     public static final int HITPOINTS_PER_ENDURANCE_POINT = 60;
+    @SuppressWarnings("FieldNamingConvention")
     public static final int HITPOINTS_PER_FIRST_TWENTY_POINTS = 1;
     public static final int ENDURANCE_BONUS_JUMP_POINT = 20;
 

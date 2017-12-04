@@ -10,8 +10,6 @@ import websocket.ConnectionPool;
 import websocket.messages.Message;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +25,7 @@ public class ConnectionPoolService {
     }
 
     public void registerUser(@NotNull Integer userId, @NotNull WebSocketSession webSocketSession) {
-        SmartController smartControllerForUser = connectionPool.getElement();
+        final SmartController smartControllerForUser = connectionPool.getElement();
         smartControllerForUser.setWebSocketSession(webSocketSession);
         sessions.put(userId, smartControllerForUser);
     }
@@ -62,7 +60,6 @@ public class ConnectionPoolService {
         }
         //noinspection OverlyBroadCatchBlock
         try {
-            //noinspection ConstantConditions
             webSocketSession.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
         } catch (IOException e) {
             throw new IOException("Unnable to send message", e);

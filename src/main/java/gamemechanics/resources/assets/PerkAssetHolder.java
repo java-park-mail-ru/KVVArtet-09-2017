@@ -1,5 +1,7 @@
 package gamemechanics.resources.assets;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gamemechanics.flyweights.perks.IngamePerk;
 import gamemechanics.interfaces.Perk;
@@ -20,17 +22,22 @@ public class PerkAssetHolder extends AbstractAssetHolder<Perk> implements AssetH
     }
 
     private void fillFromFile(@NotNull String fileName) {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<Integer, GameResource> readPerks = new HashMap<>();
+        final ObjectMapper mapper = new ObjectMapper();
+        final Map<Integer, GameResource> readPerks = new HashMap<>();
+        //noinspection Duplicates,TryWithIdenticalCatches
         try {
-            ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
             readPerks.putAll(holder.getAllResources());
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         for (Integer perkId : readPerks.keySet()) {
-            GameResource perkResource = readPerks.get(perkId);
-            IngamePerk.PerkModel model = new IngamePerk.PerkModel(perkId, perkResource.getName(),
+            final GameResource perkResource = readPerks.get(perkId);
+            final IngamePerk.PerkModel model = new IngamePerk.PerkModel(perkId, perkResource.getName(),
                     perkResource.getDescription(), perkResource.getAllAffectors());
             assets.put(model.id, new IngamePerk(model));
         }

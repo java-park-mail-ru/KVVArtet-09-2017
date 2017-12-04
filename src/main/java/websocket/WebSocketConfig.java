@@ -13,8 +13,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    @NotNull
-    private final WebSocketHandler webSocketHandler;
+    private final @NotNull WebSocketHandler webSocketHandler;
 
     public WebSocketConfig(@Qualifier("gameWebSocketHandler") @NotNull WebSocketHandler webSocketHandler) {
         this.webSocketHandler = webSocketHandler;

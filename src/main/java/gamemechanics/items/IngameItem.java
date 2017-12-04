@@ -29,11 +29,13 @@ public class IngameItem implements EquipableItem {
     private final Map<Integer, Affector> affectors;
 
     public static class ItemModel {
-        public Integer id;
-        public String name;
-        public String description;
-        public Map<Integer, Property> properties;
-        public Map<Integer, Affector> affectors;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, Property> properties;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, Affector> affectors;
 
         public ItemModel(@NotNull Integer id,
                          @NotNull String name, @NotNull String description,
@@ -73,11 +75,13 @@ public class IngameItem implements EquipableItem {
         return itemID;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public String getName() {
         return name;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public String getDescription() {
         return description;
@@ -133,7 +137,7 @@ public class IngameItem implements EquipableItem {
             return Integer.MIN_VALUE;
         }
         if ((affectorKind & AffectorCategories.AC_REDUCABLE_AFFECTORS) != 0) {
-            Random random = new Random(System.currentTimeMillis());
+            final Random random = new Random(System.currentTimeMillis());
             return affectors.get(affectorKind).getAffection(DigitsPairIndices.MIN_VALUE_INDEX)
                     + random.nextInt(affectors.get(affectorKind).getAffection(DigitsPairIndices.MAX_VALUE_INDEX)
                     - affectors.get(affectorKind).getAffection(DigitsPairIndices.MIN_VALUE_INDEX));
@@ -154,19 +158,19 @@ public class IngameItem implements EquipableItem {
 
     @Override
     public Boolean isWeapon() {
-        Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
+        final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind >= EquipmentKind.EK_SWORD.asInt() && kind <= EquipmentKind.EK_CROSSBOW.asInt();
     }
 
     @Override
     public Boolean isArmour() {
-        Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
+        final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind >= EquipmentKind.EK_CLOTH_ARMOUR.asInt() && kind <= EquipmentKind.EK_PLATE_ARMOUR.asInt();
     }
 
     @Override
     public Boolean isTrinket() {
-        Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
+        final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind.equals(EquipmentKind.EK_TRINKET.asInt());
     }
 }

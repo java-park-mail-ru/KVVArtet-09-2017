@@ -11,6 +11,7 @@ public final class PropertiesFactory {
     private PropertiesFactory() {
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     public static Property makeProperty(Integer propertyIndex) {
         Property property = null;
         switch (propertyIndex) {

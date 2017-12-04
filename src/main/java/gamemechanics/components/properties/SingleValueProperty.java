@@ -25,12 +25,11 @@ public class SingleValueProperty implements Property {
 
     @Override
     @JsonSetter("property")
-    public Boolean setSingleProperty(@NotNull Integer property) {
+    public void setSingleProperty(@NotNull Integer property) {
         if (property == null) {
-            return false;
+            return;
         }
         this.property = property;
-        return true;
     }
 
     @Override
@@ -39,16 +38,15 @@ public class SingleValueProperty implements Property {
         return true;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
-    public Boolean modifyByAddition(@NotNull Integer property) {
+    public void modifyByAddition(@NotNull Integer property) {
         this.property += property;
-        return true;
     }
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer propertyValue) {
-        return false;
+    public void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer propertyValue) {
     }
 
     @Override
@@ -71,8 +69,7 @@ public class SingleValueProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Boolean setPropertyList(@NotNull List<Integer> properties) {
-        return null;
+    public void setPropertyList(@NotNull List<Integer> properties) {
     }
 
     @Override

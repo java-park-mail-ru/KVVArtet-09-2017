@@ -21,48 +21,53 @@ public class ItemFactoryImpl implements ItemsFactory {
 
     @Override
     public EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
-        Random random = new Random(System.currentTimeMillis());
-        Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL) ?
+        final Random random = new Random(System.currentTimeMillis());
+        final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL) ?
                 blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty() :
                 random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
 
-        Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY) ?
+        final Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY) ?
                 blueprint.getProperties().get(PropertyCategories.PC_ITEM_RARITY).getProperty() :
                 ItemRarity.IR_UNDEFINED.asInt();
 
-        Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND) ?
+        final Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND) ?
                 blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty() :
                 EquipmentKind.EK_UNDEFINED.asInt();
 
-        List<ItemPart> itemParts = getItemParts(level, rarity, kind, blueprint.getItemParts());
-        return new IngameItem(makeItemModel(level, rarity, itemParts));
+        final List<ItemPart> itemPartsList = getItemParts(level, rarity, kind, blueprint.getItemParts());
+        return new IngameItem(makeItemModel(level, rarity, itemPartsList));
     }
 
     private List<ItemPart> getItemParts(@NotNull Integer level, @NotNull Integer rarity, @NotNull Integer kind,
-                                        @NotNull Map<Integer, Integer> itemParts) {
-        Random random = new Random(System.currentTimeMillis());
+                                        @NotNull Map<Integer, Integer> itemPartsList) {
+        final Random random = new Random(System.currentTimeMillis());
+        final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
 
-        List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
         for (Integer itemPartIndex = ItemPart.FIRST_PART_ID; itemPartIndex < ItemPart.ITEM_PARTS_COUNT;
              ++itemPartIndex) {
-            Map<Integer, ItemPart> partsScope = this.itemParts.get(itemPartIndex);
-            List<Integer> scopePartsIds = new ArrayList<>(partsScope.keySet());
+            final Map<Integer, ItemPart> partsScope = this.itemParts.get(itemPartIndex);
+            final List<Integer> scopePartsIds = new ArrayList<>(partsScope.keySet());
 
-            Integer partId = itemParts.get(itemPartIndex);
+            Integer partId = itemPartsList.get(itemPartIndex);
             if (partId < Constants.MIN_ID_VALUE) {
                 while(true) {
-                    Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
+                    final Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
                     if (kind.equals(EquipmentKind.EK_UNDEFINED.asInt())) {
                         kind = partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND);
                         partId = tmpId;
                         break;
                     }
                     if (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND).equals(kind)) {
-                        partId = tmpId;
-                        break;
+                        if (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY).equals(rarity)) {
+                            partId = tmpId;
+                            break;
+                        }
                     }
                 }
                 scopePartsIds.set(itemPartIndex, partId);
+                parts.add(partsScope.get(scopePartsIds.get(random.nextInt(scopePartsIds.size()))));
+            } else {
+                parts.add(this.itemParts.get(itemPartIndex).get(itemPartsList.get(itemPartIndex)));
             }
         }
 
@@ -71,9 +76,8 @@ public class ItemFactoryImpl implements ItemsFactory {
 
     private IngameItem.ItemModel makeItemModel(@NotNull Integer level, @NotNull Integer rarity,
                                                @NotNull List<ItemPart> parts) {
-        Random random = new Random(System.currentTimeMillis());
-        Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
-        List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        final Random random = new Random(System.currentTimeMillis());
+        final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
         for (Integer i = 0; i < parts.size(); ++i) {
             if (rarity.equals(ItemRarity.IR_UNDEFINED.asInt())) {
                 partRarities.set(i, random.nextInt(ItemRarity.IR_SIZE.asInt()));
@@ -82,32 +86,33 @@ public class ItemFactoryImpl implements ItemsFactory {
             }
         }
 
-        StringBuilder name = new StringBuilder();
+        final StringBuilder name = new StringBuilder();
         for (ItemPart part : parts) {
             name.append(part.getName());
-            name.append(" ");
+            name.append(' ');
         }
         name.deleteCharAt(name.length() - 1);
 
-        StringBuilder description = new StringBuilder();
+        final StringBuilder description = new StringBuilder();
         for (ItemPart part : parts) {
             description.append(part.getDescription());
-            description.append(" ");
+            description.append(' ');
         }
         description.deleteCharAt(description.length() - 1);
 
-        Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
-        Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
+        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
+        final Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
+        final Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
 
         return new IngameItem.ItemModel(name.toString(), description.toString(), mergedProperties, mergedAffectors);
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private Map<Integer, Affector> mergeAffectors(@NotNull List<ItemPart> parts,
                                                   @NotNull List<Integer> rarities,
                                                   @NotNull Float growth) {
-        Map<Integer, Affector> mergedAffectors = new HashMap<>();
 
-        Set<Integer> affectorIds = new HashSet<>();
+        final Set<Integer> affectorIds = new HashSet<>();
         for (ItemPart itemPart : parts) {
             if (affectorIds.isEmpty()) {
                 affectorIds.addAll(itemPart.getAvailableAffectors());
@@ -120,19 +125,20 @@ public class ItemFactoryImpl implements ItemsFactory {
             }
         }
 
+        final Map<Integer, Affector> mergedAffectors = new HashMap<>();
         for (Integer affectorId : affectorIds) {
-            List<Affector> affectors = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+            final List<Affector> affectors = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
             for (ItemPart part : parts) {
                 if (part.getAvailableAffectors().contains(affectorId)) {
                     affectors.set(part.getPartIndex(), part.getAllAffectors().get(affectorId));
                 }
             }
-            List<Integer> affectionsList = new ArrayList<>();
-            Map<Integer, Integer> affectionsMap = new HashMap<>();
+            final List<Integer> affectionsList = new ArrayList<>();
+            final Map<Integer, Integer> affectionsMap = new HashMap<>();
             Integer affection = null;
 
             for (Integer i = 0; i < affectors.size(); ++i) {
-                Affector affector = affectors.get(i);
+                final Affector affector = affectors.get(i);
                 if (affector == null) {
                     continue;
                 }
@@ -195,12 +201,12 @@ public class ItemFactoryImpl implements ItemsFactory {
         return mergedAffectors;
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private Map<Integer, Property> mergeProperties(@NotNull List<ItemPart> parts,
                                                    @NotNull List<Integer> rarities,
                                                    @NotNull Float growth) {
-        Map<Integer, Property> mergedProperties = new HashMap<>();
 
-        Set<Integer> propertyIds = new HashSet<>();
+        final Set<Integer> propertyIds = new HashSet<>();
         for (ItemPart part : parts) {
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
@@ -213,20 +219,21 @@ public class ItemFactoryImpl implements ItemsFactory {
             }
         }
 
+        final Map<Integer, Property> mergedProperties = new HashMap<>();
         for (Integer propertyId : propertyIds) {
-            List<Property> partProperties = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+            final List<Property> partProperties = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
             for (ItemPart part : parts) {
                 if (part.getAvailableProperties().contains(propertyId)) {
                     partProperties.set(part.getPartIndex(), part.getAllProperties().get(propertyId));
                 }
             }
 
-            List<Integer> propertiesList = new ArrayList<>();
-            Map<Integer, Integer> propertiesMap = new HashMap<>();
-            Set<Integer> propertiesSet = new HashSet<>();
+            final List<Integer> propertiesList = new ArrayList<>();
+            final Map<Integer, Integer> propertiesMap = new HashMap<>();
+            final Set<Integer> propertiesSet = new HashSet<>();
             Integer propertyValue = null;
             for (Integer i = 0; i < partProperties.size(); ++i) {
-                Property property = partProperties.get(i);
+                final Property property = partProperties.get(i);
                 if (property == null) {
                     continue;
                 }

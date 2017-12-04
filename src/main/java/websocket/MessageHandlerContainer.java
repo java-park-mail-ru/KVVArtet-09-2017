@@ -12,8 +12,7 @@ import java.util.Map;
 
 @Service
 public class MessageHandlerContainer {
-    @NotNull
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageHandlerContainer.class);
+    private static final @NotNull Logger LOGGER = LoggerFactory.getLogger(MessageHandlerContainer.class);
     final Map<Class<?>, MessageHandler<?>> handlerMap = new HashMap<>();
 
     public void handle(@NotNull Message message, @NotNull Integer forUser) throws Exception {

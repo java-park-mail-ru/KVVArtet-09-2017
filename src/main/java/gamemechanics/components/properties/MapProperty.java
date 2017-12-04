@@ -37,6 +37,7 @@ public class MapProperty implements Property {
         return properties;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("properties")
     public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
@@ -52,30 +53,27 @@ public class MapProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer propertyValue) {
+    public void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer propertyValue) {
         if (properties.containsKey(propertyIndex)) {
             properties.replace(propertyIndex, propertyValue);
         } else {
             properties.put(propertyIndex, propertyValue);
         }
-        return true;
     }
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer propertyValue) {
-        return false;
+    public void setSingleProperty(@NotNull Integer propertyValue) {
     }
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer toAdd) {
+    public void modifyByAddition(@NotNull Integer toAdd) {
         for (Integer key : properties.keySet()) {
-            Boolean result = modifyByAddition(key, toAdd);
+            final Boolean result = modifyByAddition(key, toAdd);
             if (!result) {
-                return result;
+                return;
             }
         }
-        return true;
     }
 
     @Override
@@ -100,7 +98,7 @@ public class MapProperty implements Property {
     @Override
     public Boolean modifyByPercentage(@NotNull Float percentage) {
         for (Integer key : properties.keySet()) {
-            Boolean result = modifyByPercentage(key, percentage);
+            final Boolean result = modifyByPercentage(key, percentage);
             if (!result) {
                 return result;
             }
@@ -117,8 +115,7 @@ public class MapProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Boolean setPropertyList(@NotNull List<Integer> properties) {
-        return null;
+    public void setPropertyList(@NotNull List<Integer> properties) {
     }
 
     @Override
@@ -127,6 +124,7 @@ public class MapProperty implements Property {
         return null;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
     public Boolean setPropertySet(@NotNull Set<Integer> properties) {

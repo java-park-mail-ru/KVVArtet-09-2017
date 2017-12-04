@@ -27,14 +27,12 @@ public class SetProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer propertyValue) {
-        return false;
+    public void setSingleProperty(@NotNull Integer propertyValue) {
     }
 
     @Override
     @JsonIgnore
-    public Boolean setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer propertyValue) {
-        return false;
+    public void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer propertyValue) {
     }
 
     @Override
@@ -43,6 +41,7 @@ public class SetProperty implements Property {
         return properties;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("properties")
     public Boolean setPropertySet(@NotNull Set<Integer> properties) {
@@ -61,6 +60,7 @@ public class SetProperty implements Property {
         return null;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
     public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
@@ -75,8 +75,7 @@ public class SetProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Boolean setPropertyList(@NotNull List<Integer> properties) {
-        return false;
+    public void setPropertyList(@NotNull List<Integer> properties) {
     }
 
     @Override
@@ -99,8 +98,7 @@ public class SetProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Boolean modifyByAddition(@NotNull Integer toAdd) {
-        return false;
+    public void modifyByAddition(@NotNull Integer toAdd) {
     }
 
     @Override

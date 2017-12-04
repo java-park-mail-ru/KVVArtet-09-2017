@@ -40,12 +40,12 @@ public class MovementAction extends AbstractAction {
 
     @Override
     public ActionResult execute() {
-        ActionResult result = new BattleActionResult(getID(), sender, target, null, new ArrayList<>());
+        final ActionResult result = new BattleActionResult(getID(), sender, target, null, new ArrayList<>());
         if (!sender.isOccupied()) {
             result.addEvent(EventsFactory.makeRollbackEvent());
             return result;
         }
-        Route route = pathfinder.getPath(sender.getCoordinates(), target.getCoordinates());
+        final Route route = pathfinder.getPath(sender.getCoordinates(), target.getCoordinates());
         if (route.getLength() <= sender.getInhabitant().getProperty(PropertyCategories.PC_SPEED)) {
             route.walkThrough();
         } else {

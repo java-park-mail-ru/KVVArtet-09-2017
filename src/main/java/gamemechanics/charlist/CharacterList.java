@@ -10,14 +10,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CharacterList implements Charlist {
 
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer charlistID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer charlistID = INSTANCE_COUNTER.getAndIncrement();
     private List<UserCharacter> characterList = new ArrayList<>();
-    private Integer ownerID;
+    private final Integer ownerID;
 
     public static class CharacterListModel {
         List<UserCharacter> characterList = new ArrayList<>();
-        Integer ownerID;
+        final Integer ownerID;
         public CharacterListModel(Integer ownerID, List<UserCharacter>characterList) {
             this.ownerID = ownerID;
             this.characterList = characterList;
@@ -36,12 +36,12 @@ public class CharacterList implements Charlist {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
     public UserCharacter createChar(UserCharacterModel userModel) {
-        UserCharacter newUserCharacter = new UserCharacter(userModel);
+        final UserCharacter newUserCharacter = new UserCharacter(userModel);
         this.characterList.add(newUserCharacter);
         //insert in database
         return newUserCharacter;
@@ -49,7 +49,7 @@ public class CharacterList implements Charlist {
 
     @Override
     public void deleteChar(Integer index) {
-        Integer charID = this.characterList.get(index).getID();
+        final Integer charID = this.characterList.get(index).getID();
         this.characterList.remove(index);
         //delete in database with charID
     }

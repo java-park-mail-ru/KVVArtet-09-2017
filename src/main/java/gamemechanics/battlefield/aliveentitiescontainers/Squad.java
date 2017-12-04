@@ -19,13 +19,13 @@ public class Squad implements Countable {
     public static final int TEAM_ONE_SQUAD_ID = 0;
     public static final int TEAM_TWO_SQUAD_ID = 1;
 
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
-    private final Integer ID = instanceCounter.getAndIncrement();
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
+    private final Integer id = INSTANCE_COUNTER.getAndIncrement();
 
     private final List<AliveEntity> members;
     private final Integer squadID;
 
-    public Squad(List<AliveEntity> members, Integer squadID) {
+    public Squad(@NotNull List<AliveEntity> members, @NotNull Integer squadID) {
         this.members = members;
         this.squadID = squadID;
         for (AliveEntity member : members) {
@@ -37,12 +37,12 @@ public class Squad implements Countable {
 
     @Override
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
     public Integer getID() {
-        return ID;
+        return id;
     }
 
     public AliveEntity getMember(Integer memberIndex) {

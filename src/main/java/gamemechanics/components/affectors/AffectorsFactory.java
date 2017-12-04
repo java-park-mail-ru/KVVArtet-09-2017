@@ -13,6 +13,7 @@ public final class AffectorsFactory {
     private AffectorsFactory() {
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     public static Affector getAffector(Integer affectorID) {
         Affector affector = null;
         switch (affectorID) {
@@ -58,12 +59,12 @@ public final class AffectorsFactory {
     }
 
     private static Affector makeDamageAffector() {
-        Map<Integer, Integer> damageAffections = initializeDamageMap();
+        final Map<Integer, Integer> damageAffections = initializeDamageMap();
         return new MapAffector(damageAffections);
     }
 
     private static Affector makeDefenseAffector() {
-        Map<Integer, Integer> defenseAffections = initializeDefenseMap();
+        final Map<Integer, Integer> defenseAffections = initializeDefenseMap();
         return new MapAffector(defenseAffections);
     }
 
@@ -88,7 +89,7 @@ public final class AffectorsFactory {
     }
 
     private static Map<Integer, Integer> initializeDamageMap() {
-        Map<Integer, Integer> affections = new HashMap<>();
+        final Map<Integer, Integer> affections = new HashMap<>();
         affections.put(EquipmentKind.EK_SWORD.asInt(), 0);
         affections.put(EquipmentKind.EK_DAGGER.asInt(), 0);
         affections.put(EquipmentKind.EK_AXE.asInt(), 0);
@@ -101,7 +102,7 @@ public final class AffectorsFactory {
     }
 
     private static Map<Integer, Integer> initializeDefenseMap() {
-        Map<Integer, Integer> affections = new HashMap<>();
+        final Map<Integer, Integer> affections = new HashMap<>();
         affections.put(EquipmentKind.EK_CLOTH_ARMOUR.asInt(), 0);
         affections.put(EquipmentKind.EK_LEATHER_ARMOUR.asInt(), 0);
         affections.put(EquipmentKind.EK_CHAINMAIL_ARMOUR.asInt(), 0);

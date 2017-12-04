@@ -21,17 +21,18 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     private final CharacterRole characterRole;
     private final List<Effect> effects = new ArrayList<>();
 
+    @SuppressWarnings("PublicField")
     private static class AbstractAliveEntityModel {
-        public String name;
-        public String description;
-        public Map<Integer, Property> properties;
-        public List<Bag> bags; // for monsters bags will contain generated loot
-        public CharacterRole characterRole; // character class for user characters and playable bots
+        public final String name;
+        public final String description;
+        public final Map<Integer, Property> properties;
+        public final List<Bag> bags; // for monsters bags will contain generated loot
+        public final CharacterRole characterRole; // character class for user characters and playable bots
         // or an AI-driven role for monsters
 
-        private AbstractAliveEntityModel(@NotNull String name, @NotNull String description,
-                                         @NotNull Map<Integer, Property> properties,
-                                         @NotNull List<Bag> bags, @NotNull CharacterRole characterRole) {
+        AbstractAliveEntityModel(@NotNull String name, @NotNull String description,
+                                 @NotNull Map<Integer, Property> properties,
+                                 @NotNull List<Bag> bags, @NotNull CharacterRole characterRole) {
             this.name = name;
             this.description = description;
             this.properties = properties;
@@ -40,8 +41,9 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         }
     }
 
+    @SuppressWarnings("PublicField")
     public static class NPCModel extends AbstractAliveEntityModel {
-        public DecisionMaker behavior;
+        public final DecisionMaker behavior;
 
         public NPCModel(@NotNull String name, @NotNull String description,
                         @NotNull Map<Integer, Property> properties,
@@ -59,10 +61,11 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         }
     }
 
+    @SuppressWarnings("PublicField")
     public static class UserCharacterModel extends AbstractAliveEntityModel {
-        public CharacterRace characterRace;
-        public CharacterDoll equipment;
-        public Map<Integer, Map<Integer, Integer>> perkRanks;
+        public final CharacterRace characterRace;
+        public final CharacterDoll equipment;
+        public final Map<Integer, Map<Integer, Integer>> perkRanks;
 
         public UserCharacterModel(@NotNull String name, @NotNull String description,
                                   @NotNull Map<Integer, Property> properties,
@@ -131,8 +134,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             return Integer.MIN_VALUE;
         }
         if (propertyKind == PropertyCategories.PC_BASE_DAMAGE) {
-            Random random = new Random(System.currentTimeMillis());
-            List<Integer> damage = properties.get(propertyKind).getPropertyList();
+            final Random random = new Random(System.currentTimeMillis());
+            final List<Integer> damage = properties.get(propertyKind).getPropertyList();
             return damage.get(DigitsPairIndices.MIN_VALUE_INDEX)
                     + random.nextInt(damage.get(DigitsPairIndices.MAX_VALUE_INDEX)
                     - damage.get(DigitsPairIndices.MIN_VALUE_INDEX));
@@ -141,45 +144,43 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean addProperty(Integer propertyKind, Property property) {
+    public void addProperty(Integer propertyKind, Property property) {
         if (hasProperty(propertyKind)) {
-            return false;
+            return;
         }
         properties.put(propertyKind, property);
-        return true;
     }
 
     @Override
-    public Boolean removeProperty(Integer propertyKind) {
+    public void removeProperty(Integer propertyKind) {
         if (!hasProperty(propertyKind)) {
-            return false;
+            return;
         }
         properties.remove(propertyKind);
-        return true;
     }
 
     @Override
-    public Boolean setProperty(Integer propertyKind, Integer propertyValue) {
+    public void setProperty(Integer propertyKind, Integer propertyValue) {
         if (!hasProperty(propertyKind)) {
-            return false;
+            return;
         }
-        return properties.get(propertyKind).setSingleProperty(propertyValue);
+        properties.get(propertyKind).setSingleProperty(propertyValue);
     }
 
     @Override
-    public Boolean setProperty(Integer propertyKind, Integer propertyIndex, Integer propertyValue) {
+    public void setProperty(Integer propertyKind, Integer propertyIndex, Integer propertyValue) {
         if (!hasProperty(propertyKind)) {
-            return false;
+            return;
         }
-        return properties.get(propertyKind).setSingleProperty(propertyIndex, propertyValue);
+        properties.get(propertyKind).setSingleProperty(propertyIndex, propertyValue);
     }
 
     @Override
-    public Boolean setProperty(Integer propertyKind, List<Integer> propertyValue) {
+    public void setProperty(Integer propertyKind, List<Integer> propertyValue) {
         if (!hasProperty(propertyKind)) {
-            return false;
+            return;
         }
-        return properties.get(propertyKind).setPropertyList(propertyValue);
+        properties.get(propertyKind).setPropertyList(propertyValue);
     }
 
     @Override
@@ -207,19 +208,19 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean modifyPropertyByAddition(Integer propertyKind, Integer toAdd) {
+    public void modifyPropertyByAddition(Integer propertyKind, Integer toAdd) {
         if (!hasProperty(propertyKind)) {
-            return false;
+            return;
         }
-        return properties.get(propertyKind).modifyByAddition(toAdd);
+        properties.get(propertyKind).modifyByAddition(toAdd);
     }
 
     @Override
-    public Boolean modifyPropertyByAddition(Integer propertyKind, Integer propertyIndex, Integer toAdd) {
+    public void modifyPropertyByAddition(Integer propertyKind, Integer propertyIndex, Integer toAdd) {
         if (!hasProperty(propertyKind)) {
-            return false;
+            return;
         }
-        return properties.get(propertyKind).modifyByAddition(propertyIndex, toAdd);
+        properties.get(propertyKind).modifyByAddition(propertyIndex, toAdd);
     }
 
     @Override
@@ -233,7 +234,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             return;
         }
         if (amount > 0) {
-            Integer missingHitpoints = getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.MAX_VALUE_INDEX)
+            final Integer missingHitpoints = getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.MAX_VALUE_INDEX)
                     - getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX);
             if (missingHitpoints < amount) {
                 modifyPropertyByAddition(PropertyCategories.PC_HITPOINTS,
@@ -257,9 +258,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean addEffect(@NotNull Effect effect) {
+    public void addEffect(@NotNull Effect effect) {
         effects.add(effect);
-        return true;
     }
 
     @Override
@@ -342,7 +342,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     private Float getDamageReduction() {
-        Float damageReduction = ((Constants.MINIMAL_DAMAGE_REDUCTION * Constants.PERCENTAGE_CAP_INT
+        final Float damageReduction = ((Constants.MINIMAL_DAMAGE_REDUCTION * Constants.PERCENTAGE_CAP_INT
                 * getDefense().floatValue()) / getProperty(PropertyCategories.PC_BASE_DEFENSE))
                 * Constants.ONE_PERCENT_FLOAT;
         if (damageReduction > Constants.PERCENTAGE_CAP_FLOAT) {
@@ -354,15 +354,16 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         return damageReduction;
     }
 
-    Float intToFloatPercentage(Integer value) {
+    Float intToFloatPercentage(@NotNull Integer value) {
         return value.floatValue() / Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue();
     }
 
-    Integer getEffectsAffection(Integer affectorKind) {
+    @SuppressWarnings("SameParameterValue")
+    Integer getEffectsAffection(@NotNull Integer affectorKind) {
         Integer effectsAffection = 0;
-        for (Effect effect : getEffects()) {
+        for (Effect effect : effects) {
             if (!effect.isExpired()) {
-                Integer effectBonus = effect.getAffection(affectorKind);
+                final Integer effectBonus = effect.getAffection(affectorKind);
                 if (effectBonus != Integer.MIN_VALUE) {
                     effectsAffection += effectBonus;
                 }
@@ -373,9 +374,9 @@ public abstract class AbstractAliveEntity implements AliveEntity {
 
     Integer getEffectsAffection(Integer affectorKind, Integer affectionIndex) {
         Integer effectsAffection = 0;
-        for (Effect effect : getEffects()) {
+        for (Effect effect : effects) {
             if (!effect.isExpired()) {
-                Integer effectBonus = effect.getAffection(affectorKind, affectionIndex);
+                final Integer effectBonus = effect.getAffection(affectorKind, affectionIndex);
                 if (effectBonus != Integer.MIN_VALUE) {
                     effectsAffection += effectBonus;
                 }

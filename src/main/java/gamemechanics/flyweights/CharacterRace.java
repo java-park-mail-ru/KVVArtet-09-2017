@@ -14,13 +14,14 @@ public class CharacterRace implements GameEntity, AffectorProvider {
     private final String name;
     private final String description;
 
-    public Map<Integer, Affector> affectors;
+    private final Map<Integer, Affector> affectors;
 
     public static class CharacterRaceModel {
-        public Integer id;
-        public String name;
-        public String description;
-        public Map<Integer, Affector> affectors;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, Affector> affectors;
 
         public CharacterRaceModel(@NotNull Integer id,
                                   @NotNull String name, @NotNull String description,

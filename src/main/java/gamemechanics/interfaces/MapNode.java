@@ -57,10 +57,8 @@ public interface MapNode extends Countable {
 
     /**
      * remove node's inhabitant if there's one
-     *
-     * @return true if the node was occupied or false otherwise
      */
-    Boolean free();
+    void free();
 
     /**
      * get one of the nodes adjacent to this node

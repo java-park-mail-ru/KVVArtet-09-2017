@@ -17,7 +17,8 @@ public class StateStack implements PendingStack {
 
     private enum StackActions { SA_PUSH, SA_POP, SA_CLEAR }
 
-    private enum ChangeStateMessages {CharacterListRequestMessage, LobbyRequestMessage, StayInLineRequestMessage}
+    private enum ChangeStateMessages {CHARACTER_LIST_REQUEST_MESSAGE, LOBBY_REQUEST_MESSAGE,
+        STAY_IN_LINE_REQUEST_MESSAGE}
 
 
 
@@ -84,9 +85,9 @@ public class StateStack implements PendingStack {
 
     //    public void mainStateHandler(Message message) {
 //        switch(message.getClass()) {
-//            case CharacterListRequestMessage:
-//            case LobbyRequestMessage:
-//            case StayInLineRequestMessage:
+//            case CHARACTER_LIST_REQUEST_MESSAGE:
+//            case LOBBY_REQUEST_MESSAGE:
+//            case STAY_IN_LINE_REQUEST_MESSAGE:
 //        }
 //    }
 

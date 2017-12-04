@@ -50,6 +50,7 @@ public class SingleValueAffector implements Affector {
         return false;
     }
 
+    @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affection")
     public Boolean setSingleAffection(@NotNull Integer affection) {
@@ -58,9 +59,8 @@ public class SingleValueAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Float percentage) {
+    public void modifyByPercentage(@NotNull Float percentage) {
         affection = Math.round(affection * (percentage + Constants.PERCENTAGE_CAP_FLOAT));
-        return true;
     }
 
     @Override

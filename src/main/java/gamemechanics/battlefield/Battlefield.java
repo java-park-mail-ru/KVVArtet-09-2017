@@ -32,9 +32,11 @@ public class Battlefield implements Updateable {
     public static final int PVE_GAME_MODE = 0;
     public static final int PVP_GAME_MODE = 1;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final Map<Integer, AI.BehaviorFunction> behaviors;
 
     private final BattleMap map;
+    @SuppressWarnings("FieldCanBeLocal")
     private final Pathfinder pathfinder;
 
     private final List<Squad> squads = new ArrayList<>(SQUADS_COUNT);
@@ -52,10 +54,13 @@ public class Battlefield implements Updateable {
     private final Integer mode;
 
     public static class BattlefieldModel {
-        public Map<Integer, AI.BehaviorFunction> behaviors;
-        public BattleMap map;
-        public List<SpawnPoint> spawnPoints;
-        public Integer mode;
+        @SuppressWarnings("PublicField")
+        public final Map<Integer, AI.BehaviorFunction> behaviors;
+        @SuppressWarnings("PublicField")
+        public final BattleMap map;
+        @SuppressWarnings("PublicField")
+        public final List<SpawnPoint> spawnPoints;
+        public final Integer mode;
 
         public BattlefieldModel(@NotNull Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
                                 @NotNull List<SpawnPoint> spawnPoints, @NotNull Integer mode) {
@@ -66,6 +71,7 @@ public class Battlefield implements Updateable {
         }
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     public Battlefield(@NotNull BattlefieldModel model) {
         behaviors = model.behaviors;
         map = model.map;
@@ -87,7 +93,7 @@ public class Battlefield implements Updateable {
                 break;
         }
 
-        List<AliveEntity> battlersList = new ArrayList<>();
+        final List<AliveEntity> battlersList = new ArrayList<>();
         for (Squad squad : squads) {
             for (Integer i = 0; i < squad.getSquadSize(); ++i) {
                 if (squad.getMember(i) != null) {
@@ -100,9 +106,9 @@ public class Battlefield implements Updateable {
             battlersQueue.addFirst(battler);
         }
 
-        Squad monsterSquad = squads.get(Squad.MONSTER_SQUAD_ID);
+        final Squad monsterSquad = squads.get(Squad.MONSTER_SQUAD_ID);
         for (Integer i = 0; i < monsterSquad.getSquadSize(); ++i) {
-            Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
+            final Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
             Integer activeBehaviorId = Constants.WRONG_INDEX;
             for (Integer behaviorId : monsterSquad.getMember(i).getCharacterRole().getBehaviorIds()) {
                 if (behaviors.containsKey(behaviorId)) {
@@ -123,6 +129,7 @@ public class Battlefield implements Updateable {
         return turnCounter;
     }
 
+    @Override
     public void update() {
         if (actionsQueue.isEmpty()) {
             return;
@@ -142,7 +149,7 @@ public class Battlefield implements Updateable {
         processEvents();
 
         if (!isBattleFinished()) {
-            AliveEntity activeBattler = battlersQueue.getFirst();
+            final AliveEntity activeBattler = battlersQueue.getFirst();
             if (activeBattler.isControlledByAI()) {
                 while (activeBattlerActionsPooled < ACTIONS_PER_TURN) {
                     pushAction(activeBattler.makeDecision());
@@ -173,16 +180,15 @@ public class Battlefield implements Updateable {
         return squads.get(Squad.TEAM_ONE_SQUAD_ID).areAllDead();
     }
 
-    public Boolean pushAction(Action action) {
+    public void pushAction(Action action) {
         if (action.getSender().getInhabitant() == battlersQueue.getFirst()
                 && activeBattlerActionsPooled < ACTIONS_PER_TURN) {
             actionsQueue.addLast(action);
             ++activeBattlerActionsPooled;
-            return true;
         }
-        return false;
     }
 
+    @SuppressWarnings("SameReturnValue")
     public Boolean pushAction(/* JSON packet here */) {
         return false;
     }
@@ -211,7 +217,7 @@ public class Battlefield implements Updateable {
     }
 
     private void mergeMonsterSquads(List<SpawnPoint> spawnPoints) {
-        Squad monsterSquad = new Squad(new ArrayList<>(), Squad.MONSTER_SQUAD_ID);
+        final Squad monsterSquad = new Squad(new ArrayList<>(), Squad.MONSTER_SQUAD_ID);
         for (SpawnPoint spawnPoint : spawnPoints) {
             if (spawnPoint != null) {
                 if (spawnPoint.getSquad().getSquadID() == Squad.MONSTER_SQUAD_ID) {
@@ -256,7 +262,7 @@ public class Battlefield implements Updateable {
     }
 
     private void rewardTeam(Integer teamID) {
-        Integer looseTeamID;
+        final Integer looseTeamID;
         switch (teamID) {
             case Squad.TEAM_ONE_SQUAD_ID:
                 looseTeamID = Squad.TEAM_TWO_SQUAD_ID;
@@ -301,11 +307,12 @@ public class Battlefield implements Updateable {
         generateReward();
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private void processEvents() {
         for (ActionResult entry : battleLog) {
             if (!entry.getIsProcessed()) {
                 for (Integer eventIndex = 0; eventIndex < entry.getEventsCount(); ++eventIndex) {
-                    TurnEvent event = entry.getEvent(eventIndex);
+                    final TurnEvent event = entry.getEvent(eventIndex);
                     if (event.getEventKind() == EventCategories.EC_ROLLBACK) {
                         if (activeBattlerActionsPooled > 0) {
                             --activeBattlerActionsPooled;
@@ -319,29 +326,29 @@ public class Battlefield implements Updateable {
 
                     if (event.getEventKind() == EventCategories.EC_HITPOINTS_CHANGE) {
                         if (event.getAmount() < 0 && !event.getWhere().getInhabitant().isAlive()) {
-                            Integer squadIdToReward = event.getWhere().getInhabitant()
+                            final Integer squadIdToReward = event.getWhere().getInhabitant()
                                     .getProperty(PropertyCategories.PC_SQUAD_ID) == Squad.TEAM_ONE_SQUAD_ID
                                     ? Squad.TEAM_TWO_SQUAD_ID : Squad.TEAM_ONE_SQUAD_ID;
                             if (squadIdToReward == Squad.PLAYERS_SQUAD_ID || mode == PVP_GAME_MODE) {
                                 Integer averagePartyLevel = 0;
                                 for (Integer i = 0; i < squads.get(squadIdToReward).getSquadSize(); ++i) {
-                                    AliveEntity member = squads.get(squadIdToReward).getMember(i);
+                                    final AliveEntity member = squads.get(squadIdToReward).getMember(i);
                                     if (member != null) {
                                         if (member.isAlive()) {
                                             averagePartyLevel += member.getLevel();
                                         }
                                     }
                                 }
-                                Integer expAmount = ExperienceCalculator.getPartyBiasedXPReward(
+                                final Integer expAmount = ExperienceCalculator.getPartyBiasedXPReward(
                                         ExperienceCalculator.getXPReward(averagePartyLevel
                                                         / squads.get(squadIdToReward).getAliveMembersCount(),
                                                 event.getWhere().getInhabitant().getLevel()),
                                         squads.get(squadIdToReward).getAliveMembersCount());
-                                Integer cashAmount = CashCalculator.getPartyBiasedCashReward(
+                                final Integer cashAmount = CashCalculator.getPartyBiasedCashReward(
                                         CashCalculator.getCashReward(event.getWhere().getInhabitant().getLevel()),
                                         squads.get(squadIdToReward).getAliveMembersCount());
                                 for (Integer i = 0; i < squads.get(squadIdToReward).getSquadSize(); ++i) {
-                                    AliveEntity member = squads.get(squadIdToReward).getMember(i);
+                                    final AliveEntity member = squads.get(squadIdToReward).getMember(i);
                                     if (member != null) {
                                         if (member.isAlive() && member.hasProperty(PropertyCategories.PC_XP_POINTS)
                                                 && member.hasProperty(PropertyCategories.PC_CASH_AMOUNT)) {

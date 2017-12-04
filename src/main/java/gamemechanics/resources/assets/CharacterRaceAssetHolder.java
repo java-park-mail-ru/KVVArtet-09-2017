@@ -1,5 +1,7 @@
 package gamemechanics.resources.assets;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gamemechanics.flyweights.CharacterRace;
 import gamemechanics.resources.holders.GameResourceHolder;
@@ -19,16 +21,21 @@ public class CharacterRaceAssetHolder extends AbstractAssetHolder<CharacterRace>
     }
 
     private void fillFromFile(@NotNull String fileName) {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
+        //noinspection TryWithIdenticalCatches
         try {
-            ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
-            Map<Integer, GameResource> raceResources = holder.getAllResources();
+            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final Map<Integer, GameResource> raceResources = holder.getAllResources();
             for (Integer raceId : raceResources.keySet()) {
-                GameResource raceResource = raceResources.get(raceId);
-                CharacterRace.CharacterRaceModel model = new CharacterRace.CharacterRaceModel(raceId,
+                final GameResource raceResource = raceResources.get(raceId);
+                final CharacterRace.CharacterRaceModel model = new CharacterRace.CharacterRaceModel(raceId,
                         raceResource.getName(), raceResource.getDescription(), raceResource.getAllAffectors());
                 assets.put(model.id, new CharacterRace(model));
             }
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

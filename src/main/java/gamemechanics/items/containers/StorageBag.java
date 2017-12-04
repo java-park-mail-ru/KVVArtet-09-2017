@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class StorageBag implements Bag {
-    private static final AtomicInteger instanceCounter = new AtomicInteger(0);
+    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer bagID;
 
     private final String name;
@@ -21,9 +21,9 @@ public class StorageBag implements Bag {
     private final List<EquipableItem> contents;
 
     public static class EmptyBagModel {
-        public String name;
-        public String description;
-        public Integer bagSize;
+        public final String name;
+        public final String description;
+        public final Integer bagSize;
 
         public EmptyBagModel(@NotNull String name, @NotNull String description, @NotNull Integer bagSize) {
             this.name = name;
@@ -33,10 +33,11 @@ public class StorageBag implements Bag {
     }
 
     public static class FilledBagModel {
-        public Integer id;
-        public String name;
-        public String description;
-        public List<EquipableItem> contents;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        @SuppressWarnings("PublicField")
+        public final List<EquipableItem> contents;
 
         public FilledBagModel(@NotNull Integer id, @NotNull String name,
                               @NotNull String description, @NotNull List<EquipableItem> contents) {
@@ -48,7 +49,7 @@ public class StorageBag implements Bag {
     }
 
     public StorageBag(@NotNull EmptyBagModel model) {
-        bagID = instanceCounter.getAndIncrement();
+        bagID = INSTANCE_COUNTER.getAndIncrement();
         name = model.name;
         description = model.description;
         contents = new ArrayList<>(model.bagSize);
@@ -64,7 +65,7 @@ public class StorageBag implements Bag {
     @Override
     @JsonIgnore
     public Integer getInstancesCount() {
-        return instanceCounter.get();
+        return INSTANCE_COUNTER.get();
     }
 
     @Override
@@ -103,6 +104,7 @@ public class StorageBag implements Bag {
 
     @Override
     public Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos) {
+        //noinspection OverlyComplexBooleanExpression
         if (fromPos < 0 || toPos < 0 || fromPos >= contents.size() || toPos >= contents.size()) {
             return false;
         }
@@ -115,13 +117,14 @@ public class StorageBag implements Bag {
 
     @Override
     public Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos) {
+        //noinspection OverlyComplexBooleanExpression
         if (fromPos < 0 || fromPos >= contents.size() || toBag == null || toPos < 0) {
             return false;
         }
         if (toPos >= toBag.getSlotsCount()) {
             return false;
         }
-        EquipableItem tmp = contents.get(fromPos);
+        final EquipableItem tmp = contents.get(fromPos);
         contents.set(fromPos, toBag.getItem(toPos));
         toBag.throwAway(toPos, true);
         toBag.addItem(tmp, toPos);
@@ -130,7 +133,7 @@ public class StorageBag implements Bag {
 
     @Override
     public Boolean addItem(@NotNull EquipableItem item) {
-        Integer putIndex = getFirstFreeSlot();
+        final Integer putIndex = getFirstFreeSlot();
         return addItem(item, putIndex);
     }
 
@@ -147,12 +150,11 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed) {
+    public void throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed) {
         if (!isConfirmed || fromPos < 0 || fromPos >= contents.size()) {
-            return false;
+            return;
         }
         contents.set(fromPos, null);
-        return true;
     }
 
     @Override

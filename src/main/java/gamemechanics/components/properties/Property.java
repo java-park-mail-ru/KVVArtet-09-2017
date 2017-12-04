@@ -17,13 +17,13 @@ import java.util.Set;
 })
 public interface Property {
     Integer getProperty();
-    Boolean setSingleProperty(@NotNull Integer property);
+    void setSingleProperty(@NotNull Integer property);
 
     Integer getProperty(@NotNull Integer propertyIndex);
 
     List<Integer> getPropertyList();
-    Boolean setPropertyList(@NotNull List<Integer> properties);
-    Boolean setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property);
+    void setPropertyList(@NotNull List<Integer> properties);
+    void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property);
 
     Map<Integer, Integer> getPropertyMap();
     Boolean setPropertyMap(@NotNull Map<Integer, Integer> property);
@@ -34,7 +34,7 @@ public interface Property {
     Boolean modifyByPercentage(@NotNull Float percentage);
     Boolean modifyByPercentage(@NotNull Integer itemIndex, @NotNull Float percentage);
 
-    Boolean modifyByAddition(@NotNull Integer toAdd);
+    void modifyByAddition(@NotNull Integer toAdd);
     Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd);
 }
 

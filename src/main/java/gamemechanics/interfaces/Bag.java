@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
  * @see GameEntity
  * @see EquipableItem
  */
+@SuppressWarnings("NewClassNamingConvention")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(StorageBag.class),
@@ -76,10 +77,9 @@ public interface Bag extends GameEntity {
      *
      * @param fromPos     slot index to remove item from
      * @param isConfirmed is operation confirmed by the user
-     * @return true if the removal was successful or false
      * if the removal wasn't confirmed or the chosen slot was empty
      */
-    Boolean throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed);
+    void throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed);
 
     /**
      * get the item from the bag by slot index
