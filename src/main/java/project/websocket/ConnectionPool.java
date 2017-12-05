@@ -11,7 +11,6 @@ public class ConnectionPool implements ObjectivePool<SmartController>{
 
     private Deque<SmartController> connectionPool = new ArrayDeque<>();
     private Integer startCapacity = 8;
-    private Integer capacityMultiplier = 2;
 
     public ConnectionPool() {
          initializeNewElements();
@@ -34,6 +33,7 @@ public class ConnectionPool implements ObjectivePool<SmartController>{
     @Override
     public void addMore() {
         initializeNewElements();
+        Integer capacityMultiplier = 2;
         startCapacity *= capacityMultiplier;
     }
 

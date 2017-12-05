@@ -11,7 +11,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import project.server.models.User;
 import project.server.services.UserService;
-import project.websocket.MessageHandlerContainer;
 import project.websocket.messages.Message;
 import project.websocket.services.ConnectionPoolService;
 
@@ -43,13 +42,13 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) {
-        final Integer id = (Integer) webSocketSession.getAttributes().get("userId");
-        if (id == null || userService.getUserById(id) == null) {
-            LOGGER.warn("User requested project.websocket is not registred or not logged in. Openning project.websocket session is denied.");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        if (userId == null || userService.getUserById(userId) == null) {
+            LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
             return;
         }
-        connectionPoolService.registerUser(id, webSocketSession);
+        connectionPoolService.registerUser(userId, webSocketSession);
     }
 
     @Override
@@ -60,6 +59,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
         final User user;
         if (userId == null || (user = userService.getUserById(userId)) == null) {
+            LOGGER.warn("User requested websocket is not registred or not logged in. Text message can't be handled.");
             closeSessionSilently(webSocketSession, ACCESS_DENIED);
             return;
         }
@@ -99,7 +99,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     private void closeSessionSilently(@NotNull WebSocketSession session, @Nullable CloseStatus closeStatus) {
         final CloseStatus status = closeStatus == null ? SERVER_ERROR : closeStatus;
-        //noinspection OverlyBroadCatchBlock
         try {
             session.close(status);
         } catch (Exception ignore) {

@@ -1,10 +1,9 @@
-package project.websocket;
+package project.websocket.handlers;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import project.websocket.handlers.MessageHandler;
 import project.websocket.messages.Message;
 
 import java.util.HashMap;
