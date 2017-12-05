@@ -53,7 +53,7 @@ public class ConnectionPoolService {
     public void sendMessageToUser(@NotNull Integer userId, @NotNull Message message) throws IOException {
         final WebSocketSession webSocketSession = sessions.get(userId).getWebSocketSession();
         if (webSocketSession == null) {
-            throw new IOException("no game project.websocket for user " + userId);
+            throw new IOException("no game websocket for user " + userId);
         }
         if (!webSocketSession.isOpen()) {
             throw new IOException("session is closed or not exsists");

@@ -2,12 +2,14 @@ package project.websocket;
 
 import project.gamemechanics.smartcontroller.SmartController;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class ConnectionPool implements ObjectivePool<SmartController>{
 
-    private Queue<SmartController> connectionPool = new PriorityQueue<>();
+    private Deque<SmartController> connectionPool = new ArrayDeque<>();
     private Integer startCapacity = 8;
     private Integer capacityMultiplier = 2;
 
