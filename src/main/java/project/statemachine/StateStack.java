@@ -1,10 +1,10 @@
-package statemachine;
+package project.statemachine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import states.State;
-import states.StateFactory;
-import websocket.messages.Message;
+import project.states.State;
+import project.states.StateFactory;
+import project.websocket.messages.Message;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

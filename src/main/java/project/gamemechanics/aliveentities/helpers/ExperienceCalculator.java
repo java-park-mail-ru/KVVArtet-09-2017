@@ -1,6 +1,6 @@
-package gamemechanics.aliveentities.helpers;
+package project.gamemechanics.aliveentities.helpers;
 
-import gamemechanics.globals.Constants;
+import project.gamemechanics.globals.Constants;
 
 import java.util.Objects;
 

@@ -1,13 +1,13 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.battlefield.actionresults.events.TurnEvent;
-import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.effects.IngameEffect;
-import gamemechanics.flyweights.abilities.IngameAbility;
+import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
+import project.gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.effects.IngameEffect;
+import project.gamemechanics.flyweights.abilities.IngameAbility;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -32,7 +32,7 @@ public interface Ability extends GameEntity, PropertyProvider, AffectorProvider 
      *
      * @param action {@link AggregatedAbilityAction} - action data needed to perform the ability
      * @return list of {@link TurnEvent}s caused by ability. This list shall be added
-     * to {@link gamemechanics.battlefield.actionresults.ActionResult}'s event list
+     * to {@link project.gamemechanics.battlefield.actionresults.ActionResult}'s event list
      */
     List<TurnEvent> execute(@NotNull AggregatedAbilityAction action);
 

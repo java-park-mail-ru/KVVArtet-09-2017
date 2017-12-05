@@ -1,4 +1,4 @@
-package gamemechanics.battlefield.map.tilesets;
+package project.gamemechanics.battlefield.map.tilesets;
 
 import java.util.List;
 

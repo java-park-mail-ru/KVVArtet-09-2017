@@ -1,13 +1,13 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.aliveentities.UserCharacter;
-import gamemechanics.aliveentities.npcs.NonPlayerCharacter;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
+import project.gamemechanics.aliveentities.UserCharacter;
+import project.gamemechanics.aliveentities.npcs.NonPlayerCharacter;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
 
@@ -99,7 +99,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
 
     /**
      * returns an unmodified entity's intiative. Initiative defines entity's position in
-     * the {@link gamemechanics.battlefield.Battlefield} turn order.
+     * the {@link project.gamemechanics.battlefield.Battlefield} turn order.
      *
      * @return entity's initiative
      */

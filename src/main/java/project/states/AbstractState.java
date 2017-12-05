@@ -1,6 +1,6 @@
-package states;
+package project.states;
 
-import statemachine.PendingStack;
+import project.statemachine.PendingStack;
 
 public abstract class AbstractState implements State {
     private final PendingStack stack;

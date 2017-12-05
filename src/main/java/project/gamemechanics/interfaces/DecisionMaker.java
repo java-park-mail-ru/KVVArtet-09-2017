@@ -1,4 +1,4 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 /**
  * interface for various monster AI implementations

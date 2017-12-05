@@ -1,9 +1,9 @@
-package gamemechanics.battlefield.map;
+package project.gamemechanics.battlefield.map;
 
-import gamemechanics.battlefield.Tile;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.Directions;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.Tile;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.MapNode;
 
 import java.util.*;
 

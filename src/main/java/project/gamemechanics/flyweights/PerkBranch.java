@@ -1,7 +1,7 @@
-package gamemechanics.flyweights;
+package project.gamemechanics.flyweights;
 
-import gamemechanics.interfaces.GameEntity;
-import gamemechanics.interfaces.Perk;
+import project.gamemechanics.interfaces.GameEntity;
+import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

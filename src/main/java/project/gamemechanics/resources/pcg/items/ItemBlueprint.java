@@ -1,8 +1,8 @@
-package gamemechanics.resources.pcg.items;
+package project.gamemechanics.resources.pcg.items;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.Property;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

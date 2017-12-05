@@ -1,11 +1,11 @@
-package gamemechanics.aliveentities;
+package project.gamemechanics.aliveentities;
 
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.mappers.PropertyToAffectorMapper;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.flyweights.CharacterRace;
-import gamemechanics.globals.*;
-import gamemechanics.items.containers.CharacterDoll;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.mappers.PropertyToAffectorMapper;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.flyweights.CharacterRace;
+import project.gamemechanics.globals.*;
+import project.gamemechanics.items.containers.CharacterDoll;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

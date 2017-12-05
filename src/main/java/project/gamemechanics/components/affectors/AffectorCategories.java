@@ -1,4 +1,4 @@
-package gamemechanics.components.affectors;
+package project.gamemechanics.components.affectors;
 
 public final class AffectorCategories {
     public static final int AC_STATS_AFFECTOR = 1;

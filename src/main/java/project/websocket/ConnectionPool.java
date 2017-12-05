@@ -1,6 +1,6 @@
-package websocket;
+package project.websocket;
 
-import gamemechanics.smartcontroller.SmartController;
+import project.gamemechanics.smartcontroller.SmartController;
 
 import java.util.PriorityQueue;
 import java.util.Queue;

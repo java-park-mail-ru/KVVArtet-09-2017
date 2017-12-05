@@ -1,8 +1,8 @@
-package gamemechanics.charlist;
+package project.gamemechanics.charlist;
 
-import gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
-import gamemechanics.aliveentities.UserCharacter;
-import gamemechanics.interfaces.Charlist;
+import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
+import project.gamemechanics.aliveentities.UserCharacter;
+import project.gamemechanics.interfaces.Charlist;
 
 import java.util.ArrayList;
 import java.util.List;

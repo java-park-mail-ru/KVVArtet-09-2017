@@ -1,14 +1,14 @@
-package gamemechanics.dungeons;
+package project.gamemechanics.dungeons;
 
-import gamemechanics.aliveentities.npcs.ai.AI;
-import gamemechanics.battlefield.Battlefield;
-import gamemechanics.battlefield.actionresults.ActionResult;
-import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
-import gamemechanics.battlefield.aliveentitiescontainers.Squad;
-import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.Directions;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.aliveentities.npcs.ai.AI;
+import project.gamemechanics.battlefield.Battlefield;
+import project.gamemechanics.battlefield.actionresults.ActionResult;
+import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
+import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
+import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

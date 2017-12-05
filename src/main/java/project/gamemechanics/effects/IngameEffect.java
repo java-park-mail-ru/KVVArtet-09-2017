@@ -1,10 +1,10 @@
-package gamemechanics.effects;
+package project.gamemechanics.effects;
 
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.Effect;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.Effect;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

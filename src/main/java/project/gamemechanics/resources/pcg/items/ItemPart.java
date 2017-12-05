@@ -1,13 +1,13 @@
-package gamemechanics.resources.pcg.items;
+package project.gamemechanics.resources.pcg.items;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.interfaces.AffectorProvider;
-import gamemechanics.interfaces.GameEntity;
-import gamemechanics.interfaces.PropertyProvider;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.interfaces.AffectorProvider;
+import project.gamemechanics.interfaces.GameEntity;
+import project.gamemechanics.interfaces.PropertyProvider;
 
 import java.util.Map;
 

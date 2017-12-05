@@ -1,8 +1,8 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.battlefield.Tile;
+import project.gamemechanics.battlefield.Tile;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * interface for tile-based battle maps' nodes
  *
  * @see Countable
- * @see gamemechanics.battlefield.map.BattleMap
+ * @see project.gamemechanics.battlefield.map.BattleMap
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({

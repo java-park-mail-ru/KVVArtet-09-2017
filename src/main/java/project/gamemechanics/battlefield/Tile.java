@@ -1,14 +1,14 @@
-package gamemechanics.battlefield;
+package project.gamemechanics.battlefield;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.properties.PropertiesFactory;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.Directions;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.components.properties.PropertiesFactory;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

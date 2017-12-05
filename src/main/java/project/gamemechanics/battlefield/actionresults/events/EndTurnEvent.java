@@ -1,4 +1,4 @@
-package gamemechanics.battlefield.actionresults.events;
+package project.gamemechanics.battlefield.actionresults.events;
 
 public class EndTurnEvent implements TurnEvent {
 

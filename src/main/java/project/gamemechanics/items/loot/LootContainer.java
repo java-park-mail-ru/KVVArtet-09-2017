@@ -1,8 +1,8 @@
-package gamemechanics.items.loot;
+package project.gamemechanics.items.loot;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

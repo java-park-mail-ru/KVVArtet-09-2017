@@ -1,11 +1,11 @@
-package gamemechanics.items.containers;
+package project.gamemechanics.items.containers;
 
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.CharacterRatings;
-import gamemechanics.globals.CharacterStats;
-import gamemechanics.globals.EquipmentSlot;
-import gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.CharacterRatings;
+import project.gamemechanics.globals.CharacterStats;
+import project.gamemechanics.globals.EquipmentSlot;
+import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

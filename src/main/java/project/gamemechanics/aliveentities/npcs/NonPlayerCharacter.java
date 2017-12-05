@@ -1,9 +1,9 @@
-package gamemechanics.aliveentities.npcs;
+package project.gamemechanics.aliveentities.npcs;
 
-import gamemechanics.aliveentities.AbstractAliveEntity;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.interfaces.Action;
-import gamemechanics.interfaces.DecisionMaker;
+import project.gamemechanics.aliveentities.AbstractAliveEntity;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.interfaces.Action;
+import project.gamemechanics.interfaces.DecisionMaker;
 
 import javax.validation.constraints.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;

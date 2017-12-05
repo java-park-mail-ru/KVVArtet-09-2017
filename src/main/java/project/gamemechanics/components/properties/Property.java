@@ -1,4 +1,4 @@
-package gamemechanics.components.properties;
+package project.gamemechanics.components.properties;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

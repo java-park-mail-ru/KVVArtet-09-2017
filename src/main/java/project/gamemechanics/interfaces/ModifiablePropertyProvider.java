@@ -1,8 +1,8 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
-import gamemechanics.components.properties.ListProperty;
-import gamemechanics.components.properties.MapProperty;
-import gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.ListProperty;
+import project.gamemechanics.components.properties.MapProperty;
+import project.gamemechanics.components.properties.Property;
 
 import java.util.List;
 import java.util.Map;
@@ -41,9 +41,9 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @param propertyKind  index of property to set a new value to
      * @param propertyValue value to set
      * or false if there's either no property registered under such index
-     * or the property registered by that index is not a {@link gamemechanics.components.properties.SingleValueProperty}
+     * or the property registered by that index is not a {@link project.gamemechanics.components.properties.SingleValueProperty}
      * @see Property
-     * @see gamemechanics.components.properties.SingleValueProperty
+     * @see project.gamemechanics.components.properties.SingleValueProperty
      */
     void setProperty(Integer propertyKind, Integer propertyValue);
 

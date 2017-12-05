@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public final class Constants {
     public static final int WRONG_INDEX = Integer.MIN_VALUE;

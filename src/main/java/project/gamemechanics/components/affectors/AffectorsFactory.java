@@ -1,9 +1,9 @@
-package gamemechanics.components.affectors;
+package project.gamemechanics.components.affectors;
 
-import gamemechanics.globals.CharacterRatings;
-import gamemechanics.globals.CharacterStats;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.EquipmentKind;
+import project.gamemechanics.globals.CharacterRatings;
+import project.gamemechanics.globals.CharacterStats;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.EquipmentKind;
 
 import java.util.ArrayList;
 import java.util.HashMap;

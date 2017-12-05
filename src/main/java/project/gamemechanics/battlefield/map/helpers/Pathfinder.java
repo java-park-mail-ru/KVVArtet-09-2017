@@ -1,9 +1,9 @@
-package gamemechanics.battlefield.map.helpers;
+package project.gamemechanics.battlefield.map.helpers;
 
-import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

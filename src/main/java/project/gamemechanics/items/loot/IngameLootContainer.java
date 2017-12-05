@@ -1,7 +1,7 @@
-package gamemechanics.items.loot;
+package project.gamemechanics.items.loot;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

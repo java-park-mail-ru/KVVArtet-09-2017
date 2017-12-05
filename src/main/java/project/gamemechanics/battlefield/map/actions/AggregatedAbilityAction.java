@@ -1,10 +1,10 @@
-package gamemechanics.battlefield.map.actions;
+package project.gamemechanics.battlefield.map.actions;
 
-import gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.effects.IngameEffect;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.effects.IngameEffect;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

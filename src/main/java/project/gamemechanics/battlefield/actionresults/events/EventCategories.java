@@ -1,4 +1,4 @@
-package gamemechanics.battlefield.actionresults.events;
+package project.gamemechanics.battlefield.actionresults.events;
 
 public final class EventCategories {
     public static final int EC_MOVE = 0;

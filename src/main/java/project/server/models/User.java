@@ -1,4 +1,4 @@
-package server.models;
+package project.server.models;
 
 @SuppressWarnings("unused")
 public class User {

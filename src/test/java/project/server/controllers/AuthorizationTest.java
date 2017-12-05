@@ -1,4 +1,4 @@
-package server.controllers;
+package project.server.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
-import server.dao.UserDao;
-import server.models.ApiResponse;
-import server.models.User;
+import project.server.dao.UserDao;
+import project.server.models.ApiResponse;
+import project.server.models.User;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

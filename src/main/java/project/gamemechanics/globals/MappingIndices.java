@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public final class MappingIndices {
     public static final int PERKS_MAPPING = 0;

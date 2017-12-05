@@ -1,6 +1,6 @@
-package states;
+package project.states;
 
-import websocket.messages.Message;
+import project.websocket.messages.Message;
 
 @SuppressWarnings({"UnusedReturnValue", "SameReturnValue", "unused"})
 public interface State {

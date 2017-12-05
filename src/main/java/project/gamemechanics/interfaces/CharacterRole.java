@@ -1,11 +1,11 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
-import gamemechanics.flyweights.CharacterClass;
-import gamemechanics.flyweights.PerkBranch;
+import project.gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
+import project.gamemechanics.flyweights.CharacterClass;
+import project.gamemechanics.flyweights.PerkBranch;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -74,7 +74,7 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
      * @return true if that role has such affector
      * or false if it isn't an NPC role or there's no such affector
      * @see AffectorProvider
-     * @see gamemechanics.components.affectors.Affector
+     * @see project.gamemechanics.components.affectors.Affector
      */
     @Override
     default Boolean hasAffector(@NotNull Integer affectorKind) {

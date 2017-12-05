@@ -1,4 +1,4 @@
-package gamemechanics.battlefield.map.tilesets;
+package project.gamemechanics.battlefield.map.tilesets;
 
 public final class TilesetShapes {
     public static final int TS_SQUARE = 0;

@@ -1,8 +1,8 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 /**
  * An interface for entities which have some repeatable routine either
- * for turn-based battle mode or for server ticks
+ * for turn-based battle mode or for project.server ticks
  */
 public interface Updateable {
     /**
@@ -12,7 +12,7 @@ public interface Updateable {
     } // for battle turns
 
     /**
-     * routine to repeat on each server tick (once per given timestep)
+     * routine to repeat on each project.server tick (once per given timestep)
      *
      * @param timestep fixed timestep value
      */

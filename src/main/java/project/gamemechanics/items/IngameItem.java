@@ -1,15 +1,15 @@
-package gamemechanics.items;
+package project.gamemechanics.items;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.EquipmentKind;
-import gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.EquipmentKind;
+import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

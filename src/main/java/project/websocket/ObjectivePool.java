@@ -1,6 +1,6 @@
-package websocket;
+package project.websocket;
 
-import gamemechanics.smartcontroller.SmartController;
+import project.gamemechanics.smartcontroller.SmartController;
 
 public interface ObjectivePool <T> {
 

@@ -1,15 +1,15 @@
-package gamemechanics.aliveentities.npcs.ai;
+package project.gamemechanics.aliveentities.npcs.ai;
 
-import gamemechanics.battlefield.map.actions.BattleAction;
-import gamemechanics.battlefield.map.actions.MovementAction;
-import gamemechanics.battlefield.map.actions.SkipTurnAction;
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.Action;
-import gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.battlefield.map.actions.BattleAction;
+import project.gamemechanics.battlefield.map.actions.MovementAction;
+import project.gamemechanics.battlefield.map.actions.SkipTurnAction;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.Action;
+import project.gamemechanics.interfaces.AliveEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

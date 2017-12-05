@@ -1,7 +1,7 @@
-package gamemechanics.battlefield.map.helpers;
+package project.gamemechanics.battlefield.map.helpers;
 
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.MapNode;
 
 import java.util.List;
 

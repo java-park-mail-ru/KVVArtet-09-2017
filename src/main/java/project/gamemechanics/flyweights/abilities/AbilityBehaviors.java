@@ -1,14 +1,14 @@
-package gamemechanics.flyweights.abilities;
+package project.gamemechanics.flyweights.abilities;
 
-import gamemechanics.battlefield.BattlefieldObjectsCategories;
-import gamemechanics.battlefield.actionresults.events.EventsFactory;
-import gamemechanics.battlefield.actionresults.events.TurnEvent;
-import gamemechanics.battlefield.map.tilesets.AreaEffectTileset;
-import gamemechanics.battlefield.map.tilesets.Tileset;
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.effects.IngameEffect;
-import gamemechanics.interfaces.Effect;
+import project.gamemechanics.battlefield.BattlefieldObjectsCategories;
+import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
+import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
+import project.gamemechanics.battlefield.map.tilesets.AreaEffectTileset;
+import project.gamemechanics.battlefield.map.tilesets.Tileset;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.effects.IngameEffect;
+import project.gamemechanics.interfaces.Effect;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

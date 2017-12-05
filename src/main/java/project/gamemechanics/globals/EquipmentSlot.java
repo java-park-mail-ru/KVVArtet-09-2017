@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public enum EquipmentSlot {
     ES_HEAD(0, "Head"),

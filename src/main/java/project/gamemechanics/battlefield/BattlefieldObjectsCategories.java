@@ -1,4 +1,4 @@
-package gamemechanics.battlefield;
+package project.gamemechanics.battlefield;
 
 public class BattlefieldObjectsCategories {
     public static final int BO_UNDEFINED = -1;

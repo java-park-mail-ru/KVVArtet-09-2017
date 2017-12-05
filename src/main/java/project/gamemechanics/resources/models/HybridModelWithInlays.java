@@ -1,8 +1,8 @@
-package gamemechanics.resources.models;
+package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

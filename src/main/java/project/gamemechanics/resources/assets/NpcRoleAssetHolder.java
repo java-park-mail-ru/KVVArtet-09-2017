@@ -1,15 +1,15 @@
-package gamemechanics.resources.assets;
+package project.gamemechanics.resources.assets;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
-import gamemechanics.globals.MappingIndices;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.CharacterRole;
-import gamemechanics.resources.holders.GameResourceHolder;
-import gamemechanics.resources.holders.ResourceHolder;
-import gamemechanics.resources.models.GameResource;
+import project.gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
+import project.gamemechanics.globals.MappingIndices;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.CharacterRole;
+import project.gamemechanics.resources.holders.GameResourceHolder;
+import project.gamemechanics.resources.holders.ResourceHolder;
+import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;

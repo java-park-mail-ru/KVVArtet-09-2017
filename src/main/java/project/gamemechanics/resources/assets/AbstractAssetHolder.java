@@ -1,6 +1,6 @@
-package gamemechanics.resources.assets;
+package project.gamemechanics.resources.assets;
 
-import gamemechanics.interfaces.Countable;
+import project.gamemechanics.interfaces.Countable;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;

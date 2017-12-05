@@ -1,9 +1,9 @@
-package gamemechanics.battlefield.map.actions;
+package project.gamemechanics.battlefield.map.actions;
 
-import gamemechanics.battlefield.actionresults.ActionResult;
-import gamemechanics.battlefield.actionresults.BattleActionResult;
-import gamemechanics.battlefield.actionresults.events.EventsFactory;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.actionresults.ActionResult;
+import project.gamemechanics.battlefield.actionresults.BattleActionResult;
+import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

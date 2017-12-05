@@ -1,4 +1,4 @@
-package gamemechanics.resources.pcg.npcs;
+package project.gamemechanics.resources.pcg.npcs;
 
 public interface NpcPart {
 }

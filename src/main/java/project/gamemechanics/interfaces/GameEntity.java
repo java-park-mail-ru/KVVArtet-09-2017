@@ -1,4 +1,4 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 /**
  * An interface for entities that have name and description

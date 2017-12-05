@@ -1,9 +1,9 @@
-package gamemechanics.dungeons;
+package project.gamemechanics.dungeons;
 
-import gamemechanics.battlefield.actionresults.ActionResult;
-import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
-import gamemechanics.interfaces.Levelable;
-import gamemechanics.interfaces.Updateable;
+import project.gamemechanics.battlefield.actionresults.ActionResult;
+import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
+import project.gamemechanics.interfaces.Levelable;
+import project.gamemechanics.interfaces.Updateable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

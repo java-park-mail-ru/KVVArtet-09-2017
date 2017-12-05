@@ -1,6 +1,6 @@
-package gamemechanics.battlefield.map.tilesets;
+package project.gamemechanics.battlefield.map.tilesets;
 
-import gamemechanics.battlefield.actionresults.events.TurnEvent;
+import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

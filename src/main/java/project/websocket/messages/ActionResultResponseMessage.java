@@ -1,4 +1,4 @@
-package websocket.messages;
+package project.websocket.messages;
 
 public class ActionResultResponseMessage extends Message {
 }

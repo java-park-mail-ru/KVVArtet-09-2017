@@ -1,8 +1,8 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
-import gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
-import gamemechanics.aliveentities.UserCharacter;
-import gamemechanics.charlist.CharacterList;
+import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
+import project.gamemechanics.aliveentities.UserCharacter;
+import project.gamemechanics.charlist.CharacterList;
 /**
  * interface for charlist {@link CharacterList}
  * Implementations shall always provide access to the {@link CharacterList}.

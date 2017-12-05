@@ -1,16 +1,16 @@
-package gamemechanics;
+package project.gamemechanics;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.components.properties.SingleValueProperty;
-import gamemechanics.globals.Constants;
-import gamemechanics.resources.pcg.items.ItemPart;
-import gamemechanics.resources.pcg.items.ItemPartAsset;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.components.properties.SingleValueProperty;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.resources.pcg.items.ItemPart;
+import project.gamemechanics.resources.pcg.items.ItemPartAsset;
 import org.junit.Test;
 
 import java.io.IOException;

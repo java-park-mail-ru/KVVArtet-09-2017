@@ -1,10 +1,10 @@
-package gamemechanics.components.actionmakers;
+package project.gamemechanics.components.actionmakers;
 
-import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.battlefield.map.actions.BattleAction;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.ActionMaker;
-import gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.battlefield.map.actions.BattleAction;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.ActionMaker;
+import project.gamemechanics.interfaces.AliveEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

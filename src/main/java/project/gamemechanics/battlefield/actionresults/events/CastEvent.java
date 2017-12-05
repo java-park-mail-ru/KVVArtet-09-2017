@@ -1,7 +1,7 @@
-package gamemechanics.battlefield.actionresults.events;
+package project.gamemechanics.battlefield.actionresults.events;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 

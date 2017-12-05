@@ -1,10 +1,10 @@
-package gamemechanics.smartcontroller;
+package project.gamemechanics.smartcontroller;
 
-import gamemechanics.aliveentities.UserCharacter;
-import gamemechanics.charlist.CharacterList;
+import project.gamemechanics.aliveentities.UserCharacter;
+import project.gamemechanics.charlist.CharacterList;
 import org.springframework.web.socket.WebSocketSession;
-import statemachine.StateStack;
-import websocket.messages.Message;
+import project.statemachine.StateStack;
+import project.websocket.messages.Message;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

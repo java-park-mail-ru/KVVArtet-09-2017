@@ -1,8 +1,8 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import statemachine.StateStack;
-import states.State;
+import project.statemachine.StateStack;
+import project.states.State;
 
 import java.util.Random;
 
@@ -31,7 +31,7 @@ public class StateStackTest {
     @Test
     public void freshStackTest() {
         assertFalse("in newly made stack shall be no pending changes enqueued", stack.hasPendingChanges());
-        assertTrue("newly made stack shall contain no states", stack.isStackEmpty());
+        assertTrue("newly made stack shall contain no project.states", stack.isStackEmpty());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class StateStackTest {
             stack.pushState(State.StateId.SI_TITLE);
         }
         stack.update();
-        assertFalse("state stack shall contain states before testing", stack.isStackEmpty());
+        assertFalse("state stack shall contain project.states before testing", stack.isStackEmpty());
         stack.clearState();
         stack.update();
         assertTrue("stack shall be empty after clear change implementation", stack.isStackEmpty());

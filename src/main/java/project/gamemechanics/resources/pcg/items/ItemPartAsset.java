@@ -1,11 +1,11 @@
-package gamemechanics.resources.pcg.items;
+package project.gamemechanics.resources.pcg.items;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

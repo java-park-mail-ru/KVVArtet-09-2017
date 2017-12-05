@@ -1,8 +1,8 @@
-package gamemechanics.flyweights;
+package project.gamemechanics.flyweights;
 
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.interfaces.AffectorProvider;
-import gamemechanics.interfaces.GameEntity;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.interfaces.AffectorProvider;
+import project.gamemechanics.interfaces.GameEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

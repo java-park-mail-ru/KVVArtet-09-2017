@@ -1,13 +1,13 @@
-package gamemechanics.battlefield.map.actions;
+package project.gamemechanics.battlefield.map.actions;
 
 import com.sun.istack.internal.NotNull;
-import gamemechanics.battlefield.actionresults.ActionResult;
-import gamemechanics.battlefield.actionresults.BattleActionResult;
-import gamemechanics.battlefield.actionresults.events.EventsFactory;
-import gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
-import gamemechanics.battlefield.map.helpers.Route;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.actionresults.ActionResult;
+import project.gamemechanics.battlefield.actionresults.BattleActionResult;
+import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
+import project.gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
+import project.gamemechanics.battlefield.map.helpers.Route;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.interfaces.MapNode;
 
 import java.util.ArrayList;
 

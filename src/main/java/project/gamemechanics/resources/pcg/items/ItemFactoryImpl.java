@@ -1,13 +1,13 @@
-package gamemechanics.resources.pcg.items;
+package project.gamemechanics.resources.pcg.items;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.affectors.*;
-import gamemechanics.components.properties.*;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.EquipmentKind;
-import gamemechanics.globals.ItemRarity;
-import gamemechanics.interfaces.EquipableItem;
-import gamemechanics.items.IngameItem;
+import project.gamemechanics.components.affectors.*;
+import project.gamemechanics.components.properties.*;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.EquipmentKind;
+import project.gamemechanics.globals.ItemRarity;
+import project.gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.items.IngameItem;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

@@ -1,4 +1,4 @@
-package gamemechanics.aliveentities.npcs.ai;
+package project.gamemechanics.aliveentities.npcs.ai;
 
 public final class BehaviorCategories {
     public static final int BC_COMMON_MONSTER_AI = 0;

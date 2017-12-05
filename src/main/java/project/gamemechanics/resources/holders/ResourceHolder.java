@@ -1,6 +1,6 @@
-package gamemechanics.resources.holders;
+package project.gamemechanics.resources.holders;
 
-import gamemechanics.resources.models.GameResource;
+import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

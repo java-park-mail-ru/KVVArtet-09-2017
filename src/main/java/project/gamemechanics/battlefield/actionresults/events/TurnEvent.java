@@ -1,8 +1,8 @@
-package gamemechanics.battlefield.actionresults.events;
+package project.gamemechanics.battlefield.actionresults.events;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.interfaces.MapNode;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({

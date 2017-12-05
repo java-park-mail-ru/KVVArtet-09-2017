@@ -1,7 +1,7 @@
-package gamemechanics.components.properties;
+package project.gamemechanics.components.properties;
 
-import gamemechanics.battlefield.map.tilesets.TilesetShapes;
-import gamemechanics.globals.*;
+import project.gamemechanics.battlefield.map.tilesets.TilesetShapes;
+import project.gamemechanics.globals.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

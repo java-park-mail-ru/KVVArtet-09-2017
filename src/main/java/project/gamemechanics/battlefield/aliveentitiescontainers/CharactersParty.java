@@ -1,7 +1,7 @@
-package gamemechanics.battlefield.aliveentitiescontainers;
+package project.gamemechanics.battlefield.aliveentitiescontainers;
 
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.Countable;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.Countable;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

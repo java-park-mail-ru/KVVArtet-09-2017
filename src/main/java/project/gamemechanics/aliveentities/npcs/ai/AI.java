@@ -1,13 +1,13 @@
-package gamemechanics.aliveentities.npcs.ai;
+package project.gamemechanics.aliveentities.npcs.ai;
 
-import gamemechanics.battlefield.aliveentitiescontainers.Squad;
-import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
-import gamemechanics.battlefield.map.tilesets.FieldOfVision;
-import gamemechanics.battlefield.map.tilesets.FoVTileset;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.*;
+import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
+import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
+import project.gamemechanics.battlefield.map.tilesets.FieldOfVision;
+import project.gamemechanics.battlefield.map.tilesets.FoVTileset;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

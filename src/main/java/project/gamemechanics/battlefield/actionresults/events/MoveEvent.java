@@ -1,6 +1,6 @@
-package gamemechanics.battlefield.actionresults.events;
+package project.gamemechanics.battlefield.actionresults.events;
 
-import gamemechanics.battlefield.map.helpers.Route;
+import project.gamemechanics.battlefield.map.helpers.Route;
 
 import javax.validation.constraints.NotNull;
 

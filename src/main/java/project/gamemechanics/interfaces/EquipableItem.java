@@ -1,20 +1,20 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.items.IngameItem;
+import project.gamemechanics.items.IngameItem;
 
 /**
  * interface for items that may be stored in {@link Bag}s,
- * worn by {@link gamemechanics.aliveentities.UserCharacter}s or looted from NPC monsters
+ * worn by {@link project.gamemechanics.aliveentities.UserCharacter}s or looted from NPC monsters
  *
  * @see Levelable
  * @see AffectorProvider
  * @see PropertyProvider
  * @see Bag
- * @see gamemechanics.aliveentities.UserCharacter
- * @see gamemechanics.aliveentities.npcs.NonPlayerCharacter
+ * @see project.gamemechanics.aliveentities.UserCharacter
+ * @see project.gamemechanics.aliveentities.npcs.NonPlayerCharacter
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({

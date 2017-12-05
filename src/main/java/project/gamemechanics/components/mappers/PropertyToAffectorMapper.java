@@ -1,8 +1,8 @@
-package gamemechanics.components.mappers;
+package project.gamemechanics.components.mappers;
 
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
 
 import java.util.HashMap;
 import java.util.Map;

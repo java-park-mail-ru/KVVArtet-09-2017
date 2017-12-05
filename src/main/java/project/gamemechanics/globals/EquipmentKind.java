@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public enum EquipmentKind {
     EK_UNDEFINED(-1, "undefined"),

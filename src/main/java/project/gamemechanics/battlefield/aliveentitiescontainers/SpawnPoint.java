@@ -1,9 +1,9 @@
-package gamemechanics.battlefield.aliveentitiescontainers;
+package project.gamemechanics.battlefield.aliveentitiescontainers;
 
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.Directions;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.MapNode;
 
 import java.util.ArrayList;
 import java.util.List;

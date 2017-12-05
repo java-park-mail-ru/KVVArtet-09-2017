@@ -1,4 +1,4 @@
-package gamemechanics.dungeons;
+package project.gamemechanics.dungeons;
 
 import javax.validation.constraints.NotNull;
 

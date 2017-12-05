@@ -1,8 +1,8 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
-import gamemechanics.components.properties.ListProperty;
-import gamemechanics.components.properties.MapProperty;
-import gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.ListProperty;
+import project.gamemechanics.components.properties.MapProperty;
+import project.gamemechanics.components.properties.Property;
 
 import java.util.Set;
 
@@ -48,10 +48,10 @@ public interface PropertyProvider {
      *
      * @param propertyIndex ID of the property to get the value from
      * @return requested property's value if ID is valid
-     * and the property is {@link gamemechanics.components.properties.SingleValueProperty}
+     * and the property is {@link project.gamemechanics.components.properties.SingleValueProperty}
      * or a special constant otherwise
      * @see Property
-     * @see gamemechanics.components.properties.SingleValueProperty
+     * @see project.gamemechanics.components.properties.SingleValueProperty
      */
     Integer getProperty(Integer propertyIndex);
 }

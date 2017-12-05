@@ -1,6 +1,6 @@
-package gamemechanics.resources.pcg.items;
+package project.gamemechanics.resources.pcg.items;
 
-import gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
 

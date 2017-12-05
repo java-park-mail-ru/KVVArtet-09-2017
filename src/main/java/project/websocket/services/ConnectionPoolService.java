@@ -1,13 +1,13 @@
-package websocket.services;
+package project.websocket.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gamemechanics.smartcontroller.SmartController;
+import project.gamemechanics.smartcontroller.SmartController;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import websocket.ConnectionPool;
-import websocket.messages.Message;
+import project.websocket.ConnectionPool;
+import project.websocket.messages.Message;
 
 import java.io.IOException;
 import java.util.Map;
@@ -53,7 +53,7 @@ public class ConnectionPoolService {
     public void sendMessageToUser(@NotNull Integer userId, @NotNull Message message) throws IOException {
         final WebSocketSession webSocketSession = sessions.get(userId).getWebSocketSession();
         if (webSocketSession == null) {
-            throw new IOException("no game websocket for user " + userId);
+            throw new IOException("no game project.websocket for user " + userId);
         }
         if (!webSocketSession.isOpen()) {
             throw new IOException("session is closed or not exsists");

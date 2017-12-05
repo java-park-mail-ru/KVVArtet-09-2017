@@ -1,9 +1,9 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.items.containers.CharacterDoll;
-import gamemechanics.items.containers.StorageBag;
+import project.gamemechanics.items.containers.CharacterDoll;
+import project.gamemechanics.items.containers.StorageBag;
 
 import javax.validation.constraints.NotNull;
 

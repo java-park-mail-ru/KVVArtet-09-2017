@@ -1,7 +1,7 @@
-package gamemechanics.resources.pcg;
+package project.gamemechanics.resources.pcg;
 
-import gamemechanics.interfaces.EquipableItem;
-import gamemechanics.resources.pcg.items.ItemBlueprint;
+import project.gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 
 import javax.validation.constraints.NotNull;
 

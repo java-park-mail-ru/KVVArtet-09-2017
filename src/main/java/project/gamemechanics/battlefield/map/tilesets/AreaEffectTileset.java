@@ -1,15 +1,15 @@
-package gamemechanics.battlefield.map.tilesets;
+package project.gamemechanics.battlefield.map.tilesets;
 
-import gamemechanics.battlefield.BattlefieldObjectsCategories;
-import gamemechanics.battlefield.actionresults.events.EventsFactory;
-import gamemechanics.battlefield.actionresults.events.TurnEvent;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.CharacterRatings;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.Effect;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.BattlefieldObjectsCategories;
+import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
+import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.CharacterRatings;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.Effect;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

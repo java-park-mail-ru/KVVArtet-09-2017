@@ -1,12 +1,12 @@
-package gamemechanics.resources.assets;
+package project.gamemechanics.resources.assets;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gamemechanics.flyweights.CharacterRace;
-import gamemechanics.resources.holders.GameResourceHolder;
-import gamemechanics.resources.holders.ResourceHolder;
-import gamemechanics.resources.models.GameResource;
+import project.gamemechanics.flyweights.CharacterRace;
+import project.gamemechanics.resources.holders.GameResourceHolder;
+import project.gamemechanics.resources.holders.ResourceHolder;
+import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;

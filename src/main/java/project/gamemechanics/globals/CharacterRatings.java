@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public enum CharacterRatings {
     CR_CRITICAL_HIT(0, "Critical hit chance"),

@@ -1,9 +1,11 @@
+package project;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
-import websocket.handlers.GameSocketHandler;
+import project.websocket.handlers.GameSocketHandler;
 
 @SuppressWarnings({"ALL", "WeakerAccess"})
 @SpringBootApplication

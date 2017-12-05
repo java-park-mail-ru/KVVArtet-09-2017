@@ -1,10 +1,10 @@
-package gamemechanics.battlefield.actionresults;
+package project.gamemechanics.battlefield.actionresults;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.battlefield.actionresults.events.TurnEvent;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 

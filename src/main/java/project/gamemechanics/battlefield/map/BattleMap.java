@@ -1,8 +1,8 @@
-package gamemechanics.battlefield.map;
+package project.gamemechanics.battlefield.map;
 
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.MapNode;
 
 import java.util.ArrayList;
 import java.util.List;

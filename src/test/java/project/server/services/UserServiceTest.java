@@ -1,4 +1,4 @@
-package server.services;
+package project.server.services;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import server.dao.UserDao;
-import server.models.User;
+import project.server.dao.UserDao;
+import project.server.models.User;
 
 import java.util.List;
 

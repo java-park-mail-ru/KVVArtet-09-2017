@@ -1,8 +1,8 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.effects.IngameEffect;
+import project.gamemechanics.effects.IngameEffect;
 
 /**
  * interface for various effects (DoTs/HoTs, buffs/debuffs, etc.)

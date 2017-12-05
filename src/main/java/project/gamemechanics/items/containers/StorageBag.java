@@ -1,10 +1,10 @@
-package gamemechanics.items.containers;
+package project.gamemechanics.items.containers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.globals.Constants;
-import gamemechanics.interfaces.Bag;
-import gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.interfaces.Bag;
+import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

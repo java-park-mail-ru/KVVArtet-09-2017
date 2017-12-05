@@ -1,8 +1,8 @@
-package gamemechanics.aliveentities.npcs;
+package project.gamemechanics.aliveentities.npcs;
 
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.CharacterRole;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.CharacterRole;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

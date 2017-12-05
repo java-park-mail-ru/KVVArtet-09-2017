@@ -1,4 +1,4 @@
-package gamemechanics.components.affectors;
+package project.gamemechanics.components.affectors;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

@@ -1,4 +1,4 @@
-package gamemechanics.battlefield.map.helpers;
+package project.gamemechanics.battlefield.map.helpers;
 
 import java.util.List;
 

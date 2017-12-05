@@ -1,7 +1,7 @@
-package server.mappers;
+package project.server.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import server.models.User;
+import project.server.models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

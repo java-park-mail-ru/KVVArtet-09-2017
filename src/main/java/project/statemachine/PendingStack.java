@@ -1,7 +1,7 @@
-package statemachine;
+package project.statemachine;
 
-import websocket.messages.Message;
-import states.State;
+import project.websocket.messages.Message;
+import project.states.State;
 
 public interface PendingStack {
     void pushState(State.StateId stateId);

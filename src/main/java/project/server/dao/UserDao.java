@@ -1,6 +1,6 @@
-package server.dao;
+package project.server.dao;
 
-import server.models.User;
+import project.server.models.User;
 
 import java.util.List;
 

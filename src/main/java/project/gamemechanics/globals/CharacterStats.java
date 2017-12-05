@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public enum CharacterStats {
     CS_ENDURANCE(0, "Endurance"),

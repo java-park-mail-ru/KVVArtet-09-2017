@@ -1,9 +1,9 @@
-package gamemechanics.components.affectors;
+package project.gamemechanics.components.affectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import gamemechanics.globals.Constants;
+import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

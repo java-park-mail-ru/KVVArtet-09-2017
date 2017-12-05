@@ -1,11 +1,11 @@
-package gamemechanics.resources.models;
+package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.interfaces.GameEntity;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.interfaces.GameEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

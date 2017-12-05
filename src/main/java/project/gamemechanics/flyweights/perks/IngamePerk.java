@@ -1,9 +1,9 @@
-package gamemechanics.flyweights.perks;
+package project.gamemechanics.flyweights.perks;
 
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.Perk;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

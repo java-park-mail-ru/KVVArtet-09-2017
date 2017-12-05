@@ -1,11 +1,11 @@
-package gamemechanics.flyweights.abilities;
+package project.gamemechanics.flyweights.abilities;
 
-import gamemechanics.battlefield.actionresults.events.TurnEvent;
-import gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
-import gamemechanics.components.affectors.Affector;
-import gamemechanics.components.properties.Property;
-import gamemechanics.effects.IngameEffect;
-import gamemechanics.interfaces.Ability;
+import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
+import project.gamemechanics.battlefield.map.actions.AggregatedAbilityAction;
+import project.gamemechanics.components.affectors.Affector;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.effects.IngameEffect;
+import project.gamemechanics.interfaces.Ability;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

@@ -1,4 +1,4 @@
-package websocket;
+package project.websocket;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,4 +1,4 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 /**
  * Interface for entities that have level property.
@@ -15,8 +15,8 @@ public interface Levelable extends GameEntity {
 
     /**
      * method for level-up logic.
-     * can be used both for in-game level-up (as in {@link gamemechanics.aliveentities.UserCharacter} class)
-     * or to scale entity's properties on creation (as for {@link gamemechanics.items.IngameItem} class)
+     * can be used both for in-game level-up (as in {@link project.gamemechanics.aliveentities.UserCharacter} class)
+     * or to scale entity's properties on creation (as for {@link project.gamemechanics.items.IngameItem} class)
      */
     default void levelUp() {
     }

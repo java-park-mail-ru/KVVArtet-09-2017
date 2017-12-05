@@ -1,4 +1,4 @@
-package gamemechanics.battlefield.actionresults;
+package project.gamemechanics.battlefield.actionresults;
 
 public final class ActionCategories {
     public static final int AC_MOVE = 0;

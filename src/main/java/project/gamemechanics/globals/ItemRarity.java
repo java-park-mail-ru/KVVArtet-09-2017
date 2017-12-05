@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public enum ItemRarity {
     IR_UNDEFINED(-1, "undefined"),

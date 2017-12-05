@@ -1,8 +1,8 @@
-package gamemechanics.battlefield.actionresults.events;
+package project.gamemechanics.battlefield.actionresults.events;
 
-import gamemechanics.battlefield.map.helpers.Route;
-import gamemechanics.interfaces.Effect;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.battlefield.map.helpers.Route;
+import project.gamemechanics.interfaces.Effect;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 

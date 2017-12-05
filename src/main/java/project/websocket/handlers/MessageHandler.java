@@ -1,6 +1,6 @@
-package websocket.handlers;
+package project.websocket.handlers;
 
-import websocket.messages.Message;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 

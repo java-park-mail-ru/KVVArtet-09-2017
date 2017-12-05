@@ -1,10 +1,10 @@
-package gamemechanics.battlefield.aliveentitiescontainers;
+package project.gamemechanics.battlefield.aliveentitiescontainers;
 
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.components.properties.SingleValueProperty;
-import gamemechanics.globals.Constants;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.Countable;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.components.properties.SingleValueProperty;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.interfaces.Countable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

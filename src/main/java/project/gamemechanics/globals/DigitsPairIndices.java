@@ -1,4 +1,4 @@
-package gamemechanics.globals;
+package project.gamemechanics.globals;
 
 public final class DigitsPairIndices {
     public static final int MIN_VALUE_INDEX = 0;

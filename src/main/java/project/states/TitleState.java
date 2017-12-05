@@ -1,9 +1,9 @@
-package states;
+package project.states;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import statemachine.PendingStack;
-import websocket.messages.Message;
+import project.statemachine.PendingStack;
+import project.websocket.messages.Message;
 
 public class TitleState extends AbstractState {
   private static final Logger LOGGER = LoggerFactory.getLogger(TitleState.class);

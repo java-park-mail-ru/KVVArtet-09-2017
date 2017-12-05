@@ -1,11 +1,11 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import java.util.Set;
 
 /**
  * An interface providing methods to access entity's affectors.
  *
- * @see gamemechanics.components.affectors.Affector
+ * @see project.gamemechanics.components.affectors.Affector
  */
 public interface AffectorProvider {
     /**
@@ -37,9 +37,9 @@ public interface AffectorProvider {
      *
      * @param affectorKind affector ID
      * @return affector value
-     * @see gamemechanics.components.affectors.SingleValueAffector
-     * @see gamemechanics.components.affectors.ListAffector
-     * @see gamemechanics.components.affectors.MapAffector
+     * @see project.gamemechanics.components.affectors.SingleValueAffector
+     * @see project.gamemechanics.components.affectors.ListAffector
+     * @see project.gamemechanics.components.affectors.MapAffector
      */
     Integer getAffection(Integer affectorKind);
 }

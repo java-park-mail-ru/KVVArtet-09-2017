@@ -1,9 +1,9 @@
-package gamemechanics.battlefield.map.tilesets;
+package project.gamemechanics.battlefield.map.tilesets;
 
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.globals.Directions;
-import gamemechanics.interfaces.MapNode;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

@@ -1,4 +1,4 @@
-package gamemechanics.components.properties;
+package project.gamemechanics.components.properties;
 
 public class PropertyCategories {
     // general properties

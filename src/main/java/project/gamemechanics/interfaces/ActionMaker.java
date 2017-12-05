@@ -1,4 +1,4 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
 import java.util.List;
 

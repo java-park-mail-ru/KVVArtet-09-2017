@@ -1,12 +1,12 @@
-package server.services;
+package project.server.services;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import server.dao.UserDao;
-import server.mappers.UserMapper;
-import server.models.User;
+import project.server.dao.UserDao;
+import project.server.mappers.UserMapper;
+import project.server.models.User;
 
 import java.sql.PreparedStatement;
 import java.util.List;

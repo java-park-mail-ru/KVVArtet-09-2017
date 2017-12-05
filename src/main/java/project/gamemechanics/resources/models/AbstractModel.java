@@ -1,4 +1,4 @@
-package gamemechanics.resources.models;
+package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

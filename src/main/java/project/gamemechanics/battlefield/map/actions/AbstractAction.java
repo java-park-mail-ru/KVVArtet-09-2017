@@ -1,6 +1,6 @@
-package gamemechanics.battlefield.map.actions;
+package project.gamemechanics.battlefield.map.actions;
 
-import gamemechanics.interfaces.Action;
+import project.gamemechanics.interfaces.Action;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

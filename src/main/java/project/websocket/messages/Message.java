@@ -1,4 +1,4 @@
-package websocket.messages;
+package project.websocket.messages;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;

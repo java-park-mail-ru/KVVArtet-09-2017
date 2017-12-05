@@ -1,8 +1,8 @@
-package gamemechanics.resources.holders;
+package project.gamemechanics.resources.holders;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.resources.models.GameResource;
+import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;

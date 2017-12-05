@@ -1,8 +1,8 @@
-package gamemechanics.flyweights;
+package project.gamemechanics.flyweights;
 
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.CharacterRole;
-import gamemechanics.interfaces.Perk;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.CharacterRole;
+import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

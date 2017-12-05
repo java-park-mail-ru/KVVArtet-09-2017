@@ -1,13 +1,13 @@
-package gamemechanics.aliveentities;
+package project.gamemechanics.aliveentities;
 
-import gamemechanics.components.affectors.AffectorCategories;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.flyweights.CharacterRace;
-import gamemechanics.globals.Constants;
-import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.*;
-import gamemechanics.items.containers.CharacterDoll;
+import project.gamemechanics.components.affectors.AffectorCategories;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.flyweights.CharacterRace;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.*;
+import project.gamemechanics.items.containers.CharacterDoll;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

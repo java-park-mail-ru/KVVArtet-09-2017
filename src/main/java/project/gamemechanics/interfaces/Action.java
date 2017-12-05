@@ -1,6 +1,6 @@
-package gamemechanics.interfaces;
+package project.gamemechanics.interfaces;
 
-import gamemechanics.battlefield.actionresults.ActionResult;
+import project.gamemechanics.battlefield.actionresults.ActionResult;
 
 /**
  * interface for various battle actions
@@ -23,7 +23,7 @@ public interface Action extends Countable {
     /**
      * is the action a movement action
      *
-     * @return true if the action is a {@link gamemechanics.battlefield.map.actions.MovementAction}
+     * @return true if the action is a {@link project.gamemechanics.battlefield.map.actions.MovementAction}
      * or false otherwise
      */
     default Boolean isMovement() {
@@ -33,7 +33,7 @@ public interface Action extends Countable {
     /**
      * is the action a skip turn action
      *
-     * @return true if the action is a {@link gamemechanics.battlefield.map.actions.SkipTurnAction}
+     * @return true if the action is a {@link project.gamemechanics.battlefield.map.actions.SkipTurnAction}
      * or false otherwise
      */
     default Boolean isSkip() {

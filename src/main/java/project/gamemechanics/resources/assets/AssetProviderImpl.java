@@ -1,10 +1,10 @@
-package gamemechanics.resources.assets;
+package project.gamemechanics.resources.assets;
 
-import gamemechanics.flyweights.CharacterRace;
-import gamemechanics.flyweights.PerkBranch;
-import gamemechanics.interfaces.Ability;
-import gamemechanics.interfaces.CharacterRole;
-import gamemechanics.interfaces.Perk;
+import project.gamemechanics.flyweights.CharacterRace;
+import project.gamemechanics.flyweights.PerkBranch;
+import project.gamemechanics.interfaces.Ability;
+import project.gamemechanics.interfaces.CharacterRole;
+import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
