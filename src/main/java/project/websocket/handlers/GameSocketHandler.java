@@ -9,6 +9,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import project.gamemechanics.smartcontroller.SmartController;
 import project.server.models.User;
 import project.server.services.UserService;
 import project.websocket.messages.Message;
@@ -24,17 +25,17 @@ public class GameSocketHandler extends TextWebSocketHandler {
     private static final CloseStatus ACCESS_DENIED = new CloseStatus(4500, "Not logged in. Access denied");
 
     private @NotNull UserService userService;
-    private final @NotNull MessageHandlerContainer messageHandlerContainer;
+    private final @NotNull SmartController smartController;
     private final @NotNull ConnectionPoolService connectionPoolService;
 
     private final ObjectMapper objectMapper;
 
 
-    public GameSocketHandler(@NotNull MessageHandlerContainer messageHandlerContainer,
+    public GameSocketHandler(@NotNull SmartController smartController,
                              @NotNull UserService authService,
                              @NotNull ConnectionPoolService connectionPoolService,
                              ObjectMapper objectMapper) {
-        this.messageHandlerContainer = messageHandlerContainer;
+        this.smartController = smartController;
         this.userService = authService;
         this.connectionPoolService = connectionPoolService;
         this.objectMapper = objectMapper;
@@ -75,11 +76,12 @@ public class GameSocketHandler extends TextWebSocketHandler {
             LOGGER.error("wrong json format at game response", ex);
             return;
         }
-        try {
-            messageHandlerContainer.handle(message, user.getId());
-        } catch (Exception e) {
-            LOGGER.error("Can't handle message of type " + message.getClass().getName() + " with content: " + text, e);
-        }
+        connectionPoolService.putMessage(user.getId(), message);
+//        try {
+//            messageHandlerContainer.handle(message, user.getId());
+//        } catch (Exception e) {
+//            LOGGER.error("Can't handle message of type " + message.getClass().getName() + " with content: " + text, e);
+//        }
     }
 
     @Override

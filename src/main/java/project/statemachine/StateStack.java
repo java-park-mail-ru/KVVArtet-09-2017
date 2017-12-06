@@ -73,7 +73,7 @@ public class StateStack implements PendingStack {
     }
 
     @Override
-    public void handleMessage(final Message message) {
+    public Message handleMessage(final Message message) {
         LOGGER.info("state handlePacket call: ");
         for (State state : stack) {
             if (!state.handleMessage(message)) {
@@ -81,6 +81,7 @@ public class StateStack implements PendingStack {
             }
         }
         applyPendingChanges();
+        return message;
     }
 
     //    public void mainStateHandler(Message message) {

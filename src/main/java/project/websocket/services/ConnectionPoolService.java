@@ -24,6 +24,10 @@ public class ConnectionPoolService {
         this.objectMapper = objectMapper;
     }
 
+    public void putMessage(Integer userId, Message message) {
+        sessions.get(userId).addInboxMessage(message);
+    }
+
     public void registerUser(@NotNull Integer userId, @NotNull WebSocketSession webSocketSession) {
         final SmartController smartControllerForUser = connectionPool.getElement();
         smartControllerForUser.setWebSocketSession(webSocketSession);

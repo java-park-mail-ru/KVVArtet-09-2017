@@ -14,5 +14,5 @@ public interface PendingStack {
     void update();
 
     @SuppressWarnings("unused")
-    void handleMessage(Message message);
+    Message handleMessage(Message message);
 }

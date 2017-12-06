@@ -13,14 +13,14 @@ import java.util.Objects;
 
 @SuppressWarnings("SpellCheckingInspection")
 @RestController
-@CrossOrigin(origins = AuthorizationController.FRONTED_URL)
+@CrossOrigin(origins = AuthorizationController.FRONTED_URL1)
 public class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
     @SuppressWarnings("WeakerAccess")
-    static final String FRONTED_URL = "https://lands-dangeous.herokuapp.com/";
+    static final String FRONTED_URL1 = "https://lands-dangeous.herokuapp.com/";
+    static final String FRONTED_URL2 = "https://dev-lands-dungeons.herokuapp.com/";
 
-  
 
     public AuthorizationController(UserService userService, PasswordEncoder encoder) {
         super();

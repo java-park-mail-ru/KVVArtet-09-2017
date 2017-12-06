@@ -11,18 +11,25 @@ import java.util.Deque;
 import java.util.Queue;
 
 public class SmartController {
-    private Deque<Message> messageQueue = new ArrayDeque<>();
+    private Deque<Message> inboxMessageQueue = new ArrayDeque<>();
+    private Deque<Message> outboxMessageQueue = new ArrayDeque<>();
     private UserCharacter activeChar;
     private CharacterList characterList;
     private StateStack stateMachine = new StateStack();
     private WebSocketSession webSocketSession;
 
-    public Queue<Message> getMessageQueue() {
-        return messageQueue;
+    void tick() {
+        while(!outboxMessageQueue.isEmpty()){
+            outboxMessageQueue.add(stateMachine.handleMessage(inboxMessageQueue.getFirst()));
+        }
     }
 
-    public void setMessageQueue(Deque<Message> messageQueue) {
-        this.messageQueue = messageQueue;
+    public Message getOutboxMessage() {
+        return outboxMessageQueue.getFirst();
+    }
+
+    public void addInboxMessage(Message inboxMessage) {
+        this.inboxMessageQueue.add(inboxMessage);
     }
 
     public UserCharacter getActiveChar() {
@@ -57,32 +64,6 @@ public class SmartController {
         this.webSocketSession = webSocketSession;
     }
 
-    @SuppressWarnings("OverlyComplexMethod")
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        //noinspection QuestionableName
-        final SmartController that = (SmartController) o;
-
-        //noinspection OverlyComplexBooleanExpression
-        return (messageQueue != null ? messageQueue.equals(that.messageQueue) : that.messageQueue == null)
-                && (activeChar != null ? activeChar.equals(that.activeChar) : that.activeChar == null)
-                && (characterList != null ? characterList.equals(that.characterList) : that.characterList == null)
-                && (stateMachine != null ? stateMachine.equals(that.stateMachine) : that.stateMachine == null)
-                && (webSocketSession != null ? webSocketSession.equals(that.webSocketSession)
-                : that.webSocketSession == null);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = messageQueue != null ? messageQueue.hashCode() : 0;
-        result = 31 * result + (activeChar != null ? activeChar.hashCode() : 0);
-        result = 31 * result + (characterList != null ? characterList.hashCode() : 0);
-        result = 31 * result + (stateMachine != null ? stateMachine.hashCode() : 0);
-        result = 31 * result + (webSocketSession != null ? webSocketSession.hashCode() : 0);
-        return result;
-    }
 
 }
