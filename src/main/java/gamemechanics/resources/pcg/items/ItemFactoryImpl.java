@@ -50,7 +50,7 @@ public class ItemFactoryImpl implements ItemsFactory {
 
             Integer partId = itemPartsList.get(itemPartIndex);
             if (partId < Constants.MIN_ID_VALUE) {
-                while(true) {
+                while (true) {
                     final Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
                     if (kind.equals(EquipmentKind.EK_UNDEFINED.asInt())) {
                         kind = partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND);

@@ -77,7 +77,7 @@ public interface Bag extends GameEntity {
      *
      * @param fromPos     slot index to remove item from
      * @param isConfirmed is operation confirmed by the user
-     * if the removal wasn't confirmed or the chosen slot was empty
+     *                    if the removal wasn't confirmed or the chosen slot was empty
      */
     void throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed);
 

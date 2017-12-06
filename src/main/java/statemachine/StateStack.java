@@ -15,12 +15,12 @@ public class StateStack implements PendingStack {
     private final Deque<State> stack = new ArrayDeque<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(StateStack.class);
 
-    private enum StackActions { SA_PUSH, SA_POP, SA_CLEAR }
+    private enum StackActions {SA_PUSH, SA_POP, SA_CLEAR}
 
-    private enum ChangeStateMessages {CHARACTER_LIST_REQUEST_MESSAGE, LOBBY_REQUEST_MESSAGE,
-        STAY_IN_LINE_REQUEST_MESSAGE}
-
-
+    private enum ChangeStateMessages {
+        CHARACTER_LIST_REQUEST_MESSAGE, LOBBY_REQUEST_MESSAGE,
+        STAY_IN_LINE_REQUEST_MESSAGE
+    }
 
 
     private static class PendingChange {

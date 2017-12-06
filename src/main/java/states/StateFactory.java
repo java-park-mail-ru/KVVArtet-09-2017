@@ -8,7 +8,8 @@ import statemachine.PendingStack;
 public final class StateFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(StateFactory.class);
 
-    private StateFactory() { }
+    private StateFactory() {
+    }
 
     public static State createState(State.StateId stateId, PendingStack stack) {
         State state = null;

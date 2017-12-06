@@ -22,7 +22,7 @@ public class MessageHandlerContainer {
             throw new Exception("no handler for message of " + message.getClass().getName() + " type");
         }
         messageHandler.handleMessage(message, forUser);
-        LOGGER.trace("message handled: type =[" + message.getClass().getName()+ ']');
+        LOGGER.trace("message handled: type =[" + message.getClass().getName() + ']');
     }
 
     public <T extends Message> void registerHandler(@NotNull Class<T> clazz, MessageHandler<T> handler) {

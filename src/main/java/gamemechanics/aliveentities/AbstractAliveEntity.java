@@ -1,5 +1,6 @@
 package gamemechanics.aliveentities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
@@ -8,6 +9,7 @@ import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.*;
 import gamemechanics.items.containers.CharacterDoll;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -63,16 +65,19 @@ public abstract class AbstractAliveEntity implements AliveEntity {
 
     @SuppressWarnings("PublicField")
     public static class UserCharacterModel extends AbstractAliveEntityModel {
+        public final Integer id;
         public final CharacterRace characterRace;
         public final CharacterDoll equipment;
         public final Map<Integer, Map<Integer, Integer>> perkRanks;
 
-        public UserCharacterModel(@NotNull String name, @NotNull String description,
+        public UserCharacterModel(@NotNull Integer id,
+                                  @NotNull String name, @NotNull String description,
                                   @NotNull Map<Integer, Property> properties,
                                   @NotNull List<Bag> bags, @NotNull CharacterRole characterRole,
                                   @NotNull CharacterRace characterRace, @NotNull CharacterDoll equipment,
                                   @NotNull Map<Integer, Map<Integer, Integer>> perkRanks) {
             super(name, description, properties, bags, characterRole);
+            this.id = id;
             this.characterRace = characterRace;
             this.equipment = equipment;
             this.perkRanks = perkRanks;
@@ -116,12 +121,13 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
+    @JsonIgnore
     public Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -129,7 +135,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind) {
+    public Integer getProperty(@NotNull Integer propertyKind) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -144,7 +150,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void addProperty(Integer propertyKind, Property property) {
+    public void addProperty(@NotNull Integer propertyKind, @NotNull Property property) {
         if (hasProperty(propertyKind)) {
             return;
         }
@@ -152,7 +158,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void removeProperty(Integer propertyKind) {
+    public void removeProperty(@NotNull Integer propertyKind) {
         if (!hasProperty(propertyKind)) {
             return;
         }
@@ -160,7 +166,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void setProperty(Integer propertyKind, Integer propertyValue) {
+    public void setProperty(@NotNull Integer propertyKind, @NotNull Integer propertyValue) {
         if (!hasProperty(propertyKind)) {
             return;
         }
@@ -168,7 +174,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void setProperty(Integer propertyKind, Integer propertyIndex, Integer propertyValue) {
+    public void setProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex,
+                            @NotNull Integer propertyValue) {
         if (!hasProperty(propertyKind)) {
             return;
         }
@@ -176,7 +183,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void setProperty(Integer propertyKind, List<Integer> propertyValue) {
+    public void setProperty(@NotNull Integer propertyKind, @NotNull List<Integer> propertyValue) {
         if (!hasProperty(propertyKind)) {
             return;
         }
@@ -184,7 +191,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean setProperty(Integer propertyKind, Map<Integer, Integer> propertyValue) {
+    public Boolean setProperty(@NotNull Integer propertyKind, @NotNull Map<Integer, Integer> propertyValue) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
@@ -192,7 +199,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean modifyPropertyByPercentage(Integer propertyKind, Float percentage) {
+    public Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind, @NotNull Float percentage) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
@@ -200,7 +207,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean modifyPropertyByPercentage(Integer propertyKind, Integer propertyIndex, Float percentage) {
+    public Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind, @NotNull Integer propertyIndex,
+                                              @NotNull Float percentage) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
@@ -208,7 +216,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void modifyPropertyByAddition(Integer propertyKind, Integer toAdd) {
+    public void modifyPropertyByAddition(@NotNull Integer propertyKind, @NotNull Integer toAdd) {
         if (!hasProperty(propertyKind)) {
             return;
         }
@@ -216,7 +224,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void modifyPropertyByAddition(Integer propertyKind, Integer propertyIndex, Integer toAdd) {
+    public void modifyPropertyByAddition(@NotNull Integer propertyKind, @NotNull Integer propertyIndex,
+                                         @NotNull Integer toAdd) {
         if (!hasProperty(propertyKind)) {
             return;
         }
@@ -229,7 +238,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void affectHitpoints(Integer amount) {
+    public void affectHitpoints(@NotNull Integer amount) {
         if (!isAlive()) {
             return;
         }
@@ -281,7 +290,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Bag getBag(Integer bagIndex) {
+    public @Nullable Bag getBag(@NotNull Integer bagIndex) {
         if (bagIndex < 0 || bagIndex > bags.size()) {
             return null;
         }
@@ -372,7 +381,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         return effectsAffection;
     }
 
-    Integer getEffectsAffection(Integer affectorKind, Integer affectionIndex) {
+    Integer getEffectsAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         Integer effectsAffection = 0;
         for (Effect effect : effects) {
             if (!effect.isExpired()) {

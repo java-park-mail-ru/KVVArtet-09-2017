@@ -6,8 +6,8 @@ public abstract class AbstractState implements State {
     private final PendingStack stack;
 
     AbstractState(PendingStack stack) {
-      this.stack = stack;
-  }
+        this.stack = stack;
+    }
 
     @Override
     public void requestStackPush(State.StateId stateId) {

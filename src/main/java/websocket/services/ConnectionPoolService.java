@@ -1,4 +1,5 @@
 package websocket.services;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gamemechanics.smartcontroller.SmartController;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +35,7 @@ public class ConnectionPoolService {
         return sessions.containsKey(userId) && sessions.get(userId).getWebSocketSession().isOpen();
     }
 
-    public void removeUser(@NotNull Integer userId)
-    {
+    public void removeUser(@NotNull Integer userId) {
         connectionPool.addElement(sessions.get(userId));
         sessions.remove(userId);
     }

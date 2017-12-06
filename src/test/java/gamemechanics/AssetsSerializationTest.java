@@ -20,11 +20,9 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class PropertySerializationTest {
-
-
+public class AssetsSerializationTest {
     @Test
-    public void itemPartSerializationDeserialization() {
+    public void itemPartStringSerializationDeserialization() {
         final Random random = new Random(System.currentTimeMillis());
         final Map<Integer, Property> testProperty = new HashMap<>();
         testProperty.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(Constants.START_LEVEL));

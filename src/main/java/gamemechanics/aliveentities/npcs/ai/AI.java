@@ -89,7 +89,7 @@ public class AI implements DecisionMaker {
               @NotNull PathfindingAlgorithm pathfinder,
               @NotNull Map<Integer, Ability> abilities,
               @NotNull Map<Integer, BehaviorFunction> behaviours,
-              Integer activeBehaviourID) {
+              @NotNull Integer activeBehaviourID) {
         this.npc = npc;
         this.allies = allies;
         this.enemies = enemies;
@@ -119,7 +119,7 @@ public class AI implements DecisionMaker {
     }
 
     @Override
-    public void updateAggro(Integer enemyID, Integer amount) {
+    public void updateAggro(@NotNull Integer enemyID, @NotNull Integer amount) {
         if (!aggro.containsKey(enemyID)) {
             return;
         }
@@ -127,7 +127,7 @@ public class AI implements DecisionMaker {
     }
 
     @Override
-    public void updateDamageFrom(Integer enemyID, Integer amount) {
+    public void updateDamageFrom(@NotNull Integer enemyID, @NotNull Integer amount) {
         if (!gotDamageFrom.containsKey(enemyID)) {
             return;
         }

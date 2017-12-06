@@ -23,7 +23,6 @@ public class AuthorizationController {
     @SuppressWarnings("WeakerAccess")
     static final String FRONTED_URL = "https://lands-dangeous.herokuapp.com/";
 
-  
 
     public AuthorizationController(UserService userService, PasswordEncoder encoder) {
         super();
@@ -62,7 +61,7 @@ public class AuthorizationController {
     public ResponseEntity<String> signIn(@RequestBody User user, HttpSession httpSession) {
 
         final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
-      
+
         if (userIdInCurrentSession != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED.getResponse());
         }
