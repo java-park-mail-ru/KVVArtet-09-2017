@@ -5,18 +5,18 @@ import gamemechanics.smartcontroller.SmartController;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class ConnectionPool implements ObjectivePool<SmartController>{
+public class ConnectionPool implements ObjectivePool<SmartController> {
 
     private Queue<SmartController> connectionPool = new PriorityQueue<>();
     private Integer startCapacity = 8;
     private Integer capacityMultiplier = 2;
 
     public ConnectionPool() {
-         initializeNewElements();
+        initializeNewElements();
     }
 
     private void initializeNewElements() {
-        for(int i = 0; i < startCapacity; i++ ) {
+        for (int i = 0; i < startCapacity; i++) {
             connectionPool.add(new SmartController());
         }
     }

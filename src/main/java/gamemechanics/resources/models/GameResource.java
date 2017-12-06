@@ -19,7 +19,7 @@ import java.util.Set;
         @JsonSubTypes.Type(HybridModel.class),
         @JsonSubTypes.Type(HybridModelWithInlays.class),
 })
-public interface GameResource extends  GameEntity {
+public interface GameResource extends GameEntity {
     default Boolean hasProperty(@NotNull Integer propertyKind) {
         return false;
     }

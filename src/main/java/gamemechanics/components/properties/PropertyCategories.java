@@ -37,4 +37,8 @@ public class PropertyCategories {
     public static final int PC_INFLICTED_CATEGORIES = 23;
     public static final int PC_COOLDOWN = 24;
     public static final int PC_AREA_SHAPE = 25;
+
+    //serialized AliveEntity implementations-specific properties
+    public static final int PC_CHARACTER_ROLE_ID = 27;
+    public static final int PC_CHARACTER_RACE_ID = 28;
 }

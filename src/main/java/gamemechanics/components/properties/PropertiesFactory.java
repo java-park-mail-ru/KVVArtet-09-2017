@@ -89,6 +89,13 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_ITEM_BLUEPRINT_ID:
                 property = makeItemBlueprintIdProperty();
+                break;
+            case PropertyCategories.PC_CHARACTER_ROLE_ID:
+                property = makeCharacterRoleProperty();
+                break;
+            case PropertyCategories.PC_CHARACTER_RACE_ID:
+                property = makeCharacterRaceProperty();
+                break;
             default:
                 break;
         }
@@ -192,6 +199,14 @@ public final class PropertiesFactory {
     }
 
     private static Property makeItemBlueprintIdProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeCharacterRoleProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeCharacterRaceProperty() {
         return new SingleValueProperty(0);
     }
 }

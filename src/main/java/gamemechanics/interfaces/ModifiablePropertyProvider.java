@@ -21,7 +21,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *
      * @param propertyKind index to register the property under
      * @param property     property to add
-     * or false if there's already a property registered under such index
+     *                     or false if there's already a property registered under such index
      * @see Property
      */
     void addProperty(Integer propertyKind, Property property);
@@ -30,7 +30,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * remove {@link Property} by index
      *
      * @param propertyKind property index to remove
-     * or false if there're no properties registered under such index
+     *                     or false if there're no properties registered under such index
      * @see Property
      */
     void removeProperty(Integer propertyKind);
@@ -40,8 +40,8 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *
      * @param propertyKind  index of property to set a new value to
      * @param propertyValue value to set
-     * or false if there's either no property registered under such index
-     * or the property registered by that index is not a {@link gamemechanics.components.properties.SingleValueProperty}
+     *                      or false if there's either no property registered under such index
+     *                      or the property registered by that index is not a {@link gamemechanics.components.properties.SingleValueProperty}
      * @see Property
      * @see gamemechanics.components.properties.SingleValueProperty
      */
@@ -54,10 +54,10 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @param propertyKind  property ID to change
      * @param propertyIndex index of the value in the chosen property
      * @param propertyValue value to set
-     * or false if there's no property registered under such index
-     * or the property registered under such index is not
-     * a {@link ListProperty}
-     * or {@link MapProperty}
+     *                      or false if there's no property registered under such index
+     *                      or the property registered under such index is not
+     *                      a {@link ListProperty}
+     *                      or {@link MapProperty}
      * @see Property
      * @see ListProperty
      * @see MapProperty
@@ -69,8 +69,8 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *
      * @param propertyKind  property ID to set the list to
      * @param propertyValue values list to set
-     * or false if there's either no property registered under such index
-     * or the property registered under such index is not a {@link ListProperty}
+     *                      or false if there's either no property registered under such index
+     *                      or the property registered under such index is not a {@link ListProperty}
      * @see Property
      * @see ListProperty
      */
@@ -127,7 +127,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *
      * @param propertyKind ID of the property to modify
      * @param toAdd        amount to modify property's value(s) on
-     * or false if there's no property registered under such index
+     *                     or false if there's no property registered under such index
      * @see Property
      */
     void modifyPropertyByAddition(Integer propertyKind, Integer toAdd);
@@ -138,9 +138,9 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @param propertyKind  ID of the property to modify
      * @param propertyIndex index of the value in the property to modify
      * @param toAdd         amount to modify property's value on
-     * or false if there's either no property registered under such index
-     * or the property registered under such index is not a {@link ListProperty}
-     * or {@link MapProperty}
+     *                      or false if there's either no property registered under such index
+     *                      or the property registered under such index is not a {@link ListProperty}
+     *                      or {@link MapProperty}
      * @see Property
      * @see ListProperty
      * @see MapProperty
