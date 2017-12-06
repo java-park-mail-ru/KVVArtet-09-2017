@@ -18,7 +18,8 @@ public class CharacterList implements Charlist {
     public static class CharacterListModel {
         List<UserCharacter> characterList = new ArrayList<>();
         final Integer ownerID;
-        public CharacterListModel(Integer ownerID, List<UserCharacter>characterList) {
+
+        public CharacterListModel(Integer ownerID, List<UserCharacter> characterList) {
             this.ownerID = ownerID;
             this.characterList = characterList;
         }
