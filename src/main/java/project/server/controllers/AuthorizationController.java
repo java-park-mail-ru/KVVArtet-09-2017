@@ -3,10 +3,7 @@ package project.server.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.server.models.ApiResponse;
 import project.server.models.User;
 import project.server.services.UserService;
@@ -91,7 +88,7 @@ public class AuthorizationController {
         }
     }
 
-    @PostMapping("/signout")
+    @DeleteMapping("/signout")
     public ResponseEntity<String> signOut(HttpSession httpSession) {
         final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
         if (userIdInCurrentSession == null) {
@@ -115,7 +112,7 @@ public class AuthorizationController {
                 + ' ' + userIdInCurrentSession + "  Your login is " + username);
     }
 
-    @PostMapping("/settings")
+    @PutMapping("/settings")
     public ResponseEntity<String> changeUserProfile(@RequestBody User user, HttpSession httpSession) {
         final Integer id = (Integer) httpSession.getAttribute("id");
 
