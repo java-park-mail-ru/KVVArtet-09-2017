@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.globals.Constants;
+import gamemechanics.resources.pcg.items.ItemBlueprint;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ public class NpcPartAsset implements NpcPart {
     private final String description;
 
     private final Map<Integer, Property> properties;
+    private final List<ItemBlueprint> lootList;
 
     private final Integer partIndex;
 
@@ -24,11 +27,13 @@ public class NpcPartAsset implements NpcPart {
                         @JsonProperty("name") @NotNull String name,
                         @JsonProperty("description") @NotNull String description,
                         @JsonProperty("properties") @NotNull Map<Integer, Property> properties,
+                        @JsonProperty("lootList") @NotNull List<ItemBlueprint> lootList,
                         @JsonProperty("partIndex") @NotNull Integer partIndex) {
         this.npcPartAssetId = npcPartAssetId;
         this.name = name;
         this.description = description;
         this.properties = properties;
+        this.lootList = lootList;
         this.partIndex = partIndex;
     }
 
@@ -91,5 +96,10 @@ public class NpcPartAsset implements NpcPart {
     @Override
     public Integer getPartIndex() {
         return partIndex;
+    }
+
+    @Override
+    public List<ItemBlueprint> getLootList() {
+        return lootList;
     }
 }

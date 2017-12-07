@@ -34,11 +34,11 @@ public class ItemFactoryImpl implements ItemsFactory {
                 blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty() :
                 EquipmentKind.EK_UNDEFINED.asInt();
 
-        final List<ItemPart> itemPartsList = getItemParts(level, rarity, kind, blueprint.getItemParts());
+        final List<ItemPart> itemPartsList = getItemParts(rarity, kind, blueprint.getItemParts());
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));
     }
 
-    private List<ItemPart> getItemParts(@NotNull Integer level, @NotNull Integer rarity, @NotNull Integer kind,
+    private List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
                                         @NotNull Map<Integer, Integer> itemPartsList) {
         final Random random = new Random(System.currentTimeMillis());
         final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
@@ -303,7 +303,7 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
             }
 
-            Property mergedProperty = null;
+            Property mergedProperty;
             if (!propertiesList.isEmpty()) {
                 mergedProperty = new ListProperty(propertiesList);
             } else if (!propertiesMap.isEmpty()) {
