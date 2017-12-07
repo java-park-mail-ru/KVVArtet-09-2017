@@ -3,6 +3,7 @@ package gamemechanics.interfaces;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import gamemechanics.items.containers.CharacterDoll;
+import gamemechanics.items.containers.MonsterLootBag;
 import gamemechanics.items.containers.StorageBag;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @JsonSubTypes({
         @JsonSubTypes.Type(StorageBag.class),
         @JsonSubTypes.Type(CharacterDoll.class),
+        @JsonSubTypes.Type(MonsterLootBag.class),
 })
 public interface Bag extends GameEntity {
     /**
