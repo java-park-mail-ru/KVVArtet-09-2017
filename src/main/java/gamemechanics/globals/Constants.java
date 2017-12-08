@@ -21,6 +21,7 @@ public final class Constants {
     public static final int MAX_LEVEL = 60;
     public static final int FIRST_LEVEL_UP_CAP = 100;
     public static final int SKILL_POINTS_GRANTED_PER_LEVEL = 1;
+    public static final int LEVEL_RANGE_FOR_LOOT_DROPPING = 5;
 
     public static final int INITIAL_HITPOINTS_CAP = 100;
     public static final int HITPOINTS_PER_ENDURANCE_POINT = 60;

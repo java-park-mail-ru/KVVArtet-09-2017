@@ -5,7 +5,7 @@ import websocket.messages.Message;
 import javax.validation.constraints.NotNull;
 
 public abstract class MessageHandler<T> {
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     public MessageHandler(@NotNull Class<T> clazz) {
         this.clazz = clazz;

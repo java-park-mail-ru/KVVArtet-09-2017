@@ -9,6 +9,7 @@ import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.MapNode;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -53,7 +54,6 @@ public abstract class AbstractInstance implements Instance {
         }
     }
 
-    /* TODO: modify data model as DungeonInstance class will be specified */
     public static class DungeonInstanceModel extends AbstractInstanceModel {
         @SuppressWarnings("PublicField")
         public final Map<Integer, AI.BehaviorFunction> behaviors;
@@ -141,7 +141,7 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public ActionResult getBattleLogEntry(@NotNull Integer entryIndex) {
+    public @Nullable ActionResult getBattleLogEntry(@NotNull Integer entryIndex) {
         return currentRoom.getBattleLogEntry(entryIndex);
     }
 
@@ -172,8 +172,8 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
-    MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
-                              @NotNull Set<MapNode> occupiedNodes) {
+    @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
+                                        @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
         }

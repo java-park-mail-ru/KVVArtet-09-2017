@@ -3,11 +3,19 @@ package gamemechanics.battlefield.aliveentitiescontainers;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.components.properties.SingleValueProperty;
 import gamemechanics.globals.Constants;
+import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.interfaces.AliveEntity;
+import gamemechanics.interfaces.Bag;
 import gamemechanics.interfaces.Countable;
+import gamemechanics.interfaces.EquipableItem;
+import gamemechanics.items.loot.IngameLootContainer;
+import gamemechanics.items.loot.LootContainer;
+import gamemechanics.items.loot.PendingLootPool;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Squad implements Countable {
@@ -23,16 +31,26 @@ public class Squad implements Countable {
     private final Integer id = INSTANCE_COUNTER.getAndIncrement();
 
     private final List<AliveEntity> members;
+    private final Map<AliveEntity, LootContainer> earnedLoot = new HashMap<>();
+    private final PendingLootPool lootPool;
     private final Integer squadID;
 
-    public Squad(@NotNull List<AliveEntity> members, @NotNull Integer squadID) {
+    public Squad(@NotNull List<AliveEntity> members, @NotNull PendingLootPool lootPool, @NotNull Integer squadID) {
         this.members = members;
         this.squadID = squadID;
         for (AliveEntity member : members) {
             if (member != null) {
                 member.setProperty(PropertyCategories.PC_SQUAD_ID, this.squadID);
             }
+            earnedLoot.put(member, new IngameLootContainer());
         }
+        this.lootPool = lootPool;
+    }
+
+    public Squad(@NotNull List<AliveEntity> members, @NotNull Integer squadID) {
+        this.members = members;
+        this.squadID = squadID;
+        this.lootPool = null;
     }
 
     @Override
@@ -99,5 +117,46 @@ public class Squad implements Countable {
 
     public Boolean areAllDead() {
         return getAliveMembersCount() == 0;
+    }
+
+    public void generateLootFor(@NotNull AliveEntity member, @NotNull Bag lootBag) {
+        if (!earnedLoot.containsKey(member)) {
+            return;
+        }
+        for (Integer i = 0; i < lootBag.getSlotsCount(); ++i) {
+            final EquipableItem item = lootBag.getItem(i);
+            if (item != null) {
+                earnedLoot.get(member).addItem(item);
+            }
+        }
+    }
+
+    public void addExpFor(@NotNull AliveEntity member, @NotNull Integer amount) {
+        if (!earnedLoot.containsKey(member) || amount < 0) {
+            return;
+        }
+        earnedLoot.get(member).changeExp(amount);
+    }
+
+    public void addCashFor(@NotNull AliveEntity member, @NotNull Integer amount) {
+        if (!earnedLoot.containsKey(member) || amount < 0) {
+            return;
+        }
+        earnedLoot.get(member).changeCash(amount);
+    }
+
+    public void distributeLoot() {
+        if (lootPool == null) {
+            return;
+        }
+        for (AliveEntity member : earnedLoot.keySet()) {
+            member.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
+                    DigitsPairIndices.CURRENT_VALUE_INDEX, earnedLoot.get(member).getExpReward());
+            member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
+                    earnedLoot.get(member).getCashReward());
+            for (EquipableItem lootedItem : earnedLoot.get(member).getItemsList()) {
+                lootPool.offerItemToPool(member, lootedItem);
+            }
+        }
     }
 }

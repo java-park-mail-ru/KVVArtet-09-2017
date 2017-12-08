@@ -7,9 +7,9 @@ import java.util.Queue;
 
 public class ConnectionPool implements ObjectivePool<SmartController> {
 
-    private Queue<SmartController> connectionPool = new PriorityQueue<>();
+    private final Queue<SmartController> connectionPool = new PriorityQueue<>();
     private Integer startCapacity = 8;
-    private Integer capacityMultiplier = 2;
+    private static final Integer CAPACITY_MULTIPLIER = 2;
 
     public ConnectionPool() {
         initializeNewElements();
@@ -32,7 +32,7 @@ public class ConnectionPool implements ObjectivePool<SmartController> {
     @Override
     public void addMore() {
         initializeNewElements();
-        startCapacity *= capacityMultiplier;
+        startCapacity *= CAPACITY_MULTIPLIER;
     }
 
     @Override

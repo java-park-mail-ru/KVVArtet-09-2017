@@ -208,6 +208,7 @@ public class ItemFactoryImpl implements ItemsFactory {
 
         final Set<Integer> propertyIds = new HashSet<>();
         for (ItemPart part : parts) {
+            //noinspection Duplicates
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
             } else {
@@ -265,7 +266,7 @@ public class ItemFactoryImpl implements ItemsFactory {
                                         applyRarityBonus(propertiesMap.get(propertyIndex), rarities.get(i)));
                             }
                         }
-                    } else if (propertiesMap.keySet() == property.getPropertyMap().keySet()) {
+                    } else if (propertiesMap.keySet().equals(property.getPropertyMap().keySet())) {
                         for (Integer propertyIndex : propertiesMap.keySet()) {
                             if (isPropertyAlterable(propertyId)) {
                                 propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
@@ -277,6 +278,7 @@ public class ItemFactoryImpl implements ItemsFactory {
                         }
                     }
                 } else if (property.getPropertySet() != null) {
+                    //noinspection Duplicates
                     if (propertiesSet.isEmpty()) {
                         propertiesSet.addAll(property.getPropertySet());
                     } else {
@@ -303,7 +305,8 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
             }
 
-            Property mergedProperty;
+            final Property mergedProperty;
+            //noinspection Duplicates
             if (!propertiesList.isEmpty()) {
                 mergedProperty = new ListProperty(propertiesList);
             } else if (!propertiesMap.isEmpty()) {

@@ -18,6 +18,7 @@ import gamemechanics.interfaces.Action;
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Effect;
 import gamemechanics.interfaces.Updateable;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -180,8 +181,8 @@ public class Battlefield implements Updateable {
         return squads.get(Squad.TEAM_ONE_SQUAD_ID).areAllDead();
     }
 
-    public void pushAction(Action action) {
-        if (action.getSender().getInhabitant() == battlersQueue.getFirst()
+    public void pushAction(@NotNull Action action) {
+        if (action.getSender().getInhabitant().equals(battlersQueue.getFirst())
                 && activeBattlerActionsPooled < ACTIONS_PER_TURN) {
             actionsQueue.addLast(action);
             ++activeBattlerActionsPooled;
@@ -201,14 +202,14 @@ public class Battlefield implements Updateable {
         return battleLog;
     }
 
-    public ActionResult getBattleLogEntry(Integer entryIndex) {
+    public @Nullable ActionResult getBattleLogEntry(Integer entryIndex) {
         if (entryIndex < 0 || entryIndex >= battleLog.size()) {
             return null;
         }
         return battleLog.get(entryIndex);
     }
 
-    private void emplaceBattlers(List<SpawnPoint> spawnPoints) {
+    private void emplaceBattlers(@NotNull List<SpawnPoint> spawnPoints) {
         for (SpawnPoint spawnPoint : spawnPoints) {
             if (spawnPoint != null) {
                 spawnPoint.emplaceSquad();
@@ -216,7 +217,7 @@ public class Battlefield implements Updateable {
         }
     }
 
-    private void mergeMonsterSquads(List<SpawnPoint> spawnPoints) {
+    private void mergeMonsterSquads(@NotNull List<SpawnPoint> spawnPoints) {
         final Squad monsterSquad = new Squad(new ArrayList<>(), Squad.MONSTER_SQUAD_ID);
         for (SpawnPoint spawnPoint : spawnPoints) {
             if (spawnPoint != null) {
@@ -261,7 +262,7 @@ public class Battlefield implements Updateable {
         }
     }
 
-    private void rewardTeam(Integer teamID) {
+    private void rewardTeam(@NotNull Integer teamID) {
         final Integer looseTeamID;
         switch (teamID) {
             case Squad.TEAM_ONE_SQUAD_ID:

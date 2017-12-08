@@ -113,6 +113,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
                                                    @NotNull CharacterRole npcRole) {
         final Set<Integer> propertyIds = new HashSet<>();
         for (NpcPart part : npcPartList) {
+            //noinspection Duplicates
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
             } else {
@@ -184,6 +185,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
                         }
                     }
                 } else if (partProperty.getPropertySet() != null) {
+                    //noinspection Duplicates
                     if (propertySet.isEmpty()) {
                         propertySet.addAll(partProperty.getPropertySet());
                     } else {
@@ -208,6 +210,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
             }
 
             final Property mergedProperty;
+            //noinspection Duplicates
             if (!propertyList.isEmpty()) {
                 mergedProperty = new ListProperty(propertyList);
             } else if (!propertyMap.isEmpty()) {

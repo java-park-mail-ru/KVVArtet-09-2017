@@ -2,6 +2,7 @@ package gamemechanics.battlefield.aliveentitiescontainers;
 
 import gamemechanics.interfaces.AliveEntity;
 import gamemechanics.interfaces.Countable;
+import gamemechanics.items.loot.PendingLootPool;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -15,13 +16,16 @@ public class CharactersParty implements Countable {
     private final Integer partyID = INSTANCE_COUNTER.getAndIncrement();
 
     private final Map<Integer, AliveEntity> members;
+    private final PendingLootPool lootPool;
 
-    public CharactersParty(@NotNull Map<Integer, AliveEntity> members) {
+    public CharactersParty(@NotNull Map<Integer, AliveEntity> members,
+                           @NotNull PendingLootPool lootPool) {
         this.members = members;
+        this.lootPool = lootPool;
     }
 
-    public CharactersParty() {
-        this(new HashMap<>());
+    public CharactersParty(@NotNull PendingLootPool lootPool) {
+        this(new HashMap<>(), lootPool);
     }
 
     @Override
@@ -34,14 +38,14 @@ public class CharactersParty implements Countable {
         return partyID;
     }
 
-    public Squad toSquad(Integer squadId) {
+    public Squad toSquad(@NotNull Integer squadId) {
         final List<AliveEntity> membersList = new ArrayList<>();
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
                 membersList.add(members.get(roleId));
             }
         }
-        return new Squad(membersList, squadId);
+        return new Squad(membersList, lootPool, squadId);
     }
 
     public Squad toSquad() {
