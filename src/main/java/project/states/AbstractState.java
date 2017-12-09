@@ -1,26 +1,12 @@
 package project.states;
 
 import project.statemachine.PendingStack;
+import project.websocket.messages.Message;
 
 public abstract class AbstractState implements State {
-    private final PendingStack stack;
-
-    AbstractState(PendingStack stack) {
-      this.stack = stack;
-  }
 
     @Override
-    public void requestStackPush(State.StateId stateId) {
-        stack.pushState(stateId);
-    }
+    public boolean handleMessage(Message message) {
 
-    @Override
-    public void requestStackPop() {
-        stack.popState();
-    }
-
-    @Override
-    public void requestStackClear() {
-        stack.clearState();
     }
 }

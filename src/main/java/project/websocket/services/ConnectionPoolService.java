@@ -24,6 +24,10 @@ public class ConnectionPoolService {
         this.objectMapper = objectMapper;
     }
 
+    public void tick() {
+
+    }
+
     public void putMessage(Integer userId, Message message) {
         sessions.get(userId).addInboxMessage(message);
     }

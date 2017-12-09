@@ -18,4 +18,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(StayInLineRequestMessage.class)
 })
 public abstract class Message {
+    String status;
 }

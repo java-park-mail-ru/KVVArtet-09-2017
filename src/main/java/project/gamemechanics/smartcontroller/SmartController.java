@@ -19,7 +19,7 @@ public class SmartController {
     private WebSocketSession webSocketSession;
 
     void tick() {
-        while(!outboxMessageQueue.isEmpty()){
+        while(!inboxMessageQueue.isEmpty()){
             outboxMessageQueue.add(stateMachine.handleMessage(inboxMessageQueue.getFirst()));
         }
     }
@@ -63,7 +63,5 @@ public class SmartController {
     public void setWebSocketSession(WebSocketSession webSocketSession) {
         this.webSocketSession = webSocketSession;
     }
-
-
 
 }
