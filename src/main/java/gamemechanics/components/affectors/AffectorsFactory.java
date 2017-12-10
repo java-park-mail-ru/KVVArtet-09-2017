@@ -4,6 +4,7 @@ import gamemechanics.globals.CharacterRatings;
 import gamemechanics.globals.CharacterStats;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.EquipmentKind;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public final class AffectorsFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    public static @Nullable Affector getAffector(Integer affectorID) {
+    public static @Nullable Affector getAffector(@NotNull Integer affectorID) {
         Affector affector = null;
         switch (affectorID) {
             case AffectorCategories.AC_STATS_AFFECTOR:

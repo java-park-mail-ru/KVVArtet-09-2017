@@ -17,8 +17,8 @@ public class BasicModel extends AbstractModel {
     public BasicModel(@JsonProperty("modelId") @NotNull Integer modelID,
                       @JsonProperty("name") @NotNull String name,
                       @JsonProperty("description") @NotNull String description,
-                      @JsonProperty("properties") @NotNull Map<Integer, Property> properties,
-                      @JsonProperty("affectors") @NotNull Map<Integer, Affector> affectors) {
+                      @JsonProperty("properties") Map<Integer, Property> properties,
+                      @JsonProperty("affectors") Map<Integer, Affector> affectors) {
         super(modelID, name, description);
         this.properties = properties;
         this.affectors = affectors;

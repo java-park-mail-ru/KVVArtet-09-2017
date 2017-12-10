@@ -1,5 +1,6 @@
 package gamemechanics.aliveentities;
 
+import gamemechanics.aliveentities.helpers.ExperienceCalculator;
 import gamemechanics.components.affectors.AffectorCategories;
 import gamemechanics.components.mappers.PropertyToAffectorMapper;
 import gamemechanics.components.properties.PropertyCategories;
@@ -48,9 +49,8 @@ public class UserCharacter extends AbstractAliveEntity {
     public void levelUp() {
         modifyPropertyByAddition(PropertyCategories.PC_LEVEL, 1);
         final List<Integer> nextLevelUpCap = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-        for (Integer i = 0; i < nextLevelUpCap.size(); ++i) {
-            nextLevelUpCap.set(i, getProperty(PropertyCategories.PC_XP_POINTS, i));
-        }
+        setProperty(PropertyCategories.PC_XP_POINTS, DigitsPairIndices.MAX_VALUE_INDEX,
+                ExperienceCalculator.getNewLevelUpCap(getProperty(PropertyCategories.PC_LEVEL)));
         // grant him some skill points to spend on perks
         modifyPropertyByAddition(PropertyCategories.PC_SKILL_POINTS, Constants.SKILL_POINTS_GRANTED_PER_LEVEL);
 

@@ -2,6 +2,8 @@ package gamemechanics.components.properties;
 
 import gamemechanics.battlefield.map.tilesets.TilesetShapes;
 import gamemechanics.globals.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +14,7 @@ public final class PropertiesFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    public static Property makeProperty(Integer propertyIndex) {
+    public static @Nullable Property makeProperty(@NotNull Integer propertyIndex) {
         Property property = null;
         switch (propertyIndex) {
             case PropertyCategories.PC_STATS:
@@ -95,6 +97,9 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_CHARACTER_RACE_ID:
                 property = makeCharacterRaceProperty();
+                break;
+            case PropertyCategories.PC_AVAILABLE_EQUIPMENT:
+                property = makeAvailableEquipmentProperty();
                 break;
             default:
                 break;
@@ -208,5 +213,9 @@ public final class PropertiesFactory {
 
     private static Property makeCharacterRaceProperty() {
         return new SingleValueProperty(0);
+    }
+
+    private static Property makeAvailableEquipmentProperty() {
+        return new SetProperty(new HashSet<>(PropertyCategories.PC_AVAILABLE_EQUIPMENT));
     }
 }

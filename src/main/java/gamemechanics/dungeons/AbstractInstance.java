@@ -9,6 +9,8 @@ import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.MapNode;
+import gamemechanics.resources.pcg.PcgContentFactory;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -30,6 +32,8 @@ public abstract class AbstractInstance implements Instance {
 
     private final List<CharactersParty> squads = new ArrayList<>();
 
+    final PcgContentFactory factory;
+
     Battlefield currentRoom;
 
     private static class AbstractInstanceModel {
@@ -39,30 +43,34 @@ public abstract class AbstractInstance implements Instance {
         public final Integer gameMode;
         public final Integer roomsCount;
         @SuppressWarnings("PublicField")
+        public final PcgContentFactory factory;
+        @SuppressWarnings("PublicField")
         public final List<CharactersParty> squads;
 
         AbstractInstanceModel(@NotNull String name, @NotNull String description,
                               @NotNull Integer gameMode, @NotNull Integer level,
-                              @NotNull Integer roomsCount, @NotNull List<CharactersParty> squads) {
+                              @NotNull Integer roomsCount, @NotNull PcgContentFactory factory,
+                              @NotNull List<CharactersParty> squads) {
             this.name = name;
             this.description = description;
             this.level = level;
             this.gameMode = gameMode;
             this.roomsCount = roomsCount;
+            this.factory = factory;
             this.squads = squads;
         }
     }
 
-    /* TODO: modify data model as DungeonInstance class will be specified */
     public static class DungeonInstanceModel extends AbstractInstanceModel {
         @SuppressWarnings("PublicField")
         public final Map<Integer, AI.BehaviorFunction> behaviors;
 
         public DungeonInstanceModel(@NotNull String name, @NotNull String description,
                                     @NotNull Integer level, @NotNull Integer roomsCount,
+                                    @NotNull PcgContentFactory factory,
                                     @NotNull List<CharactersParty> squads,
                                     @NotNull Map<Integer, AI.BehaviorFunction> behaviors) {
-            super(name, description, Battlefield.PVE_GAME_MODE, level, roomsCount, squads);
+            super(name, description, Battlefield.PVE_GAME_MODE, level, roomsCount, factory, squads);
             this.behaviors = behaviors;
         }
     }
@@ -71,9 +79,10 @@ public abstract class AbstractInstance implements Instance {
     /* TODO: modify data model as LandInstance class will be specified */
     public static class LandInstanceModel extends AbstractInstanceModel {
         public LandInstanceModel(@NotNull String name, @NotNull String description,
-                                 Integer level, Integer roomsCount,
+                                 @NotNull Integer level, @NotNull Integer roomsCount,
+                                 @NotNull PcgContentFactory factory,
                                  @NotNull List<CharactersParty> squads) {
-            super(name, description, Battlefield.PVP_GAME_MODE, level, roomsCount, squads);
+            super(name, description, Battlefield.PVP_GAME_MODE, level, roomsCount, factory, squads);
         }
     }
 
@@ -83,6 +92,7 @@ public abstract class AbstractInstance implements Instance {
         gameMode = model.gameMode;
         level = model.level;
         roomsCount = model.roomsCount;
+        factory = model.factory;
         squads.addAll(model.squads);
     }
 
@@ -92,6 +102,7 @@ public abstract class AbstractInstance implements Instance {
         gameMode = model.gameMode;
         level = model.level;
         roomsCount = model.roomsCount;
+        factory = model.factory;
         squads.addAll(model.squads);
     }
 
@@ -141,7 +152,7 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public ActionResult getBattleLogEntry(@NotNull Integer entryIndex) {
+    public @Nullable ActionResult getBattleLogEntry(@NotNull Integer entryIndex) {
         return currentRoom.getBattleLogEntry(entryIndex);
     }
 
@@ -171,9 +182,17 @@ public abstract class AbstractInstance implements Instance {
         return squads.get(Squad.PLAYERS_SQUAD_ID).areAllDead();
     }
 
+    @Override
+    public @Nullable CharactersParty getParty(@NotNull Integer partyIndex) {
+        if (partyIndex < 0 || partyIndex >= squads.size()) {
+            return null;
+        }
+        return squads.get(partyIndex);
+    }
+
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
-    MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
-                              @NotNull Set<MapNode> occupiedNodes) {
+    @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
+                                        @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
         }

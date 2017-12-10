@@ -1,5 +1,8 @@
 package gamemechanics.items.containers;
 
+import gamemechanics.components.properties.Property;
+import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.components.properties.SingleValueProperty;
 import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.Bag;
 import gamemechanics.interfaces.EquipableItem;
@@ -9,17 +12,33 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Random;
 
 public class MonsterLootBag implements Bag {
-    private final Integer level;
-
     private final List<ItemBlueprint> itemPresets;
     private final ItemsFactory itemGenerator;
 
     public MonsterLootBag(@NotNull List<ItemBlueprint> itemPresets, @NotNull Integer level,
                           @NotNull ItemsFactory itemGenerator) {
         this.itemPresets = itemPresets;
-        this.level = level;
+
+        final Random random = new Random(System.currentTimeMillis());
+        for (ItemBlueprint itemPreset : itemPresets) {
+            if (!itemPreset.getProperties().containsKey(PropertyCategories.PC_LEVEL)) {
+                final Property property = new SingleValueProperty(level
+                        + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING)
+                        - Constants.LEVEL_RANGE_FOR_LOOT_DROPPING / 2);
+                itemPreset.getProperties().put(PropertyCategories.PC_LEVEL, property);
+            } else {
+                if (itemPreset.getProperties().get(PropertyCategories.PC_LEVEL).getProperty()
+                        < Constants.START_LEVEL) {
+                    itemPreset.getProperties().get(PropertyCategories.PC_LEVEL).setSingleProperty(level
+                            + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING)
+                            - Constants.LEVEL_RANGE_FOR_LOOT_DROPPING / 2);
+                }
+            }
+        }
+
         this.itemGenerator = itemGenerator;
     }
 
@@ -82,6 +101,8 @@ public class MonsterLootBag implements Bag {
         if (itemIndex < 0 || itemIndex >= itemPresets.size()) {
             return null;
         }
-        return itemGenerator.makeItem(itemPresets.get(itemIndex));
+        final Random random = new Random(System.currentTimeMillis());
+        return random.nextInt(Constants.WIDE_PERCENTAGE_CAP_INT) <= itemPresets.get(itemIndex).getDropChance()
+                ? itemGenerator.makeItem(itemPresets.get(itemIndex)) : null;
     }
 }

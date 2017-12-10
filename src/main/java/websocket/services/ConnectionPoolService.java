@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class ConnectionPoolService {
 
-    private ConnectionPool connectionPool = new ConnectionPool();
-    private Map<Integer, SmartController> sessions = new ConcurrentHashMap<>();
+    private final ConnectionPool connectionPool = new ConnectionPool();
+    private final Map<Integer, SmartController> sessions = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
 
     public ConnectionPoolService(ObjectMapper objectMapper) {

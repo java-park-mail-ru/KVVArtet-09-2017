@@ -11,13 +11,19 @@ import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.battlefield.map.helpers.Pathfinder;
+import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.components.properties.SingleValueProperty;
 import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
-import gamemechanics.interfaces.Action;
-import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.Effect;
-import gamemechanics.interfaces.Updateable;
+import gamemechanics.globals.EquipmentKind;
+import gamemechanics.globals.ItemRarity;
+import gamemechanics.interfaces.*;
+import gamemechanics.items.containers.MonsterLootBag;
+import gamemechanics.resources.pcg.items.ItemBlueprint;
+import gamemechanics.resources.pcg.items.ItemPart;
+import gamemechanics.resources.pcg.items.ItemsFactory;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -51,6 +57,8 @@ public class Battlefield implements Updateable {
 
     private Integer turnCounter = INITIAL_TURN_NUMBER;
 
+    private final ItemsFactory itemsGenerator;
+
     private final Integer mode;
 
     public static class BattlefieldModel {
@@ -60,13 +68,17 @@ public class Battlefield implements Updateable {
         public final BattleMap map;
         @SuppressWarnings("PublicField")
         public final List<SpawnPoint> spawnPoints;
+        @SuppressWarnings("PublicField")
+        public final ItemsFactory itemsGenerator;
         public final Integer mode;
 
         public BattlefieldModel(@NotNull Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
-                                @NotNull List<SpawnPoint> spawnPoints, @NotNull Integer mode) {
+                                @NotNull List<SpawnPoint> spawnPoints, @NotNull ItemsFactory itemsGenerator,
+                                @NotNull Integer mode) {
             this.behaviors = behaviors;
             this.map = map;
             this.spawnPoints = spawnPoints;
+            this.itemsGenerator = itemsGenerator;
             this.mode = mode;
         }
     }
@@ -77,6 +89,7 @@ public class Battlefield implements Updateable {
         map = model.map;
         mode = model.mode;
         pathfinder = new Pathfinder(map);
+        itemsGenerator = model.itemsGenerator;
 
         emplaceBattlers(model.spawnPoints);
 
@@ -110,7 +123,8 @@ public class Battlefield implements Updateable {
         for (Integer i = 0; i < monsterSquad.getSquadSize(); ++i) {
             final Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
             Integer activeBehaviorId = Constants.WRONG_INDEX;
-            for (Integer behaviorId : monsterSquad.getMember(i).getCharacterRole().getBehaviorIds()) {
+            for (Integer behaviorId : Objects.requireNonNull(Objects.requireNonNull(
+                    monsterSquad.getMember(i)).getCharacterRole().getBehaviorIds())) {
                 if (behaviors.containsKey(behaviorId)) {
                     if (activeBehaviorId == Constants.WRONG_INDEX) {
                         activeBehaviorId = behaviorId;
@@ -118,9 +132,10 @@ public class Battlefield implements Updateable {
                     monsterBehaviors.put(behaviorId, behaviors.get(behaviorId));
                 }
             }
-            monsterSquad.getMember(i).setBehavior(new AI(monsterSquad.getMember(i),
+            Objects.requireNonNull(monsterSquad.getMember(i))
+                    .setBehavior(new AI(Objects.requireNonNull(monsterSquad.getMember(i)),
                     monsterSquad, squads.get(Squad.PLAYERS_SQUAD_ID), map, pathfinder,
-                    monsterSquad.getMember(i).getCharacterRole().getAllAbilities(),
+                    Objects.requireNonNull(monsterSquad.getMember(i)).getCharacterRole().getAllAbilities(),
                     monsterBehaviors, activeBehaviorId));
         }
     }
@@ -180,8 +195,8 @@ public class Battlefield implements Updateable {
         return squads.get(Squad.TEAM_ONE_SQUAD_ID).areAllDead();
     }
 
-    public void pushAction(Action action) {
-        if (action.getSender().getInhabitant() == battlersQueue.getFirst()
+    public void pushAction(@NotNull Action action) {
+        if (action.getSender().getInhabitant().equals(battlersQueue.getFirst())
                 && activeBattlerActionsPooled < ACTIONS_PER_TURN) {
             actionsQueue.addLast(action);
             ++activeBattlerActionsPooled;
@@ -201,14 +216,14 @@ public class Battlefield implements Updateable {
         return battleLog;
     }
 
-    public ActionResult getBattleLogEntry(Integer entryIndex) {
+    public @Nullable ActionResult getBattleLogEntry(Integer entryIndex) {
         if (entryIndex < 0 || entryIndex >= battleLog.size()) {
             return null;
         }
         return battleLog.get(entryIndex);
     }
 
-    private void emplaceBattlers(List<SpawnPoint> spawnPoints) {
+    private void emplaceBattlers(@NotNull List<SpawnPoint> spawnPoints) {
         for (SpawnPoint spawnPoint : spawnPoints) {
             if (spawnPoint != null) {
                 spawnPoint.emplaceSquad();
@@ -216,13 +231,16 @@ public class Battlefield implements Updateable {
         }
     }
 
-    private void mergeMonsterSquads(List<SpawnPoint> spawnPoints) {
+    private void mergeMonsterSquads(@NotNull List<SpawnPoint> spawnPoints) {
         final Squad monsterSquad = new Squad(new ArrayList<>(), Squad.MONSTER_SQUAD_ID);
         for (SpawnPoint spawnPoint : spawnPoints) {
             if (spawnPoint != null) {
                 if (spawnPoint.getSquad().getSquadID() == Squad.MONSTER_SQUAD_ID) {
                     for (Integer i = 0; i < spawnPoint.getSquad().getSquadSize(); ++i) {
-                        monsterSquad.addMember(spawnPoint.getSquad().getMember(i));
+                        final AliveEntity member = spawnPoint.getSquad().getMember(i);
+                        if (member != null) {
+                            monsterSquad.addMember(member);
+                        }
                     }
                 }
             }
@@ -249,19 +267,35 @@ public class Battlefield implements Updateable {
     private void endBattleCleanup() {
         for (Squad squad : squads) {
             for (Integer i = 0; i < squad.getSquadSize(); ++i) {
-                squad.getMember(i).removeProperty(PropertyCategories.PC_COORDINATES);
+                final AliveEntity member = squad.getMember(i);
+                if (member != null) {
+                    member.removeProperty(PropertyCategories.PC_COORDINATES);
+                }
             }
         }
     }
 
     private void generateLoot() {
-        // collect all loot lists from mobs and generate loot
-        for (Integer i = 0; i < squads.get(Squad.MONSTER_SQUAD_ID).getSquadSize(); ++i) {
+        final Integer winnersExpBonus = ExperienceCalculator.getPartyBiasedXPReward(
+                ExperienceCalculator.getXPReward(squads.get(Squad.PLAYERS_SQUAD_ID).getAverageLevel(),
+                        squads.get(Squad.MONSTER_SQUAD_ID).getAverageLevel()),
+                squads.get(Squad.PLAYERS_SQUAD_ID).getSquadSize());
+        final Integer winnersGoldBonus = CashCalculator.getPartyBiasedCashReward(
+                CashCalculator.getCashReward(squads.get(Squad.MONSTER_SQUAD_ID).getAverageLevel()),
+                squads.get(Squad.PLAYERS_SQUAD_ID).getSquadSize());
 
+        for (Integer i = 0; i < squads.get(Squad.PLAYERS_SQUAD_ID).getSquadSize(); ++i) {
+            final AliveEntity member = squads.get(Squad.PLAYERS_SQUAD_ID).getMember(i);
+            if (member != null) {
+                squads.get(Squad.PLAYERS_SQUAD_ID).addExpFor(member, winnersExpBonus);
+                squads.get(Squad.PLAYERS_SQUAD_ID).addCashFor(member, winnersGoldBonus);
+            }
         }
+
+        squads.get(Squad.PLAYERS_SQUAD_ID).distributeLoot();
     }
 
-    private void rewardTeam(Integer teamID) {
+    private void rewardTeam(@NotNull Integer teamID) {
         final Integer looseTeamID;
         switch (teamID) {
             case Squad.TEAM_ONE_SQUAD_ID:
@@ -273,13 +307,39 @@ public class Battlefield implements Updateable {
             default:
                 return;
         }
+        final Integer winnersExpBonus = ExperienceCalculator.getPartyBiasedXPReward(
+                ExperienceCalculator.getXPReward(squads.get(teamID).getAverageLevel(),
+                        squads.get(looseTeamID).getAverageLevel()), squads.get(teamID).getSquadSize());
+        final Integer losersExpBonus = ExperienceCalculator.getPartyBiasedXPReward(
+                ExperienceCalculator.getXPReward(squads.get(looseTeamID).getAverageLevel(),
+                        squads.get(teamID).getAverageLevel()), squads.get(looseTeamID).getSquadSize()) / 2;
+
+        final Integer winnersGoldBonus = CashCalculator.getPartyBiasedCashReward(
+                CashCalculator.getCashReward(squads.get(looseTeamID).getAverageLevel()),
+                squads.get(teamID).getSquadSize());
+        final Integer losersGoldBonus = CashCalculator.getPartyBiasedCashReward(
+                CashCalculator.getCashReward(squads.get(teamID).getAverageLevel()),
+                squads.get(looseTeamID).getSquadSize());
         // reward winners with full-scale
         for (Integer i = 0; i < squads.get(teamID).getSquadSize(); ++i) {
-
+            final AliveEntity member = squads.get(teamID).getMember(i);
+            if (member != null) {
+                squads.get(teamID).addExpFor(member, winnersExpBonus);
+                squads.get(teamID).addCashFor(member, winnersGoldBonus);
+                generatePvpKillReward(squads.get(teamID), member);
+            }
         }
         // also reward the team that's lost but with lesser reward
         for (Integer i = 0; i < squads.get(looseTeamID).getSquadSize(); ++i) {
+            final AliveEntity member = squads.get(looseTeamID).getMember(i);
+            if (member != null) {
+                squads.get(looseTeamID).addExpFor(member, losersExpBonus);
+                squads.get(looseTeamID).addCashFor(member, losersGoldBonus);
+            }
+        }
 
+        for (Squad squad : squads) {
+            squad.distributeLoot();
         }
     }
 
@@ -366,12 +426,109 @@ public class Battlefield implements Updateable {
                                         }
                                     }
                                 }
+
+                                if (mode == PVE_GAME_MODE) {
+                                    final Bag lootBag = event.getWhere().getInhabitant()
+                                            .getBag(Constants.PERSONAL_REWARD_LOOT_BAG_ID);
+                                    if (lootBag != null) {
+                                        squads.get(squadIdToReward)
+                                                .generateLootFor(entry.getSender().getInhabitant(), lootBag);
+                                    }
+                                } else {
+                                    generatePvpKillReward(squads.get(squadIdToReward),
+                                            entry.getSender().getInhabitant());
+                                }
+                                shareGroupKillReward(squads.get(squadIdToReward), event.getWhere().getInhabitant());
                             }
                         }
                     }
                 }
 
                 entry.markProcessed();
+            }
+        }
+    }
+
+    private ItemRarity defineItemRarity(@NotNull Random random) {
+        final Integer roll = random.nextInt(Constants.WIDE_PERCENTAGE_CAP_INT);
+        if (roll < ItemRarity.IR_LEGENDARY.getDefaultDropChance()) {
+            return ItemRarity.IR_LEGENDARY;
+        }
+        if (roll < ItemRarity.IR_EPIC.getDefaultDropChance()) {
+            return ItemRarity.IR_EPIC;
+        }
+        if (roll < ItemRarity.IR_RARE.getDefaultDropChance()) {
+            return ItemRarity.IR_RARE;
+        }
+        if (roll < ItemRarity.IR_GOOD.getDefaultDropChance()) {
+            return ItemRarity.IR_GOOD;
+        }
+        if (roll < ItemRarity.IR_COMMON.getDefaultDropChance()) {
+            return ItemRarity.IR_COMMON;
+        }
+        return ItemRarity.IR_TRASH;
+    }
+
+    private void generatePvpKillReward(@NotNull Squad killersSquad, @NotNull AliveEntity killer) {
+
+        final Random random = new Random(System.currentTimeMillis());
+
+        final Map<Integer, Integer> itemParts = new HashMap<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer i = ItemPart.FIRST_PART_ID; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
+            itemParts.put(i, Constants.UNDEFINED_ID);
+        }
+        final Set<Integer> equipableKinds = killer.getCharacterRole().getEquipableKinds();
+        final List<Integer> availableEquipmentKinds;
+        if (equipableKinds != null) {
+            availableEquipmentKinds = new ArrayList<>(equipableKinds);
+        } else {
+            availableEquipmentKinds = null;
+        }
+        final Integer lootBagSize = Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE
+                + random.nextInt(2) - random.nextInt(2);
+        final List<ItemBlueprint> lootList = new ArrayList<>(lootBagSize);
+        for (Integer i = 0; i < lootBagSize; ++i) {
+            final Integer equipmentKind = availableEquipmentKinds == null
+                    ? random.nextInt(EquipmentKind.EK_SIZE.asInt())
+                    : availableEquipmentKinds.get(
+                    random.nextInt(availableEquipmentKinds.size()));
+
+            Integer level = killer.getLevel()
+                    + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2
+                    - random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2;
+            level = level > Constants.MAX_LEVEL ? Constants.MAX_LEVEL
+                    : level < Constants.START_LEVEL ? Constants.START_LEVEL : level;
+
+            final ItemRarity rarity = defineItemRarity(random);
+
+            final Map<Integer, Property> properties = new HashMap<>();
+            properties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+
+            final Property rarityProperty =
+                    new SingleValueProperty(rarity == ItemRarity.IR_TRASH
+                            ? ItemRarity.IR_UNDEFINED.asInt() : rarity.asInt());
+            properties.put(PropertyCategories.PC_ITEM_RARITY, rarityProperty);
+
+            properties.put(PropertyCategories.PC_ITEM_KIND, new SingleValueProperty(equipmentKind));
+
+            lootList.set(i, new ItemBlueprint(
+                    rarity == ItemRarity.IR_UNDEFINED
+                            ? rarity.getDefaultDropChance()
+                            : Constants.UNDEFINED_RARITY_DEFAULT_DROP_CHANCE,
+                    properties, itemParts));
+            killersSquad.generateLootFor(killer, new MonsterLootBag(lootList, level, itemsGenerator));
+        }
+    }
+
+    private void shareGroupKillReward(@NotNull Squad killers, @NotNull AliveEntity killed) {
+        for (Integer memberIndex = 0; memberIndex < killers.getSquadSize(); ++memberIndex) {
+            final AliveEntity member = killers.getMember(memberIndex);
+            if (member != null && member.isAlive()) {
+                if (mode == PVE_GAME_MODE) {
+                    killers.generateLootFor(member, killed.getBag(Constants.GENERIC_REWARD_LOOT_BAG_ID));
+                } else {
+                    generatePvpKillReward(killers, member);
+                }
             }
         }
     }
