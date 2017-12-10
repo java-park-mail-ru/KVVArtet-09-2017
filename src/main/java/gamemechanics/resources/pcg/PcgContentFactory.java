@@ -9,7 +9,6 @@ import gamemechanics.resources.pcg.npcs.NpcsFactory;
 
 import javax.validation.constraints.NotNull;
 
-@SuppressWarnings("InterfaceNeverImplemented")
 public interface PcgContentFactory {
     EquipableItem makeItem(@NotNull ItemBlueprint blueprint);
 

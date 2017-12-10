@@ -4,8 +4,10 @@ import gamemechanics.aliveentities.npcs.ai.AI;
 import gamemechanics.battlefield.Battlefield;
 import gamemechanics.battlefield.actionresults.ActionResult;
 import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
+import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
+import gamemechanics.globals.Constants;
 import gamemechanics.globals.DigitsPairIndices;
 import gamemechanics.globals.Directions;
 import gamemechanics.interfaces.MapNode;
@@ -28,7 +30,7 @@ public abstract class AbstractInstance implements Instance {
     private final Integer gameMode;
 
     private final Integer roomsCount;
-    private final Integer roomsCleared = 0;
+    Integer roomsCleared = 0;
 
     private final List<CharactersParty> squads = new ArrayList<>();
 
@@ -76,13 +78,12 @@ public abstract class AbstractInstance implements Instance {
     }
 
 
-    /* TODO: modify data model as LandInstance class will be specified */
     public static class LandInstanceModel extends AbstractInstanceModel {
         public LandInstanceModel(@NotNull String name, @NotNull String description,
-                                 @NotNull Integer level, @NotNull Integer roomsCount,
+                                 @NotNull Integer level,
                                  @NotNull PcgContentFactory factory,
                                  @NotNull List<CharactersParty> squads) {
-            super(name, description, Battlefield.PVP_GAME_MODE, level, roomsCount, factory, squads);
+            super(name, description, Battlefield.PVP_GAME_MODE, level, 1, factory, squads);
         }
     }
 
@@ -263,5 +264,18 @@ public abstract class AbstractInstance implements Instance {
         }
 
         return null;
+    }
+
+
+    List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
+        final List<SpawnPoint> spawnPoints = new ArrayList<>();
+        final Set<MapNode> reservedNodes = new HashSet<>();
+        for (Squad squad : squadList) {
+            final SpawnPoint spawnPoint = new SpawnPoint(Objects.requireNonNull(emplaceSpawnPoint(squad,
+                    Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, map, reservedNodes)),
+                    Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
+            spawnPoints.add(spawnPoint);
+        }
+        return spawnPoints;
     }
 }

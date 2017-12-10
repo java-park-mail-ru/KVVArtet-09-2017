@@ -101,6 +101,18 @@ public final class PropertiesFactory {
             case PropertyCategories.PC_AVAILABLE_EQUIPMENT:
                 property = makeAvailableEquipmentProperty();
                 break;
+            case PropertyCategories.PC_ACTIVE_ROLE:
+                property = makeActiveRoleProperty();
+                break;
+            case PropertyCategories.PC_AVAILABLE_ROLES:
+                property = makeAvailableRolesProperty();
+                break;
+            case PropertyCategories.PC_PARTY_ID:
+                property = makePartyIdProperty();
+                break;
+            case PropertyCategories.PC_INSTANCE_ID:
+                property = makeInstanceId();
+                break;
             default:
                 break;
         }
@@ -217,5 +229,21 @@ public final class PropertiesFactory {
 
     private static Property makeAvailableEquipmentProperty() {
         return new SetProperty(new HashSet<>(PropertyCategories.PC_AVAILABLE_EQUIPMENT));
+    }
+
+    private static Property makeActiveRoleProperty() {
+        return new SingleValueProperty(Constants.UNDEFINED_ID);
+    }
+
+    private static Property makeAvailableRolesProperty() {
+        return new SetProperty(new HashSet<>(CharacterRoleIds.CR_SIZE));
+    }
+
+    private static Property makePartyIdProperty() {
+        return new SingleValueProperty(Constants.UNDEFINED_ID);
+    }
+
+    private static Property makeInstanceId() {
+        return new SingleValueProperty(Constants.UNDEFINED_ID);
     }
 }

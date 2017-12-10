@@ -72,7 +72,7 @@ public class Battlefield implements Updateable {
         public final ItemsFactory itemsGenerator;
         public final Integer mode;
 
-        public BattlefieldModel(@NotNull Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
+        public BattlefieldModel(@Nullable Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
                                 @NotNull List<SpawnPoint> spawnPoints, @NotNull ItemsFactory itemsGenerator,
                                 @NotNull Integer mode) {
             this.behaviors = behaviors;
