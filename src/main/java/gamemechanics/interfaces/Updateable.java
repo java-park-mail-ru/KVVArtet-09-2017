@@ -1,5 +1,7 @@
 package gamemechanics.interfaces;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * An interface for entities which have some repeatable routine either
  * for turn-based battle mode or for server ticks
@@ -16,6 +18,6 @@ public interface Updateable {
      *
      * @param timestep fixed timestep value
      */
-    default void update(Integer timestep) {
+    default void update(@NotNull Integer timestep) {
     } // for any other occasions;
 }

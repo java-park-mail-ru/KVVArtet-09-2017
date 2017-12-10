@@ -3,6 +3,7 @@ package gamemechanics.resources.assets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.PerkBranch;
 import gamemechanics.globals.MappingIndices;
@@ -11,14 +12,15 @@ import gamemechanics.interfaces.CharacterRole;
 import gamemechanics.resources.holders.GameResourceHolder;
 import gamemechanics.resources.holders.ResourceHolder;
 import gamemechanics.resources.models.GameResource;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
         implements AssetHolder.CharacterClassHolder {
     public CharacterClassAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities,
@@ -32,7 +34,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
         final ObjectMapper mapper = new ObjectMapper();
         //noinspection TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
             final Map<Integer, GameResource> characterClassResources = holder.getAllResources();
             for (Integer classId : characterClassResources.keySet()) {
                 final GameResource characterClassResource = characterClassResources.get(classId);

@@ -13,10 +13,12 @@ import gamemechanics.items.containers.MonsterLootBag;
 import gamemechanics.resources.assets.AssetProvider;
 import gamemechanics.resources.pcg.items.ItemBlueprint;
 import gamemechanics.resources.pcg.items.ItemsFactory;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+@Service
 public class NpcsFactoryImpl implements NpcsFactory {
     private final Map<Integer, Map<Integer, NpcPart>> npcParts;
 

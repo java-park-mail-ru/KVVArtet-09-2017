@@ -5,12 +5,14 @@ import gamemechanics.flyweights.PerkBranch;
 import gamemechanics.interfaces.Ability;
 import gamemechanics.interfaces.CharacterRole;
 import gamemechanics.interfaces.Perk;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Service
 public class AssetProviderImpl implements AssetProvider {
     private final AssetHolder.PerkHolder perkHolder;
     private final AssetHolder.PerkBranchHolder perkBranchHolder;

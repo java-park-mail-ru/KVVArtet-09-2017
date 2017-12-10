@@ -1,5 +1,6 @@
 package gamemechanics.battlefield.aliveentitiescontainers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.components.properties.SingleValueProperty;
@@ -13,6 +14,7 @@ import gamemechanics.items.loot.PendingLootPool;
 import gamemechanics.resources.pcg.items.ItemBlueprint;
 import gamemechanics.resources.pcg.items.ItemPart;
 import gamemechanics.resources.pcg.items.ItemsFactory;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -120,7 +122,7 @@ public class CharactersParty implements Countable {
     }
 
     public void giveRewardForInstance(@NotNull Integer roleId, @NotNull Integer extraExp,
-                                      @NotNull Integer extraGold, @NotNull ItemsFactory itemsFactory) {
+                                      @NotNull Integer extraGold, @Nullable ItemsFactory itemsFactory) {
         final AliveEntity member = members.get(roleId);
         if (member == null) {
             return;
@@ -128,45 +130,48 @@ public class CharactersParty implements Countable {
         member.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
                 DigitsPairIndices.CURRENT_VALUE_INDEX, extraExp);
         member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT, extraGold);
-        final Map<Integer, Integer> itemParts = new HashMap<>(ItemPart.ITEM_PARTS_COUNT);
-        for (Integer i = ItemPart.FIRST_PART_ID; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
-            itemParts.put(i, Constants.UNDEFINED_ID);
-        }
-        final Set<Integer> equipableKinds = member.getCharacterRole().getEquipableKinds();
-        final List<Integer> availableEquipmentKinds;
-        if (equipableKinds != null) {
-            availableEquipmentKinds = new ArrayList<>(equipableKinds);
-        } else {
-            availableEquipmentKinds = null;
-        }
-        final Random random = new Random(System.currentTimeMillis());
-        final Integer extraLootCount = Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE
-                + random.nextInt(Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE / 2);
-        for (Integer i = 0; i < extraLootCount; ++i) {
-            final Integer equipmentKind = availableEquipmentKinds == null
-                    ? random.nextInt(EquipmentKind.EK_SIZE.asInt())
-                    : availableEquipmentKinds.get(
-                    random.nextInt(availableEquipmentKinds.size()));
+        if (itemsFactory != null) {
+            final Map<Integer, Integer> itemParts = new HashMap<>(ItemPart.ITEM_PARTS_COUNT);
+            for (Integer i = ItemPart.FIRST_PART_ID; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
+                itemParts.put(i, Constants.UNDEFINED_ID);
+            }
+            final Set<Integer> equipableKinds = member.getCharacterRole().getEquipableKinds();
+            final List<Integer> availableEquipmentKinds;
+            if (equipableKinds != null) {
+                availableEquipmentKinds = new ArrayList<>(equipableKinds);
+            } else {
+                availableEquipmentKinds = null;
+            }
+            final Random random = new Random(System.currentTimeMillis());
+            final Integer extraLootCount = Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE
+                    + random.nextInt(Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE / 2);
+            for (Integer i = 0; i < extraLootCount; ++i) {
+                final Integer equipmentKind = availableEquipmentKinds == null
+                        ? random.nextInt(EquipmentKind.EK_SIZE.asInt())
+                        : availableEquipmentKinds.get(
+                        random.nextInt(availableEquipmentKinds.size()));
 
-            Integer level = member.getLevel()
-                    + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2
-                    - random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2;
-            level = level > Constants.MAX_LEVEL ? Constants.MAX_LEVEL
-                    : level < Constants.START_LEVEL ? Constants.START_LEVEL : level;
+                Integer level = member.getLevel()
+                        + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2
+                        - random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2;
+                level = level > Constants.MAX_LEVEL ? Constants.MAX_LEVEL
+                        : level < Constants.START_LEVEL ? Constants.START_LEVEL : level;
 
-            final Map<Integer, Property> properties = new HashMap<>();
-            properties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+                final Map<Integer, Property> properties = new HashMap<>();
+                properties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
 
-            final Property rarityProperty =
-                    new SingleValueProperty(ItemRarity.IR_UNDEFINED.asInt());
-            properties.put(PropertyCategories.PC_ITEM_RARITY, rarityProperty);
+                final Property rarityProperty =
+                        new SingleValueProperty(ItemRarity.IR_UNDEFINED.asInt());
+                properties.put(PropertyCategories.PC_ITEM_RARITY, rarityProperty);
 
-            properties.put(PropertyCategories.PC_ITEM_KIND, new SingleValueProperty(equipmentKind));
-            lootPool.offerItemToPool(member, itemsFactory.makeItem(new ItemBlueprint(
-                    Constants.WIDE_PERCENTAGE_CAP_INT, properties, itemParts)));
+                properties.put(PropertyCategories.PC_ITEM_KIND, new SingleValueProperty(equipmentKind));
+                lootPool.offerItemToPool(member, itemsFactory.makeItem(new ItemBlueprint(
+                        Constants.WIDE_PERCENTAGE_CAP_INT, properties, itemParts)));
+            }
         }
     }
 
+    @JsonIgnore
     public Set<Integer> getRoleIds() {
         return members.keySet();
     }

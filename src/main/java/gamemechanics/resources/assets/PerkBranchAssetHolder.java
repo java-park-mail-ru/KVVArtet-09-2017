@@ -3,21 +3,23 @@ package gamemechanics.resources.assets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import gamemechanics.flyweights.PerkBranch;
 import gamemechanics.globals.MappingIndices;
 import gamemechanics.interfaces.Perk;
 import gamemechanics.resources.holders.GameResourceHolder;
 import gamemechanics.resources.holders.ResourceHolder;
 import gamemechanics.resources.models.GameResource;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class PerkBranchAssetHolder extends AbstractAssetHolder<PerkBranch> implements AssetHolder.PerkBranchHolder {
     public PerkBranchAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Perk> perks) {
         super();
@@ -47,7 +49,7 @@ public class PerkBranchAssetHolder extends AbstractAssetHolder<PerkBranch> imple
         final Map<Integer, GameResource> readData = new HashMap<>();
         //noinspection Duplicates,TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
             readData.putAll(holder.getAllResources());
         } catch (JsonParseException e) {
             e.printStackTrace();

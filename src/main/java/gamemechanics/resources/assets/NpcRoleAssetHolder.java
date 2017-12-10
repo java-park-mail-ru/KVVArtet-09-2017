@@ -10,6 +10,7 @@ import gamemechanics.interfaces.CharacterRole;
 import gamemechanics.resources.holders.GameResourceHolder;
 import gamemechanics.resources.holders.ResourceHolder;
 import gamemechanics.resources.models.GameResource;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> implements AssetHolder.NpcRoleHolder {
     public NpcRoleAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities) {
         super();

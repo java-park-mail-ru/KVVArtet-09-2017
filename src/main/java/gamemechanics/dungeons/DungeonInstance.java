@@ -10,7 +10,6 @@ import gamemechanics.battlefield.map.BattleMap;
 import gamemechanics.battlefield.map.BattleMapGenerator;
 import gamemechanics.globals.Constants;
 import gamemechanics.interfaces.AliveEntity;
-import gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -74,18 +73,6 @@ public class DungeonInstance extends AbstractInstance {
         return factory.makeNpc(level);
     }
 
-    private List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
-        final List<SpawnPoint> spawnPoints = new ArrayList<>();
-        final Set<MapNode> reservedNodes = new HashSet<>();
-        for (Squad squad : squadList) {
-            final SpawnPoint spawnPoint = new SpawnPoint(Objects.requireNonNull(emplaceSpawnPoint(squad,
-                    Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, map, reservedNodes)),
-                    Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
-            spawnPoints.add(spawnPoint);
-        }
-        return spawnPoints;
-    }
-
     @Override
     public void giveRewards() {
         final Integer partyLevel = Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getAverageLevel();
@@ -107,5 +94,20 @@ public class DungeonInstance extends AbstractInstance {
     @Override
     public Boolean handlePacket() {
         return true;
+    }
+
+    @Override
+    public void update(@NotNull Integer timestep) {
+        if (!isInstanceCleared() || isInstanceFailed()) {
+            if (currentRoom.isBattleFinished()) {
+                if (currentRoom.isVictory()) {
+                    // invoking cleared room update method to reward players;
+                    currentRoom.update();
+                    if (++roomsCleared < getRoomsCount()) {
+                        currentRoom = generateNewRoom();
+                    }
+                }
+            }
+        }
     }
 }

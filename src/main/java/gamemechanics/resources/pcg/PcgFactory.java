@@ -2,6 +2,7 @@ package gamemechanics.resources.pcg;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import gamemechanics.components.properties.Property;
 import gamemechanics.components.properties.PropertyCategories;
 import gamemechanics.components.properties.SingleValueProperty;
@@ -19,13 +20,14 @@ import gamemechanics.resources.pcg.npcs.NpcBlueprint;
 import gamemechanics.resources.pcg.npcs.NpcPart;
 import gamemechanics.resources.pcg.npcs.NpcsFactory;
 import gamemechanics.resources.pcg.npcs.NpcsFactoryImpl;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class PcgFactory implements PcgContentFactory {
     private ItemsFactory itemsFactory = null;
     private NpcsFactory npcsFactory = null;
@@ -36,8 +38,8 @@ public class PcgFactory implements PcgContentFactory {
         final ObjectMapper mapper = new ObjectMapper();
         this.assetProvider = assetProvider;
         try {
-            itemsFactory = mapper.readValue(new File(itemResourcesFname), ItemFactoryImpl.class);
-            npcsFactory = mapper.readValue(new File(npcsResourcesFname), NpcsFactoryImpl.class);
+            itemsFactory = mapper.readValue(Resources.getResource(itemResourcesFname), ItemFactoryImpl.class);
+            npcsFactory = mapper.readValue(Resources.getResource(npcsResourcesFname), NpcsFactoryImpl.class);
         } catch (IOException e) {
             e.printStackTrace();
             if (itemsFactory == null) {
