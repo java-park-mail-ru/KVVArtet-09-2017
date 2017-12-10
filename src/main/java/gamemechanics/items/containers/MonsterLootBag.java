@@ -102,7 +102,7 @@ public class MonsterLootBag implements Bag {
             return null;
         }
         final Random random = new Random(System.currentTimeMillis());
-        return random.nextInt(Constants.PERCENTAGE_CAP_INT) <= itemPresets.get(itemIndex).getDropChance()
+        return random.nextInt(Constants.WIDE_PERCENTAGE_CAP_INT) <= itemPresets.get(itemIndex).getDropChance()
                 ? itemGenerator.makeItem(itemPresets.get(itemIndex)) : null;
     }
 }

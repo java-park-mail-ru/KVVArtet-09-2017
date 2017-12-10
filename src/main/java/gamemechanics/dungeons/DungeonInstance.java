@@ -1,8 +1,9 @@
 package gamemechanics.dungeons;
 
+import gamemechanics.aliveentities.helpers.CashCalculator;
+import gamemechanics.aliveentities.helpers.ExperienceCalculator;
 import gamemechanics.aliveentities.npcs.ai.AI;
 import gamemechanics.battlefield.Battlefield;
-import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import gamemechanics.battlefield.map.BattleMap;
@@ -29,10 +30,11 @@ public class DungeonInstance extends AbstractInstance {
 
     private Battlefield generateNewRoom() {
         final List<Squad> squadList = new ArrayList<>();
-        squadList.add(getParty(Squad.PLAYERS_SQUAD_ID).toSquad());
+        squadList.add(Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).toSquad());
         final Integer packsCount = generatePacksCount();
         for (Integer i = 0; i < packsCount; ++i) {
-            final Squad monstersSquad = generateMonsterSquad(getParty(Squad.PLAYERS_SQUAD_ID).getAverageLevel());
+            final Squad monstersSquad = generateMonsterSquad(
+                    Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getAverageLevel());
             squadList.add(monstersSquad);
         }
 
@@ -43,7 +45,7 @@ public class DungeonInstance extends AbstractInstance {
         final List<SpawnPoint> spawnPoints = initializeSpawnPoints(squadList, newMap);
 
         final Battlefield.BattlefieldModel newRoomModel = new Battlefield.BattlefieldModel(behaviors, newMap,
-                spawnPoints, getGameMode());
+                spawnPoints, factory.getItemsFactory(), getGameMode());
         return new Battlefield(newRoomModel);
     }
 
@@ -68,30 +70,38 @@ public class DungeonInstance extends AbstractInstance {
         return new Squad(monsters, Squad.MONSTER_SQUAD_ID);
     }
 
-    @SuppressWarnings("SameReturnValue")
     private AliveEntity generateMonster(@NotNull Integer level) {
-        return null;
+        return factory.makeNpc(level);
     }
 
     private List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
         final List<SpawnPoint> spawnPoints = new ArrayList<>();
         final Set<MapNode> reservedNodes = new HashSet<>();
         for (Squad squad : squadList) {
-            final SpawnPoint spawnPoint = new SpawnPoint(emplaceSpawnPoint(squad, Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE,
-                    map, reservedNodes), Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
+            final SpawnPoint spawnPoint = new SpawnPoint(Objects.requireNonNull(emplaceSpawnPoint(squad,
+                    Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, map, reservedNodes)),
+                    Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
             spawnPoints.add(spawnPoint);
         }
         return spawnPoints;
     }
 
     @Override
-    public CharactersParty getParty(@NotNull Integer partyIndex) {
-        return null;
-    }
-
-    @Override
     public void giveRewards() {
+        final Integer partyLevel = Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getAverageLevel();
+        final Random random = new Random(System.currentTimeMillis());
+        final Integer extraExp = ExperienceCalculator.getPartyBiasedXPReward(
+                ExperienceCalculator.getXPReward(partyLevel, partyLevel
+                        + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING / 2)),
+                Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getPartySize());
 
+        final Integer extraGold = CashCalculator.getPartyBiasedCashReward(CashCalculator.getCashReward(
+                partyLevel + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING / 2)),
+                Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getPartySize());
+        for (Integer roleId : Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getRoleIds()) {
+            Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).giveRewardForInstance(roleId,
+                    extraExp, extraGold, factory.getItemsFactory());
+        }
     }
 
     @Override

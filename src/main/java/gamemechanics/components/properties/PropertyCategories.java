@@ -30,6 +30,7 @@ public class PropertyCategories {
     // user characters-specific properties
     public static final int PC_SKILL_POINTS = 19;
     public static final int PC_BASE_HEALTH = 20;
+    public static final int PC_AVAILABLE_EQUIPMENT = 29;
 
     //Ability-specific properties
     public static final int PC_MAX_DISTANCE = 21;

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
 import gamemechanics.flyweights.CharacterClass;
 import gamemechanics.flyweights.PerkBranch;
+import gamemechanics.globals.Constants;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.Set;
         @JsonSubTypes.Type(CharacterClass.class),
         @JsonSubTypes.Type(NonPlayerCharacterRole.class),
 })
-public interface CharacterRole extends GameEntity, AffectorProvider {
+public interface CharacterRole extends GameEntity, PropertyProvider, AffectorProvider {
     /**
      * get an ability from available abilities list
      *
@@ -125,7 +127,37 @@ public interface CharacterRole extends GameEntity, AffectorProvider {
     }
 
     @JsonIgnore
-    default List<Integer> getBehaviorIds() {
+    default @Nullable List<Integer> getBehaviorIds() {
+        return null;
+    }
+
+    @Override
+    default Boolean hasProperty(@NotNull Integer propertyKind) {
+        return false;
+    }
+
+    @Override
+    @JsonIgnore
+    default @Nullable Set<Integer> getAvailableProperties() {
+        return null;
+    }
+
+    @Override
+    default Integer getProperty(@NotNull Integer propertyKind) {
+        return 0;
+    }
+
+    @Override
+    default Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
+        return Constants.WRONG_INDEX;
+    }
+
+    default Boolean canEquip(@NotNull Integer equipmentKindId) {
+        return false;
+    }
+
+    @JsonIgnore
+    default @Nullable Set<Integer> getEquipableKinds() {
         return null;
     }
 }

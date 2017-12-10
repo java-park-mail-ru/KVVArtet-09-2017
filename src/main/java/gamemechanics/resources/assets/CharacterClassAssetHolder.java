@@ -60,7 +60,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final CharacterClass.CharacterClassModel model =
                         new CharacterClass.CharacterClassModel(characterClassResource.getID(),
                                 characterClassResource.getName(), characterClassResource.getDescription(),
-                                classAbilities, classBranches);
+                                classAbilities, classBranches, characterClassResource.getAllProperties());
                 assets.put(model.id, new CharacterClass(model));
             }
         } catch (JsonParseException e) {

@@ -180,13 +180,13 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
             }
 
-            Affector affector = null;
+            final Affector affector;
             if (!affectionsList.isEmpty()) {
                 affector = new ListAffector(affectionsList);
             } else if (!affectionsMap.isEmpty()) {
                 affector = new MapAffector(affectionsMap);
             } else {
-                affector = new SingleValueAffector(affection);
+                affector = new SingleValueAffector(Objects.requireNonNull(affection));
             }
 
             // apply level-up growth to level-dependent affectors
@@ -314,7 +314,7 @@ public class ItemFactoryImpl implements ItemsFactory {
             } else if (!propertiesSet.isEmpty()) {
                 mergedProperty = new SetProperty(propertiesSet);
             } else {
-                mergedProperty = new SingleValueProperty(propertyValue);
+                mergedProperty = new SingleValueProperty(Objects.requireNonNull(propertyValue));
             }
 
             if (isPropertyLevelable(propertyId)) {

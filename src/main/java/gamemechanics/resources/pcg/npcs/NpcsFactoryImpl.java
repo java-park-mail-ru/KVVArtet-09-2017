@@ -218,7 +218,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
             } else if (!propertySet.isEmpty()) {
                 mergedProperty = new SetProperty(propertySet);
             } else {
-                mergedProperty = new SingleValueProperty(propertyValue);
+                mergedProperty = new SingleValueProperty(Objects.requireNonNull(propertyValue));
             }
             final Integer affectionValue = getRoleProperAffector(npcRole, propertyId);
             if (affectionValue != Constants.WRONG_INDEX) {

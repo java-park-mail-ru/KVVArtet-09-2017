@@ -11,6 +11,7 @@ import gamemechanics.interfaces.EquipableItem;
 import gamemechanics.items.loot.IngameLootContainer;
 import gamemechanics.items.loot.LootContainer;
 import gamemechanics.items.loot.PendingLootPool;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class Squad implements Countable {
         return id;
     }
 
-    public AliveEntity getMember(Integer memberIndex) {
+    public @Nullable AliveEntity getMember(Integer memberIndex) {
         if (memberIndex < 0 && memberIndex >= members.size()) {
             return null;
         }
@@ -109,6 +110,21 @@ public class Squad implements Countable {
             }
         }
         return aliveMembers;
+    }
+
+    public Integer getAverageLevel() {
+        Integer accumulatedLevel = 0;
+        Integer partySize = 0;
+        for (AliveEntity member : members) {
+            if (member != null) {
+                ++partySize;
+                accumulatedLevel += member.getLevel();
+            }
+        }
+        if (partySize == 0) {
+            return 0;
+        }
+        return accumulatedLevel / partySize;
     }
 
     public Integer getSquadID() {

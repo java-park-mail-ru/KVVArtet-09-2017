@@ -10,6 +10,7 @@ public final class Constants {
     public static final int AI_CONTROLLED_NPC_ID = -1;
 
     public static final int PERCENTAGE_CAP_INT = 100;
+    public static final int WIDE_PERCENTAGE_CAP_INT = 10000;
     public static final float PERCENTAGE_CAP_FLOAT = 1.0f;
     public static final float ONE_PERCENT_FLOAT = 0.01f;
 
@@ -22,6 +23,12 @@ public final class Constants {
     public static final int FIRST_LEVEL_UP_CAP = 100;
     public static final int SKILL_POINTS_GRANTED_PER_LEVEL = 1;
     public static final int LEVEL_RANGE_FOR_LOOT_DROPPING = 5;
+
+    public static final int GENERIC_REWARD_LOOT_BAG_ID = 0;
+    public static final int PERSONAL_REWARD_LOOT_BAG_ID = 1;
+    public static final int DEFAULT_PERSONAL_REWARD_BAG_SIZE = 3;
+    @SuppressWarnings("FieldNamingConvention")
+    public static final int UNDEFINED_RARITY_DEFAULT_DROP_CHANCE = 5000;
 
     public static final int INITIAL_HITPOINTS_CAP = 100;
     public static final int HITPOINTS_PER_ENDURANCE_POINT = 60;
