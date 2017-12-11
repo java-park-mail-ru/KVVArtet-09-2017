@@ -1,6 +1,5 @@
 package project.gamemechanics.battlefield.map.actions;
 
-import com.sun.istack.internal.NotNull;
 import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.actionresults.BattleActionResult;
 import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
@@ -9,6 +8,7 @@ import project.gamemechanics.battlefield.map.helpers.Route;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
 public class MovementAction extends AbstractAction {

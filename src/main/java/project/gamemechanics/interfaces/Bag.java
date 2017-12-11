@@ -3,6 +3,7 @@ package project.gamemechanics.interfaces;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import project.gamemechanics.items.containers.CharacterDoll;
+import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.items.containers.StorageBag;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @JsonSubTypes({
         @JsonSubTypes.Type(StorageBag.class),
         @JsonSubTypes.Type(CharacterDoll.class),
+        @JsonSubTypes.Type(MonsterLootBag.class),
 })
 public interface Bag extends GameEntity {
     /**
@@ -77,7 +79,7 @@ public interface Bag extends GameEntity {
      *
      * @param fromPos     slot index to remove item from
      * @param isConfirmed is operation confirmed by the user
-     * if the removal wasn't confirmed or the chosen slot was empty
+     *                    if the removal wasn't confirmed or the chosen slot was empty
      */
     void throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed);
 

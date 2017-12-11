@@ -2,7 +2,7 @@ package project.websocket;
 
 import project.gamemechanics.smartcontroller.SmartController;
 
-public interface ObjectivePool <T> {
+public interface ObjectivePool<T> {
 
     T getElement();
 

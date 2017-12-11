@@ -1,7 +1,9 @@
 package project.gamemechanics.globals;
 
+import javax.validation.constraints.NotNull;
+
 public enum EquipmentKind {
-    EK_UNDEFINED(-1, "undefined"),
+    EK_UNDEFINED(Constants.UNDEFINED_ID, "undefined"),
 
     EK_CLOTH_ARMOUR(0, "Cloth armour"),
     EK_LEATHER_ARMOUR(1, "Leather armour"),
@@ -17,12 +19,14 @@ public enum EquipmentKind {
     EK_BOW(10, "Bow"),
     EK_CROSSBOW(11, "Crossbow"),
 
-    EK_TRINKET(12, "Trinket");
+    EK_TRINKET(12, "Trinket"),
+
+    EK_SIZE(13, "equipment kinds count");
 
     private final Integer kindID;
     private final String description;
 
-    EquipmentKind(Integer kindID, String description) {
+    EquipmentKind(@NotNull Integer kindID, @NotNull String description) {
         this.kindID = kindID;
         this.description = description;
     }

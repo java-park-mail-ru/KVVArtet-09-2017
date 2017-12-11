@@ -12,7 +12,8 @@ import java.util.Set;
 public class GameResourceHolder implements ResourceHolder {
     private final Map<Integer, GameResource> resources = new HashMap<>();
 
-    public GameResourceHolder() {}
+    public GameResourceHolder() {
+    }
 
     public GameResourceHolder(@JsonProperty("resources") @NotNull Map<Integer, GameResource> resources) {
         this.resources.putAll(resources);

@@ -1,6 +1,8 @@
 package project.gamemechanics.components.properties;
 
 import project.gamemechanics.battlefield.map.tilesets.TilesetShapes;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.*;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public final class PropertiesFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    public static Property makeProperty(Integer propertyIndex) {
+    public static @Nullable Property makeProperty(@NotNull Integer propertyIndex) {
         Property property = null;
         switch (propertyIndex) {
             case PropertyCategories.PC_STATS:
@@ -89,6 +91,28 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_ITEM_BLUEPRINT_ID:
                 property = makeItemBlueprintIdProperty();
+                break;
+            case PropertyCategories.PC_CHARACTER_ROLE_ID:
+                property = makeCharacterRoleProperty();
+                break;
+            case PropertyCategories.PC_CHARACTER_RACE_ID:
+                property = makeCharacterRaceProperty();
+                break;
+            case PropertyCategories.PC_AVAILABLE_EQUIPMENT:
+                property = makeAvailableEquipmentProperty();
+                break;
+            case PropertyCategories.PC_ACTIVE_ROLE:
+                property = makeActiveRoleProperty();
+                break;
+            case PropertyCategories.PC_AVAILABLE_ROLES:
+                property = makeAvailableRolesProperty();
+                break;
+            case PropertyCategories.PC_PARTY_ID:
+                property = makePartyIdProperty();
+                break;
+            case PropertyCategories.PC_INSTANCE_ID:
+                property = makeInstanceId();
+                break;
             default:
                 break;
         }
@@ -193,5 +217,33 @@ public final class PropertiesFactory {
 
     private static Property makeItemBlueprintIdProperty() {
         return new SingleValueProperty(0);
+    }
+
+    private static Property makeCharacterRoleProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeCharacterRaceProperty() {
+        return new SingleValueProperty(0);
+    }
+
+    private static Property makeAvailableEquipmentProperty() {
+        return new SetProperty(new HashSet<>(PropertyCategories.PC_AVAILABLE_EQUIPMENT));
+    }
+
+    private static Property makeActiveRoleProperty() {
+        return new SingleValueProperty(Constants.UNDEFINED_ID);
+    }
+
+    private static Property makeAvailableRolesProperty() {
+        return new SetProperty(new HashSet<>(CharacterRoleIds.CR_SIZE));
+    }
+
+    private static Property makePartyIdProperty() {
+        return new SingleValueProperty(Constants.UNDEFINED_ID);
+    }
+
+    private static Property makeInstanceId() {
+        return new SingleValueProperty(Constants.UNDEFINED_ID);
     }
 }

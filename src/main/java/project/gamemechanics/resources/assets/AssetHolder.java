@@ -13,18 +13,28 @@ import java.util.Set;
 
 public interface AssetHolder<T extends Countable> {
     T getAsset(@NotNull Integer assetIndex);
+
     Boolean hasAsset(@NotNull Integer assetIndex);
 
     Set<Integer> getAvailableAssets();
+
     Map<Integer, T> getAllAssets();
 
-    interface PerkHolder extends AssetHolder<Perk> {}
-    interface PerkBranchHolder extends AssetHolder<PerkBranch> {}
+    interface PerkHolder extends AssetHolder<Perk> {
+    }
 
-    interface AbilityHolder extends AssetHolder<Ability> {}
+    interface PerkBranchHolder extends AssetHolder<PerkBranch> {
+    }
 
-    interface CharacterClassHolder extends AssetHolder<CharacterRole> {}
-    interface CharacterRaceHolder extends AssetHolder<CharacterRace> {}
+    interface AbilityHolder extends AssetHolder<Ability> {
+    }
 
-    interface NpcRoleHolder extends AssetHolder<CharacterRole> {}
+    interface CharacterClassHolder extends AssetHolder<CharacterRole> {
+    }
+
+    interface CharacterRaceHolder extends AssetHolder<CharacterRace> {
+    }
+
+    interface NpcRoleHolder extends AssetHolder<CharacterRole> {
+    }
 }

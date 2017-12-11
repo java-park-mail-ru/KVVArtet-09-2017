@@ -8,10 +8,12 @@ import project.gamemechanics.globals.EquipmentKind;
 import project.gamemechanics.globals.ItemRarity;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.items.IngameItem;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+@Service
 public class ItemFactoryImpl implements ItemsFactory {
     private final Map<Integer, Map<Integer, ItemPart>> itemParts;
 
@@ -34,11 +36,11 @@ public class ItemFactoryImpl implements ItemsFactory {
                 blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty() :
                 EquipmentKind.EK_UNDEFINED.asInt();
 
-        final List<ItemPart> itemPartsList = getItemParts(level, rarity, kind, blueprint.getItemParts());
+        final List<ItemPart> itemPartsList = getItemParts(rarity, kind, blueprint.getItemParts());
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));
     }
 
-    private List<ItemPart> getItemParts(@NotNull Integer level, @NotNull Integer rarity, @NotNull Integer kind,
+    private List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
                                         @NotNull Map<Integer, Integer> itemPartsList) {
         final Random random = new Random(System.currentTimeMillis());
         final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
@@ -50,7 +52,7 @@ public class ItemFactoryImpl implements ItemsFactory {
 
             Integer partId = itemPartsList.get(itemPartIndex);
             if (partId < Constants.MIN_ID_VALUE) {
-                while(true) {
+                while (true) {
                     final Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
                     if (kind.equals(EquipmentKind.EK_UNDEFINED.asInt())) {
                         kind = partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND);
@@ -180,13 +182,13 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
             }
 
-            Affector affector = null;
+            final Affector affector;
             if (!affectionsList.isEmpty()) {
                 affector = new ListAffector(affectionsList);
             } else if (!affectionsMap.isEmpty()) {
                 affector = new MapAffector(affectionsMap);
             } else {
-                affector = new SingleValueAffector(affection);
+                affector = new SingleValueAffector(Objects.requireNonNull(affection));
             }
 
             // apply level-up growth to level-dependent affectors
@@ -208,6 +210,7 @@ public class ItemFactoryImpl implements ItemsFactory {
 
         final Set<Integer> propertyIds = new HashSet<>();
         for (ItemPart part : parts) {
+            //noinspection Duplicates
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
             } else {
@@ -265,7 +268,7 @@ public class ItemFactoryImpl implements ItemsFactory {
                                         applyRarityBonus(propertiesMap.get(propertyIndex), rarities.get(i)));
                             }
                         }
-                    } else if (propertiesMap.keySet() == property.getPropertyMap().keySet()) {
+                    } else if (propertiesMap.keySet().equals(property.getPropertyMap().keySet())) {
                         for (Integer propertyIndex : propertiesMap.keySet()) {
                             if (isPropertyAlterable(propertyId)) {
                                 propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
@@ -277,6 +280,7 @@ public class ItemFactoryImpl implements ItemsFactory {
                         }
                     }
                 } else if (property.getPropertySet() != null) {
+                    //noinspection Duplicates
                     if (propertiesSet.isEmpty()) {
                         propertiesSet.addAll(property.getPropertySet());
                     } else {
@@ -303,7 +307,8 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
             }
 
-            Property mergedProperty = null;
+            final Property mergedProperty;
+            //noinspection Duplicates
             if (!propertiesList.isEmpty()) {
                 mergedProperty = new ListProperty(propertiesList);
             } else if (!propertiesMap.isEmpty()) {
@@ -311,7 +316,7 @@ public class ItemFactoryImpl implements ItemsFactory {
             } else if (!propertiesSet.isEmpty()) {
                 mergedProperty = new SetProperty(propertiesSet);
             } else {
-                mergedProperty = new SingleValueProperty(propertyValue);
+                mergedProperty = new SingleValueProperty(Objects.requireNonNull(propertyValue));
             }
 
             if (isPropertyLevelable(propertyId)) {

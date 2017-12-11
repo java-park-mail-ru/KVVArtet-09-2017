@@ -27,5 +27,6 @@ public interface ItemPart extends GameEntity, AffectorProvider, PropertyProvider
     Integer getPartIndex();
 
     Map<Integer, Affector> getAllAffectors();
+
     Map<Integer, Property> getAllProperties();
 }

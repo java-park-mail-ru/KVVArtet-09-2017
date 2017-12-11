@@ -5,6 +5,7 @@ import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.MapNode;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -18,7 +19,7 @@ public class BattleActionResult implements ActionResult {
     private Boolean isProcessed = false;
 
     public BattleActionResult(@NotNull Integer actionID, @NotNull MapNode sender,
-                              MapNode target, Ability ability,
+                              MapNode target, @Nullable Ability ability,
                               @NotNull List<TurnEvent> events) {
         this.actionID = actionID;
         this.sender = sender;
@@ -74,7 +75,7 @@ public class BattleActionResult implements ActionResult {
     @Override
     public Integer getEventIndex(@NotNull TurnEvent event) {
         for (Integer i = 0; i < events.size(); ++i) {
-            if (events.get(i) == event) {
+            if (events.get(i).equals(event)) {
                 return i;
             }
         }

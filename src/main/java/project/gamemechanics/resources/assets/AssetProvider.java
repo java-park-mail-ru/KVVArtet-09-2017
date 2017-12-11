@@ -20,12 +20,18 @@ public interface AssetProvider {
     int NPC_ROLE_RESOURCE_NAME = 5;
 
     Perk getPerk(@NotNull Integer perkId);
+
     PerkBranch getPerkBranch(@NotNull Integer branchId);
 
     Ability getAbility(@NotNull Integer abilityId);
 
     CharacterRace getCharacterRace(@NotNull Integer raceId);
+
+    CharacterRace getCharacterRace();
+
     CharacterRole getCharacterClass(@NotNull Integer classId);
 
     CharacterRole getNpcRole(@NotNull Integer roleId);
+
+    CharacterRole getNpcRole();
 }

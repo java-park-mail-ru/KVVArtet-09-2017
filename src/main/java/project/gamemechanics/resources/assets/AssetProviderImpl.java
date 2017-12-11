@@ -5,10 +5,14 @@ import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.CharacterRole;
 import project.gamemechanics.interfaces.Perk;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+@Service
 public class AssetProviderImpl implements AssetProvider {
     private final AssetHolder.PerkHolder perkHolder;
     private final AssetHolder.PerkBranchHolder perkBranchHolder;
@@ -48,6 +52,13 @@ public class AssetProviderImpl implements AssetProvider {
     }
 
     @Override
+    public CharacterRace getCharacterRace() {
+        final List<Integer> characterRaceKeyList = new ArrayList<>(characterRaceHolder.getAvailableAssets());
+        final Random random = new Random(System.currentTimeMillis());
+        return getCharacterRace(characterRaceKeyList.get(random.nextInt(characterRaceKeyList.size())));
+    }
+
+    @Override
     public Ability getAbility(@NotNull Integer abilityId) {
         return abilityHolder.getAsset(abilityId);
     }
@@ -60,5 +71,12 @@ public class AssetProviderImpl implements AssetProvider {
     @Override
     public CharacterRole getNpcRole(@NotNull Integer roleId) {
         return npcRoleHolder.getAsset(roleId);
+    }
+
+    @Override
+    public CharacterRole getNpcRole() {
+        final List<Integer> npcRoleKeysList = new ArrayList<>(npcRoleHolder.getAvailableAssets());
+        final Random random = new Random(System.currentTimeMillis());
+        return getNpcRole(npcRoleKeysList.get(random.nextInt(npcRoleKeysList.size())));
     }
 }

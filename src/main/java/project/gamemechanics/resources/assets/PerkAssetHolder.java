@@ -8,6 +8,7 @@ import project.gamemechanics.interfaces.Perk;
 import project.gamemechanics.resources.holders.GameResourceHolder;
 import project.gamemechanics.resources.holders.ResourceHolder;
 import project.gamemechanics.resources.models.GameResource;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class PerkAssetHolder extends AbstractAssetHolder<Perk> implements AssetHolder.PerkHolder {
     public PerkAssetHolder(@NotNull String fileName) {
         super();

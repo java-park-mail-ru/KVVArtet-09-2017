@@ -12,7 +12,8 @@ public class IngameLootContainer implements LootContainer {
     private Integer goldReward = 0;
     private Integer expReward = 0;
 
-    public IngameLootContainer() {}
+    public IngameLootContainer() {
+    }
 
     public IngameLootContainer(@NotNull List<EquipableItem> lootList, @NotNull Integer goldReward,
                                @NotNull Integer expReward) {

@@ -4,6 +4,8 @@ import project.gamemechanics.globals.CharacterRatings;
 import project.gamemechanics.globals.CharacterStats;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.EquipmentKind;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +16,7 @@ public final class AffectorsFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    public static Affector getAffector(Integer affectorID) {
+    public static @Nullable Affector getAffector(@NotNull Integer affectorID) {
         Affector affector = null;
         switch (affectorID) {
             case AffectorCategories.AC_STATS_AFFECTOR:
@@ -43,6 +45,12 @@ public final class AffectorsFactory {
                 break;
             case AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR:
                 affector = makeAbilityHealthAffector();
+                break;
+            case AffectorCategories.AC_BASE_DAMAGE_ROLE_AFFECTOR:
+                affector = makeBaseDamageRoleAffector();
+                break;
+            case AffectorCategories.AC_BASE_DEFENSE_ROLE_AFFECTOR:
+                affector = makeBaseDefenseRoleAffector();
                 break;
             default:
                 break;
@@ -86,6 +94,14 @@ public final class AffectorsFactory {
 
     private static Affector makeAbilityHealthAffector() {
         return new ListAffector(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+    }
+
+    private static Affector makeBaseDamageRoleAffector() {
+        return new SingleValueAffector(0);
+    }
+
+    private static Affector makeBaseDefenseRoleAffector() {
+        return new SingleValueAffector(0);
     }
 
     private static Map<Integer, Integer> initializeDamageMap() {

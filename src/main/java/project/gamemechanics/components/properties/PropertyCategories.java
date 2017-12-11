@@ -30,6 +30,8 @@ public class PropertyCategories {
     // user characters-specific properties
     public static final int PC_SKILL_POINTS = 19;
     public static final int PC_BASE_HEALTH = 20;
+    public static final int PC_AVAILABLE_EQUIPMENT = 29;
+    public static final int PC_ACTIVE_ROLE = 32;
 
     //Ability-specific properties
     public static final int PC_MAX_DISTANCE = 21;
@@ -37,4 +39,14 @@ public class PropertyCategories {
     public static final int PC_INFLICTED_CATEGORIES = 23;
     public static final int PC_COOLDOWN = 24;
     public static final int PC_AREA_SHAPE = 25;
+
+    //serialized AliveEntity implementations-specific properties
+    public static final int PC_CHARACTER_ROLE_ID = 27;
+    public static final int PC_CHARACTER_RACE_ID = 28;
+
+    //character party-related character properties
+    public static final int PC_PARTY_ID = 30;
+    public static final int PC_INSTANCE_ID = 31;
+
+    public static final int PC_AVAILABLE_ROLES = 33;
 }

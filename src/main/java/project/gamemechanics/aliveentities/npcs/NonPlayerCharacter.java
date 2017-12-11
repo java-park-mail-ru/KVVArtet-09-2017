@@ -12,7 +12,7 @@ public class NonPlayerCharacter extends AbstractAliveEntity {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer npcID = INSTANCE_COUNTER.getAndIncrement();
 
-    private final DecisionMaker behavior;
+    private DecisionMaker behavior;
 
     public NonPlayerCharacter(@NotNull NPCModel model) {
         super(model);
@@ -42,5 +42,10 @@ public class NonPlayerCharacter extends AbstractAliveEntity {
     @Override
     public Action makeDecision() {
         return behavior.makeDecision();
+    }
+
+    @Override
+    public void setBehavior(@NotNull DecisionMaker behavior) {
+        this.behavior = behavior;
     }
 }

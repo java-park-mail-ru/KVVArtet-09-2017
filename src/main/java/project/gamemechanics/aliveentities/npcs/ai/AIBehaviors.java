@@ -223,7 +223,7 @@ public final class AIBehaviors {
                 * Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue());
     }
 
-    private static Set<Ability> getHealingAbilities(Map<Integer, Ability> abilities) {
+    private static Set<Ability> getHealingAbilities(@NotNull Map<Integer, Ability> abilities) {
         final Set<Ability> healingAbilities = new HashSet<>();
 
         for (Integer abilityID : abilities.keySet()) {
@@ -239,7 +239,7 @@ public final class AIBehaviors {
         return healingAbilities;
     }
 
-    private static Set<Ability> getDamagingAbilities(Map<Integer, Ability> abilities) {
+    private static Set<Ability> getDamagingAbilities(@NotNull Map<Integer, Ability> abilities) {
         final Set<Ability> damagingAbilities = new HashSet<>();
 
         for (Integer abilityID : abilities.keySet()) {

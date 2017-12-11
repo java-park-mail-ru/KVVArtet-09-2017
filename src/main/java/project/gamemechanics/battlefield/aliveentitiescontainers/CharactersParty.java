@@ -1,13 +1,23 @@
 package project.gamemechanics.battlefield.aliveentitiescontainers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.components.properties.SingleValueProperty;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.EquipmentKind;
+import project.gamemechanics.globals.ItemRarity;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.Countable;
+import project.gamemechanics.items.loot.PendingLootPool;
+import project.gamemechanics.resources.pcg.items.ItemBlueprint;
+import project.gamemechanics.resources.pcg.items.ItemPart;
+import project.gamemechanics.resources.pcg.items.ItemsFactory;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CharactersParty implements Countable {
@@ -15,13 +25,16 @@ public class CharactersParty implements Countable {
     private final Integer partyID = INSTANCE_COUNTER.getAndIncrement();
 
     private final Map<Integer, AliveEntity> members;
+    private final PendingLootPool lootPool;
 
-    public CharactersParty(@NotNull Map<Integer, AliveEntity> members) {
+    public CharactersParty(@NotNull Map<Integer, AliveEntity> members,
+                           @NotNull PendingLootPool lootPool) {
         this.members = members;
+        this.lootPool = lootPool;
     }
 
-    public CharactersParty() {
-        this(new HashMap<>());
+    public CharactersParty(@NotNull PendingLootPool lootPool) {
+        this(new HashMap<>(), lootPool);
     }
 
     @Override
@@ -34,14 +47,14 @@ public class CharactersParty implements Countable {
         return partyID;
     }
 
-    public Squad toSquad(Integer squadId) {
+    public Squad toSquad(@NotNull Integer squadId) {
         final List<AliveEntity> membersList = new ArrayList<>();
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
                 membersList.add(members.get(roleId));
             }
         }
-        return new Squad(membersList, squadId);
+        return new Squad(membersList, lootPool, squadId);
     }
 
     public Squad toSquad() {
@@ -72,6 +85,16 @@ public class CharactersParty implements Countable {
         return members.getOrDefault(roleId, null);
     }
 
+    public Integer getPartySize() {
+        Integer membersCount = 0;
+        for (Integer roleId : members.keySet()) {
+            if (members.get(roleId) != null) {
+                ++membersCount;
+            }
+        }
+        return membersCount;
+    }
+
     public Boolean areAllDead() {
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
@@ -96,5 +119,60 @@ public class CharactersParty implements Countable {
             return 0;
         }
         return accumulatedLevel / partySize;
+    }
+
+    public void giveRewardForInstance(@NotNull Integer roleId, @NotNull Integer extraExp,
+                                      @NotNull Integer extraGold, @Nullable ItemsFactory itemsFactory) {
+        final AliveEntity member = members.get(roleId);
+        if (member == null) {
+            return;
+        }
+        member.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
+                DigitsPairIndices.CURRENT_VALUE_INDEX, extraExp);
+        member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT, extraGold);
+        if (itemsFactory != null) {
+            final Map<Integer, Integer> itemParts = new HashMap<>(ItemPart.ITEM_PARTS_COUNT);
+            for (Integer i = ItemPart.FIRST_PART_ID; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
+                itemParts.put(i, Constants.UNDEFINED_ID);
+            }
+            final Set<Integer> equipableKinds = member.getCharacterRole().getEquipableKinds();
+            final List<Integer> availableEquipmentKinds;
+            if (equipableKinds != null) {
+                availableEquipmentKinds = new ArrayList<>(equipableKinds);
+            } else {
+                availableEquipmentKinds = null;
+            }
+            final Random random = new Random(System.currentTimeMillis());
+            final Integer extraLootCount = Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE
+                    + random.nextInt(Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE / 2);
+            for (Integer i = 0; i < extraLootCount; ++i) {
+                final Integer equipmentKind = availableEquipmentKinds == null
+                        ? random.nextInt(EquipmentKind.EK_SIZE.asInt())
+                        : availableEquipmentKinds.get(
+                        random.nextInt(availableEquipmentKinds.size()));
+
+                Integer level = member.getLevel()
+                        + random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2
+                        - random.nextInt(Constants.LEVEL_RANGE_FOR_LOOT_DROPPING) / 2;
+                level = level > Constants.MAX_LEVEL ? Constants.MAX_LEVEL
+                        : level < Constants.START_LEVEL ? Constants.START_LEVEL : level;
+
+                final Map<Integer, Property> properties = new HashMap<>();
+                properties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+
+                final Property rarityProperty =
+                        new SingleValueProperty(ItemRarity.IR_UNDEFINED.asInt());
+                properties.put(PropertyCategories.PC_ITEM_RARITY, rarityProperty);
+
+                properties.put(PropertyCategories.PC_ITEM_KIND, new SingleValueProperty(equipmentKind));
+                lootPool.offerItemToPool(member, itemsFactory.makeItem(new ItemBlueprint(
+                        Constants.WIDE_PERCENTAGE_CAP_INT, properties, itemParts)));
+            }
+        }
+    }
+
+    @JsonIgnore
+    public Set<Integer> getRoleIds() {
+        return members.keySet();
     }
 }

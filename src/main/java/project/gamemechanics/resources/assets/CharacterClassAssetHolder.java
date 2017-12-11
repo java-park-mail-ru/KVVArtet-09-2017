@@ -3,6 +3,7 @@ package project.gamemechanics.resources.assets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import project.gamemechanics.flyweights.CharacterClass;
 import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.globals.MappingIndices;
@@ -11,14 +12,15 @@ import project.gamemechanics.interfaces.CharacterRole;
 import project.gamemechanics.resources.holders.GameResourceHolder;
 import project.gamemechanics.resources.holders.ResourceHolder;
 import project.gamemechanics.resources.models.GameResource;
+import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
         implements AssetHolder.CharacterClassHolder {
     public CharacterClassAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities,
@@ -32,7 +34,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
         final ObjectMapper mapper = new ObjectMapper();
         //noinspection TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
             final Map<Integer, GameResource> characterClassResources = holder.getAllResources();
             for (Integer classId : characterClassResources.keySet()) {
                 final GameResource characterClassResource = characterClassResources.get(classId);
@@ -60,7 +62,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final CharacterClass.CharacterClassModel model =
                         new CharacterClass.CharacterClassModel(characterClassResource.getID(),
                                 characterClassResource.getName(), characterClassResource.getDescription(),
-                                classAbilities, classBranches);
+                                classAbilities, classBranches, characterClassResource.getAllProperties());
                 assets.put(model.id, new CharacterClass(model));
             }
         } catch (JsonParseException e) {

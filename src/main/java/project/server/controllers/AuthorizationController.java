@@ -59,7 +59,7 @@ public class AuthorizationController {
     public ResponseEntity<String> signIn(@RequestBody User user, HttpSession httpSession) {
 
         final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
-      
+
         if (userIdInCurrentSession != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.USER_ALREADY_AUTHORIZED.getResponse());
         }

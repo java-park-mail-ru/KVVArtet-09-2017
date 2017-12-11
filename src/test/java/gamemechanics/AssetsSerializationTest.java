@@ -1,16 +1,16 @@
-package project.gamemechanics;
+package gamemechanics;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import project.gamemechanics.components.affectors.Affector;
-import project.gamemechanics.components.properties.Property;
-import project.gamemechanics.components.properties.PropertyCategories;
-import project.gamemechanics.components.properties.SingleValueProperty;
-import project.gamemechanics.globals.Constants;
-import project.gamemechanics.resources.pcg.items.ItemPart;
-import project.gamemechanics.resources.pcg.items.ItemPartAsset;
+import gamemechanics.components.affectors.Affector;
+import gamemechanics.components.properties.Property;
+import gamemechanics.components.properties.PropertyCategories;
+import gamemechanics.components.properties.SingleValueProperty;
+import gamemechanics.globals.Constants;
+import gamemechanics.resources.pcg.items.ItemPart;
+import gamemechanics.resources.pcg.items.ItemPartAsset;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,11 +20,9 @@ import java.util.Random;
 
 import static org.junit.Assert.*;
 
-public class PropertySerializationTest {
-
-
+public class AssetsSerializationTest {
     @Test
-    public void itemPartSerializationDeserialization() {
+    public void itemPartStringSerializationDeserialization() {
         final Random random = new Random(System.currentTimeMillis());
         final Map<Integer, Property> testProperty = new HashMap<>();
         testProperty.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(Constants.START_LEVEL));
