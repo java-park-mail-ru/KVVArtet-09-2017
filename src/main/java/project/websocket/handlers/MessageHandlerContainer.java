@@ -20,7 +20,7 @@ public class MessageHandlerContainer {
         if (messageHandler == null) {
             throw new Exception("no handler for message of " + message.getClass().getName() + " type");
         }
-        messageHandler.handleMessage(message, forUser);
+        messageHandler.handleMessage(message);
         LOGGER.trace("message handled: type =[" + message.getClass().getName()+ ']');
     }
 

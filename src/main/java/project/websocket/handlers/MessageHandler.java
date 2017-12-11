@@ -1,5 +1,9 @@
 package project.websocket.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import project.states.LobbyState;
+import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
@@ -7,18 +11,21 @@ import javax.validation.constraints.NotNull;
 public abstract class MessageHandler<T> {
     private Class<T> clazz;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(LobbyState.class);
+
     public MessageHandler(@NotNull Class<T> clazz) {
         this.clazz = clazz;
     }
 
-    public void handleMessage(@NotNull Message message, @NotNull Integer userId) throws Exception {
+    public Message handleMessage(@NotNull Message message) {
         try {
-            handle(clazz.cast(message), userId);
+            return handle(clazz.cast(message));
         } catch (ClassCastException e) {
             e.printStackTrace();
-            throw new Exception("Message is not convertible");
+            LOGGER.error("Message is not convertible");
+            return new ErrorMessage("Message is not convertible");
         }
     }
 
-    public abstract void handle(@NotNull T message, @NotNull Integer userId) throws Exception;
+    public abstract Message handle(@NotNull T message);
 }

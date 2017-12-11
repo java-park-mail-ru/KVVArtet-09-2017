@@ -3,7 +3,7 @@ package project.gamemechanics.smartcontroller;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
 import org.springframework.web.socket.WebSocketSession;
-import project.statemachine.StateStack;
+import project.statemachine.StateService;
 import project.websocket.messages.Message;
 
 import java.util.ArrayDeque;
@@ -15,12 +15,12 @@ public class SmartController {
     private Deque<Message> outboxMessageQueue = new ArrayDeque<>();
     private UserCharacter activeChar;
     private CharacterList characterList;
-    private StateStack stateMachine = new StateStack();
+    private StateService stateService = new StateService();
     private WebSocketSession webSocketSession;
 
     void tick() {
         while(!inboxMessageQueue.isEmpty()){
-            outboxMessageQueue.add(stateMachine.handleMessage(inboxMessageQueue.getFirst()));
+            outboxMessageQueue.add(stateService.handleMessage(inboxMessageQueue.getFirst()));
         }
     }
 
@@ -46,14 +46,6 @@ public class SmartController {
 
     public void setCharacterList(CharacterList characterList) {
         this.characterList = characterList;
-    }
-
-    public StateStack getStateMachine() {
-        return stateMachine;
-    }
-
-    public void setStateMachine(StateStack stateMachine) {
-        this.stateMachine = stateMachine;
     }
 
     public WebSocketSession getWebSocketSession() {

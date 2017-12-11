@@ -2,25 +2,19 @@ package project.states;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import project.websocket.handlers.CharacterListRequestHandler;
+import project.websocket.handlers.CreateCharacterRequestHandler;
+import project.websocket.handlers.MessageHandler;
+import project.websocket.messages.CharacterListRequestMessage;
+import project.websocket.messages.CreateCharacterRequestMessage;
 import project.websocket.messages.Message;
-import project.statemachine.PendingStack;
 
 public class CharacterListState extends AbstractState {
     private static final Logger LOGGER = LoggerFactory.getLogger(CharacterListState.class);
 
-    CharacterListState(PendingStack stack) {
-        super(stack);
-    }
-
-    @Override
-    public boolean update() {
-        LOGGER.info("updated");
-        return true;
-    }
-
-    @Override
-    public boolean handleMessage(final Message message) {
-        LOGGER.info("handles packet");
-        return true;
+    public CharacterListState(){
+        super();
+        handlersMap.put(CharacterListRequestMessage.class, new CharacterListRequestHandler());
+        handlersMap.put(CreateCharacterRequestMessage.class, new CreateCharacterRequestHandler());
     }
 }

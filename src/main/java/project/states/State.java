@@ -6,6 +6,6 @@ import project.websocket.messages.Message;
 public interface State {
     enum StateId { SI_NONE, SI_TITLE, @SuppressWarnings("SpellCheckingInspection") SI_SIGNUP, SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON, SI_CHARACTER_CREATION }
 
-    boolean handleMessage(Message message);
+    Message handleMessage(Message message);
 
 }
