@@ -4,8 +4,6 @@ import project.gamemechanics.smartcontroller.SmartController;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class ConnectionPool implements ObjectivePool<SmartController>{
 

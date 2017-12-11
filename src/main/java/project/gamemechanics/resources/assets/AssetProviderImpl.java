@@ -5,7 +5,6 @@ import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.CharacterRole;
 import project.gamemechanics.interfaces.Perk;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

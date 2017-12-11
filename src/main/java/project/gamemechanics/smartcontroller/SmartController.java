@@ -8,7 +8,6 @@ import project.websocket.messages.Message;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Queue;
 
 public class SmartController {
     private Deque<Message> inboxMessageQueue = new ArrayDeque<>();
