@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> implements AssetHolder.NpcRoleHolder {
     public NpcRoleAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities) {
         super();

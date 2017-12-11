@@ -2,9 +2,9 @@ package project.gamemechanics.resources.pcg.npcs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

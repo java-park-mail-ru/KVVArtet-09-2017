@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
-@Service
 public class NpcsFactoryImpl implements NpcsFactory {
     private final Map<Integer, Map<Integer, NpcPart>> npcParts;
 

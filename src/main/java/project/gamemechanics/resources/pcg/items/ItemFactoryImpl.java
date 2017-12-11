@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
-@Service
 public class ItemFactoryImpl implements ItemsFactory {
     private final Map<Integer, Map<Integer, ItemPart>> itemParts;
 

@@ -1,10 +1,10 @@
 package project.gamemechanics.world;
 
-import gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.dungeons.Instance;
-import gamemechanics.globals.Constants;
-import gamemechanics.interfaces.AliveEntity;
+import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.dungeons.Instance;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.interfaces.AliveEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.Deque;

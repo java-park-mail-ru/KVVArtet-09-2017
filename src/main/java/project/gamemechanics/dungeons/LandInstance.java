@@ -1,13 +1,13 @@
 package project.gamemechanics.dungeons;
 
-import gamemechanics.aliveentities.helpers.CashCalculator;
-import gamemechanics.aliveentities.helpers.ExperienceCalculator;
-import gamemechanics.battlefield.Battlefield;
-import gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
-import gamemechanics.battlefield.aliveentitiescontainers.Squad;
-import gamemechanics.battlefield.map.BattleMap;
-import gamemechanics.battlefield.map.BattleMapGenerator;
-import gamemechanics.globals.Constants;
+import project.gamemechanics.aliveentities.helpers.CashCalculator;
+import project.gamemechanics.aliveentities.helpers.ExperienceCalculator;
+import project.gamemechanics.battlefield.Battlefield;
+import project.gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
+import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
+import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.battlefield.map.BattleMapGenerator;
+import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

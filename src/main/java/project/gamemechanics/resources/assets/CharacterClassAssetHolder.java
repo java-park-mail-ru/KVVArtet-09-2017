@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
         implements AssetHolder.CharacterClassHolder {
     public CharacterClassAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities,

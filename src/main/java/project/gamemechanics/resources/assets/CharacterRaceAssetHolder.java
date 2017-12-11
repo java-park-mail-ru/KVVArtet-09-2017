@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Map;
 
-@Service
 public class CharacterRaceAssetHolder extends AbstractAssetHolder<CharacterRace>
         implements AssetHolder.CharacterRaceHolder {
     public CharacterRaceAssetHolder(@NotNull String fileName) {

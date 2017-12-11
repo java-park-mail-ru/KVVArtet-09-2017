@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class PerkBranchAssetHolder extends AbstractAssetHolder<PerkBranch> implements AssetHolder.PerkBranchHolder {
     public PerkBranchAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Perk> perks) {
         super();

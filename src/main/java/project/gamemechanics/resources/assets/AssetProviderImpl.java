@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Service
 public class AssetProviderImpl implements AssetProvider {
     private final AssetHolder.PerkHolder perkHolder;
     private final AssetHolder.PerkBranchHolder perkBranchHolder;

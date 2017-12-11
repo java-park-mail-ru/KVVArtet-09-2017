@@ -2,17 +2,17 @@ package project.gamemechanics.resources.pcg.npcs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gamemechanics.components.properties.Property;
-import gamemechanics.components.properties.PropertyCategories;
-import gamemechanics.globals.Constants;
-import gamemechanics.resources.pcg.items.ItemBlueprint;
+import project.gamemechanics.components.properties.Property;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.globals.Constants;
+import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class NpcPartAsset {
+public class NpcPartAsset implements NpcPart{
     private final Integer npcPartAssetId;
 
     private final String name;

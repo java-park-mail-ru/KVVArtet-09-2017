@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
 public class PcgFactory implements PcgContentFactory {
     private ItemsFactory itemsFactory = null;
     private NpcsFactory npcsFactory = null;
