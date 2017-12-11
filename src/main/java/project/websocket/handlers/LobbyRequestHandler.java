@@ -1,6 +1,5 @@
 package project.websocket.handlers;
 
-import project.websocket.messages.CreateCharacterRequestMessage;
 import project.websocket.messages.LobbyRequestMessage;
 import project.websocket.messages.Message;
 

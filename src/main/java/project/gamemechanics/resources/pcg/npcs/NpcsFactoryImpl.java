@@ -13,7 +13,6 @@ import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.assets.AssetProvider;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

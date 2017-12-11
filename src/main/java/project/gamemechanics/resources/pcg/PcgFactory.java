@@ -21,7 +21,6 @@ import project.gamemechanics.resources.pcg.npcs.NpcBlueprint;
 import project.gamemechanics.resources.pcg.npcs.NpcPart;
 import project.gamemechanics.resources.pcg.npcs.NpcsFactory;
 import project.gamemechanics.resources.pcg.npcs.NpcsFactoryImpl;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
