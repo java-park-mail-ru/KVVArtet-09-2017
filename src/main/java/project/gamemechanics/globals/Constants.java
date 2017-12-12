@@ -55,6 +55,7 @@ public final class Constants {
     public static final int DEFAULT_WALLS_COUNT = 20;
 
     public static final int DEFAULT_PACKS_COUNT = 3;
+    public static final int DEFAULT_ROOMS_COUNT = 5;
 
     public static final int DECREMENT_PER_SPAWNED_MONSTER = 15;
 

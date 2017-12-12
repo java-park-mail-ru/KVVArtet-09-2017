@@ -1,11 +1,12 @@
 package project.websocket.services;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import project.gamemechanics.smartcontroller.SmartController;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import project.gamemechanics.smartcontroller.SmartController;
 import project.websocket.ConnectionPool;
 import project.websocket.messages.Message;
 
@@ -20,7 +21,7 @@ public class ConnectionPoolService {
     private Map<Integer, SmartController> sessions = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
 
-    public ConnectionPoolService(ObjectMapper objectMapper) {
+    public ConnectionPoolService(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
@@ -28,7 +29,7 @@ public class ConnectionPoolService {
 
     }
 
-    public void putMessage(Integer userId, Message message) {
+    public void putMessage(@NotNull Integer userId, @NotNull Message message) {
         sessions.get(userId).addInboxMessage(message);
     }
 
@@ -72,5 +73,9 @@ public class ConnectionPoolService {
         } catch (IOException e) {
             throw new IOException("Unnable to send message", e);
         }
+    }
+
+    public Map<Integer, SmartController> getActiveSmartControllers() {
+        return sessions;
     }
 }

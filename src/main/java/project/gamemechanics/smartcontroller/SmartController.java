@@ -1,8 +1,8 @@
 package project.gamemechanics.smartcontroller;
 
+import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
-import org.springframework.web.socket.WebSocketSession;
 import project.statemachine.StateService;
 import project.websocket.messages.Message;
 
@@ -55,4 +55,7 @@ public class SmartController {
         this.webSocketSession = webSocketSession;
     }
 
+    public Boolean isValid() {
+        return false;
+    }
 }
