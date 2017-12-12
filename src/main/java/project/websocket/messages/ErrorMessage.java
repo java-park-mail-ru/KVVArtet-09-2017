@@ -1,11 +1,20 @@
 package project.websocket.messages;
 
+import org.jetbrains.annotations.NotNull;
+
 public class ErrorMessage extends Message {
-    public ErrorMessage(String message){
-        status = message;
+
+    private final String message;
+
+    public ErrorMessage(@NotNull String message){
+        this.message = message;
     }
 
-    ErrorMessage(){
-        status = "some error occured";
+    public ErrorMessage(){
+        this.message = "some error occured";
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
