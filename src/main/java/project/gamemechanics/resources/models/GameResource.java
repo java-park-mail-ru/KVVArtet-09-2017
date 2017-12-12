@@ -3,6 +3,7 @@ package project.gamemechanics.resources.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.interfaces.GameEntity;
@@ -18,6 +19,7 @@ import java.util.Set;
         @JsonSubTypes.Type(ForeignKeyModel.class),
         @JsonSubTypes.Type(HybridModel.class),
         @JsonSubTypes.Type(HybridModelWithInlays.class),
+        @JsonSubTypes.Type(InstanceNameDescription.class),
 })
 public interface GameResource extends GameEntity {
     default Boolean hasProperty(@NotNull Integer propertyKind) {
@@ -25,13 +27,13 @@ public interface GameResource extends GameEntity {
     }
 
     @JsonIgnore
-    default Set<Integer> getAvailableProperties() {
+    default @Nullable Set<Integer> getAvailableProperties() {
         return null;
     }
 
-    Map<Integer, Property> getAllProperties();
+    @Nullable Map<Integer, Property> getAllProperties();
 
-    default Property getProperty(@NotNull Integer propertyIndex) {
+    default @Nullable Property getProperty(@NotNull Integer propertyIndex) {
         return null;
     }
 
@@ -40,17 +42,17 @@ public interface GameResource extends GameEntity {
     }
 
     @JsonIgnore
-    default Set<Integer> getAvailableAffectors() {
+    default @Nullable Set<Integer> getAvailableAffectors() {
         return null;
     }
 
-    Map<Integer, Affector> getAllAffectors();
+    @Nullable Map<Integer, Affector> getAllAffectors();
 
-    default Affector getAffector(@NotNull Integer affectorIndex) {
+    default @Nullable Affector getAffector(@NotNull Integer affectorIndex) {
         return null;
     }
 
-    default void scaleToLevel(Integer level) {
+    default void scaleToLevel(@NotNull Integer level) {
     }
 
     default Boolean hasMapping(@NotNull Integer mappingIndex) {
@@ -58,19 +60,19 @@ public interface GameResource extends GameEntity {
     }
 
     @JsonIgnore
-    default Set<Integer> getAvailableMappings() {
+    default @Nullable Set<Integer> getAvailableMappings() {
         return null;
     }
 
-    default List<Integer> getMapping(@NotNull Integer mappingIndex) {
+    default @Nullable List<Integer> getMapping(@NotNull Integer mappingIndex) {
         return null;
     }
 
-    Map<Integer, List<Integer>> getAllMappings();
+    @Nullable Map<Integer, List<Integer>> getAllMappings();
 
-    default GameResource getInlaid(@NotNull Integer inlaidIndex) {
+    default @Nullable GameResource getInlaid(@NotNull Integer inlaidIndex) {
         return null;
     }
 
-    List<GameResource> getAllInlaid();
+    @Nullable List<GameResource> getAllInlaid();
 }

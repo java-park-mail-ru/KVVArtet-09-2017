@@ -1,5 +1,6 @@
 package project.gamemechanics.resources.assets;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import project.gamemechanics.interfaces.Countable;
 
 import javax.validation.constraints.NotNull;
@@ -21,11 +22,13 @@ public abstract class AbstractAssetHolder<T extends Countable> implements AssetH
     }
 
     @Override
+    @JsonIgnore
     public Set<Integer> getAvailableAssets() {
         return assets.keySet();
     }
 
     @Override
+    @JsonIgnore
     public Map<Integer, T> getAllAssets() {
         return assets;
     }

@@ -8,5 +8,6 @@ public final class CharacterRoleIds {
 
     public static final int CR_SIZE = 4;
 
-    public static final int CR_DAMAGE_DEALER = 5;
+    public static final int CR_DAMAGE_DEALER_ONE = 5;
+    public static final int CR_DAMAGE_DEALER_TWO = 6;
 }

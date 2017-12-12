@@ -6,6 +6,7 @@ import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.CharacterRole;
 import project.gamemechanics.interfaces.Countable;
 import project.gamemechanics.interfaces.Perk;
+import project.gamemechanics.resources.models.InstanceNameDescription;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
@@ -36,5 +37,8 @@ public interface AssetHolder<T extends Countable> {
     }
 
     interface NpcRoleHolder extends AssetHolder<CharacterRole> {
+    }
+
+    interface InstanceNameDescriptionHolder extends  AssetHolder<InstanceNameDescription> {
     }
 }

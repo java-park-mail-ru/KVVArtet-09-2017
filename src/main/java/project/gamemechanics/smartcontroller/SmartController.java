@@ -1,14 +1,13 @@
 package project.gamemechanics.smartcontroller;
 
+import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
-import org.springframework.web.socket.WebSocketSession;
 import project.statemachine.StateService;
 import project.websocket.messages.Message;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Queue;
 
 public class SmartController {
     private Deque<Message> inboxMessageQueue = new ArrayDeque<>();
@@ -56,4 +55,7 @@ public class SmartController {
         this.webSocketSession = webSocketSession;
     }
 
+    public Boolean isValid() {
+        return false;
+    }
 }

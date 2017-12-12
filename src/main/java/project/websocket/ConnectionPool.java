@@ -2,22 +2,23 @@ package project.websocket;
 
 import project.gamemechanics.smartcontroller.SmartController;
 
-import java.util.ArrayDeque;
+import javax.validation.constraints.NotNull;
 import java.util.Deque;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class ConnectionPool implements ObjectivePool<SmartController>{
+public class ConnectionPool implements ObjectivePool.SmartControllersPool {
+    private static final int CAPACITY_MULTIPLIER = 2;
+    private static final int START_CAPACITY = 8;
 
-    private Deque<SmartController> connectionPool = new ArrayDeque<>();
-    private Integer startCapacity = 8;
+    private Deque<SmartController> connectionPool = new ConcurrentLinkedDeque<>();
+    private Integer capacity = START_CAPACITY;
 
     public ConnectionPool() {
          initializeNewElements();
     }
 
     private void initializeNewElements() {
-        for(int i = 0; i < startCapacity; i++ ) {
+        for(int i = 0; i < capacity - connectionPool.size(); ++i ) {
             connectionPool.add(new SmartController());
         }
     }
@@ -30,15 +31,13 @@ public class ConnectionPool implements ObjectivePool<SmartController>{
         return connectionPool.remove();
     }
 
-    @Override
-    public void addMore() {
+    private void addMore() {
         initializeNewElements();
-        Integer capacityMultiplier = 2;
-        startCapacity *= capacityMultiplier;
+        capacity *= CAPACITY_MULTIPLIER;
     }
 
     @Override
-    public void addElement(SmartController smartController) {
+    public void addElement(@NotNull SmartController smartController) {
         connectionPool.add(smartController);
     }
 

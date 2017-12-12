@@ -7,6 +7,7 @@ import project.gamemechanics.interfaces.CharacterRole;
 import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public interface AssetProvider {
     int PERK_RESOURCE_NAME = 0;
@@ -18,6 +19,10 @@ public interface AssetProvider {
     int CHARACTER_CLASS_RESOURCE_NAME = 4;
 
     int NPC_ROLE_RESOURCE_NAME = 5;
+    @SuppressWarnings("FieldNamingConvention")
+    int INSTANCE_NAME_DESCRIPTION_FIRST_RESOURCE_NAME = 6;
+    @SuppressWarnings("FieldNamingConvention")
+    int INSTANCE_NAME_DESCRIPTION_SECOND_RESOURCE_NAME = 7;
 
     Perk getPerk(@NotNull Integer perkId);
 
@@ -34,4 +39,6 @@ public interface AssetProvider {
     CharacterRole getNpcRole(@NotNull Integer roleId);
 
     CharacterRole getNpcRole();
+
+    List<String> makeInstanceNameDescription();
 }
