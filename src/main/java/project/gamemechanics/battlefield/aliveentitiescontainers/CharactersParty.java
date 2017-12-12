@@ -1,20 +1,17 @@
 package project.gamemechanics.battlefield.aliveentitiescontainers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
-import project.gamemechanics.globals.Constants;
-import project.gamemechanics.globals.DigitsPairIndices;
-import project.gamemechanics.globals.EquipmentKind;
-import project.gamemechanics.globals.ItemRarity;
+import project.gamemechanics.globals.*;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.Countable;
 import project.gamemechanics.items.loot.PendingLootPool;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -61,23 +58,48 @@ public class CharactersParty implements Countable {
         return this.toSquad(Squad.PLAYERS_SQUAD_ID);
     }
 
-    public Boolean hasRole(Integer roleId) {
-        return members.getOrDefault(roleId, null) != null;
+    public Boolean hasRole(@NotNull Integer roleId) {
+        final Integer parsedRoleId = parseRoleId(roleId);
+        return parsedRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                ? members.getOrDefault(parsedRoleId, null) != null
+                : members.getOrDefault(parsedRoleId, null) != null
+                && members.getOrDefault(CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null) != null;
     }
 
     public Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
-        if (hasRole(roleId) || !members.containsKey(roleId)) {
+        Integer realRoleId = parseRoleId(roleId);
+        if (hasRole(realRoleId) || !members.containsKey(realRoleId)) {
             return false;
         }
-        members.replace(roleId, member);
+        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE && members.containsKey(realRoleId)) {
+            realRoleId = CharacterRoleIds.CR_DAMAGE_DEALER_TWO;
+        }
+        members.replace(realRoleId, member);
+        if (member.hasProperty(PropertyCategories.PC_PARTY_ID)) {
+            member.setProperty(PropertyCategories.PC_PARTY_ID, partyID);
+        } else {
+            member.addProperty(PropertyCategories.PC_PARTY_ID, new SingleValueProperty(partyID));
+        }
+        if (member.hasProperty(PropertyCategories.PC_ACTIVE_ROLE)) {
+            member.setProperty(PropertyCategories.PC_ACTIVE_ROLE, realRoleId);
+        } else {
+            member.addProperty(PropertyCategories.PC_ACTIVE_ROLE, new SingleValueProperty(realRoleId));
+        }
         return true;
     }
 
     public Boolean removeMember(@NotNull Integer roleId) {
-        if (!hasRole(roleId)) {
+        final Integer realRoleId = parseRoleId(roleId);
+        if (!hasRole(realRoleId)) {
             return false;
         }
-        members.replace(roleId, null);
+        if (members.get(realRoleId).hasProperty(PropertyCategories.PC_PARTY_ID)) {
+            members.get(realRoleId).setProperty(PropertyCategories.PC_PARTY_ID, Constants.UNDEFINED_ID);
+        } else {
+            members.get(realRoleId).addProperty(PropertyCategories.PC_PARTY_ID,
+                    new SingleValueProperty(Constants.UNDEFINED_ID));
+        }
+        members.replace(realRoleId, null);
         return true;
     }
 
@@ -174,5 +196,18 @@ public class CharactersParty implements Countable {
     @JsonIgnore
     public Set<Integer> getRoleIds() {
         return members.keySet();
+    }
+
+    private void initMembers() {
+        members.put(CharacterRoleIds.CR_TANK, null);
+        members.put(CharacterRoleIds.CR_SUPPORT, null);
+        members.put(CharacterRoleIds.CR_DAMAGE_DEALER_ONE, null);
+        members.put(CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null);
+    }
+
+    private Integer parseRoleId(@NotNull Integer roleId) {
+        return roleId == CharacterRoleIds.CR_MELEE_DAMAGE_DEALER
+                || roleId == CharacterRoleIds.CR_RANGED_DAMAGE_DEALER
+                ? CharacterRoleIds.CR_DAMAGE_DEALER_ONE : roleId;
     }
 }

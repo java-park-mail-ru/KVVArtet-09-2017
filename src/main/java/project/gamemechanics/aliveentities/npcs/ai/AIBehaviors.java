@@ -42,6 +42,10 @@ public final class AIBehaviors {
         return BEHAVIORS.getOrDefault(behaviorID, null);
     }
 
+    public static Map<Integer, AI.BehaviorFunction> getAllBehaviors() {
+        return BEHAVIORS;
+    }
+
     /* TODO: find a better way to write and put BEHAVIORS in the map that that */
     @SuppressWarnings("OverlyComplexMethod")
     private static Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
@@ -67,14 +71,15 @@ public final class AIBehaviors {
                                 enemyIdWithMaximalScore = enemyID;
                             } else {
                                 if (enemyDistanceScore + enemyHealthScore + enemyAggroScore == maximalScore) {
-                                    if (enemyDistanceScore > getDistanceScore(aggregatedBattleState
-                                                    .enemies.getMember(enemyIdWithMaximalScore),
+                                    if (enemyDistanceScore > getDistanceScore(Objects.requireNonNull(
+                                            aggregatedBattleState.enemies.getMember(enemyIdWithMaximalScore)),
                                             aggregatedBattleState.self)) {
                                         enemyIdWithMaximalScore = enemyID;
                                     } else {
                                         if (aggregatedBattleState.aggroMap.get(enemy.getID())
-                                                > aggregatedBattleState.aggroMap.get(aggregatedBattleState.enemies
-                                                .getMember(enemyIdWithMaximalScore).getID())) {
+                                                > aggregatedBattleState.aggroMap.get(
+                                                        Objects.requireNonNull(aggregatedBattleState.enemies
+                                                .getMember(enemyIdWithMaximalScore)).getID())) {
                                             enemyIdWithMaximalScore = enemyID;
                                         }
                                     }
@@ -86,8 +91,7 @@ public final class AIBehaviors {
 
                 final AliveEntity targetEnemy = aggregatedBattleState.enemies.getMember(enemyIdWithMaximalScore);
 
-                Integer maxAttackDamage = Integer.MIN_VALUE;
-                Ability bestAttack = null;
+                assert targetEnemy != null;
                 final Integer distanceToTarget = aggregatedBattleState.map
                         .getTile(aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                                 DigitsPairIndices.ROW_COORD_INDEX), aggregatedBattleState.self
@@ -97,6 +101,8 @@ public final class AIBehaviors {
                                 targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
                                         DigitsPairIndices.COL_COORD_INDEX)));
 
+                Integer maxAttackDamage = Integer.MIN_VALUE;
+                Ability bestAttack = null;
                 for (Ability attack : attacks) {
                     if (aggregatedBattleState.self.getProperty(PropertyCategories.PC_ABILITIES_COOLDOWN,
                             attack.getID()) == 0) {
