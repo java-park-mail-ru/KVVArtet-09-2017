@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.helpers.CashCalculator;
 import project.gamemechanics.aliveentities.helpers.ExperienceCalculator;
 import project.gamemechanics.aliveentities.npcs.ai.AI;
@@ -23,7 +24,6 @@ import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -221,6 +221,10 @@ public class Battlefield implements Updateable {
             return null;
         }
         return battleLog.get(entryIndex);
+    }
+
+    public List<Long> encodeMap() {
+        return map.encode();
     }
 
     private void emplaceBattlers(@NotNull List<SpawnPoint> spawnPoints) {
