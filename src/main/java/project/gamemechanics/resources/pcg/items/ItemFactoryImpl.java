@@ -8,7 +8,6 @@ import project.gamemechanics.globals.EquipmentKind;
 import project.gamemechanics.globals.ItemRarity;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.items.IngameItem;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

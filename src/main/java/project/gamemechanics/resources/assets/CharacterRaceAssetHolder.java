@@ -8,7 +8,6 @@ import project.gamemechanics.flyweights.CharacterRace;
 import project.gamemechanics.resources.holders.GameResourceHolder;
 import project.gamemechanics.resources.holders.ResourceHolder;
 import project.gamemechanics.resources.models.GameResource;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
