@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.helpers.CashCalculator;
 import project.gamemechanics.aliveentities.helpers.ExperienceCalculator;
 import project.gamemechanics.aliveentities.npcs.ai.AI;
@@ -14,16 +15,12 @@ import project.gamemechanics.battlefield.map.helpers.Pathfinder;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
-import project.gamemechanics.globals.Constants;
-import project.gamemechanics.globals.DigitsPairIndices;
-import project.gamemechanics.globals.EquipmentKind;
-import project.gamemechanics.globals.ItemRarity;
+import project.gamemechanics.globals.*;
 import project.gamemechanics.interfaces.*;
 import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -223,6 +220,10 @@ public class Battlefield implements Updateable {
         return battleLog.get(entryIndex);
     }
 
+    public List<Long> encodeMap() {
+        return map.encode();
+    }
+
     private void emplaceBattlers(@NotNull List<SpawnPoint> spawnPoints) {
         for (SpawnPoint spawnPoint : spawnPoints) {
             if (spawnPoint != null) {
@@ -416,6 +417,8 @@ public class Battlefield implements Updateable {
                                                     DigitsPairIndices.CURRENT_VALUE_INDEX, expAmount);
                                             member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
                                                     cashAmount);
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
+                                                    cashAmount);
                                             entry.addEvent(entry.getEventIndex(event) + 1,
                                                     EventsFactory.makeRewardEvent(map.getTile(
                                                             member.getProperty(PropertyCategories.PC_COORDINATES,
@@ -423,6 +426,21 @@ public class Battlefield implements Updateable {
                                                             member.getProperty(PropertyCategories.PC_COORDINATES,
                                                                     DigitsPairIndices.COL_COORD_INDEX)),
                                                             expAmount, cashAmount));
+                                            if (mode == PVE_GAME_MODE) {
+                                                Integer propertyIndex = UserCharacterStatistics.US_PVE_ASSISTS;
+                                                if (member.equals(entry.getSender().getInhabitant())) {
+                                                    propertyIndex = UserCharacterStatistics.US_PVE_KILLS;
+                                                }
+                                                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                        propertyIndex, 1);
+                                            } else {
+                                                Integer propertyIndex = UserCharacterStatistics.US_PVP_ASSISTS;
+                                                if (member.equals(entry.getSender().getInhabitant())) {
+                                                    propertyIndex = UserCharacterStatistics.US_PVP_KILLS;
+                                                }
+                                                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                        propertyIndex, 1);
+                                            }
                                         }
                                     }
                                 }

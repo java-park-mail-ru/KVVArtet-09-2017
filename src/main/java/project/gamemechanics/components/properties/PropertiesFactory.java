@@ -1,8 +1,8 @@
 package project.gamemechanics.components.properties;
 
-import project.gamemechanics.battlefield.map.tilesets.TilesetShapes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import project.gamemechanics.battlefield.map.tilesets.TilesetShapes;
 import project.gamemechanics.globals.*;
 
 import java.util.ArrayList;
@@ -112,6 +112,9 @@ public final class PropertiesFactory {
                 break;
             case PropertyCategories.PC_INSTANCE_ID:
                 property = makeInstanceId();
+                break;
+            case PropertyCategories.PC_STATISTICS:
+                property = makeStatisticsProperty();
                 break;
             default:
                 break;
@@ -245,5 +248,9 @@ public final class PropertiesFactory {
 
     private static Property makeInstanceId() {
         return new SingleValueProperty(Constants.UNDEFINED_ID);
+    }
+
+    private static Property makeStatisticsProperty() {
+        return new ListProperty(new ArrayList<>(UserCharacterStatistics.US_SIZE));
     }
 }
