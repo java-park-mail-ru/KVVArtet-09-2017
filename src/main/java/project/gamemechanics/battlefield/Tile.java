@@ -1,7 +1,7 @@
 package project.gamemechanics.battlefield;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.properties.PropertiesFactory;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
@@ -13,6 +13,7 @@ import project.gamemechanics.interfaces.MapNode;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Tile implements MapNode {
@@ -41,12 +42,13 @@ public class Tile implements MapNode {
     }
 
     @Override
-    @JsonProperty("id")
+    @JsonIgnore
     public Integer getID() {
         return tileID;
     }
 
     @Override
+    @JsonIgnore
     public Boolean getIsPassable() {
         return isPassable;
     }
@@ -63,6 +65,7 @@ public class Tile implements MapNode {
     }
 
     @Override
+    @JsonIgnore
     public Boolean isOccupied() {
         return inhabitant == null;
     }
@@ -76,7 +79,7 @@ public class Tile implements MapNode {
                 stander.setProperty(PropertyCategories.PC_COORDINATES, coordinates);
             } else {
                 final Property coordinatesProperty = PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES);
-                coordinatesProperty.setPropertyList(coordinates);
+                Objects.requireNonNull(coordinatesProperty).setPropertyList(coordinates);
                 stander.addProperty(PropertyCategories.PC_COORDINATES, coordinatesProperty);
             }
         } else {
@@ -93,7 +96,7 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public MapNode getAdjacent(@NotNull Integer direction) {
+    public @Nullable MapNode getAdjacent(@NotNull Integer direction) {
         if (direction < Directions.UP || direction >= adjacentTiles.size()) {
             return null;
         }
