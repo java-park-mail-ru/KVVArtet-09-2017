@@ -8,7 +8,9 @@ import project.gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.battlefield.map.BattleMapGenerator;
+import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.UserCharacterStatistics;
 import project.gamemechanics.interfaces.AliveEntity;
 
 import javax.validation.constraints.NotNull;
@@ -88,6 +90,11 @@ public class DungeonInstance extends AbstractInstance {
         for (Integer roleId : Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getRoleIds()) {
             Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).giveRewardForInstance(roleId,
                     extraExp, extraGold, factory.getItemsFactory());
+            final AliveEntity member = Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getMember(roleId);
+            if (member != null) {
+                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                        UserCharacterStatistics.US_DUNGEONS_CLEARED, 1);
+            }
         }
     }
 

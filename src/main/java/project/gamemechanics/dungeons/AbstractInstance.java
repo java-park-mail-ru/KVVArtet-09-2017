@@ -1,5 +1,6 @@
 package project.gamemechanics.dungeons;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.npcs.ai.AI;
 import project.gamemechanics.battlefield.Battlefield;
 import project.gamemechanics.battlefield.actionresults.ActionResult;
@@ -12,7 +13,6 @@ import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.MapNode;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -189,6 +189,11 @@ public abstract class AbstractInstance implements Instance {
             return null;
         }
         return squads.get(partyIndex);
+    }
+
+    @Override
+    public List<Long> encodeCurrentRoomMap(){
+        return currentRoom.encodeMap();
     }
 
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})

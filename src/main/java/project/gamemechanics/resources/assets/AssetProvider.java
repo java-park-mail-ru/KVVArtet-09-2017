@@ -24,6 +24,8 @@ public interface AssetProvider {
     @SuppressWarnings("FieldNamingConvention")
     int INSTANCE_NAME_DESCRIPTION_SECOND_RESOURCE_NAME = 7;
 
+    int ASSET_HOLDERS_FILES_COUNT = 8;
+
     Perk getPerk(@NotNull Integer perkId);
 
     PerkBranch getPerkBranch(@NotNull Integer branchId);

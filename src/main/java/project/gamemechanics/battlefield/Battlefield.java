@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.helpers.CashCalculator;
 import project.gamemechanics.aliveentities.helpers.ExperienceCalculator;
 import project.gamemechanics.aliveentities.npcs.ai.AI;
@@ -14,16 +15,12 @@ import project.gamemechanics.battlefield.map.helpers.Pathfinder;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
-import project.gamemechanics.globals.Constants;
-import project.gamemechanics.globals.DigitsPairIndices;
-import project.gamemechanics.globals.EquipmentKind;
-import project.gamemechanics.globals.ItemRarity;
+import project.gamemechanics.globals.*;
 import project.gamemechanics.interfaces.*;
 import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -154,13 +151,11 @@ public class Battlefield implements Updateable {
             battleLog.add(actionsQueue.getFirst().execute());
         }
 
-        /* Note: now only updating an active battler per turn
-         * to prevent enormous effects' ticking
-         */
-        battlersQueue.getFirst().update();
+        if (activeBattlerActionsPooled == 0) {
+            updateBattlers();
+        }
 
         removeDead();
-        removeExpiredEffects();
         processEvents();
 
         if (!isBattleFinished()) {
@@ -221,6 +216,10 @@ public class Battlefield implements Updateable {
             return null;
         }
         return battleLog.get(entryIndex);
+    }
+
+    public List<Long> encodeMap() {
+        return map.encode();
     }
 
     private void emplaceBattlers(@NotNull List<SpawnPoint> spawnPoints) {
@@ -416,6 +415,8 @@ public class Battlefield implements Updateable {
                                                     DigitsPairIndices.CURRENT_VALUE_INDEX, expAmount);
                                             member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
                                                     cashAmount);
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                    UserCharacterStatistics.US_GOLD_EARNED, cashAmount);
                                             entry.addEvent(entry.getEventIndex(event) + 1,
                                                     EventsFactory.makeRewardEvent(map.getTile(
                                                             member.getProperty(PropertyCategories.PC_COORDINATES,
@@ -423,6 +424,21 @@ public class Battlefield implements Updateable {
                                                             member.getProperty(PropertyCategories.PC_COORDINATES,
                                                                     DigitsPairIndices.COL_COORD_INDEX)),
                                                             expAmount, cashAmount));
+                                            if (mode == PVE_GAME_MODE) {
+                                                Integer propertyIndex = UserCharacterStatistics.US_PVE_ASSISTS;
+                                                if (member.equals(entry.getSender().getInhabitant())) {
+                                                    propertyIndex = UserCharacterStatistics.US_PVE_KILLS;
+                                                }
+                                                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                        propertyIndex, 1);
+                                            } else {
+                                                Integer propertyIndex = UserCharacterStatistics.US_PVP_ASSISTS;
+                                                if (member.equals(entry.getSender().getInhabitant())) {
+                                                    propertyIndex = UserCharacterStatistics.US_PVP_KILLS;
+                                                }
+                                                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                        propertyIndex, 1);
+                                            }
                                         }
                                     }
                                 }
@@ -531,5 +547,17 @@ public class Battlefield implements Updateable {
                 }
             }
         }
+    }
+
+    private void updateBattlers() {
+        for (Squad squad : squads) {
+            for (Integer memberIndex = 0; memberIndex < squad.getSquadSize(); ++memberIndex) {
+                final AliveEntity member = squad.getMember(memberIndex);
+                if (member != null && member.isAlive()) {
+                    member.update();
+                }
+            }
+        }
+        removeExpiredEffects();
     }
 }
