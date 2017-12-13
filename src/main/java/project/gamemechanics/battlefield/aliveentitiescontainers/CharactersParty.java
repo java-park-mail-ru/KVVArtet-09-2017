@@ -152,6 +152,8 @@ public class CharactersParty implements Countable {
         member.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
                 DigitsPairIndices.CURRENT_VALUE_INDEX, extraExp);
         member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT, extraGold);
+        member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                UserCharacterStatistics.US_GOLD_EARNED, extraGold);
         if (itemsFactory != null) {
             final Map<Integer, Integer> itemParts = new HashMap<>(ItemPart.ITEM_PARTS_COUNT);
             for (Integer i = ItemPart.FIRST_PART_ID; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
