@@ -417,8 +417,8 @@ public class Battlefield implements Updateable {
                                                     DigitsPairIndices.CURRENT_VALUE_INDEX, expAmount);
                                             member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
                                                     cashAmount);
-                                            member.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT,
-                                                    cashAmount);
+                                            member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                    UserCharacterStatistics.US_GOLD_EARNED, cashAmount);
                                             entry.addEvent(entry.getEventIndex(event) + 1,
                                                     EventsFactory.makeRewardEvent(map.getTile(
                                                             member.getProperty(PropertyCategories.PC_COORDINATES,
