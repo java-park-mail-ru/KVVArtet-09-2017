@@ -151,13 +151,11 @@ public class Battlefield implements Updateable {
             battleLog.add(actionsQueue.getFirst().execute());
         }
 
-        /* Note: now only updating an active battler per turn
-         * to prevent enormous effects' ticking
-         */
-        battlersQueue.getFirst().update();
+        if (activeBattlerActionsPooled == 0) {
+            updateBattlers();
+        }
 
         removeDead();
-        removeExpiredEffects();
         processEvents();
 
         if (!isBattleFinished()) {
@@ -549,5 +547,17 @@ public class Battlefield implements Updateable {
                 }
             }
         }
+    }
+
+    private void updateBattlers() {
+        for (Squad squad : squads) {
+            for (Integer memberIndex = 0; memberIndex < squad.getSquadSize(); ++memberIndex) {
+                final AliveEntity member = squad.getMember(memberIndex);
+                if (member != null && member.isAlive()) {
+                    member.update();
+                }
+            }
+        }
+        removeExpiredEffects();
     }
 }
