@@ -3,6 +3,7 @@ package project.gamemechanics.battlefield.map.helpers;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class BattleMapRoute implements Route {
@@ -10,7 +11,7 @@ public class BattleMapRoute implements Route {
 
     private final List<MapNode> route;
 
-    public BattleMapRoute(List<MapNode> route) {
+    public BattleMapRoute(@NotNull List<MapNode> route) {
         this.route = route;
     }
 
@@ -28,7 +29,7 @@ public class BattleMapRoute implements Route {
     }
 
     @Override
-    public void walkThrough(Integer distance) {
+    public void walkThrough(@NotNull Integer distance) {
         final AliveEntity pedestrian = route.get(SOURCE_TILE_INDEX).getInhabitant();
         if (pedestrian == null) {
             return;
@@ -54,12 +55,16 @@ public class BattleMapRoute implements Route {
     }
 
     @Override
-    public List<Integer> getGoalCoordinates(Integer distance) {
+    public List<Integer> getGoalCoordinates(@NotNull Integer distance) {
         return route.get(distance).getCoordinates();
     }
 
     @Override
     public List<Integer> getGoalCoordinates() {
         return getGoalCoordinates(route.size() - 1);
+    }
+
+    public List<MapNode> getRoute() {
+        return route;
     }
 }
