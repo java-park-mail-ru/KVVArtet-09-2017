@@ -33,6 +33,8 @@ public class PropertyCategories {
     public static final int PC_AVAILABLE_EQUIPMENT = 29;
     public static final int PC_ACTIVE_ROLE = 32;
 
+    public static final int PC_STATISTICS = 34;
+
     //Ability-specific properties
     public static final int PC_MAX_DISTANCE = 21;
     public static final int PC_AREA = 22;

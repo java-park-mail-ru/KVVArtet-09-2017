@@ -7,7 +7,10 @@ import project.gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.battlefield.map.BattleMapGenerator;
+import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.UserCharacterStatistics;
+import project.gamemechanics.interfaces.AliveEntity;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -65,6 +68,11 @@ public class LandInstance extends AbstractInstance {
         for (Integer roleId : Objects.requireNonNull(getParty(winnerSquad)).getRoleIds()) {
             Objects.requireNonNull(getParty(winnerSquad)).giveRewardForInstance(roleId,
                     winnersExtraExp, winnersExtraGold, factory.getItemsFactory());
+            final AliveEntity member = Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).getMember(roleId);
+            if (member != null) {
+                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                        UserCharacterStatistics.US_PVP_MATCHES_WON, 1);
+            }
         }
 
         final Integer losersExtraExp = ExperienceCalculator.getPartyBiasedXPReward(
