@@ -75,6 +75,11 @@ public class PendingLootPoolImpl implements PendingLootPool {
         lootPools.get(owner).add(item);
     }
 
+    @Override
+    public void reset() {
+        lootPools.clear();
+    }
+
     private @Nullable Bag findFirstFreeBag(@NotNull AliveEntity owner) {
         Integer bagIndex = 0;
         Bag bag = owner.getBag(bagIndex);

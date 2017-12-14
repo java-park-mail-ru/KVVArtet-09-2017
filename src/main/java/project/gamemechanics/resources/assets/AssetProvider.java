@@ -43,4 +43,6 @@ public interface AssetProvider {
     CharacterRole getNpcRole();
 
     List<String> makeInstanceNameDescription();
+
+    void reset();
 }

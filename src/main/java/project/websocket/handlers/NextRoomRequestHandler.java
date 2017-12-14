@@ -12,7 +12,7 @@ public class NextRoomRequestHandler extends MessageHandler<NextRoomRequestMessag
 
     @Override
     public Message handle(@NotNull NextRoomRequestMessage message) {
-        //some world class method
+        //TODO some world class method
         return message;
     }
 }

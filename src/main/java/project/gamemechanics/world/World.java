@@ -19,4 +19,6 @@ public interface World {
     PendingLootPool getPendingLootPool();
 
     Lobby getLobby();
+
+    void reset();
 }

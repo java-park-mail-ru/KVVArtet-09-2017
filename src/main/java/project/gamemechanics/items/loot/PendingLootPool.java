@@ -20,4 +20,6 @@ public interface PendingLootPool {
     void rejectItemFromPool(@NotNull AliveEntity owner, @NotNull Integer itemIndex);
 
     void offerItemToPool(@NotNull AliveEntity owner, @NotNull EquipableItem item);
+
+    void reset();
 }
