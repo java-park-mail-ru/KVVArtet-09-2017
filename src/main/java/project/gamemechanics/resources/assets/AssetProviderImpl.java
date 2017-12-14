@@ -129,4 +129,9 @@ public class AssetProviderImpl implements AssetProvider {
         nameDescription.add(descriptionBuilder.toString());
         return nameDescription;
     }
+
+    @Override
+    public void reset() {
+        instanceNameDescriptionHolders.clear();
+    }
 }

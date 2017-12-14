@@ -78,4 +78,10 @@ public class ConnectionPoolService {
     public Map<Integer, SmartController> getActiveSmartControllers() {
         return sessions;
     }
+
+    public void reset() {
+        for (Map.Entry<Integer, SmartController> entry : sessions.entrySet()) {
+            cutDownConnection(entry.getKey(), CloseStatus.SERVER_ERROR);
+        }
+    }
 }

@@ -12,7 +12,7 @@ public class CreateCharacterRequestHandler extends MessageHandler<CreateCharacte
 
     @Override
     public Message handle(@NotNull CreateCharacterRequestMessage message) {
-        //some world class method
+        //TODO some world class method
         return message;
     }
 }
