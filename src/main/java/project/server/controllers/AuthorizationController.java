@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @SuppressWarnings("SpellCheckingInspection")
 @RestController
-@CrossOrigin(origins = "https://lands-dangeous.herokuapp.com/")
+@CrossOrigin(origins = "https://lands-dangeous.herokuapp.com")
 public class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
