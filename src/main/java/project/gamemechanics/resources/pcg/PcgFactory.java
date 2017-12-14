@@ -99,4 +99,9 @@ public class PcgFactory implements PcgContentFactory {
     public NpcsFactory getNpcsFactory() {
         return npcsFactory;
     }
+
+    @Override
+    public void reset() {
+        assetProvider.reset();
+    }
 }

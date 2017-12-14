@@ -12,7 +12,7 @@ public class LobbyRequestHandler extends MessageHandler<LobbyRequestMessage> {
 
     @Override
     public Message handle(@NotNull LobbyRequestMessage message) {
-        //some world class method
+        //TODO some world class method
         return message;
     }
 }

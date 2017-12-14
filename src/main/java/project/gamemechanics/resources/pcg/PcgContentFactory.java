@@ -21,4 +21,6 @@ public interface PcgContentFactory {
     ItemsFactory getItemsFactory();
 
     NpcsFactory getNpcsFactory();
+
+    void reset();
 }

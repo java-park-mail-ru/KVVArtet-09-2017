@@ -12,6 +12,7 @@ public class DungeonState extends AbstractState {
 
     public DungeonState(){
         super();
+        LOGGER.info("DungeonState");
         handlersMap.put(ActionRequestMessage.class, new ActionRequestHandler());
         handlersMap.put(NextRoomRequestMessage.class, new NextRoomRequestHandler());
     }

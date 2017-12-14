@@ -13,7 +13,7 @@ public class CharacterListRequestHandler extends MessageHandler<CharacterListReq
 
     @Override
     public Message handle(@NotNull CharacterListRequestMessage message) {
-        //some world class method
+        //TODO some world class method
         return message;
     }
 }
