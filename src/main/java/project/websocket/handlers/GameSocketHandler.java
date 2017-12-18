@@ -73,11 +73,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
             return;
         }
         connectionPoolService.putMessage(user.getId(), message);
-//        try {
-//            messageHandlerContainer.handle(message, user.getId());
-//        } catch (Exception e) {
-//            LOGGER.error("Can't handle message of type " + message.getClass().getName() + " with content: " + text, e);
-//        }
     }
 
     @Override

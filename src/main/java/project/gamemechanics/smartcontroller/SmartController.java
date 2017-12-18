@@ -1,5 +1,6 @@
 package project.gamemechanics.smartcontroller;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
@@ -16,15 +17,25 @@ public class SmartController {
     private CharacterList characterList;
     private StateService stateService = new StateService();
     private WebSocketSession webSocketSession;
+    private Integer ownerID;
 
-    void tick() {
+    public SmartController() {
+        //characterList = new CharacterList(new CharacterList.CharacterListModel(this.getOwnerID()));
+        //activeChar = characterList.getCharacterList().get(0);
+    }
+
+    public void tick() {
         while(!inboxMessageQueue.isEmpty()){
-            outboxMessageQueue.add(stateService.handleMessage(inboxMessageQueue.getFirst()));
+            outboxMessageQueue.add(stateService.handleMessage(inboxMessageQueue.getFirst(), this.ownerID));
         }
     }
 
     public Message getOutboxMessage() {
-        return outboxMessageQueue.getFirst();
+        if(outboxMessageQueue.isEmpty()){
+            return null;
+        } else {
+            return outboxMessageQueue.getFirst();
+        }
     }
 
     public void addInboxMessage(Message inboxMessage) {
@@ -56,6 +67,14 @@ public class SmartController {
     }
 
     public Boolean isValid() {
-        return false;
+        return getWebSocketSession().isOpen();
+    }
+
+    public void setOwnerID(Integer ownerID) {
+        this.ownerID = ownerID;
+    }
+
+    public Integer getOwnerID() {
+        return ownerID;
     }
 }

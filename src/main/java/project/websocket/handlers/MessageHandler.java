@@ -8,7 +8,7 @@ import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 
-public abstract class MessageHandler<T> {
+public abstract class MessageHandler<T extends Message> {
     private Class<T> clazz;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LobbyState.class);
@@ -17,9 +17,9 @@ public abstract class MessageHandler<T> {
         this.clazz = clazz;
     }
 
-    public Message handleMessage(@NotNull Message message) {
+    public Message handleMessage(@NotNull Message message, Integer forUser) {
         try {
-            return handle(clazz.cast(message));
+            return handle(clazz.cast(message), forUser);
         } catch (ClassCastException e) {
             e.printStackTrace();
             LOGGER.error("Message is not convertible");
@@ -27,5 +27,5 @@ public abstract class MessageHandler<T> {
         }
     }
 
-    public abstract Message handle(@NotNull T message);
+    public abstract Message handle(@NotNull T message, Integer forUser);
 }

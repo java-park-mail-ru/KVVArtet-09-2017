@@ -11,6 +11,7 @@ import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 import project.gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.battlefield.map.actions.BattleAction;
 import project.gamemechanics.battlefield.map.helpers.Pathfinder;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
@@ -21,6 +22,10 @@ import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
+import project.websocket.messages.ActionRequestMessage;
+import project.websocket.messages.ConfirmationMessage;
+import project.websocket.messages.ErrorMessage;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -199,8 +204,16 @@ public class Battlefield implements Updateable {
     }
 
     @SuppressWarnings("SameReturnValue")
-    public Boolean pushAction(/* JSON packet here */) {
-        return false;
+    public Message pushAction(ActionRequestMessage message) {
+        MapNode senderTile = map.getTile(message.getSender().getCoordinate(0), message.getSender().getCoordinate(1));
+        if(senderTile.isOccupied() && senderTile != null){
+            BattleAction battleAction = new BattleAction(message.getSender(), message.getTarget(), message.getAbility(), pathfinder);
+            pushAction(battleAction);
+            return new ConfirmationMessage("Action delivered");
+        } else {
+            return new ErrorMessage("Unexpected data in ActionRequestMessage");
+        }
+
     }
 
     public Integer getBattleLogLength() {
