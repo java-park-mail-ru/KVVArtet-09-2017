@@ -3,27 +3,20 @@ package project.gamemechanics;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.socket.CloseStatus;
-import project.gamemechanics.smartcontroller.SmartController;
 import project.gamemechanics.world.World;
-import project.gamemechanics.world.WorldImpl;
-import project.websocket.ConnectionPool;
 import project.websocket.services.ConnectionPoolService;
 
-import java.util.Map;
-
-@Service
 public class GameExecutor implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameExecutor.class);
     @NotNull
-    private final World world;
+    private World world;
+    @NotNull
+    private final ConnectionPoolService connectionPoolService;
 
-    @Autowired
-    public GameExecutor(@NotNull World world) {
+    public GameExecutor(@NotNull World world, @NotNull ConnectionPoolService connectionPoolService) {
         this.world = world;
+        this.connectionPoolService = connectionPoolService;
     }
 
     @Override
@@ -36,9 +29,9 @@ public class GameExecutor implements Runnable {
     }
 
     private void mainCycle() {
-
         while(true){
             try {
+                connectionPoolService.tick();
                 world.tick();
                 if (Thread.currentThread().isInterrupted()) {
                     world.reset();

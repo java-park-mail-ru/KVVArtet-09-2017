@@ -16,8 +16,8 @@ import project.gamemechanics.items.loot.PendingLootPool;
 import project.gamemechanics.resources.assets.AssetProvider;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.smartcontroller.SmartController;
-import project.websocket.messages.ConfirmationMessage;
 import project.websocket.messages.ErrorMessage;
+import project.websocket.messages.LobbyConfirmationMessage;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
@@ -92,7 +92,7 @@ public class LobbyImpl implements Lobby {
 
         queuedCharacters.get(gameMode).get(character.getProperty(PropertyCategories.PC_ACTIVE_ROLE))
                 .offerLast(character);
-        return new ConfirmationMessage();
+        return new LobbyConfirmationMessage();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class LobbyImpl implements Lobby {
                 final AbstractInstance.DungeonInstanceModel newDungeonModel = makePveInstanceModel(parties);
                 final Instance newPveInstance = new DungeonInstance(newDungeonModel);
                 instancesPool.put(newPveInstance.getID(), newPveInstance);
-                return new ConfirmationMessage(); /* TODO: change to proper message */
+                return new LobbyConfirmationMessage(); /* TODO: change to proper message */
             }
         }
         for (Integer gameModeId : wipPartiesPool.keySet()) {
@@ -116,7 +116,7 @@ public class LobbyImpl implements Lobby {
             }
         }
         wipPartiesPool.get(gameMode).offerLast(party);
-        return new ConfirmationMessage();
+        return new LobbyConfirmationMessage();
     }
 
     @Override
@@ -129,14 +129,14 @@ public class LobbyImpl implements Lobby {
                 break;
             }
         }
-        return new ConfirmationMessage();
+        return new LobbyConfirmationMessage();
     }
 
     @Override
     public Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
         dequeueCharacterFromQueue(character, gameMode);
         dequeueCharacterFromParties(character, gameMode);
-        return new ConfirmationMessage();
+        return new LobbyConfirmationMessage();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class LobbyImpl implements Lobby {
         if (dismissParty) {
             dismissCharactersParty(party);
         }
-        return new ConfirmationMessage();
+        return new LobbyConfirmationMessage();
     }
 
     @Override
@@ -164,7 +164,7 @@ public class LobbyImpl implements Lobby {
             return new ErrorMessage("party is not queued");
         }
         wipPartiesPool.get(gameMode).remove(party);
-        return new ConfirmationMessage();
+        return new LobbyConfirmationMessage();
     }
 
     @Override
@@ -223,7 +223,7 @@ public class LobbyImpl implements Lobby {
     }
 
     private void sendInvitations(@NotNull Instance instance, @NotNull List<CharactersParty> parties) {
-        final Message invitation = new ConfirmationMessage(); /* TODO: change on something more correct */
+        final Message invitation = new LobbyConfirmationMessage(); /* TODO: change on something more correct */
         final List<Integer> notifiedUsersList = new ArrayList<>();
         for(CharactersParty matchedParty : parties) {
             for (Integer roleId : matchedParty.getRoleIds()) {

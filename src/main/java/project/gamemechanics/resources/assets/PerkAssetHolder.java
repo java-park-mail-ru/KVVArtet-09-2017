@@ -3,6 +3,7 @@ package project.gamemechanics.resources.assets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import project.gamemechanics.flyweights.perks.IngamePerk;
 import project.gamemechanics.interfaces.Perk;
 import project.gamemechanics.resources.holders.GameResourceHolder;
@@ -26,7 +27,7 @@ public class PerkAssetHolder extends AbstractAssetHolder<Perk> implements AssetH
         final Map<Integer, GameResource> readPerks = new HashMap<>();
         //noinspection Duplicates,TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
             readPerks.putAll(holder.getAllResources());
         } catch (JsonParseException e) {
             e.printStackTrace();

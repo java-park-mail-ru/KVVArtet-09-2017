@@ -2,6 +2,7 @@ package project.websocket.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -13,7 +14,6 @@ import project.websocket.messages.Message;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 @Service
 public class ConnectionPoolService {
 
@@ -26,6 +26,21 @@ public class ConnectionPoolService {
     }
 
     public void tick() {
+        for(SmartController smart : sessions.values()){
+            if(smart.isValid()) {
+                smart.tick();
+                Message response = null;
+                while((response = smart.getOutboxMessage()) != null){
+                    try {
+                        this.sendMessageToUser(smart.getOwnerID(), response);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                removeUser(smart.getOwnerID());
+            }
+        }
 
     }
 
@@ -36,6 +51,7 @@ public class ConnectionPoolService {
     public void registerUser(@NotNull Integer userId, @NotNull WebSocketSession webSocketSession) {
         final SmartController smartControllerForUser = connectionPool.getElement();
         smartControllerForUser.setWebSocketSession(webSocketSession);
+        smartControllerForUser.setOwnerID(userId);
         sessions.put(userId, smartControllerForUser);
     }
 
@@ -77,6 +93,10 @@ public class ConnectionPoolService {
 
     public Map<Integer, SmartController> getActiveSmartControllers() {
         return sessions;
+    }
+
+    public SmartController getSmartController(Integer userID) {
+        return sessions.get(userID);
     }
 
     public void reset() {

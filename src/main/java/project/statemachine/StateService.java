@@ -15,11 +15,11 @@ public class StateService {
     private static final Logger LOGGER = LoggerFactory.getLogger(StateService.class);
     private List<State> stateList = new ArrayList<>();
 
-    public Message handleMessage(final Message message) {
-        LOGGER.info("state handlePacket call: ");
+    public Message handleMessage(final Message message, Integer forUser) {
+        LOGGER.info("StateService call: ");
         Message response = null;
         for (State state : stateList) {
-            response = state.handleMessage(message);
+            response = state.handleMessage(message, forUser);
             if (response != null) {
                 break;
             }

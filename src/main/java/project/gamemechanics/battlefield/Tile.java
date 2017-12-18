@@ -31,8 +31,8 @@ public class Tile implements MapNode {
 
     public Tile(@NotNull Boolean isPassable, @NotNull Integer coordX, @NotNull Integer coordY) {
         this.isPassable = isPassable;
-        this.coordinates.set(DigitsPairIndices.ROW_COORD_INDEX, coordX);
-        this.coordinates.set(DigitsPairIndices.COL_COORD_INDEX, coordY);
+        this.coordinates.add(DigitsPairIndices.ROW_COORD_INDEX, coordX);
+        this.coordinates.add(DigitsPairIndices.COL_COORD_INDEX, coordY);
     }
 
     @Override

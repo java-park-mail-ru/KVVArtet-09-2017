@@ -1,5 +1,7 @@
 package project.gamemechanics.world;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.dungeons.Instance;
 import project.gamemechanics.interfaces.AliveEntity;
