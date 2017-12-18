@@ -13,6 +13,8 @@ import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.MapNode;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
+import project.websocket.messages.ActionRequestMessage;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -37,6 +39,8 @@ public abstract class AbstractInstance implements Instance {
     final PcgContentFactory factory;
 
     Battlefield currentRoom;
+
+    public abstract Message handleMessage(ActionRequestMessage message);
 
     private static class AbstractInstanceModel {
         public final String name;

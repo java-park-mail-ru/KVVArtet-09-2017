@@ -11,7 +11,6 @@ public class ActionResultResponseMessage extends Message {
     private final Ability ability;
     private final List<TurnEvent> events;
 
-
     public ActionResultResponseMessage(List<TurnEvent> events,
                                        MapNode sender,
                                        MapNode target,

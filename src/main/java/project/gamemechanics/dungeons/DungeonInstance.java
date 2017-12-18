@@ -12,6 +12,9 @@ import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.UserCharacterStatistics;
 import project.gamemechanics.interfaces.AliveEntity;
+import project.websocket.messages.ActionRequestMessage;
+import project.websocket.messages.ErrorMessage;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -99,8 +102,12 @@ public class DungeonInstance extends AbstractInstance {
     }
 
     @Override
-    public Boolean handlePacket() {
-        return true;
+    public Message handleMessage(ActionRequestMessage message) {
+        if (!isInstanceCleared() && !isInstanceFailed()) {
+            return currentRoom.pushAction(message);
+        } else {
+            return new ErrorMessage("dungeon cleared");
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package project.gamemechanics.resources.assets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import project.gamemechanics.effects.IngameEffect;
 import project.gamemechanics.flyweights.abilities.AbilityBehaviors;
 import project.gamemechanics.flyweights.abilities.IngameAbility;
@@ -29,7 +30,7 @@ public class AbilityAssetHolder extends AbstractAssetHolder<Ability> implements 
         final ObjectMapper mapper = new ObjectMapper();
         //noinspection TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
             final Map<Integer, GameResource> abilityResources = holder.getAllResources();
 
             for (Integer abilityID : abilityResources.keySet()) {

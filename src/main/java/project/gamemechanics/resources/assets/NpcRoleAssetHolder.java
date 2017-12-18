@@ -3,6 +3,7 @@ package project.gamemechanics.resources.assets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import project.gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
 import project.gamemechanics.globals.MappingIndices;
 import project.gamemechanics.interfaces.Ability;
@@ -28,7 +29,7 @@ public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> imple
         final ObjectMapper mapper = new ObjectMapper();
         //noinspection TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(new File(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
             final Map<Integer, GameResource> npcRoleResources = holder.getAllResources();
             for (Integer roleId : npcRoleResources.keySet()) {
                 final GameResource npcRoleResource = npcRoleResources.get(roleId);

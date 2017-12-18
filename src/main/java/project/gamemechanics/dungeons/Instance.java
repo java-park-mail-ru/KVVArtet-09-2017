@@ -5,7 +5,8 @@ import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.interfaces.Levelable;
 import project.gamemechanics.interfaces.Updateable;
-
+import project.websocket.messages.ActionRequestMessage;
+import project.websocket.messages.Message;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -34,6 +35,5 @@ public interface Instance extends Levelable, Updateable {
 
     List<Long> encodeCurrentRoomMap();
 
-    @SuppressWarnings("SameReturnValue")
-    Boolean handlePacket(/* JSON packet here as arg */);
+    Message handleMessage(ActionRequestMessage message);
 }

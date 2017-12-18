@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(NextRoomRequestMessage.class),
         @Type(NextRoomResponseMessage.class),
         @Type(StayInLineRequestMessage.class),
-        @Type(ConfirmationMessage.class)
+        @Type(LobbyConfirmationMessage.class)
 })
 public abstract class Message {
     String status;

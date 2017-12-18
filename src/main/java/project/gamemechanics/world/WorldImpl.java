@@ -1,6 +1,8 @@
 package project.gamemechanics.world;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.dungeons.Instance;

@@ -23,12 +23,22 @@ public class CharacterList implements Charlist {
             this.ownerID = ownerID;
             this.characterList = characterList;
         }
+
+        public CharacterListModel(Integer ownerID) {
+            this.ownerID = ownerID;
+            this.SetDefaultCharacters();
+        }
+
+        public void SetDefaultCharacters() {
+            //TODO MAKE IT WORK
+        }
     }
 
     public CharacterList(CharacterListModel characterListModel) {
         this.characterList = characterListModel.characterList;
         this.ownerID = characterListModel.ownerID;
     }
+
 
     @Override
     public Integer getID() {
@@ -58,5 +68,9 @@ public class CharacterList implements Charlist {
     @Override
     public Integer getOwnerId() {
         return ownerID;
+    }
+
+    public List<UserCharacter> getCharacterList() {
+        return characterList;
     }
 }
