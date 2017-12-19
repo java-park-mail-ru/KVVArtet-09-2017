@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.map.tilesets;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.MapNode;
@@ -13,7 +14,8 @@ import java.util.Set;
 public abstract class MapNodeTileset implements Tileset {
     private final Set<MapNode> tileset = new HashSet<>();
 
-    public MapNodeTileset(@NotNull MapNode center, Integer shape, Integer direction, Integer size) {
+    public MapNodeTileset(@NotNull MapNode center, @NotNull Integer shape,
+                          @NotNull Integer direction, @NotNull Integer size) {
         makeTileset(center, shape, direction, size);
     }
 
@@ -21,7 +23,7 @@ public abstract class MapNodeTileset implements Tileset {
         this(center, TilesetShapes.TS_POINT, Directions.DIRECTIONS_COUNT, 0);
     }
 
-    public MapNodeTileset(@NotNull MapNode center, Integer size, Boolean isCircle) {
+    public MapNodeTileset(@NotNull MapNode center, @NotNull Integer size, @NotNull Boolean isCircle) {
         this(center, isCircle ? TilesetShapes.TS_CIRCLE : TilesetShapes.TS_SQUARE,
                 Directions.DIRECTIONS_COUNT, size);
     }
@@ -36,7 +38,8 @@ public abstract class MapNodeTileset implements Tileset {
         return tileset.size();
     }
 
-    private void makeTileset(@NotNull MapNode center, Integer shape, Integer direction, Integer size) {
+    private void makeTileset(@NotNull MapNode center, @NotNull Integer shape,
+                             @NotNull Integer direction, @NotNull Integer size) {
         switch (shape) {
             case TilesetShapes.TS_SQUARE:
                 makeSquareTileset(center, size);
@@ -61,7 +64,7 @@ public abstract class MapNodeTileset implements Tileset {
         }
     }
 
-    private void makeSquareTileset(@NotNull MapNode center, Integer size) {
+    private void makeSquareTileset(@NotNull MapNode center, @NotNull Integer size) {
         final Integer halfSide = (size - 1) / 2;
         // grabbing row centers, first upper rows, then lower ones
         final List<MapNode> rowCenters = new ArrayList<>();
@@ -88,7 +91,9 @@ public abstract class MapNodeTileset implements Tileset {
         }
     }
 
-    private void makeConeTileset(@NotNull MapNode center, Integer direction, Integer size, Boolean isReverse) {
+    @SuppressWarnings("OverlyComplexMethod")
+    private void makeConeTileset(@NotNull MapNode center, @NotNull Integer direction,
+                                 @NotNull Integer size, @NotNull Boolean isReverse) {
         final List<MapNode> centralCol = getTilesetLine(center, direction, size);
         if (centralCol == null) {
             return;
@@ -96,14 +101,18 @@ public abstract class MapNodeTileset implements Tileset {
         tileset.addAll(centralCol);
         if (isReverse) {
             for (MapNode colCenter : centralCol) {
-                if (center != colCenter) {
+                if (!center.equals(colCenter)) {
                     final Boolean isHorizontal = direction == Directions.LEFT || direction == Directions.RIGHT;
                     final MapNode colHeadLeft = getReverseConeColumnHead(colCenter,
                             isHorizontal ? Directions.UP : Directions.LEFT);
                     final MapNode colHeadRight = getReverseConeColumnHead(colCenter,
                             isHorizontal ? Directions.DOWN : Directions.RIGHT);
-                    getReverseConeColumn(colHeadLeft, direction, size - colCenter.getH(colHeadLeft));
-                    getReverseConeColumn(colHeadRight, direction, size - colCenter.getH(colHeadRight));
+                    if (colHeadLeft != null) {
+                        getReverseConeColumn(colHeadLeft, direction, size - colCenter.getH(colHeadLeft));
+                    }
+                    if (colHeadRight != null) {
+                        getReverseConeColumn(colHeadRight, direction, size - colCenter.getH(colHeadRight));
+                    }
                 }
             }
         } else {
@@ -115,7 +124,7 @@ public abstract class MapNodeTileset implements Tileset {
         }
     }
 
-    private void makeLineTileset(@NotNull MapNode center, Integer direction, Integer size) {
+    private void makeLineTileset(@NotNull MapNode center, @NotNull Integer direction, @NotNull Integer size) {
         tileset.add(center);
         if (direction < 0 || direction >= Directions.DIRECTIONS_COUNT) {
             return;
@@ -134,7 +143,7 @@ public abstract class MapNodeTileset implements Tileset {
         }
     }
 
-    private void makeCircleTileset(@NotNull MapNode center, Integer size) {
+    private void makeCircleTileset(@NotNull MapNode center, @NotNull Integer size) {
         for (Integer direction = Directions.UP; direction < Directions.DIRECTIONS_COUNT; ++direction) {
             makeConeTileset(center, direction, size, false);
         }
@@ -144,7 +153,8 @@ public abstract class MapNodeTileset implements Tileset {
         tileset.add(center);
     }
 
-    private List<MapNode> getTilesetLine(@NotNull MapNode startPoint, Integer direction, Integer distance) {
+    private @Nullable List<MapNode> getTilesetLine(@NotNull MapNode startPoint, @NotNull Integer direction,
+                                                   @NotNull Integer distance) {
         if (direction >= Directions.DIRECTIONS_COUNT || direction < 0) {
             return null;
         }
@@ -165,7 +175,7 @@ public abstract class MapNodeTileset implements Tileset {
         return line;
     }
 
-    private MapNode getReverseConeColumnHead(@NotNull MapNode rowCenter, Integer direction) {
+    private @Nullable MapNode getReverseConeColumnHead(@NotNull MapNode rowCenter, @NotNull Integer direction) {
         MapNode colHead = rowCenter.getAdjacent(direction);
         while (tileset.contains(colHead)) {
             if (colHead == null) {
@@ -204,7 +214,8 @@ public abstract class MapNodeTileset implements Tileset {
         }
     }
 
-    private void getTileRowFromRowCenter(@NotNull MapNode rowCenter, Integer size, Boolean isHorizontal) {
+    private void getTileRowFromRowCenter(@NotNull MapNode rowCenter, @NotNull Integer size,
+                                         @NotNull Boolean isHorizontal) {
         final Integer halfSize = (size - 1) / 2;
         if (halfSize <= 0) {
             return;

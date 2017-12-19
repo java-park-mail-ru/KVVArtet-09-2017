@@ -44,12 +44,12 @@ public class FoVTileset implements FieldOfVision {
         Integer start;
         Integer end;
 
-        Shadow(Integer start, Integer end) {
+        Shadow(@NotNull Integer start, @NotNull Integer end) {
             this.start = start;
             this.end = end;
         }
 
-        Boolean contains(Shadow other) {
+        Boolean contains(@NotNull Shadow other) {
             return start <= other.start && end >= other.end;
         }
     }
@@ -69,7 +69,7 @@ public class FoVTileset implements FieldOfVision {
          * @param projection node coordinates projection from the current PoV
          * @return true is this projection is covered by shadow line or false otherwise
          */
-        Boolean isInShadow(Shadow projection) {
+        Boolean isInShadow(@NotNull Shadow projection) {
             for (Shadow shadow : shadows) {
                 if (shadow.contains(projection)) {
                     return true;
@@ -83,7 +83,7 @@ public class FoVTileset implements FieldOfVision {
          *
          * @param shadow shadow to add
          */
-        void add(Shadow shadow) {
+        void add(@NotNull Shadow shadow) {
             Integer position = 0;
             for (; position < shadows.size(); ++position) {
                 if (shadows.get(position).start >= shadow.start) {
@@ -121,7 +121,7 @@ public class FoVTileset implements FieldOfVision {
          * @return true if the shadow line is represented by the single shadow
          * and covers the whole row width
          */
-        Boolean isFullShadow(Integer width) {
+        Boolean isFullShadow(@NotNull Integer width) {
             return shadows.size() == 1 && Objects.equals(shadows.get(0).start, 0)
                     && Objects.equals(shadows.get(0).end, width);
         }
@@ -261,7 +261,7 @@ public class FoVTileset implements FieldOfVision {
             return row;
         }
 
-        private Shadow projectNode(Integer row, Integer column) {
+        private Shadow projectNode(@NotNull Integer row, @NotNull Integer column) {
             //noinspection OverlyComplexBooleanExpression
             final Integer nominator = direction == OD_NORTH || direction == OD_SOUTH_EAST
                     || direction == OD_SOUTH || direction == OD_NORTH_WEST ? column : row;
@@ -281,7 +281,7 @@ public class FoVTileset implements FieldOfVision {
                     ? DigitsPairIndices.ROW_COORD_INDEX : DigitsPairIndices.COL_COORD_INDEX;
         }
 
-        private List<Integer> getRelativeNodeCoordinates(List<Integer> nodeCoordinates) {
+        private List<Integer> getRelativeNodeCoordinates(@NotNull List<Integer> nodeCoordinates) {
             final List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
             relativeCoordinates.set(DigitsPairIndices.ROW_COORD_INDEX,
                     nodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)
@@ -309,14 +309,14 @@ public class FoVTileset implements FieldOfVision {
      * @param position new PoV coordinates, [rowCoordinate, colCoordinate]
      */
     @Override
-    public void refresh(List<Integer> position) {
+    public void refresh(@NotNull List<Integer> position) {
         movePoV(position);
         fieldOfVision.clear();
         initializeFoV();
     }
 
     @Override
-    public Boolean isVisible(List<Integer> position) {
+    public Boolean isVisible(@NotNull List<Integer> position) {
         return fieldOfVision.containsKey(position);
     }
 
@@ -332,8 +332,8 @@ public class FoVTileset implements FieldOfVision {
         }
     }
 
-    private void movePoV(List<Integer> goal) {
-        while (currentPosition.getCoordinates() != goal) {
+    private void movePoV(@NotNull List<Integer> goal) {
+        while (!currentPosition.getCoordinates().equals(goal)) {
             final Integer rowDifference = currentPosition.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
                     - goal.get(DigitsPairIndices.ROW_COORD_INDEX);
             if (rowDifference != 0) {

@@ -12,6 +12,7 @@ import project.gamemechanics.globals.EquipmentKind;
 import project.gamemechanics.interfaces.EquipableItem;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -24,18 +25,18 @@ public class IngameItem implements EquipableItem {
     private final String name;
     private final String description;
 
-    private final Map<Integer, Property> properties;
+    private final Map<Integer, Property> properties = new HashMap<>();
 
-    private final Map<Integer, Affector> affectors;
+    private final Map<Integer, Affector> affectors = new HashMap<>();
 
     public static class ItemModel {
         public final Integer id;
         public final String name;
         public final String description;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Property> properties;
+        public final Map<Integer, Property> properties = new HashMap<>();
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Affector> affectors;
+        public final Map<Integer, Affector> affectors = new HashMap<>();
 
         public ItemModel(@NotNull Integer id,
                          @NotNull String name, @NotNull String description,
@@ -44,8 +45,8 @@ public class IngameItem implements EquipableItem {
             this.id = id;
             this.name = name;
             this.description = description;
-            this.properties = properties;
-            this.affectors = affectors;
+            this.properties.putAll(properties);
+            this.affectors.putAll(affectors);
         }
 
         public ItemModel(@NotNull String name, @NotNull String description,
@@ -59,8 +60,8 @@ public class IngameItem implements EquipableItem {
         itemID = model.id == Constants.UNDEFINED_ID ? instanceCounter.getAndIncrement() : model.id;
         name = model.name;
         description = model.description;
-        properties = model.properties;
-        affectors = model.affectors;
+        properties.putAll(model.properties);
+        affectors.putAll(model.affectors);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class IngameItem implements EquipableItem {
 
     @Override
     public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
-        if (!hasAffector(propertyKind)) {
+        if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
         return properties.get(propertyKind).getProperty(propertyIndex);
@@ -114,7 +115,7 @@ public class IngameItem implements EquipableItem {
 
     @Override
     public Integer getProperty(@NotNull Integer propertyKind) {
-        if (!hasAffector(propertyKind)) {
+        if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
         return properties.get(propertyKind).getProperty();
