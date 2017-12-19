@@ -12,6 +12,7 @@ import project.gamemechanics.resources.models.GameResource;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 public class CharacterRaceAssetHolder extends AbstractAssetHolder<CharacterRace>
         implements AssetHolder.CharacterRaceHolder {
@@ -29,7 +30,8 @@ public class CharacterRaceAssetHolder extends AbstractAssetHolder<CharacterRace>
             for (Integer raceId : raceResources.keySet()) {
                 final GameResource raceResource = raceResources.get(raceId);
                 final CharacterRace.CharacterRaceModel model = new CharacterRace.CharacterRaceModel(raceId,
-                        raceResource.getName(), raceResource.getDescription(), raceResource.getAllAffectors());
+                        raceResource.getName(), raceResource.getDescription(),
+                        Objects.requireNonNull(raceResource.getAllAffectors()));
                 assets.put(model.id, new CharacterRace(model));
             }
         } catch (JsonParseException e) {

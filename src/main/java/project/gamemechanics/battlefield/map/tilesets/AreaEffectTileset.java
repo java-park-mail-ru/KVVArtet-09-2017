@@ -24,9 +24,9 @@ public class AreaEffectTileset extends MapNodeTileset {
     private final List<Integer> healthAffection;
     private final Set<Integer> affectedCategories;
 
-    public AreaEffectTileset(Integer abilityID, @NotNull MapNode sender, @NotNull MapNode target, Integer shape,
-                             Integer size, @NotNull List<Effect> effects, @NotNull List<Integer> healthAffection,
-                             Set<Integer> affectedCategories) {
+    public AreaEffectTileset(@NotNull Integer abilityID, @NotNull MapNode sender, @NotNull MapNode target,
+                             @NotNull Integer shape, @NotNull Integer size, @NotNull List<Effect> effects,
+                             @NotNull List<Integer> healthAffection, @NotNull Set<Integer> affectedCategories) {
         super(target, shape, calculateDirection(sender, target), size);
         this.abilityID = abilityID;
         this.sender = sender;
@@ -63,7 +63,7 @@ public class AreaEffectTileset extends MapNodeTileset {
         }
     }
 
-    private Boolean areOnSameSide(AliveEntity lhs, AliveEntity rhs) {
+    private Boolean areOnSameSide(@NotNull AliveEntity lhs, @NotNull AliveEntity rhs) {
         return Objects.equals(lhs.getProperty(PropertyCategories.PC_SQUAD_ID),
                 rhs.getProperty(PropertyCategories.PC_SQUAD_ID));
     }

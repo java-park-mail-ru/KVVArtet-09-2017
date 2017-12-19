@@ -8,6 +8,7 @@ import project.gamemechanics.battlefield.map.tilesets.Tileset;
 import project.gamemechanics.components.affectors.AffectorCategories;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.effects.IngameEffect;
+import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.interfaces.Effect;
 
 import javax.validation.constraints.NotNull;
@@ -38,14 +39,20 @@ public final class AbilityBehaviors {
                     causedEvents.add(EventsFactory.makeRollbackEvent());
                     return causedEvents;
                 }
+                final List<Integer> damage = new ArrayList<>(aggregatedAbilityAction.abilityAffectors
+                        .get(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR).getAffectionsList());
+                final Integer senderDamage = aggregatedAbilityAction.sender.getInhabitant().getDamage();
+                damage.set(DigitsPairIndices.MIN_VALUE_INDEX, damage.get(DigitsPairIndices.MIN_VALUE_INDEX)
+                        + senderDamage);
+                damage.set(DigitsPairIndices.MAX_VALUE_INDEX, damage.get(DigitsPairIndices.MAX_VALUE_INDEX)
+                        + senderDamage);
+
                 final Tileset affectedArea = new AreaEffectTileset(aggregatedAbilityAction.abilityID,
                         aggregatedAbilityAction.sender,
                         aggregatedAbilityAction.target,
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_AREA_SHAPE).getProperty(),
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_AREA).getProperty(),
-                        makeEffects(aggregatedAbilityAction.abilityEffects),
-                        aggregatedAbilityAction.abilityAffectors.get(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR)
-                                .getAffectionsList(),
+                        makeEffects(aggregatedAbilityAction.abilityEffects), damage,
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_INFLICTED_CATEGORIES)
                                 .getPropertySet());
                 affectedArea.applyEffects(causedEvents);
