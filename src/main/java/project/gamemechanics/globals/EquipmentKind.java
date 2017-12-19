@@ -21,7 +21,9 @@ public enum EquipmentKind {
 
     EK_TRINKET(12, "Trinket"),
 
-    EK_SIZE(13, "equipment kinds count");
+    EK_SHIELD(13, "Shield"),
+
+    EK_SIZE(14, "equipment kinds count");
 
     private final Integer kindID;
     private final String description;
