@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class CharactersParty implements Countable {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer partyID = INSTANCE_COUNTER.getAndIncrement();
@@ -24,8 +25,8 @@ public class CharactersParty implements Countable {
     private final Map<Integer, AliveEntity> members;
     private final PendingLootPool lootPool;
 
-    public CharactersParty(@NotNull Map<Integer, AliveEntity> members,
-                           @NotNull PendingLootPool lootPool) {
+    private CharactersParty(@NotNull Map<Integer, AliveEntity> members,
+                            @NotNull PendingLootPool lootPool) {
         this.members = members;
         this.lootPool = lootPool;
     }
@@ -44,7 +45,7 @@ public class CharactersParty implements Countable {
         return partyID;
     }
 
-    public Squad toSquad(@NotNull Integer squadId) {
+    private Squad toSquad(@NotNull Integer squadId) {
         final List<AliveEntity> membersList = new ArrayList<>();
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {

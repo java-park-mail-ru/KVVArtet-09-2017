@@ -1,6 +1,5 @@
 package project.gamemechanics.smartcontroller;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
@@ -10,12 +9,13 @@ import project.websocket.messages.Message;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+@SuppressWarnings("unused")
 public class SmartController {
-    private Deque<Message> inboxMessageQueue = new ArrayDeque<>();
-    private Deque<Message> outboxMessageQueue = new ArrayDeque<>();
+    private final Deque<Message> inboxMessageQueue = new ArrayDeque<>();
+    private final Deque<Message> outboxMessageQueue = new ArrayDeque<>();
     private UserCharacter activeChar;
     private CharacterList characterList;
-    private StateService stateService = new StateService();
+    private final StateService stateService = new StateService();
     private WebSocketSession webSocketSession;
     private Integer ownerID;
 

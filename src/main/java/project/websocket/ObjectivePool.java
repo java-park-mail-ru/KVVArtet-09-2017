@@ -4,7 +4,7 @@ import project.gamemechanics.smartcontroller.SmartController;
 
 import javax.validation.constraints.NotNull;
 
-public interface ObjectivePool<T> {
+interface ObjectivePool<T> {
 
     T getElement();
 

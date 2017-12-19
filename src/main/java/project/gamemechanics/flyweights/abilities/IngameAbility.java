@@ -29,16 +29,16 @@ public class IngameAbility implements Ability {
 
     public static class AbilityModel {
         public final Integer id;
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Property> properties;
+        final Map<Integer, Property> properties;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Affector> affectors;
+        final Map<Integer, Affector> affectors;
         @SuppressWarnings("PublicField")
-        public final List<IngameEffect.EffectModel> appliedEffects;
+        final List<IngameEffect.EffectModel> appliedEffects;
         @SuppressWarnings("PublicField")
-        public final AbilityBehavior perform;
+        final AbilityBehavior perform;
 
         public AbilityModel(@NotNull Integer id,
                             @NotNull String name, @NotNull String description,

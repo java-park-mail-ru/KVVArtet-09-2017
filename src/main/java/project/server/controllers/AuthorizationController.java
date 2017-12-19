@@ -14,7 +14,7 @@ import java.util.Objects;
 @SuppressWarnings("SpellCheckingInspection")
 @RestController
 @CrossOrigin(origins = AuthorizationController.FRONTED_URL1)
-public class AuthorizationController {
+class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
     @SuppressWarnings("WeakerAccess")

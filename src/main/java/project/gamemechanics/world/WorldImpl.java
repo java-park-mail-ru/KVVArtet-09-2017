@@ -1,8 +1,6 @@
 package project.gamemechanics.world;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.dungeons.Instance;
@@ -13,7 +11,6 @@ import project.gamemechanics.resources.assets.AssetProvider;
 import project.gamemechanics.resources.assets.AssetProviderImpl;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
-import project.gamemechanics.smartcontroller.SmartController;
 import project.gamemechanics.world.config.ResourcesConfig;
 import project.websocket.services.ConnectionPoolService;
 

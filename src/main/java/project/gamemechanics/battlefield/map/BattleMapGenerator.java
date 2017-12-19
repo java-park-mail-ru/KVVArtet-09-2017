@@ -67,6 +67,7 @@ public final class BattleMapGenerator {
                         < mapSize.get(DigitsPairIndices.COL_COORD_INDEX);
             case Directions.LEFT:
                 return coords.get(DigitsPairIndices.ROW_COORD_INDEX) > 0;
+            default: break;
         }
         return false;
     }

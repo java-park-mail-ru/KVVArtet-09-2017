@@ -24,13 +24,13 @@ public class IngameEffect implements Effect {
     private final Map<Integer, Affector> affectors;
 
     public static class EffectModel {
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
 
-        public final Integer duration;
+        final Integer duration;
 
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Affector> affectors;
+        final Map<Integer, Affector> affectors;
 
         public EffectModel(@NotNull String name, @NotNull String description,
                            @NotNull Integer duration,

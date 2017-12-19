@@ -14,8 +14,8 @@ import java.util.Set;
 public abstract class MapNodeTileset implements Tileset {
     private final Set<MapNode> tileset = new HashSet<>();
 
-    public MapNodeTileset(@NotNull MapNode center, @NotNull Integer shape,
-                          @NotNull Integer direction, @NotNull Integer size) {
+    MapNodeTileset(@NotNull MapNode center, @NotNull Integer shape,
+                   @NotNull Integer direction, @NotNull Integer size) {
         makeTileset(center, shape, direction, size);
     }
 

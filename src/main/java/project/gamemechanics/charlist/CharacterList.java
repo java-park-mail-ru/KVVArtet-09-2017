@@ -15,7 +15,7 @@ public class CharacterList implements Charlist {
     private List<UserCharacter> characterList = new ArrayList<>();
     private final Integer ownerID;
 
-    public static class CharacterListModel {
+    static class CharacterListModel {
         List<UserCharacter> characterList = new ArrayList<>();
         final Integer ownerID;
 
@@ -29,7 +29,8 @@ public class CharacterList implements Charlist {
             this.SetDefaultCharacters();
         }
 
-        public void SetDefaultCharacters() {
+        @SuppressWarnings("EmptyMethod")
+        void SetDefaultCharacters() {
             //TODO MAKE IT WORK
         }
     }
@@ -58,6 +59,7 @@ public class CharacterList implements Charlist {
         return newUserCharacter;
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public void deleteChar(Integer index) {
         final Integer charID = this.characterList.get(index).getID();

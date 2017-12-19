@@ -1,6 +1,5 @@
 package project.server.dao;
 
-import org.springframework.stereotype.Service;
 import project.server.models.User;
 
 import java.util.List;

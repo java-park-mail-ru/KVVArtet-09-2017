@@ -6,15 +6,15 @@ import org.slf4j.LoggerFactory;
 import project.gamemechanics.world.World;
 import project.websocket.services.ConnectionPoolService;
 
-public class GameExecutor implements Runnable {
+class GameExecutor implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameExecutor.class);
     @NotNull
-    private World world;
+    private final World world;
     @NotNull
     private final ConnectionPoolService connectionPoolService;
 
-    public GameExecutor(@NotNull World world, @NotNull ConnectionPoolService connectionPoolService) {
+    private GameExecutor(@NotNull World world, @NotNull ConnectionPoolService connectionPoolService) {
         this.world = world;
         this.connectionPoolService = connectionPoolService;
     }

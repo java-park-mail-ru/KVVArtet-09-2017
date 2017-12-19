@@ -8,7 +8,8 @@ import project.websocket.messages.Message;
 public interface State {
     <T extends Message> void registerHandler(@NotNull Class<T> clazz, MessageHandler<T> handler);
 
-    enum StateId {SI_NONE, SI_TITLE, @SuppressWarnings("SpellCheckingInspection") SI_SIGNUP, SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON, SI_CHARACTER_CREATION}
+    enum StateId { SI_NONE, SI_TITLE, @SuppressWarnings("SpellCheckingInspection") SI_SIGNUP,
+        SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON, SI_CHARACTER_CREATION }
 
     Message handleMessage(Message message, Integer forUser);
 

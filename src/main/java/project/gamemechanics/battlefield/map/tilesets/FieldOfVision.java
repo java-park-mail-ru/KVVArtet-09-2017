@@ -7,17 +7,17 @@ import java.util.List;
  */
 public interface FieldOfVision {
     /**
-     * re-calculate FoV for new position
+     * re-calculate FoV for new position.
      *
-     * @param newPosition new point of view (PoV) coordinates [rowCoordinate, colCoordinate]
+     * @param newPosition new point of view (PoV) coordinates [rowCoordinate, colCoordinate].
      */
     void refresh(List<Integer> newPosition);
 
     /**
      * check the visibility of the map node
      *
-     * @param position coordinates of the point to check, [rowCoordinate, colCoordinate]
-     * @return true is the node is visible from the current PoV or false otherwise
+     * @param position coordinates of the point to check, [rowCoordinate, colCoordinate].
+     * @return true is the node is visible from the current PoV or false otherwise.
      */
     Boolean isVisible(List<Integer> position);
 }

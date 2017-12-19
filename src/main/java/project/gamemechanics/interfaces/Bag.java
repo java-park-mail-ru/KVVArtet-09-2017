@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @see GameEntity
  * @see EquipableItem
  */
-@SuppressWarnings("NewClassNamingConvention")
+@SuppressWarnings({"NewClassNamingConvention", "UnusedReturnValue"})
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(StorageBag.class),

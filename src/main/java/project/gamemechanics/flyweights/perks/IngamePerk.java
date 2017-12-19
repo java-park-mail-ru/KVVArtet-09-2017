@@ -20,8 +20,8 @@ public class IngamePerk implements Perk {
 
     public static class PerkModel {
         public final Integer id;
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
         final Map<Integer, Affector> affectors;
 
         public PerkModel(@NotNull Integer id,

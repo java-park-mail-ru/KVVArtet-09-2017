@@ -43,15 +43,15 @@ public abstract class AbstractInstance implements Instance {
     public abstract Message handleMessage(ActionRequestMessage message);
 
     private static class AbstractInstanceModel {
-        public final String name;
-        public final String description;
-        public final Integer level;
-        public final Integer gameMode;
-        public final Integer roomsCount;
+        final String name;
+        final String description;
+        final Integer level;
+        final Integer gameMode;
+        final Integer roomsCount;
         @SuppressWarnings("PublicField")
-        public final PcgContentFactory factory;
+        final PcgContentFactory factory;
         @SuppressWarnings("PublicField")
-        public final List<CharactersParty> squads;
+        final List<CharactersParty> squads;
 
         AbstractInstanceModel(@NotNull String name, @NotNull String description,
                               @NotNull Integer gameMode, @NotNull Integer level,
@@ -69,7 +69,7 @@ public abstract class AbstractInstance implements Instance {
 
     public static class DungeonInstanceModel extends AbstractInstanceModel {
         @SuppressWarnings("PublicField")
-        public final Map<Integer, AI.BehaviorFunction> behaviors;
+        final Map<Integer, AI.BehaviorFunction> behaviors;
 
         public DungeonInstanceModel(@NotNull String name, @NotNull String description,
                                     @NotNull Integer level, @NotNull Integer roomsCount,
@@ -201,8 +201,9 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
-    @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
-                                        @NotNull Set<MapNode> occupiedNodes) {
+    @Nullable
+    private MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
+                                      @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
         }

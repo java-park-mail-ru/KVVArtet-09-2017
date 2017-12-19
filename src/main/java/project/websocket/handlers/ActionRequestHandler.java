@@ -13,13 +13,13 @@ import javax.validation.constraints.NotNull;
 @Component
 public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
     @NotNull
-    private World world;
+    private final World world;
 
     @NotNull
-    private ConnectionPoolService connectionPoolService;
+    private final ConnectionPoolService connectionPoolService;
 
     @NotNull
-    private DungeonState dungeonState;
+    private final DungeonState dungeonState;
 
     public ActionRequestHandler(@NotNull World world, @NotNull ConnectionPoolService connectionPoolService, @NotNull DungeonState dungeonState) {
         super(ActionRequestMessage.class);
@@ -35,9 +35,7 @@ public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
 
     @Override
     public Message handle(@NotNull ActionRequestMessage message, Integer forUser) {
-        //TODO some world class method
         Integer dungeonID = connectionPoolService.getSmartController(forUser).getActiveChar().getProperty(PropertyCategories.PC_INSTANCE_ID);
-        world.getActiveInstances().get(dungeonID).handleMessage(message);
-        return message;
+        return world.getActiveInstances().get(dungeonID).handleMessage(message);
     }
 }

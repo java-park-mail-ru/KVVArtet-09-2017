@@ -11,7 +11,7 @@ public class ConnectionPool implements ObjectivePool.SmartControllersPool {
     private static final int CAPACITY_MULTIPLIER = 2;
     private static final int START_CAPACITY = 8;
 
-    private Deque<SmartController> connectionPool = new ConcurrentLinkedDeque<>();
+    private final Deque<SmartController> connectionPool = new ConcurrentLinkedDeque<>();
     private Integer capacity = START_CAPACITY;
 
     public ConnectionPool() {

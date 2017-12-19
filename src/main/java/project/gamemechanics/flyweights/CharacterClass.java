@@ -26,14 +26,14 @@ public class CharacterClass implements CharacterRole {
 
     public static class CharacterClassModel {
         public final Integer id;
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Ability> abilities;
+        final Map<Integer, Ability> abilities;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, PerkBranch> branches;
+        final Map<Integer, PerkBranch> branches;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Property> properties;
+        final Map<Integer, Property> properties;
 
         public CharacterClassModel(@NotNull Integer id, @NotNull String name,
                                    @NotNull String description, @NotNull Map<Integer, Ability> abilities,

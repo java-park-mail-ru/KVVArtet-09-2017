@@ -15,7 +15,7 @@ public class BattleMap {
         this.rows = rows;
     }
 
-    public List<MapNode> getRow(Integer rowIndex) {
+    private List<MapNode> getRow(Integer rowIndex) {
         if (rowIndex >= 0 && rowIndex < rows.size()) {
             return rows.get(rowIndex);
         }

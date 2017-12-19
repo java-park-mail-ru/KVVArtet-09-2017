@@ -26,10 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 @Transactional
-public class AuthorizationTest {
-    public static final int FAILURE_STATUS = 400;
-    public static final int STATUS_403 = 403;
-    public static final int STATUS_401 = 401;
+class AuthorizationTest {
+    private static final int FAILURE_STATUS = 400;
+    private static final int STATUS_403 = 403;
+    private static final int STATUS_401 = 401;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -39,7 +39,7 @@ public class AuthorizationTest {
     private ObjectMapper mapper;
 
     @Test
-    public void signUpTest() throws Exception {
+    private void signUpTest() throws Exception {
         mockMvc
                 .perform(post("/signup")
                         .contentType(MediaType.APPLICATION_JSON)

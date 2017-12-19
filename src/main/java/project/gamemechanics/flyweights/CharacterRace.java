@@ -18,10 +18,10 @@ public class CharacterRace implements GameEntity, AffectorProvider {
 
     public static class CharacterRaceModel {
         public final Integer id;
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
         @SuppressWarnings("PublicField")
-        public final Map<Integer, Affector> affectors;
+        final Map<Integer, Affector> affectors;
 
         public CharacterRaceModel(@NotNull Integer id,
                                   @NotNull String name, @NotNull String description,

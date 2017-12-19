@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-@SuppressWarnings("NewClassNamingConvention")
+@SuppressWarnings("ALL")
 public class AI implements DecisionMaker {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer aiID = INSTANCE_COUNTER.getAndIncrement();

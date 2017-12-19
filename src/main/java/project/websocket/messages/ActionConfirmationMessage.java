@@ -2,14 +2,14 @@ package project.websocket.messages;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ConfirmationMessage extends Message {
+public class ActionConfirmationMessage extends Message {
     private final String message;
 
-    public ConfirmationMessage(@NotNull String message){
+    public ActionConfirmationMessage(@NotNull String message){
         this.message = message;
     }
 
-    public ConfirmationMessage(){
+    public ActionConfirmationMessage(){
         this.message = "success";
     }
 

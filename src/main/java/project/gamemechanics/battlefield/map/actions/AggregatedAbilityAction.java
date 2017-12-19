@@ -18,6 +18,7 @@ public class AggregatedAbilityAction {
     public final Map<Integer, Affector> abilityAffectors;
     public final Map<Integer, Property> abilityProperties;
     public final List<IngameEffect.EffectModel> abilityEffects;
+    @SuppressWarnings("FieldCanBeLocal")
     public final PathfindingAlgorithm pathfinder;
 
     public AggregatedAbilityAction(@NotNull MapNode sender, @NotNull MapNode target, @NotNull Integer abilityID,

@@ -13,13 +13,12 @@ import project.gamemechanics.resources.holders.ResourceHolder;
 import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> implements AssetHolder.NpcRoleHolder {
+class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> implements AssetHolder.NpcRoleHolder {
     public NpcRoleAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities) {
         super();
         fillFromFile(fileName, abilities);
@@ -40,6 +39,7 @@ public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> imple
                 final List<Integer> resourceAbilityIds =
                         npcRoleResource.getMapping(MappingIndices.NPC_ROLE_ABILITY_MAPPING);
                 final Map<Integer, Ability> roleAbilities = new HashMap<>();
+                //noinspection ConstantConditions
                 for (Integer abilityId : resourceAbilityIds) {
                     final Ability ability = abilities.getOrDefault(abilityId, null);
                     if (ability != null) {

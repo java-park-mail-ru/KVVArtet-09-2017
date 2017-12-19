@@ -3,7 +3,6 @@ package project.websocket.handlers;
 import org.springframework.stereotype.Component;
 import project.gamemechanics.world.World;
 import project.states.DungeonState;
-import project.websocket.messages.CreateCharacterRequestMessage;
 import project.websocket.messages.Message;
 import project.websocket.messages.NextRoomRequestMessage;
 
@@ -13,9 +12,9 @@ import javax.validation.constraints.NotNull;
 public class NextRoomRequestHandler extends MessageHandler<NextRoomRequestMessage> {
 
     @NotNull
-    private World world;
+    private final World world;
     @NotNull
-    private DungeonState dungeonState;
+    private final DungeonState dungeonState;
 
     public NextRoomRequestHandler(@NotNull World world, @NotNull DungeonState dungeonState) {
         super(NextRoomRequestMessage.class);
@@ -30,7 +29,7 @@ public class NextRoomRequestHandler extends MessageHandler<NextRoomRequestMessag
 
     @Override
     public Message handle(@NotNull NextRoomRequestMessage message, Integer forUser) {
-        //TODO some world class method
+        //TODO NOT AVAILABLE NOW CAUSE RESPONSE DOES'NT REQUIRE REQUEST AND SENDING BY HIMSELF
 
         world.getActiveInstances().get(forUser);
         return message;

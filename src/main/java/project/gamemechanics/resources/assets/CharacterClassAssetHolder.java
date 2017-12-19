@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
+class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
         implements AssetHolder.CharacterClassHolder {
     public CharacterClassAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities,
                                      @NotNull Map<Integer, PerkBranch> perkBranches) {
@@ -40,6 +40,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final Map<Integer, Ability> classAbilities = new HashMap<>();
                 final List<Integer> resourceAbilities =
                         characterClassResource.getMapping(MappingIndices.ABILITIES_MAPPING);
+                //noinspection ConstantConditions
                 for (Integer abilityId : resourceAbilities) {
                     final Ability ability = abilities.getOrDefault(abilityId, null);
                     if (ability != null) {
@@ -50,6 +51,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final Map<Integer, PerkBranch> classBranches = new HashMap<>();
                 final List<Integer> resourceBranches =
                         characterClassResource.getMapping(MappingIndices.PERK_BRANCHES_MAPPING);
+                //noinspection ConstantConditions
                 for (Integer branchId : resourceBranches) {
                     final PerkBranch branch = perkBranches.getOrDefault(branchId, null);
                     if (branch != null) {

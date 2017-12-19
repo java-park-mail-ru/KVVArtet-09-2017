@@ -11,7 +11,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 @Configuration
 @EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
+class WebSocketConfig implements WebSocketConfigurer {
 
     private final @NotNull WebSocketHandler webSocketHandler;
 

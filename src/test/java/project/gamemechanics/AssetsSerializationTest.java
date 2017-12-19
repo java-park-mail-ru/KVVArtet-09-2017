@@ -28,7 +28,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class AssetsSerializationTest {
+class AssetsSerializationTest {
     @Test
     public void itemPartStringSerializationDeserialization() {
         final Map<Integer, Property> testProperty = new HashMap<>();

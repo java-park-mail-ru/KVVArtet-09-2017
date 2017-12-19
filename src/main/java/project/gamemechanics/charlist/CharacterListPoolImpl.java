@@ -5,7 +5,8 @@ import java.util.Map;
 
 public class CharacterListPoolImpl implements CharacterListPool {
 
-    Map<Integer, CharacterList> characterListMap = new HashMap<>();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final Map<Integer, CharacterList> characterListMap = new HashMap<>();
 
 
     @Override

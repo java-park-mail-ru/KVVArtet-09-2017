@@ -5,7 +5,7 @@ import project.gamemechanics.interfaces.MapNode;
 
 import java.util.List;
 
-public class ActionResultResponseMessage extends Message {
+class ActionResultResponseMessage extends Message {
     private final MapNode sender;
     private final MapNode target;
     private final Ability ability;
