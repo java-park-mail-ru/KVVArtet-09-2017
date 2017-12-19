@@ -25,6 +25,7 @@ import project.gamemechanics.world.config.ResourcesConfig;
 import java.io.IOException;
 import java.util.*;
 
+
 import static org.junit.Assert.*;
 
 public class AssetsSerializationTest {
@@ -42,6 +43,7 @@ public class AssetsSerializationTest {
         final Map<Integer, Affector> testAffectors = new HashMap<>();
         testAffectors.put(AffectorCategories.AC_DAMAGE_AFFECTOR,
                 AffectorsFactory.getAffector(AffectorCategories.AC_DAMAGE_AFFECTOR));
+
         final ItemPart itemPart = new ItemPartAsset(0,"test asset", "test description",
                 ItemPart.FIRST_PART_ID, testAffectors, testProperty);
         final ObjectMapper mapper = new ObjectMapper();

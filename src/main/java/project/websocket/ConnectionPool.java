@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
+
 public class ConnectionPool implements ObjectivePool.SmartControllersPool {
     private static final int CAPACITY_MULTIPLIER = 2;
     private static final int START_CAPACITY = 8;
