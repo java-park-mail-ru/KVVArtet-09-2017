@@ -13,10 +13,7 @@ import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PerkBranchAssetHolder extends AbstractAssetHolder<PerkBranch> implements AssetHolder.PerkBranchHolder {
     public PerkBranchAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Perk> perks) {
@@ -30,7 +27,7 @@ public class PerkBranchAssetHolder extends AbstractAssetHolder<PerkBranch> imple
             final List<Perk> branchPerks = new ArrayList<>();
             final GameResource branchResource = resourceData.get(branchId);
             final List<Integer> perkIds = branchResource.getMapping(MappingIndices.PERKS_MAPPING);
-            for (Integer perkId : perkIds) {
+            for (Integer perkId : Objects.requireNonNull(perkIds)) {
                 final Perk perk = perks.getOrDefault(perkId, null);
                 if (perk != null && !branchPerks.contains(perk)) {
                     branchPerks.add(perk);

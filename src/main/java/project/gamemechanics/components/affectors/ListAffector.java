@@ -3,6 +3,7 @@ package project.gamemechanics.components.affectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
@@ -46,18 +47,14 @@ public class ListAffector implements Affector {
     @Override
     @JsonSetter("affections")
     public Boolean setAffectionsList(@NotNull List<Integer> affections) {
-        if (affections.size() != this.affections.size()) {
-            return false;
-        }
-        for (Integer affectionIndex = 0; affectionIndex < this.affections.size(); ++affectionIndex) {
-            this.affections.set(affectionIndex, affections.get(affectionIndex));
-        }
+        this.affections.clear();
+        this.affections.addAll(affections);
         return true;
     }
 
     @Override
     @JsonIgnore
-    public Map<Integer, Integer> getAffectionsMap() {
+    public @Nullable Map<Integer, Integer> getAffectionsMap() {
         return null;
     }
 

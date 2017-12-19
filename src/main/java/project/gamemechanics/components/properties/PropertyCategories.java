@@ -51,4 +51,6 @@ public class PropertyCategories {
     public static final int PC_INSTANCE_ID = 31;
 
     public static final int PC_AVAILABLE_ROLES = 33;
+
+    public static final int PC_MAX_RANK = 35;
 }

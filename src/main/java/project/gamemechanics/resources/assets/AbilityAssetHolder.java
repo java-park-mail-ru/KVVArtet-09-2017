@@ -14,11 +14,11 @@ import project.gamemechanics.resources.holders.ResourceHolder;
 import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class AbilityAssetHolder extends AbstractAssetHolder<Ability> implements AssetHolder.AbilityHolder {
     public AbilityAssetHolder(@NotNull String fileName) {
@@ -30,7 +30,8 @@ public class AbilityAssetHolder extends AbstractAssetHolder<Ability> implements 
         final ObjectMapper mapper = new ObjectMapper();
         //noinspection TryWithIdenticalCatches
         try {
-            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName), GameResourceHolder.class);
+            final ResourceHolder holder = mapper.readValue(Resources.getResource(fileName),
+                    GameResourceHolder.class);
             final Map<Integer, GameResource> abilityResources = holder.getAllResources();
 
             for (Integer abilityID : abilityResources.keySet()) {
@@ -38,17 +39,19 @@ public class AbilityAssetHolder extends AbstractAssetHolder<Ability> implements 
 
                 final List<GameResource> effectResources = abilityResource.getAllInlaid();
                 final List<IngameEffect.EffectModel> effectModels = new ArrayList<>();
-                for (GameResource effectResource : effectResources) {
+                for (GameResource effectResource : Objects.requireNonNull(effectResources)) {
                     effectModels.add(new IngameEffect.EffectModel(effectResource.getName(),
                             effectResource.getDescription(), effectResource.getID(),
-                            effectResource.getAllAffectors()));
+                            Objects.requireNonNull(effectResource.getAllAffectors())));
                 }
 
                 final IngameAbility.AbilityModel abilityModel = new IngameAbility.AbilityModel(abilityID,
                         abilityResource.getName(), abilityResource.getDescription(),
-                        abilityResource.getAllProperties(), abilityResource.getAllAffectors(),
+                        Objects.requireNonNull(abilityResource.getAllProperties()),
+                        Objects.requireNonNull(abilityResource.getAllAffectors()),
                         effectModels, AbilityBehaviors.getBehavior(
-                        abilityResource.getMapping(MappingIndices.ABILITY_BEHAVIOR_MAPPING).get(0)));
+                        Objects.requireNonNull(abilityResource
+                                .getMapping(MappingIndices.ABILITY_BEHAVIOR_MAPPING)).get(0)));
                 assets.put(abilityModel.id, new IngameAbility(abilityModel));
             }
         } catch (JsonParseException e) {

@@ -3,6 +3,7 @@ package project.gamemechanics.components.properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
@@ -43,20 +44,13 @@ public class ListProperty implements Property {
     @Override
     @JsonSetter("properties")
     public void setPropertyList(@NotNull List<Integer> property) {
-        if (property == null) {
-            return;
-        }
-        if (property.size() != properties.size()) {
-            return;
-        }
-        for (Integer i = 0; i < properties.size(); ++i) {
-            properties.set(i, property.get(i));
-        }
+        properties.clear();
+        properties.addAll(property);
     }
 
     @Override
     @JsonIgnore
-    public void setSingleProperty(@NotNull Integer proeprtyValue) {
+    public void setSingleProperty(@NotNull Integer propertyValue) {
     }
 
     @Override
@@ -69,7 +63,7 @@ public class ListProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByPercentage(Float percentage) {
+    public Boolean modifyByPercentage(@NotNull Float percentage) {
         for (Integer propertyIndex = 0; propertyIndex < properties.size(); ++propertyIndex) {
             final Boolean result = modifyByPercentage(propertyIndex, percentage);
             if (!result) {
@@ -80,7 +74,7 @@ public class ListProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByPercentage(Integer propertyIndex, Float percentage) {
+    public Boolean modifyByPercentage(@NotNull Integer propertyIndex, @NotNull Float percentage) {
         if (propertyIndex < 0 || propertyIndex >= properties.size()) {
             return false;
         }
@@ -91,7 +85,7 @@ public class ListProperty implements Property {
     }
 
     @Override
-    public void modifyByAddition(Integer toAdd) {
+    public void modifyByAddition(@NotNull Integer toAdd) {
         for (Integer propertyIndex = 0; propertyIndex < properties.size(); ++propertyIndex) {
             final Boolean result = modifyByAddition(propertyIndex, toAdd);
             if (!result) {
@@ -101,7 +95,7 @@ public class ListProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByAddition(Integer propertyIndex, Integer toAdd) {
+    public Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd) {
         if (propertyIndex < 0 || propertyIndex >= properties.size()) {
             return false;
         }
@@ -111,7 +105,7 @@ public class ListProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Map<Integer, Integer> getPropertyMap() {
+    public @Nullable Map<Integer, Integer> getPropertyMap() {
         return null;
     }
 
@@ -119,12 +113,12 @@ public class ListProperty implements Property {
     @Override
     @JsonIgnore
     public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
-        return null;
+        return false;
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getPropertySet() {
+    public @Nullable Set<Integer> getPropertySet() {
         return null;
     }
 

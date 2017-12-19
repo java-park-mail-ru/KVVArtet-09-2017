@@ -8,6 +8,7 @@ import project.gamemechanics.globals.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public final class PropertiesFactory {
     private PropertiesFactory() {
@@ -131,19 +132,28 @@ public final class PropertiesFactory {
     }
 
     private static Property makeHitpointsProperty() {
-        return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+        final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        list.add(DigitsPairIndices.MIN_VALUE_INDEX, 0);
+        list.add(DigitsPairIndices.MAX_VALUE_INDEX, 0);
+        return new ListProperty(list);
     }
 
     private static Property makeXpPointsProperty() {
-        return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+        final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        list.add(DigitsPairIndices.MIN_VALUE_INDEX, 0);
+        list.add(DigitsPairIndices.MAX_VALUE_INDEX, 0);
+        return new ListProperty(list);
     }
 
     private static Property makeBaseDamageProperty() {
-        return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+        final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        list.add(DigitsPairIndices.MIN_VALUE_INDEX, 0);
+        list.add(DigitsPairIndices.MAX_VALUE_INDEX, 0);
+        return new ListProperty(list);
     }
 
     private static Property makeBaseDefenseProperty() {
-        return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+        return new SingleValueProperty(0);
     }
 
     private static Property makeLevelProperty() {
@@ -167,7 +177,10 @@ public final class PropertiesFactory {
     }
 
     private static Property makeCoordinatesProperty() {
-        return new ListProperty(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
+        final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        list.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        list.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+        return new ListProperty(list);
     }
 
     private static Property makeSquadIdProperty() {
@@ -251,6 +264,10 @@ public final class PropertiesFactory {
     }
 
     private static Property makeStatisticsProperty() {
-        return new ListProperty(new ArrayList<>(UserCharacterStatistics.US_SIZE));
+        final List<Integer> list = new ArrayList<>(UserCharacterStatistics.US_SIZE);
+        for (Integer i = 0; i < UserCharacterStatistics.US_SIZE; ++i) {
+            list.add(i, 0);
+        }
+        return new ListProperty(list);
     }
 }
