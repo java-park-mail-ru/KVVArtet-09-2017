@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("ALL")
 public class UserCharacter extends AbstractAliveEntity {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer characterID = INSTANCE_COUNTER.getAndIncrement();
@@ -135,7 +136,6 @@ public class UserCharacter extends AbstractAliveEntity {
         return 0;
     }
 
-    @SuppressWarnings("NewMethodNamingConvention")
     private Float calculateStatBonusDamagePercentage(@NotNull Integer statValue, @NotNull Integer statIndex) {
         final Integer baseStatValue = getProperty(PropertyCategories.PC_STATS, statIndex);
         final Float statBonusBaseMultiplier = 3.0f;

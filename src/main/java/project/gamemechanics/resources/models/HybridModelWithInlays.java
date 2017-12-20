@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class HybridModelWithInlays extends HybridModel {
     private final List<GameResource> inlaidModels = new ArrayList<>();
 

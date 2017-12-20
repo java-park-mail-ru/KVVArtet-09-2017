@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public final class NpcBlueprint {
     private final Map<Integer, Property> properties;
     private final Map<Integer, Integer> npcParts;

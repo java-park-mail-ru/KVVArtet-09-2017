@@ -5,6 +5,7 @@ import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public class CastEvent implements TurnEvent {
     private final MapNode where;
     private final Integer abilityID;

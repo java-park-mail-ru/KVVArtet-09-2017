@@ -29,19 +29,20 @@ public class IngameItem implements EquipableItem {
 
     private final Map<Integer, Affector> affectors = new HashMap<>();
 
+    @SuppressWarnings("SameParameterValue")
     public static class ItemModel {
-        public final Integer id;
-        public final String name;
-        public final String description;
-        @SuppressWarnings("PublicField")
-        public final Map<Integer, Property> properties = new HashMap<>();
-        @SuppressWarnings("PublicField")
-        public final Map<Integer, Affector> affectors = new HashMap<>();
+        // CHECKSTYLE:OFF
+        final Integer id;
+        final String name;
+        final String description;
+        final Map<Integer, Property> properties = new HashMap<>();
+        final Map<Integer, Affector> affectors = new HashMap<>();
+        // CHECKSTYLE:ON
 
-        public ItemModel(@NotNull Integer id,
-                         @NotNull String name, @NotNull String description,
-                         @NotNull Map<Integer, Property> properties,
-                         @NotNull Map<Integer, Affector> affectors) {
+        ItemModel(@NotNull Integer id,
+                  @NotNull String name, @NotNull String description,
+                  @NotNull Map<Integer, Property> properties,
+                  @NotNull Map<Integer, Affector> affectors) {
             this.id = id;
             this.name = name;
             this.description = description;

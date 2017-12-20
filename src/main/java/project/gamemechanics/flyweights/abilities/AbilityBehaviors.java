@@ -20,7 +20,7 @@ import java.util.Map;
 public final class AbilityBehaviors {
     private static final Map<Integer, IngameAbility.AbilityBehavior> BEHAVIORS = initializeBehaviors();
 
-    public static final int BASIC_ABILITY_BEHAVIOR = 0;
+    private static final int BASIC_ABILITY_BEHAVIOR = 0;
 
     public static IngameAbility.AbilityBehavior getBehavior(Integer behaviorIndex) {
         return BEHAVIORS.getOrDefault(behaviorIndex, null);

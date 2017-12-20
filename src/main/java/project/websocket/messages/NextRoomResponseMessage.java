@@ -7,11 +7,12 @@ import project.gamemechanics.interfaces.AliveEntity;
 import java.util.Deque;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class NextRoomResponseMessage extends Message {
     private final BattleMap map;
     private final Deque<AliveEntity> battlersQueue;
     private final List<ActionResult> battleLog;
-    private Integer turnCounter;
+    private final Integer turnCounter;
 
     public NextRoomResponseMessage(BattleMap map,
                                   Deque<AliveEntity> battlersQueue,
@@ -23,8 +24,8 @@ public class NextRoomResponseMessage extends Message {
         this.turnCounter = turnCounter;
     }
 
-    public BattleMap getMap() {
-        return map;
+    public List<Long> getMap() {
+        return map.encode();
     }
 
     public Deque<AliveEntity> getBattlersQueue() {

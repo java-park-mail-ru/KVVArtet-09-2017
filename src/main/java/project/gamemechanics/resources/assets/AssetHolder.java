@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public interface AssetHolder<T extends Countable> {
     T getAsset(@NotNull Integer assetIndex);
 

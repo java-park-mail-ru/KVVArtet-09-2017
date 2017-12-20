@@ -6,6 +6,7 @@ import project.gamemechanics.interfaces.EquipableItem;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface PendingLootPool {
     List<EquipableItem> getLootPool(@NotNull AliveEntity owner);
 

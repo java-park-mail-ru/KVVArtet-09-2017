@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("unused")
 public class Squad implements Countable {
     // PvE mode squad IDs
     public static final int PLAYERS_SQUAD_ID = 0;

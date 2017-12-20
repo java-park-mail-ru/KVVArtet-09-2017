@@ -1,5 +1,6 @@
 package project.gamemechanics.components.affectors;
 
+// CHECKSTYLE:OFF
 public final class AffectorCategories {
     public static final int AC_STATS_AFFECTOR = 1;
     public static final int AC_RATINGS_AFFECTOR = 1 << 1;
@@ -23,3 +24,4 @@ public final class AffectorCategories {
     public static final int AC_REDUCABLE_AFFECTORS = AC_OVER_TIME_AFFECTOR | AC_WEAPON_DAMAGE_AFFECTOR
             | AC_ABILITY_HEALTH_AFFECTOR;
 }
+// CHECKSTYLE:ON

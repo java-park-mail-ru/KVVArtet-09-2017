@@ -19,10 +19,12 @@ public class IngamePerk implements Perk {
     private final Map<Integer, Affector> affectors;
 
     public static class PerkModel {
+        // CHECKSTYLE:OFF
         public final Integer id;
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
         final Map<Integer, Affector> affectors;
+        // CHECKSTYLE:ON
 
         public PerkModel(@NotNull Integer id,
                          @NotNull String name, @NotNull String description,

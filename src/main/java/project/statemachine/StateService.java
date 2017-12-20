@@ -13,7 +13,7 @@ import java.util.*;
 
 public class StateService {
     private static final Logger LOGGER = LoggerFactory.getLogger(StateService.class);
-    private List<State> stateList = new ArrayList<>();
+    private final List<State> stateList = new ArrayList<>();
 
     public Message handleMessage(final Message message, Integer forUser) {
         LOGGER.info("StateService call: ");
@@ -30,9 +30,9 @@ public class StateService {
         return response;
     }
 
-    public StateService(){
+    public StateService() {
         stateList.add(new CharacterListState());
         stateList.add(new DungeonState());
         stateList.add(new LobbyState());
-    };
+    }
 }

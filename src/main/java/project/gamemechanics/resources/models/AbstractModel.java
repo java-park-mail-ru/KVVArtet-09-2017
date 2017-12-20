@@ -11,9 +11,9 @@ public abstract class AbstractModel implements GameResource {
     private final String name;
     private final String description;
 
-    public AbstractModel(@JsonProperty("modelId") @NotNull Integer modelID,
-                         @JsonProperty("name") @NotNull String name,
-                         @JsonProperty("description") @NotNull String description) {
+    AbstractModel(@JsonProperty("modelId") @NotNull Integer modelID,
+                  @JsonProperty("name") @NotNull String name,
+                  @JsonProperty("description") @NotNull String description) {
         this.modelID = modelID;
         this.name = name;
         this.description = description;

@@ -8,6 +8,7 @@ import project.gamemechanics.interfaces.MapNode;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
+@SuppressWarnings("RedundantSuppression")
 public class SkipTurnAction extends AbstractAction {
     private final MapNode sender;
 
@@ -25,11 +26,13 @@ public class SkipTurnAction extends AbstractAction {
         return sender;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public MapNode getTarget() {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public ActionResult execute() {
         final ActionResult result = new BattleActionResult(getID(), sender, null, null, new ArrayList<>());

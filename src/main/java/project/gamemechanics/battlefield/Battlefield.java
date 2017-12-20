@@ -23,13 +23,14 @@ import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
 import project.websocket.messages.ActionRequestMessage;
-import project.websocket.messages.ConfirmationMessage;
+import project.websocket.messages.ActionConfirmationMessage;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Battlefield implements Updateable {
     private static final int SQUADS_COUNT = 2;
 
@@ -44,7 +45,6 @@ public class Battlefield implements Updateable {
     private final Map<Integer, AI.BehaviorFunction> behaviors;
 
     private final BattleMap map;
-    @SuppressWarnings("FieldCanBeLocal")
     private final Pathfinder pathfinder;
 
     private final List<Squad> squads = new ArrayList<>(SQUADS_COUNT);
@@ -64,15 +64,13 @@ public class Battlefield implements Updateable {
     private final Integer mode;
 
     public static class BattlefieldModel {
-        @SuppressWarnings("PublicField")
-        public final Map<Integer, AI.BehaviorFunction> behaviors;
-        @SuppressWarnings("PublicField")
-        public final BattleMap map;
-        @SuppressWarnings("PublicField")
-        public final List<SpawnPoint> spawnPoints;
-        @SuppressWarnings("PublicField")
-        public final ItemsFactory itemsGenerator;
-        public final Integer mode;
+        // CHECKSTYLE:OFF
+        final Map<Integer, AI.BehaviorFunction> behaviors;
+        final BattleMap map;
+        final List<SpawnPoint> spawnPoints;
+        final ItemsFactory itemsGenerator;
+        final Integer mode;
+        // CHECKSTYLE:ON
 
         public BattlefieldModel(@Nullable Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
                                 @NotNull List<SpawnPoint> spawnPoints, @NotNull ItemsFactory itemsGenerator,
@@ -192,11 +190,11 @@ public class Battlefield implements Updateable {
         return squads.get(Squad.TEAM_TWO_SQUAD_ID).areAllDead();
     }
 
-    public Boolean isDefeat() {
+    private Boolean isDefeat() {
         return squads.get(Squad.TEAM_ONE_SQUAD_ID).areAllDead();
     }
 
-    public void pushAction(@NotNull Action action) {
+    private void pushAction(@NotNull Action action) {
         if (action.getSender().getInhabitant().equals(battlersQueue.getFirst())
                 && activeBattlerActionsPooled < ACTIONS_PER_TURN) {
             actionsQueue.addLast(action);
@@ -204,13 +202,13 @@ public class Battlefield implements Updateable {
         }
     }
 
-    @SuppressWarnings("SameReturnValue")
+    @SuppressWarnings({"SameReturnValue", "ConstantConditions"})
     public Message pushAction(ActionRequestMessage message) {
-        MapNode senderTile = map.getTile(message.getSender().getCoordinate(0), message.getSender().getCoordinate(1));
-        if(senderTile.isOccupied() && senderTile != null){
-            BattleAction battleAction = new BattleAction(message.getSender(), message.getTarget(), message.getAbility(), pathfinder);
+        final MapNode senderTile = map.getTile(message.getSender().getCoordinate(0), message.getSender().getCoordinate(1));
+        if (senderTile.isOccupied() && senderTile != null) {
+            final BattleAction battleAction = new BattleAction(message.getSender(), message.getTarget(), message.getAbility(), pathfinder);
             pushAction(battleAction);
-            return new ConfirmationMessage("Action delivered");
+            return new ActionConfirmationMessage("Action delivered");
         } else {
             return new ErrorMessage("Unexpected data in ActionRequestMessage");
         }
@@ -380,7 +378,7 @@ public class Battlefield implements Updateable {
         generateReward();
     }
 
-    @SuppressWarnings("OverlyComplexMethod")
+    @SuppressWarnings({"OverlyComplexMethod", "ConstantConditions"})
     private void processEvents() {
         for (ActionResult entry : battleLog) {
             if (!entry.getIsProcessed()) {

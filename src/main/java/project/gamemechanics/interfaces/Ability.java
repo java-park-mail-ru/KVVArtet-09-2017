@@ -28,11 +28,11 @@ import java.util.Map;
 })
 public interface Ability extends GameEntity, PropertyProvider, AffectorProvider {
     /**
-     * execute an ability
+     * execute an ability.
      *
      * @param action {@link AggregatedAbilityAction} - action data needed to perform the ability
      * @return list of {@link TurnEvent}s caused by ability. This list shall be added
-     * to {@link project.gamemechanics.battlefield.actionresults.ActionResult}'s event list
+     *     to {@link project.gamemechanics.battlefield.actionresults.ActionResult}'s event list
      */
     List<TurnEvent> execute(@NotNull AggregatedAbilityAction action);
 

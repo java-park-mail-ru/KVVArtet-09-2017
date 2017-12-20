@@ -7,6 +7,7 @@ import project.gamemechanics.interfaces.EquipableItem;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(IngameLootContainer.class),

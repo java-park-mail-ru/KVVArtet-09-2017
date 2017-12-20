@@ -3,9 +3,11 @@ package project.gamemechanics.charlist;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class CharacterListPoolImpl implements CharacterListPool {
 
-    Map<Integer, CharacterList> characterListMap = new HashMap<>();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final Map<Integer, CharacterList> characterListMap = new HashMap<>();
 
 
     @Override

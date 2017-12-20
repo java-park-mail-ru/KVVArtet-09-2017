@@ -9,11 +9,11 @@ import project.websocket.messages.Message;
 import javax.validation.constraints.NotNull;
 
 public abstract class MessageHandler<T extends Message> {
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LobbyState.class);
 
-    public MessageHandler(@NotNull Class<T> clazz) {
+    MessageHandler(@NotNull Class<T> clazz) {
         this.clazz = clazz;
     }
 
@@ -27,5 +27,5 @@ public abstract class MessageHandler<T extends Message> {
         }
     }
 
-    public abstract Message handle(@NotNull T message, Integer forUser);
+    protected abstract Message handle(@NotNull T message, Integer forUser);
 }

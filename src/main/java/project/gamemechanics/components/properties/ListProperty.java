@@ -109,6 +109,7 @@ public class ListProperty implements Property {
         return null;
     }
 
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
@@ -129,3 +130,4 @@ public class ListProperty implements Property {
         return false;
     }
 }
+// CHECKSTYLE:ON

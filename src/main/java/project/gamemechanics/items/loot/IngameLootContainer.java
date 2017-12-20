@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"RedundantSuppression", "unused"})
 public class IngameLootContainer implements LootContainer {
     private final List<EquipableItem> lootList = new ArrayList<>();
     private Integer goldReward = 0;
@@ -28,6 +29,7 @@ public class IngameLootContainer implements LootContainer {
         return lootList;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public EquipableItem getItem(@NotNull Integer itemIndex) {
         if (itemIndex < 0 || itemIndex >= lootList.size()) {

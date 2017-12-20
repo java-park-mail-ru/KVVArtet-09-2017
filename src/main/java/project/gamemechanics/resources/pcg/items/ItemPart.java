@@ -11,6 +11,7 @@ import project.gamemechanics.interfaces.PropertyProvider;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(ItemPartAsset.class),

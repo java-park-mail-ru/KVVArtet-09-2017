@@ -1,5 +1,6 @@
 package project.gamemechanics.globals;
 
+@SuppressWarnings("unused")
 public enum EquipmentSlot {
     ES_HEAD(0, "Head"),
     ES_CHEST(1, "Chest"),

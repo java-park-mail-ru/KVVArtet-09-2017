@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 /**
  * interface for various character classes' perks.
  * Perk is an object permanently affecting character's stats or altering some skills.
- * As we
+ * As we.
  *
  * @see GameEntity
  * @see AffectorProvider
@@ -22,14 +22,15 @@ import javax.validation.constraints.NotNull;
 })
 public interface Perk extends GameEntity, AffectorProvider {
     /**
-     * get a rank-based single affection value from the multi-value affector
+     * get a rank-based single affection value from the multi-value affector.
      *
      * @param affectorKind  {@link project.gamemechanics.components.affectors.Affector} ID to get affection from
      * @param affectorIndex index of the requested affection from the affector
      * @param perkRank      amount of skill points the character has invested in that perk
      * @return if successful - a rank-based affection value (usually it's perkRank * baseAffectionValue)
-     * or a special constant if one of IDs is invalid or the affector registered under such ID
-     * is not a {@link project.gamemechanics.components.affectors.ListAffector} or {@link project.gamemechanics.components.affectors.MapAffector}
+     *     or a special constant if one of IDs is invalid or the affector registered under such ID.
+     *     is not a {@link project.gamemechanics.components.affectors.ListAffector}
+     *     or {@link project.gamemechanics.components.affectors.MapAffector}
      * @see project.gamemechanics.components.affectors.Affector
      * @see project.gamemechanics.components.affectors.ListAffector
      * @see project.gamemechanics.components.affectors.MapAffector
@@ -38,13 +39,13 @@ public interface Perk extends GameEntity, AffectorProvider {
                                   @NotNull Integer perkRank);
 
     /**
-     * get a rank-based affection value from the single-value affector by its ID
+     * get a rank-based affection value from the single-value affector by its ID.
      *
      * @param affectorKind {@link project.gamemechanics.components.affectors.Affector} ID to get affection from
      * @param perkRank     amoount of skill points the character has invested in that perk
      * @return if successful - a rank-based affection value (usually it's perkRank * baseAffectionValue)
-     * or a special constant if ID is invalid or affector registered under such ID
-     * is not a {@link project.gamemechanics.components.affectors.SingleValueAffector}
+     *     or a special constant if ID is invalid or affector registered under such ID.
+     *     is not a {@link project.gamemechanics.components.affectors.SingleValueAffector}
      * @see project.gamemechanics.components.affectors.Affector
      * @see project.gamemechanics.components.affectors.SingleValueAffector
      */

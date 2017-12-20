@@ -4,17 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import project.gamemechanics.aliveentities.UserCharacter;
 import java.util.List;
 
-@SuppressWarnings("NullableProblems")
+@SuppressWarnings("unused")
 public class CharacterListResponseMessage extends Message {
 
-    @NotNull private List<UserCharacter> characterList;
+    private @NotNull List<UserCharacter> characterList;
 
     public CharacterListResponseMessage(@NotNull List<UserCharacter> characterList) {
         this.characterList = characterList;
     }
 
-    @NotNull
-    public List<UserCharacter> getCharacterList() {
+    public @NotNull List<UserCharacter> getCharacterList() {
         return characterList;
     }
 

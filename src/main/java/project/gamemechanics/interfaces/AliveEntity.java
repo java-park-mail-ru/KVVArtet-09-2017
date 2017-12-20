@@ -12,12 +12,13 @@ import project.gamemechanics.globals.Constants;
 import javax.validation.constraints.NotNull;
 
 /**
- * interface for user characters and various NPCs
+ * interface for user characters and various NPCs.
  *
  * @see Levelable
  * @see ModifiablePropertyProvider
  * @see Updateable
  */
+@SuppressWarnings({"RedundantSuppression", "unused"})
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(UserCharacter.class),
@@ -25,14 +26,14 @@ import javax.validation.constraints.NotNull;
 })
 public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Updateable {
     /**
-     * check if entity is alive or not
+     * check if entity is alive or not.
      *
      * @return true if entity's current HP value is above 0 or false otherwise
      */
     Boolean isAlive();
 
     /**
-     * changes entity's current HP value
+     * changes entity's current HP value.
      * (note: current HP value can't become bigger than entity's maximum HP)
      *
      * @param amount amount of heal or damage dealt to the entity
@@ -41,10 +42,10 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     void affectHitpoints(@NotNull Integer amount);
 
     /**
-     * get entity's owner ID (used to define to whom the entity belongs to)
+     * get entity's owner ID (used to define to whom the entity belongs to).
      *
      * @return value of corresponding {@link Property}.
-     * for AI-controlled NPCs it will return {@literal Constants.AI_CONTROLLED_NPC_ID}
+     *     for AI-controlled NPCs it will return {@literal Constants.AI_CONTROLLED_NPC_ID}
      * @see Constants
      */
     default Integer getOwnerID() {
@@ -52,10 +53,10 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     }
 
     /**
-     * checks the value of ownerID property
+     * checks the value of ownerID property.
      *
      * @return true if the property's equal to the {@literal Constants.AI_CONTROLLED_NPC_ID}
-     * or false otherwise
+     *     or false otherwise.
      * @see Constants
      */
     default Boolean isControlledByAI() {
@@ -65,40 +66,41 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     }
 
     /**
-     * get an AI calculated action
+     * get an AI calculated action.
      *
      * @return null for user-controlled characters and NPCs, or some AI-generated action for
-     * AI-driven NPCs.
+     *     AI-driven NPCs.
      * @see Action
      */
+    @SuppressWarnings("ConstantConditions")
     default Action makeDecision() {
         return null;
     }
 
     /**
-     * gets a randomized value between minimal and maximal values of entity's damage
+     * gets a randomized value between minimal and maximal values of entity's damage.
      *
      * @return damage dealt by entity (without applying critical hit modifier)
      */
     Integer getDamage();
 
     /**
-     * gets entity's defense amount
+     * gets entity's defense amount.
      *
      * @return entity's defense
      */
     Integer getDefense();
 
     /**
-     * gets entity's cash amount
+     * gets entity's cash amount.
      *
      * @return cash in character's purse for {@link UserCharacter}
-     * or cash reward for defeating the NPC for {@link NonPlayerCharacter}
+     *     or cash reward for defeating the NPC for {@link NonPlayerCharacter}
      */
     Integer getCash();
 
     /**
-     * returns an unmodified entity's intiative. Initiative defines entity's position in
+     * returns an unmodified entity's intiative. Initiative defines entity's position in.
      * the {@link project.gamemechanics.battlefield.Battlefield} turn order.
      *
      * @return entity's initiative
@@ -106,7 +108,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     Integer getInitiative();
 
     /**
-     * get entity's movement speed (maximal distance which it can cover
+     * get entity's movement speed (maximal distance which it can cover.
      * with one movement {@link Action})
      *
      * @return entity's speed
@@ -118,8 +120,9 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      *
      * @param abilityID ID of ability to get
      * @return null if entity's {@link CharacterRole} doesn't have an {@link Ability} with such ID or
-     * requested {@link Ability} otherwise
+     *     requested {@link Ability} otherwise
      */
+    @SuppressWarnings("ConstantConditions")
     default Ability getAbility(@NotNull Integer abilityID) {
         if (!getCharacterRole().getAllAbilities().containsKey(abilityID)) {
             return null;
@@ -129,12 +132,13 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
 
     /**
      * pretty similar to the getAbility(Integer) method,
-     * but also sets a cooldown for the asked ability
+     * but also sets a cooldown for the asked ability.
      *
      * @param abilityID ID of ability to use
      * @return null if ID was invalid or {@link Ability} otherwise
      * @see Ability
      */
+    @SuppressWarnings("ConstantConditions")
     default Ability useAbility(@NotNull Integer abilityID) {
         final Ability ability = getAbility(abilityID);
         if (ability != null) {
@@ -145,7 +149,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     }
 
     /**
-     * add an {@link Effect} to the entity
+     * add an {@link Effect} to the entity.
      *
      * @param effect {@link Effect} to add
      * @see Effect
@@ -153,7 +157,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     void addEffect(@NotNull Effect effect);
 
     /**
-     * remove an effect from entity's active effects list by index
+     * remove an effect from entity's active effects list by index.
      *
      * @param effectIndex index of the {@link Effect} to remove
      * @return true if the removal was successful or false otherwise
@@ -161,14 +165,14 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     Boolean removeEffect(@NotNull Integer effectIndex);
 
     /**
-     * clear the entity's active effects list
+     * clear the entity's active effects list.
      *
      * @return true if clearing was successful or false otherwise
      */
     Boolean removeAllEffects();
 
     /**
-     * get entity's {@link Bag} by index
+     * get entity's {@link Bag} by index.
      *
      * @param bagIndex index of the bag to get
      * @return null if index is invalid of entity's {@link Bag} otherwise
@@ -176,7 +180,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     Bag getBag(@NotNull Integer bagIndex);
 
     /**
-     * get user character class, NPC monster's role or NPC hero's class
+     * get user character class, NPC monster's role or NPC hero's class.
      *
      * @return entity's role
      * @see CharacterRole
@@ -184,7 +188,7 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
     CharacterRole getCharacterRole();
 
     /**
-     * set unit's behavior (only for AI-driven units, DO NOT overload for any others)
+     * set unit's behavior (only for AI-driven units, DO NOT overload for any others).
      *
      * @param behavior AI to drive unit's behavior
      */

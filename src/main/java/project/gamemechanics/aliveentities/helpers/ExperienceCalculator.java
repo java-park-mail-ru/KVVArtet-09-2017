@@ -4,9 +4,9 @@ import project.gamemechanics.globals.Constants;
 
 import java.util.Objects;
 
+@SuppressWarnings("ConstantNamingConvention")
 public final class ExperienceCalculator {
 
-    @SuppressWarnings("FieldNamingConvention")
     private static final int LEVEL_UP_CAP_CALCULATION_CONSTANT = 8;
     private static final int BASE_XP_REWARD = 45;
     private static final int XP_CALCULATION_CONSTANT = 5;
