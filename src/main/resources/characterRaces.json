@@ -1,0 +1,74 @@
+{
+  "type" : "GameResourceHolder",
+  "resources" : {
+    "0" : {
+      "type" : "BasicModel",
+      "modelId" : 0,
+      "name" : "Human",
+      "description" : "Humans are known to be 'jacks of all trades' but not for exceling in something particular.",
+      "affectors" : {
+        "1" : {
+          "type" : "ListAffector",
+          "affections" : [1, 1, 1, 0]
+        },
+        "2" : {
+          "type" : "ListAffector",
+          "affections" : [0, 0, 0]
+        },
+        "16" : {
+          "type" : "SingleValueAffector",
+          "affection" : 0
+        }
+      },
+      "properties" : {
+
+      }
+    },
+    "1" : {
+      "type" : "BasicModel",
+      "modelId" : 1,
+      "name" : "elf",
+      "description" : "Elves're known as wise and elegant creatures, so they excel as magic users, rangers, or scouts.",
+      "affectors" : {
+        "1" : {
+          "type" : "ListAffector",
+          "affections" : [0, 0, 2, 1]
+        },
+        "2" : {
+          "type" : "ListAffector",
+          "affections" : [1, 1, 0]
+        },
+        "16" : {
+          "type" : "SingleValueAffector",
+          "affection" : 0
+        }
+      },
+      "properties" : {
+
+      }
+    },
+    "2" : {
+      "type" : "BasicModel",
+      "modelId" : 2,
+      "name" : "Dwarf",
+      "description" : "Dwarves're short, straight, bit rude, sturdy and grumpy. And as hard as mountains they live under.",
+      "affectors" : {
+        "1" : {
+          "type" : "ListAffector",
+          "affections" : [2, 1, 0, 0]
+        },
+        "2" : {
+          "type" : "ListAffector",
+          "affections" : [0, 0, 2]
+        },
+        "16" : {
+          "type" : "SingleValueAffector",
+          "affection" : 3
+        }
+      },
+      "properties" : {
+
+      }
+    }
+  }
+}
