@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("ConstantConditions")
 public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> implements AssetHolder.NpcRoleHolder {
@@ -40,8 +41,7 @@ public class NpcRoleAssetHolder extends AbstractAssetHolder<CharacterRole> imple
                 final List<Integer> resourceAbilityIds =
                         npcRoleResource.getMapping(MappingIndices.NPC_ROLE_ABILITY_MAPPING);
                 final Map<Integer, Ability> roleAbilities = new HashMap<>();
-                //noinspection ConstantConditions
-                for (Integer abilityId : resourceAbilityIds) {
+                for (Integer abilityId : Objects.requireNonNull(resourceAbilityIds)) {
                     final Ability ability = abilities.getOrDefault(abilityId, null);
                     if (ability != null) {
                         roleAbilities.put(ability.getID(), ability);
