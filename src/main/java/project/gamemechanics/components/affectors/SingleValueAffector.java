@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("RedundantSuppression")
 public class SingleValueAffector implements Affector {
     private Integer affection;
 
@@ -26,6 +27,7 @@ public class SingleValueAffector implements Affector {
         return 0;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
     public List<Integer> getAffectionsList() {
@@ -38,6 +40,7 @@ public class SingleValueAffector implements Affector {
         return false;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
     public Map<Integer, Integer> getAffectionsMap() {
@@ -50,10 +53,12 @@ public class SingleValueAffector implements Affector {
         return false;
     }
 
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affection")
     public Boolean setSingleAffection(@NotNull Integer affection) {
+    // CHECKSTYLE:ON
         this.affection = affection;
         return true;
     }

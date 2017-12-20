@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
  */
 public interface Updateable {
     /**
-     * routine to repeat on each battle turn
+     * routine to repeat on each battle turn.
      */
     default void update() {
     } // for battle turns
@@ -18,6 +18,7 @@ public interface Updateable {
      *
      * @param timestep fixed timestep value
      */
+    @SuppressWarnings("unused")
     default void update(@NotNull Integer timestep) {
     } // for any other occasions;
 }

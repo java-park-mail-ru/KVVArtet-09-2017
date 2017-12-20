@@ -9,6 +9,7 @@ import project.gamemechanics.interfaces.AliveEntity;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings({"RedundantSuppression", "unused"})
 public class BattleActionMaker implements ActionMaker {
     @SuppressWarnings("FieldCanBeLocal")
     private final BattleMap map;
@@ -17,6 +18,7 @@ public class BattleActionMaker implements ActionMaker {
         this.map = map;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public BattleAction makeAction(@NotNull Ability ability, @NotNull AliveEntity sender,
                                    @NotNull List<Integer> targetCoords) {

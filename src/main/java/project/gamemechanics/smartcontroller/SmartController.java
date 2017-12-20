@@ -1,6 +1,5 @@
 package project.gamemechanics.smartcontroller;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
@@ -10,28 +9,25 @@ import project.websocket.messages.Message;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+@SuppressWarnings({"unused", "RedundantSuppression"})
 public class SmartController {
-    private Deque<Message> inboxMessageQueue = new ArrayDeque<>();
-    private Deque<Message> outboxMessageQueue = new ArrayDeque<>();
+    private final Deque<Message> inboxMessageQueue = new ArrayDeque<>();
+    private final Deque<Message> outboxMessageQueue = new ArrayDeque<>();
     private UserCharacter activeChar;
     private CharacterList characterList;
-    private StateService stateService = new StateService();
+    private final StateService stateService = new StateService();
     private WebSocketSession webSocketSession;
     private Integer ownerID;
 
-    public SmartController() {
-        //characterList = new CharacterList(new CharacterList.CharacterListModel(this.getOwnerID()));
-        //activeChar = characterList.getCharacterList().get(0);
-    }
-
     public void tick() {
-        while(!inboxMessageQueue.isEmpty()){
+        while (!inboxMessageQueue.isEmpty()) {
             outboxMessageQueue.add(stateService.handleMessage(inboxMessageQueue.getFirst(), this.ownerID));
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public Message getOutboxMessage() {
-        if(outboxMessageQueue.isEmpty()){
+        if (outboxMessageQueue.isEmpty()) {
             return null;
         } else {
             return outboxMessageQueue.getFirst();
@@ -67,7 +63,7 @@ public class SmartController {
     }
 
     public Boolean isValid() {
-        return getWebSocketSession().isOpen();
+        return webSocketSession.isOpen();
     }
 
     public void setOwnerID(Integer ownerID) {

@@ -21,6 +21,7 @@ import java.util.*;
  * --<br/><br/>
  * goal is to make BEHAVIORS JSON-serializable and human-readable to allow in-situ editing.
  */
+@SuppressWarnings("UnusedAssignment")
 public final class AIBehaviors {
     private static final Map<Integer, AI.BehaviorFunction> BEHAVIORS = initializeBehaviorFunctions();
 
@@ -32,12 +33,13 @@ public final class AIBehaviors {
     }
 
     /**
-     * get an AI behavior by given ID
+     * get an AI behavior by given ID.
      *
      * @param behaviorID ID of the wanted behavior
      * @return null if ID is invalid or {@link AI.BehaviorFunction} registered
-     * under given ID otherwise
+     *     under given ID otherwise
      */
+    @SuppressWarnings("unused")
     public static AI.BehaviorFunction getBehavior(Integer behaviorID) {
         return BEHAVIORS.getOrDefault(behaviorID, null);
     }
@@ -45,8 +47,10 @@ public final class AIBehaviors {
     public static Map<Integer, AI.BehaviorFunction> getAllBehaviors() {
         return BEHAVIORS;
     }
-
+    // CHECKSTYLE:OFF
     /* TODO: find a better way to write and put BEHAVIORS in the map that that */
+    // CHECKSTYLE:ON
+
     @SuppressWarnings("OverlyComplexMethod")
     private static Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
         final Map<Integer, AI.BehaviorFunction> behaviorFunctionMap = new HashMap<>();
@@ -160,13 +164,14 @@ public final class AIBehaviors {
                             aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                                     DigitsPairIndices.COL_COORD_INDEX)));
         });
-
+        // CHECKSTYLE:OFF
         /* TODO: write more AIs for monsters and bosses */
-
+        // CHECKSTYLE:ON
         return behaviorFunctionMap;
     }
 
 
+    @SuppressWarnings("unused")
     private static Integer evaluateUnit(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
         if (areAllies(unit, evaluator)) {
             return evaluateAlly(unit, evaluator);
@@ -175,17 +180,23 @@ public final class AIBehaviors {
         }
     }
 
+    @SuppressWarnings("unused")
     private static Integer evaluateAlly(@NotNull AliveEntity ally, @NotNull AliveEntity evaluator) {
         //noinspection UnnecessaryLocalVariable
         final Integer score = 0;
+        // CHECKSTYLE:OFF
         /* TODO: for future use in more complicated AIs */
+        // CHECKSTYLE:ON
         return score;
     }
 
+    @SuppressWarnings("unused")
     private static Integer evaluateEnemy(@NotNull AliveEntity enemy, @NotNull AliveEntity npc) {
         //noinspection UnnecessaryLocalVariable
         final Integer score = 0;
+        // CHECKSTYLE:OFF
         /* TODO: for future use in more complicated AIs */
+        // CHECKSTYLE:ON
         return score;
     }
 
@@ -210,6 +221,7 @@ public final class AIBehaviors {
         return score;
     }
 
+    @SuppressWarnings("unused")
     private static Integer getHitpointsScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
         return Math.round(unit.getProperty(PropertyCategories.PC_HITPOINTS,
                 DigitsPairIndices.CURRENT_VALUE_INDEX).floatValue()
@@ -229,6 +241,7 @@ public final class AIBehaviors {
                 * Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue());
     }
 
+    @SuppressWarnings("unused")
     private static Set<Ability> getHealingAbilities(@NotNull Map<Integer, Ability> abilities) {
         final Set<Ability> healingAbilities = new HashSet<>();
 

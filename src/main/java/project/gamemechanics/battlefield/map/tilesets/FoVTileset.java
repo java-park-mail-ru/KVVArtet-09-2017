@@ -9,14 +9,15 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 
 /**
- * Field of vision calculation class via shadow-casting
- * inspired on https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/ article
+ * Field of vision calculation class via shadow-casting.
+ * inspired on https://journal.stuffwithstuff.com/2015/09/07/what-the-hero-sees/ article.
  *
  * @see FieldOfVision
  */
+
 public class FoVTileset implements FieldOfVision {
     /**
-     * octant directions starting from 0..45 degrees sector covering octant and going clockwise
+     * octant directions starting from 0..45 degrees sector covering octant and going clockwise.
      */
     private static final int OD_NORTH = 0;
     private static final int OD_NORTH_EAST = 1;
@@ -28,18 +29,19 @@ public class FoVTileset implements FieldOfVision {
     private static final int OD_NORTH_WEST = 7;
 
     /**
-     * nodes visible from the current PoV
+     * nodes visible from the current PoV.
      */
     private final Map<List<Integer>, MapNode> fieldOfVision = new HashMap<>();
 
     /**
-     * current PoV
+     * current PoV.
      */
     private MapNode currentPosition;
 
     /**
-     * 1D projection of 2D {@link MapNode} coordinates from the current PoV
+     * 1D projection of 2D {@link MapNode} coordinates from the current PoV.
      */
+    // CHECKSTYLE:OFF
     private static class Shadow {
         Integer start;
         Integer end;
@@ -55,19 +57,19 @@ public class FoVTileset implements FieldOfVision {
     }
 
     /**
-     * aggregated shadow line from all obstacles
+     * aggregated shadow line from all obstacles.
      */
     private static class ShadowLine {
         /**
-         * shadows from obstacles
+         * shadows from obstacles.
          */
         final List<Shadow> shadows = new LinkedList<>();
 
         /**
-         * check if the node's projection is covered by current shadow line
+         * check if the node's projection is covered by current shadow line.
          *
-         * @param projection node coordinates projection from the current PoV
-         * @return true is this projection is covered by shadow line or false otherwise
+         * @param projection node coordinates projection from the current PoV.
+         * @return true is this projection is covered by shadow line or false otherwise.
          */
         Boolean isInShadow(@NotNull Shadow projection) {
             for (Shadow shadow : shadows) {
@@ -79,9 +81,9 @@ public class FoVTileset implements FieldOfVision {
         }
 
         /**
-         * add a new shadow to the shadow line
+         * add a new shadow to the shadow line.
          *
-         * @param shadow shadow to add
+         * @param shadow shadow to add.
          */
         void add(@NotNull Shadow shadow) {
             Integer position = 0;
@@ -117,9 +119,8 @@ public class FoVTileset implements FieldOfVision {
         /**
          * check if the shadow line covers all observed row.
          *
-         * @param width observed row's width
-         * @return true if the shadow line is represented by the single shadow
-         * and covers the whole row width
+         * @param width observed row's width.
+         * @return true if the shadow line is represented by the single shadow and covers the whole row width
          */
         Boolean isFullShadow(@NotNull Integer width) {
             return shadows.size() == 1 && Objects.equals(shadows.get(0).start, 0)
@@ -128,26 +129,27 @@ public class FoVTileset implements FieldOfVision {
     }
 
     /**
-     * octant is a 45-degrees sector of the FoV
+     * octant is a 45-degrees sector of the FoV.
      */
+    @SuppressWarnings("unused")
     private static class Octant {
         /**
-         * octant's map nodes
+         * octant's map nodes.
          */
         private final List<List<MapNode>> octant = new LinkedList<>();
 
         /**
-         * current PoV
+         * current PoV.
          */
         private final MapNode source;
 
         /**
-         * octant's direction
+         * octant's direction.
          */
         private final Integer direction;
 
         /**
-         * create new octant for given PoV in given direction
+         * create new octant for given PoV in given direction.
          *
          * @param source    PoV to build an octant from
          * @param direction direction to build an octant in
@@ -160,7 +162,7 @@ public class FoVTileset implements FieldOfVision {
         }
 
         /**
-         * get octant nodes visible from the current PoV
+         * get octant nodes visible from the current PoV.
          *
          * @return list of visible nodes
          */
@@ -294,7 +296,7 @@ public class FoVTileset implements FieldOfVision {
     }
 
     /**
-     * create and calculate FoV for the given PoV
+     * create and calculate FoV for the given PoV.
      *
      * @param currentPosition point of view
      */
@@ -304,7 +306,7 @@ public class FoVTileset implements FieldOfVision {
     }
 
     /**
-     * move the PoV to the new position and re-calculate the FoV for it
+     * move the PoV to the new position and re-calculate the FoV for it.
      *
      * @param position new PoV coordinates, [rowCoordinate, colCoordinate]
      */
@@ -348,3 +350,4 @@ public class FoVTileset implements FieldOfVision {
         }
     }
 }
+// CHECKSTYLE:ON

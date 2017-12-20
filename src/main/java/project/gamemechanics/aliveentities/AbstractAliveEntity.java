@@ -1,27 +1,20 @@
 package project.gamemechanics.aliveentities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.affectors.AffectorCategories;
-import project.gamemechanics.components.affectors.SingleValueAffector;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
-import project.gamemechanics.flyweights.CharacterClass;
 import project.gamemechanics.flyweights.CharacterRace;
-import project.gamemechanics.flyweights.PerkBranch;
-import project.gamemechanics.flyweights.abilities.IngameAbility;
-import project.gamemechanics.flyweights.perks.IngamePerk;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.interfaces.*;
 import project.gamemechanics.items.containers.CharacterDoll;
 import org.jetbrains.annotations.Nullable;
-import project.gamemechanics.items.containers.StorageBag;
-import project.server.models.User;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+@SuppressWarnings("ALL")
 public abstract class AbstractAliveEntity implements AliveEntity {
     private final String name;
     private final String description;
@@ -31,14 +24,15 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     private final CharacterRole characterRole;
     private final List<Effect> effects = new ArrayList<>();
 
-    @SuppressWarnings("PublicField")
     private static class AbstractAliveEntityModel {
-        public final String name;
-        public final String description;
-        public final Map<Integer, Property> properties;
-        public final List<Bag> bags; // for monsters bags will contain generated loot
-        public final CharacterRole characterRole; // character class for user characters and playable bots
+        // CHECKSTYLE:OFF
+        final String name;
+        final String description;
+        final Map<Integer, Property> properties;
+        final List<Bag> bags; // for monsters bags will contain generated loot
+        final CharacterRole characterRole; // character class for user characters and playable bots
         // or an AI-driven role for monsters
+        // CHECKSTYLE:ON
 
         AbstractAliveEntityModel(@NotNull String name, @NotNull String description,
                                  @NotNull Map<Integer, Property> properties,
@@ -52,9 +46,12 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @SuppressWarnings("PublicField")
-    public static class NPCModel extends AbstractAliveEntityModel {
-        public final DecisionMaker behavior;
 
+    public static class NPCModel extends AbstractAliveEntityModel {
+        // CHECKSTYLE:OFF
+        public final DecisionMaker behavior;
+        // CHECKSTYLE:OFF
+        @SuppressWarnings("unused")
         public NPCModel(@NotNull String name, @NotNull String description,
                         @NotNull Map<Integer, Property> properties,
                         @NotNull List<Bag> bags, @NotNull DecisionMaker behavior,
@@ -63,6 +60,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             this.behavior = behavior;
         }
 
+        // CHECKSTYLE:OFF
         public NPCModel(@NotNull String name, @NotNull String description,
                         @NotNull Map<Integer, Property> properties,
                         @NotNull List<Bag> bags, @NotNull CharacterRole characterRole) {
@@ -71,12 +69,12 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         }
     }
 
-    @SuppressWarnings("PublicField")
     public static class UserCharacterModel extends AbstractAliveEntityModel {
-        public final Integer id;
-        public final CharacterRace characterRace;
-        public final CharacterDoll equipment;
-        public final Map<Integer, Map<Integer, Integer>> perkRanks;
+        @SuppressWarnings("unused")
+        final Integer id;
+        final CharacterRace characterRace;
+        final CharacterDoll equipment;
+        final Map<Integer, Map<Integer, Integer>> perkRanks;
 
         public UserCharacterModel(@NotNull Integer id,
                                   @NotNull String name, @NotNull String description,
@@ -90,63 +88,10 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             this.equipment = equipment;
             this.perkRanks = perkRanks;
         }
-//
-//        public UserCharacterModel createWarrior(){
-//            Map<Integer, Property> properties = new HashMap<>();
-//            List<Bag> bags = new ArrayList<>();
-//            StorageBag.EmptyBagModel emptyBagModel = new StorageBag.EmptyBagModel("testbag", "something inside", 10);
-//            Bag storageBag = new StorageBag(emptyBagModel);
-//            bags.add(storageBag);
-//
-//            Map<Integer, Ability> abilityMap = new HashMap<>();
-//            IngameAbility.AbilityModel abilityModel = new IngameAbility.AbilityModel(1, "Heavy Strike", "Strike your enemy with double damage!", properties, affectors, )
-//            Ability ability = new IngameAbility(abilityModel);
-//            Map<Integer, PerkBranch> perkBranchMap = new HashMap<>();
-//
-//            List<Perk> slayerPerks = new ArrayList<>();
-//            Map<Integer, Affector> affectorMap = new HashMap<>();
-//            //TODO remove hardcode affection
-//            Affector affector = new SingleValueAffector(50);
-//            affectorMap.put(0, affector);
-//            IngamePerk.PerkModel heavyStrikeModel = new IngamePerk.PerkModel(0, "Heavy Strike", "Strike your enemy with double damage!", affectorMap);
-//            Perk heavyStrike = new IngamePerk(heavyStrikeModel);
-//
-//            slayerPerks.add(heavyStrike);
-//
-//            PerkBranch.PerkBranchModel perkBranchModel = new PerkBranch.PerkBranchModel(0, "Slayer", "Show no mercy to all that beautiful skeletons", slayerPerks);
-//
-//            PerkBranch perkBranch = new PerkBranch(perkBranchModel);
-//
-//            perkBranchMap.put(0, perkBranch);
-//            CharacterClass.CharacterClassModel warriorModel = new CharacterClass.CharacterClassModel(0, "Warrior", "Warrior is a warrior, what else did you expect?", abilityMap, perkBranchMap, properties);
-//            CharacterClass warrior = new CharacterClass(warriorModel);
-//
-//            CharacterRace.CharacterRaceModel humanModel = new CharacterRace.CharacterRaceModel(0, "Human", "Humans better then everyone. Always.", affectorMap);
-//            CharacterRace human = new CharacterRace(humanModel);
-//
-//            CharacterDoll characterDoll = new CharacterDoll();
-//            Map<Integer, Map<Integer, Integer>> serperkRanks = new HashMap<>();
-//            UserCharacterModel userCharacterModel = new UserCharacterModel(0, "Roderick", "But Roderick is the best you can get!", properties, bags, characterRole
-//            , characterRace, equipment, perkRanks);
-//            return  userCharacterModel;
-//
-//        }
-//
-//        public UserCharacterModel createMage(){
-//
-//        }
-//
-//        public UserCharacterModel createPriest() {
-//
-//        }
-//
-//        public UserCharacterModel createThief() {
-//
-//        }
-
+        // CHECKSTYLE:ON
     }
 
-    public AbstractAliveEntity(@NotNull NPCModel model) {
+    protected AbstractAliveEntity(@NotNull NPCModel model) {
         name = model.name;
         description = model.description;
         properties = model.properties;
@@ -408,6 +353,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         modifyPropertyByAddition(PropertyCategories.PC_ABILITIES_COOLDOWN, -1);
     }
 
+    @SuppressWarnings("unused")
     List<Effect> getEffects() {
         return effects;
     }

@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-@SuppressWarnings("NewClassNamingConvention")
+@SuppressWarnings("ALL")
 public class AI implements DecisionMaker {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer aiID = INSTANCE_COUNTER.getAndIncrement();
@@ -39,6 +39,7 @@ public class AI implements DecisionMaker {
     }
 
     static class AggregatedBattleState {
+        // CHECKSTYLE:OFF
         final AliveEntity self;
 
         final BattleMap map;
@@ -68,6 +69,7 @@ public class AI implements DecisionMaker {
                               @NotNull Map<Integer, Integer> aggroMap,
                               @NotNull Map<Integer, Integer> gotDamageFromMap,
                               @NotNull Map<Integer, Ability> abilities) {
+            // CHECKSTYLE:ON
             this.self = self;
             this.map = map;
             this.pathfinder = pathfinder;
@@ -83,6 +85,7 @@ public class AI implements DecisionMaker {
             this.abilities = abilities;
         }
     }
+    // CHECKSTYLE:OFF
 
     public AI(@NotNull AliveEntity npc, @NotNull Squad allies,
               @NotNull Squad enemies, @NotNull BattleMap map,
@@ -102,6 +105,7 @@ public class AI implements DecisionMaker {
         initializeMap(aggro);
         initializeMap(gotDamageFrom);
     }
+    // CHECKSTYLE:ON
 
     @Override
     public Integer getInstancesCount() {
@@ -230,9 +234,10 @@ public class AI implements DecisionMaker {
 
         return aliveMembersSet;
     }
-
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     private void initializeMap(@NotNull Map<Integer, Integer> map) {
+    // CHECKSTYLE:ON
         for (Integer memberIndex = 0; memberIndex < enemies.getSquadSize(); ++memberIndex) {
             final AliveEntity member = enemies.getMember(memberIndex);
             if (member != null) {

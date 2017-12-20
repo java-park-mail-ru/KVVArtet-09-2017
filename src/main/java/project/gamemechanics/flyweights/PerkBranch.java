@@ -6,6 +6,7 @@ import project.gamemechanics.interfaces.Perk;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("RedundantSuppression")
 public class PerkBranch implements GameEntity {
     private final Integer branchID;
 
@@ -15,11 +16,12 @@ public class PerkBranch implements GameEntity {
     private final List<Perk> perks;
 
     public static class PerkBranchModel {
+        // CHECKSTYLE:OFF
         public final Integer id;
-        public final String name;
-        public final String description;
-        @SuppressWarnings("PublicField")
-        public final List<Perk> perks;
+        final String name;
+        final String description;
+        final List<Perk> perks;
+        // CHECKSTYLE:ON
 
         public PerkBranchModel(@NotNull Integer id, @NotNull String name,
                                @NotNull String description, @NotNull List<Perk> perks) {
@@ -57,6 +59,7 @@ public class PerkBranch implements GameEntity {
         return description;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public Perk getPerk(Integer perkIndex) {
         if (perkIndex < 0 || perkIndex >= perks.size()) {
             return null;

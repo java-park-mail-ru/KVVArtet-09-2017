@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class CharacterDoll extends StorageBag {
 
     private static final EmptyBagModel EMPTY_CHARACTER_DOLL = new EmptyBagModel("Equipped items",
@@ -43,7 +44,7 @@ public class CharacterDoll extends StorageBag {
         return statBonuses;
     }
 
-    public Integer getRatingBonus(@NotNull Integer ratingIndex) {
+    private Integer getRatingBonus(@NotNull Integer ratingIndex) {
         Integer ratingBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {

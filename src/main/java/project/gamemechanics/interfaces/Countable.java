@@ -4,6 +4,7 @@ package project.gamemechanics.interfaces;
  * The main interface for the most of game mechanic's entities.
  * Allows to get an entity's ID.
  */
+@SuppressWarnings("unused")
 public interface Countable {
     /**
      * get entity's ID.

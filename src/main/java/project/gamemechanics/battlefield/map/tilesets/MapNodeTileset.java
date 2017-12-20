@@ -11,11 +11,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public abstract class MapNodeTileset implements Tileset {
     private final Set<MapNode> tileset = new HashSet<>();
 
-    public MapNodeTileset(@NotNull MapNode center, @NotNull Integer shape,
-                          @NotNull Integer direction, @NotNull Integer size) {
+    MapNodeTileset(@NotNull MapNode center, @NotNull Integer shape,
+                   @NotNull Integer direction, @NotNull Integer size) {
         makeTileset(center, shape, direction, size);
     }
 

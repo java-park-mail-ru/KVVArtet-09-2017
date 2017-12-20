@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class ItemPartAsset implements ItemPart {
     private final Integer itemPartId;
 

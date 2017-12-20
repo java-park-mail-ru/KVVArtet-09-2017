@@ -4,6 +4,7 @@ import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("ALL")
 public class RewardEvent implements TurnEvent {
     private final MapNode where;
     private final Integer expAmount;

@@ -1,6 +1,6 @@
 package project.server.models;
 
-@SuppressWarnings({"unused", "SpellCheckingInspection"})
+@SuppressWarnings({"unused"})
 public enum ApiResponse {
     USERNAME_EXIST(0, "User with that name is already exist"),
     EMAIL_EXIST(1, "User with that email is already exist"),

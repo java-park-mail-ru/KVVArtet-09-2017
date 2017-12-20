@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("RedundantSuppression")
 public class MapProperty implements Property {
     private final Map<Integer, Integer> properties;
 
@@ -36,7 +37,7 @@ public class MapProperty implements Property {
     public Map<Integer, Integer> getPropertyMap() {
         return properties;
     }
-
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("properties")
@@ -107,6 +108,7 @@ public class MapProperty implements Property {
     }
 
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
     public List<Integer> getPropertyList() {
@@ -118,6 +120,7 @@ public class MapProperty implements Property {
     public void setPropertyList(@NotNull List<Integer> properties) {
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
     public Set<Integer> getPropertySet() {
@@ -131,3 +134,4 @@ public class MapProperty implements Property {
         return false;
     }
 }
+// CHECKSTYLE:ON

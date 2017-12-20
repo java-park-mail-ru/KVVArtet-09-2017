@@ -10,11 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("RedundantSuppression")
 public class SetProperty implements Property {
     private final Set<Integer> properties;
 
     public SetProperty(@JsonProperty("properties") @NotNull Set<Integer> properties) {
         this.properties = properties;
+    }
+
+    @Override
+    @JsonIgnore
+    public Integer getProperty() {
+        return 0;
     }
 
     @Override
@@ -41,6 +48,7 @@ public class SetProperty implements Property {
         return properties;
     }
 
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("properties")
@@ -54,19 +62,21 @@ public class SetProperty implements Property {
     }
 
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
     public Map<Integer, Integer> getPropertyMap() {
         return null;
     }
 
-    @SuppressWarnings("ParameterHidesMemberVariable")
+    @SuppressWarnings({"ParameterHidesMemberVariable", "ConstantConditions"})
     @Override
     @JsonIgnore
     public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
     public List<Integer> getPropertyList() {
@@ -77,12 +87,7 @@ public class SetProperty implements Property {
     @JsonIgnore
     public void setPropertyList(@NotNull List<Integer> properties) {
     }
-
-    @Override
-    @JsonIgnore
-    public Integer getProperty() {
-        return 0;
-    }
+    // CHECKSTYLE:ON
 
     @Override
     @JsonIgnore

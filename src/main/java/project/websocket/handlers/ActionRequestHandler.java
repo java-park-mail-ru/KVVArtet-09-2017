@@ -10,18 +10,18 @@ import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+
 @Component
 public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
-    @NotNull
-    private World world;
+    private final @NotNull World world;
 
-    @NotNull
-    private ConnectionPoolService connectionPoolService;
+    private final @NotNull ConnectionPoolService connectionPoolService;
 
-    @NotNull
-    private DungeonState dungeonState;
+    private final @NotNull DungeonState dungeonState;
 
-    public ActionRequestHandler(@NotNull World world, @NotNull ConnectionPoolService connectionPoolService, @NotNull DungeonState dungeonState) {
+    public ActionRequestHandler(@NotNull World world,
+                                @NotNull ConnectionPoolService connectionPoolService,
+                                @NotNull DungeonState dungeonState) {
         super(ActionRequestMessage.class);
         this.world = world;
         this.connectionPoolService = connectionPoolService;
@@ -35,9 +35,8 @@ public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
 
     @Override
     public Message handle(@NotNull ActionRequestMessage message, Integer forUser) {
-        //TODO some world class method
-        Integer dungeonID = connectionPoolService.getSmartController(forUser).getActiveChar().getProperty(PropertyCategories.PC_INSTANCE_ID);
-        world.getActiveInstances().get(dungeonID).handleMessage(message);
-        return message;
+        final Integer dungeonID =
+                connectionPoolService.getSmartController(forUser).getActiveChar().getProperty(PropertyCategories.PC_INSTANCE_ID);
+        return world.getActiveInstances().get(dungeonID).handleMessage(message);
     }
 }

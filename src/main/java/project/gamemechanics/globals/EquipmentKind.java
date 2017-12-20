@@ -2,6 +2,7 @@ package project.gamemechanics.globals;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public enum EquipmentKind {
     EK_UNDEFINED(Constants.UNDEFINED_ID, "undefined"),
 

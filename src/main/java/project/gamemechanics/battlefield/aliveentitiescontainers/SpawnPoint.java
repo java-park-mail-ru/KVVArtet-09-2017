@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("ConstantConditions")
 public class SpawnPoint {
     private final MapNode center;
     private final Integer spawnAreaSide;

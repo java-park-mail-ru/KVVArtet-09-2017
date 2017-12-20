@@ -18,18 +18,20 @@ import project.server.dao.UserDao;
 import project.server.models.ApiResponse;
 import project.server.models.User;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"unused", "OverlyBroadThrowsClause", "InstanceMethodNamingConvention", "RedundantSuppression"})
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 @Transactional
 public class AuthorizationTest {
-    public static final int FAILURE_STATUS = 400;
-    public static final int STATUS_403 = 403;
-    public static final int STATUS_401 = 401;
+    private static final int FAILURE_STATUS = 400;
+    private static final int STATUS_403 = 403;
+    private static final int STATUS_401 = 401;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -47,6 +49,7 @@ public class AuthorizationTest {
                 .andExpect(status().isOk()).andExpect(MockMvcResultMatchers.content().string(ApiResponse.SIGNUP_SUCCESS.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signUpWithoutUsernameTest() throws Exception {
         mockMvc
@@ -56,6 +59,7 @@ public class AuthorizationTest {
                 .andExpect(status().is(FAILURE_STATUS)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.FIELD_EMPTY.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signUpWithoutEmailTest() throws Exception {
         mockMvc
@@ -65,6 +69,7 @@ public class AuthorizationTest {
                 .andExpect(status().is(FAILURE_STATUS)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.FIELD_EMPTY.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signUpWithoutPasswordTest() throws Exception {
         mockMvc
@@ -112,6 +117,7 @@ public class AuthorizationTest {
                 .andExpect(status().is(FAILURE_STATUS)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.SIGNUP_VALIDATION_FAILED.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signInTest() throws Exception {
         signIn(null);
@@ -129,6 +135,7 @@ public class AuthorizationTest {
                 .andExpect(status().isOk()).andExpect(MockMvcResultMatchers.content().string(ApiResponse.SIGNIN_SUCCESS.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signInWithOnlyEmailTest() throws Exception {
         signUpTest();
@@ -149,6 +156,7 @@ public class AuthorizationTest {
                 .andExpect(status().is(STATUS_403)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signInWithOnlyUsernameTest() throws Exception {
         signUpTest();
@@ -179,6 +187,7 @@ public class AuthorizationTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void sessionWithoutSessionIdTest() throws Exception {
         final MockHttpSession session = new MockHttpSession();
@@ -194,17 +203,18 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/signout")
+                .perform(delete("/signout")
                         .session(session))
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signOutWithoutSessionIdThatMeansYouAreNotAuthorizedTest() throws Exception {
         final MockHttpSession session = new MockHttpSession();
         signIn(null);
         mockMvc
-                .perform(post("/signout")
+                .perform(delete("/signout")
                         .session(session))
                 .andExpect(status().is(STATUS_401)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.USER_NOT_AUTHORIZED.getResponse()));
     }
@@ -214,7 +224,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("testusername1", "testemail@mail.ru", "testpassword"))))
@@ -227,7 +237,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("reallytestusername", "testemail@mail.ru", "testpassword"))))
@@ -239,7 +249,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "sometestpassword"))))
@@ -251,7 +261,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "testpassword"))))

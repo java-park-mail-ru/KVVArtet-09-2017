@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class ForeignKeyModel extends AbstractModel {
     private final Map<Integer, List<Integer>> mappings = new HashMap<>();
 

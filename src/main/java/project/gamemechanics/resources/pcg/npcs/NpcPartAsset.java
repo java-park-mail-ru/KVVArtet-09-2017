@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class NpcPartAsset implements NpcPart{
+@SuppressWarnings("unused")
+public class NpcPartAsset implements NpcPart {
     private final Integer npcPartAssetId;
 
     private final String name;

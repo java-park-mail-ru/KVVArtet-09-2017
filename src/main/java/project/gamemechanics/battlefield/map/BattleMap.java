@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"RedundantSuppression", "unused"})
 public class BattleMap {
     private final List<List<MapNode>> rows;
 
@@ -15,13 +16,15 @@ public class BattleMap {
         this.rows = rows;
     }
 
-    public List<MapNode> getRow(Integer rowIndex) {
+    @SuppressWarnings("ConstantConditions")
+    private List<MapNode> getRow(Integer rowIndex) {
         if (rowIndex >= 0 && rowIndex < rows.size()) {
             return rows.get(rowIndex);
         }
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public MapNode getTile(@NotNull Integer rowIndex, @NotNull Integer tileIndex) {
         final List<MapNode> row = getRow(rowIndex);
         if (row == null || tileIndex < 0) {
@@ -33,6 +36,7 @@ public class BattleMap {
         return null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     public AliveEntity getInhabitant(@NotNull Integer rowIndex, @NotNull Integer tileIndex) {
         final MapNode tile = getTile(rowIndex, tileIndex);
         if (tile == null) {

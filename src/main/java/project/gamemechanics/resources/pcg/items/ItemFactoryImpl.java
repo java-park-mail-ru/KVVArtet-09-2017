@@ -22,17 +22,17 @@ public class ItemFactoryImpl implements ItemsFactory {
     @Override
     public EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
         final Random random = new Random(System.currentTimeMillis());
-        final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL) ?
-                blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty() :
-                random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
+        final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL)
+                ? blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty()
+                : random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
 
-        final Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY) ?
-                blueprint.getProperties().get(PropertyCategories.PC_ITEM_RARITY).getProperty() :
-                ItemRarity.IR_UNDEFINED.asInt();
+        final Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY)
+                ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_RARITY).getProperty()
+                : ItemRarity.IR_UNDEFINED.asInt();
 
-        final Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND) ?
-                blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty() :
-                EquipmentKind.EK_UNDEFINED.asInt();
+        final Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND)
+                ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty()
+                : EquipmentKind.EK_UNDEFINED.asInt();
 
         final List<ItemPart> itemPartsList = getItemParts(rarity, kind, blueprint.getItemParts());
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));

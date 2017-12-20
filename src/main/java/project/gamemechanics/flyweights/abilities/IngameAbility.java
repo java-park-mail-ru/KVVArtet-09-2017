@@ -28,17 +28,15 @@ public class IngameAbility implements Ability {
     }
 
     public static class AbilityModel {
+        // CHECKSTYLE:OFF
         public final Integer id;
-        public final String name;
-        public final String description;
-        @SuppressWarnings("PublicField")
-        public final Map<Integer, Property> properties;
-        @SuppressWarnings("PublicField")
-        public final Map<Integer, Affector> affectors;
-        @SuppressWarnings("PublicField")
-        public final List<IngameEffect.EffectModel> appliedEffects;
-        @SuppressWarnings("PublicField")
-        public final AbilityBehavior perform;
+        final String name;
+        final String description;
+        final Map<Integer, Property> properties;
+        final Map<Integer, Affector> affectors;
+        final List<IngameEffect.EffectModel> appliedEffects;
+        final AbilityBehavior perform;
+        // CHECKSTYLE:ON
 
         public AbilityModel(@NotNull Integer id,
                             @NotNull String name, @NotNull String description,

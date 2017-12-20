@@ -1,4 +1,5 @@
 package project.websocket.messages;
 
-public class DeleteCharacterRequestMessage {
+class DeleteCharacterRequestMessage {
+    //TODO NOT AVAILABLE NOW
 }

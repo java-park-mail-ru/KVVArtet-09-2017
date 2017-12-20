@@ -4,7 +4,8 @@ import project.gamemechanics.smartcontroller.SmartController;
 
 import javax.validation.constraints.NotNull;
 
-public interface ObjectivePool<T> {
+@SuppressWarnings("unused")
+interface ObjectivePool<T> {
 
     T getElement();
 

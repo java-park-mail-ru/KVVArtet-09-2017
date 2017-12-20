@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class InstanceNameDescription extends AbstractModel {
     public InstanceNameDescription(@JsonProperty("modelID") @NotNull Integer modelID,
                                    @JsonProperty("name") @NotNull String name,

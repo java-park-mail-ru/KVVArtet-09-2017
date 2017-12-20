@@ -3,19 +3,18 @@ package project.websocket.handlers;
 import org.springframework.stereotype.Component;
 import project.gamemechanics.world.World;
 import project.states.LobbyState;
-import project.websocket.messages.CreateCharacterRequestMessage;
 import project.websocket.messages.LobbyRequestMessage;
 import project.websocket.messages.Message;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 @Component
 public class LobbyRequestHandler extends MessageHandler<LobbyRequestMessage> {
 
-    @NotNull
-    private World world;
-    @NotNull
-    private LobbyState lobbyState;
+    private final @NotNull World world;
+    private final @NotNull LobbyState lobbyState;
 
     public LobbyRequestHandler(@NotNull World world, @NotNull LobbyState lobbyState) {
         super(LobbyRequestMessage.class);

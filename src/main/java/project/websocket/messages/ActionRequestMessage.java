@@ -1,10 +1,7 @@
 package project.websocket.messages;
 
-import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.MapNode;
-
-import java.util.List;
 
 public class ActionRequestMessage extends Message {
     private final MapNode sender;

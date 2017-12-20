@@ -2,6 +2,7 @@ package project.gamemechanics.globals;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public enum CharacterRatings {
     CR_CRITICAL_HIT(0, "Critical hit chance"),
     CR_DODGE(1, "Chance to dodge an opponent\'s attack"),

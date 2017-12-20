@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(SingleValueAffector.class),

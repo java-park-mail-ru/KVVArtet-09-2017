@@ -9,6 +9,7 @@ import project.gamemechanics.interfaces.Perk;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings({"ConstantNamingConvention", "unused"})
 public interface AssetProvider {
     int PERK_RESOURCE_NAME = 0;
     int PERK_BRANCH_RESOURCE_NAME = 1;
@@ -19,9 +20,7 @@ public interface AssetProvider {
     int CHARACTER_CLASS_RESOURCE_NAME = 4;
 
     int NPC_ROLE_RESOURCE_NAME = 5;
-    @SuppressWarnings("FieldNamingConvention")
     int INSTANCE_NAME_DESCRIPTION_FIRST_RESOURCE_NAME = 6;
-    @SuppressWarnings("FieldNamingConvention")
     int INSTANCE_NAME_DESCRIPTION_SECOND_RESOURCE_NAME = 7;
 
     int ASSET_HOLDERS_FILES_COUNT = 8;
