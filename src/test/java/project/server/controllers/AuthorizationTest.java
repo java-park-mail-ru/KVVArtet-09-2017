@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 @Transactional
-class AuthorizationTest {
+public class AuthorizationTest {
     private static final int FAILURE_STATUS = 400;
     private static final int STATUS_403 = 403;
     private static final int STATUS_401 = 401;

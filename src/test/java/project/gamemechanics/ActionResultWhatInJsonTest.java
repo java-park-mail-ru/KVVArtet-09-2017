@@ -39,7 +39,7 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
-class ActionResultWhatInJsonTest {
+public class ActionResultWhatInJsonTest {
     @Autowired
     private UserDao dao;
     @SuppressWarnings({"unused", "ConstantConditions"})

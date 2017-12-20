@@ -36,7 +36,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 @SuppressWarnings({"unused", "InstanceMethodNamingConvention"})
-class AssetsSerializationTest {
+public class AssetsSerializationTest {
     @SuppressWarnings("unused")
     @Test
     public void itemPartStringSerializationDeserialization() {
