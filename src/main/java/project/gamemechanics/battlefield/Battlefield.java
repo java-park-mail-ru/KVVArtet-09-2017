@@ -22,8 +22,8 @@ import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.ActionConfirmationMessage;
+import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
 
@@ -146,17 +146,11 @@ public class Battlefield implements Updateable {
 
     @Override
     public void update() {
-        if (actionsQueue.isEmpty() && !battlersQueue.peekFirst().isControlledByAI()) {
+        if (actionsQueue.isEmpty()) {
             return;
         }
         while (!actionsQueue.isEmpty()) {
             battleLog.add(actionsQueue.getFirst().execute());
-        }
-
-        if (activeBattlerActionsPooled == 0) {
-            updateBattlers();
-            ++turnCounter;
-            activeBattlerActionsPooled = ACTIONS_PER_TURN;
         }
 
         removeDead();
@@ -176,6 +170,8 @@ public class Battlefield implements Updateable {
                 battlersQueue.addLast(battlersQueue.pollFirst());
                 // end turn event will be added to the last pooled action
                 battleLog.get(battleLog.size() - 1).addEvent(EventsFactory.makeEndTurnEvent());
+                updateBattlers();
+                ++turnCounter;
             }
         } else {
             onBattleEnd();
