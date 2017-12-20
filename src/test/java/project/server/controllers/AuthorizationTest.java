@@ -18,7 +18,9 @@ import project.server.dao.UserDao;
 import project.server.models.ApiResponse;
 import project.server.models.User;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"unused", "OverlyBroadThrowsClause", "InstanceMethodNamingConvention", "RedundantSuppression"})
@@ -201,7 +203,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/signout")
+                .perform(delete("/signout")
                         .session(session))
                 .andExpect(status().isOk());
     }
@@ -212,7 +214,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(null);
         mockMvc
-                .perform(post("/signout")
+                .perform(delete("/signout")
                         .session(session))
                 .andExpect(status().is(STATUS_401)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.USER_NOT_AUTHORIZED.getResponse()));
     }
@@ -222,7 +224,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("testusername1", "testemail@mail.ru", "testpassword"))))
@@ -235,7 +237,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("reallytestusername", "testemail@mail.ru", "testpassword"))))
@@ -247,7 +249,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "sometestpassword"))))
@@ -259,7 +261,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/settings")
+                .perform(put("/settings")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(new User("testusername", "testemail@mail.ru", "testpassword"))))
