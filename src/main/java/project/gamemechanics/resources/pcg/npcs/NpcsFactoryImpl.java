@@ -6,6 +6,7 @@ import project.gamemechanics.aliveentities.npcs.NonPlayerCharacter;
 import project.gamemechanics.components.affectors.AffectorCategories;
 import project.gamemechanics.components.properties.*;
 import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.Bag;
 import project.gamemechanics.interfaces.CharacterRole;
@@ -134,7 +135,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
             for (Integer i = 0; i < npcPartList.size(); ++i) {
                 final Property property = npcPartList.get(i).getAllProperties().get(propertyId);
                 if (property != null) {
-                    partProperties.set(i, property);
+                    partProperties.add(i, property);
                 }
             }
 
@@ -225,7 +226,15 @@ public class NpcsFactoryImpl implements NpcsFactory {
                 mergedProperty.modifyByPercentage(intPercentageToFloat(affectionValue));
             }
             mergedProperties.put(propertyId, mergedProperty);
+
         }
+
+        final List<Integer> hitpoints = new ArrayList<>();
+        for (Integer i = 0; i < DigitsPairIndices.PAIR_SIZE; ++i) {
+            hitpoints.add(mergedProperties.get(PropertyCategories.PC_BASE_HEALTH).getProperty());
+        }
+        mergedProperties.put(PropertyCategories.PC_HITPOINTS, new ListProperty(hitpoints));
+        mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
 
         return mergedProperties;
     }

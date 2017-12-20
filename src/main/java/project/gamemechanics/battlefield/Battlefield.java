@@ -148,16 +148,17 @@ public class Battlefield implements Updateable {
 
     @Override
     public void update() {
-        if (actionsQueue.isEmpty()) {
+        if (actionsQueue.isEmpty() && !battlersQueue.peekFirst().isControlledByAI()) {
             return;
         }
-        ++turnCounter;
         while (!actionsQueue.isEmpty()) {
             battleLog.add(actionsQueue.getFirst().execute());
         }
 
         if (activeBattlerActionsPooled == 0) {
             updateBattlers();
+            ++turnCounter;
+            activeBattlerActionsPooled = ACTIONS_PER_TURN;
         }
 
         removeDead();

@@ -17,9 +17,16 @@ import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.EquipmentKind;
 import project.gamemechanics.globals.ItemRarity;
+import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.resources.assets.*;
+import project.gamemechanics.resources.pcg.PcgContentFactory;
+import project.gamemechanics.resources.pcg.PcgFactory;
 import project.gamemechanics.resources.pcg.items.*;
+import project.gamemechanics.resources.pcg.npcs.NpcBlueprint;
+import project.gamemechanics.resources.pcg.npcs.NpcPart;
+import project.gamemechanics.resources.pcg.npcs.NpcsFactory;
+import project.gamemechanics.resources.pcg.npcs.NpcsFactoryImpl;
 import project.gamemechanics.world.config.ResourcesConfig;
 
 import java.io.IOException;
@@ -137,8 +144,8 @@ public class AssetsSerializationTest {
     public void perkBranchesTest() {
         final AssetHolder.PerkHolder perkHolder = new PerkAssetHolder(ResourcesConfig.getAssetHoldersFileNames()
                 .get(AssetProvider.PERK_RESOURCE_NAME));
-        final AssetHolder.PerkBranchHolder testHolder = new PerkBranchAssetHolder(ResourcesConfig.getAssetHoldersFileNames()
-                .get(AssetProvider.PERK_BRANCH_RESOURCE_NAME), perkHolder.getAllAssets());
+        final AssetHolder.PerkBranchHolder testHolder = new PerkBranchAssetHolder(ResourcesConfig
+                .getAssetHoldersFileNames().get(AssetProvider.PERK_BRANCH_RESOURCE_NAME), perkHolder.getAllAssets());
         assertFalse(testHolder.getAllAssets().isEmpty());
         final Random random = new Random(System.currentTimeMillis());
         assertTrue(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size()))
@@ -161,5 +168,128 @@ public class AssetsSerializationTest {
         assertFalse(testHolder.getAllAssets().isEmpty());
         assertTrue(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size()))
                 .getAppliedEffects().isEmpty());
+    }
+
+    @Test
+    public void characterClassesTest() {
+        final AssetHolder.AbilityHolder abilityHolder = new AbilityAssetHolder(
+                ResourcesConfig.getAssetHoldersFileNames().get(AssetProvider.ABILITY_RESOURCE_NAME));
+        final AssetHolder.PerkHolder perkHolder = new PerkAssetHolder(ResourcesConfig.getAssetHoldersFileNames()
+                .get(AssetProvider.PERK_RESOURCE_NAME));
+        final AssetHolder.PerkBranchHolder branchHolder = new PerkBranchAssetHolder(ResourcesConfig
+                .getAssetHoldersFileNames().get(AssetProvider.PERK_BRANCH_RESOURCE_NAME), perkHolder.getAllAssets());
+        final AssetHolder.CharacterClassHolder testHolder = new CharacterClassAssetHolder(ResourcesConfig
+                .getAssetHoldersFileNames().get(AssetProvider.CHARACTER_CLASS_RESOURCE_NAME),
+                abilityHolder.getAllAssets(), branchHolder.getAllAssets());
+        assertFalse(testHolder.getAllAssets().isEmpty());
+    }
+
+    @Test
+    public void instancesNameDescrsTest() {
+        final ObjectMapper mapper = new ObjectMapper();
+        // noinspection OverlyBroadCatchBlock
+        try {
+            final AssetHolder.InstanceNameDescriptionHolder firstTestHolder =
+                    mapper.readValue(Resources.getResource(
+                            ResourcesConfig.getAssetHoldersFileNames()
+                                    .get(AssetProvider.INSTANCE_NAME_DESCRIPTION_FIRST_RESOURCE_NAME)),
+                            InstanceNameDescriptionAssetHolder.class);
+            assertFalse(firstTestHolder.getAllAssets().isEmpty());
+            final AssetHolder.InstanceNameDescriptionHolder secondTestHolder =
+                    mapper.readValue(Resources.getResource(
+                            ResourcesConfig.getAssetHoldersFileNames()
+                                    .get(AssetProvider.INSTANCE_NAME_DESCRIPTION_SECOND_RESOURCE_NAME)),
+                            InstanceNameDescriptionAssetHolder.class);
+            assertFalse(secondTestHolder.getAllAssets().isEmpty());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void npcRolesTest() {
+        final AssetHolder.AbilityHolder abilityHolder = new AbilityAssetHolder(
+                ResourcesConfig.getAssetHoldersFileNames().get(AssetProvider.ABILITY_RESOURCE_NAME));
+        final AssetHolder.NpcRoleHolder testHolder = new NpcRoleAssetHolder(
+                ResourcesConfig.getAssetHoldersFileNames().get(AssetProvider.NPC_ROLE_RESOURCE_NAME),
+                abilityHolder.getAllAssets());
+        assertFalse(testHolder.getAllAssets().isEmpty());
+    }
+
+    @Test
+    public void assetProviderTest() {
+        final AssetProvider assetProvider = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        assertFalse(assetProvider.getNpcRole() == null);
+        assertFalse(assetProvider.getPerk(0) == null);
+        assertFalse(assetProvider.getPerkBranch(0) == null);
+        assertFalse(assetProvider.getAbility(0) == null);
+        assertFalse(assetProvider.getCharacterRace(0) == null);
+        assertFalse(assetProvider.getCharacterRace() == null);
+        assertFalse(assetProvider.getCharacterClass(0) == null);
+        assertTrue(assetProvider.makeInstanceNameDescription().size() == DigitsPairIndices.PAIR_SIZE);
+    }
+
+    @Test
+    public void npcsFactoryTest() {
+        final ObjectMapper mapper = new ObjectMapper();
+        NpcsFactory testFactory = null;
+        //noinspection OverlyBroadCatchBlock
+        try {
+            testFactory = mapper.readValue(Resources.getResource(
+                    ResourcesConfig.getNpcPartsFilename()), NpcsFactoryImpl.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertNotEquals(testFactory, null);
+    }
+
+    @Test
+    public void makeRandomNpcTest() {
+        final ObjectMapper mapper = new ObjectMapper();
+        ItemsFactory itemFactory = null;
+        //noinspection OverlyBroadCatchBlock
+        try {
+            itemFactory = mapper.readValue(Resources.getResource(
+                    ResourcesConfig.getItemPartsFilename()), ItemFactoryImpl.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertNotEquals(itemFactory, null);
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        //noinspection OverlyBroadCatchBlock
+        try {
+            final NpcsFactory testFactory = mapper.readValue(Resources.getResource(
+                    ResourcesConfig.getNpcPartsFilename()), NpcsFactoryImpl.class);
+            final Random random = new Random(System.currentTimeMillis());
+            for (Integer tryNumber = 0; tryNumber < 10; ++tryNumber) {
+                final Map<Integer, Integer> parts = new HashMap<>();
+                for (Integer i = 0; i < NpcPart.NPC_PARTS_COUNT; ++i) {
+                    parts.put(i, Constants.UNDEFINED_ID);
+                }
+                final Map<Integer, Property> properties = new HashMap<>();
+                final Integer level = random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
+                properties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+                properties.put(PropertyCategories.PC_CHARACTER_ROLE_ID,
+                        new SingleValueProperty(Constants.UNDEFINED_ID));
+                final AliveEntity npc = testFactory.makeNpc(
+                        new NpcBlueprint(properties, parts), assets, Objects.requireNonNull(itemFactory));
+                assertEquals(level, npc.getLevel());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void pcgContentFactoryTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final PcgContentFactory factory = new PcgFactory(ResourcesConfig.getItemPartsFilename(),
+                ResourcesConfig.getNpcPartsFilename(), assets);
+        final Random random = new Random(System.currentTimeMillis());
+        final Integer repeats = 10;
+        for (Integer i = 0; i < repeats; ++i) {
+            final Integer level = random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
+            assertEquals(factory.makeNpc(level).getLevel(), factory.makeItem(level).getLevel());
+        }
     }
 }
