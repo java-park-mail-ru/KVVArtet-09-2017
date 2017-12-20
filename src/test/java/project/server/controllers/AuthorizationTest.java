@@ -39,7 +39,7 @@ public class AuthorizationTest {
     private ObjectMapper mapper;
 
     @Test
-    private void signUpTest() throws Exception {
+    public void signUpTest() throws Exception {
         mockMvc
                 .perform(post("/signup")
                         .contentType(MediaType.APPLICATION_JSON)
