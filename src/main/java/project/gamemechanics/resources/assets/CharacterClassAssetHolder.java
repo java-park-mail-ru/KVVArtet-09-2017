@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
         implements AssetHolder.CharacterClassHolder {
@@ -40,7 +41,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final Map<Integer, Ability> classAbilities = new HashMap<>();
                 final List<Integer> resourceAbilities =
                         characterClassResource.getMapping(MappingIndices.ABILITIES_MAPPING);
-                for (Integer abilityId : resourceAbilities) {
+                for (Integer abilityId : Objects.requireNonNull(resourceAbilities)) {
                     final Ability ability = abilities.getOrDefault(abilityId, null);
                     if (ability != null) {
                         classAbilities.put(ability.getID(), ability);
@@ -50,7 +51,7 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final Map<Integer, PerkBranch> classBranches = new HashMap<>();
                 final List<Integer> resourceBranches =
                         characterClassResource.getMapping(MappingIndices.PERK_BRANCHES_MAPPING);
-                for (Integer branchId : resourceBranches) {
+                for (Integer branchId : Objects.requireNonNull(resourceBranches)) {
                     final PerkBranch branch = perkBranches.getOrDefault(branchId, null);
                     if (branch != null) {
                         classBranches.put(branch.getID(), branch);
@@ -60,7 +61,8 @@ public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole
                 final CharacterClass.CharacterClassModel model =
                         new CharacterClass.CharacterClassModel(characterClassResource.getID(),
                                 characterClassResource.getName(), characterClassResource.getDescription(),
-                                classAbilities, classBranches, characterClassResource.getAllProperties());
+                                classAbilities, classBranches,
+                                Objects.requireNonNull(characterClassResource.getAllProperties()));
                 assets.put(model.id, new CharacterClass(model));
             }
         } catch (JsonParseException e) {

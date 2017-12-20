@@ -24,8 +24,12 @@ public class HybridModel extends AbstractModel {
                        @JsonProperty("affectors") Map<Integer, Affector> affectors,
                        @JsonProperty("mappings") @NotNull Map<Integer, List<Integer>> mappings) {
         super(modelID, name, description);
-        this.properties.putAll(properties);
-        this.affectors.putAll(affectors);
+        if (properties != null) {
+            this.properties.putAll(properties);
+        }
+        if (affectors != null) {
+            this.affectors.putAll(affectors);
+        }
         this.mappings.putAll(mappings);
     }
 
