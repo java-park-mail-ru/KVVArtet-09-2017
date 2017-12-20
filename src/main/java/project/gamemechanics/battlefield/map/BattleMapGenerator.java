@@ -55,7 +55,6 @@ public final class BattleMapGenerator {
     }
 
     private static Boolean isDirectionValid(List<Integer> coords, List<Integer> mapSize, Integer direction) {
-        //noinspection SwitchStatementWithoutDefaultBranch
         switch (direction) {
             case Directions.UP:
                 return coords.get(DigitsPairIndices.COL_COORD_INDEX) > 0;

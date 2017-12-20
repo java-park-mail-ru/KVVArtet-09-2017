@@ -9,7 +9,7 @@ import project.websocket.messages.Message;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "RedundantSuppression"})
 public class SmartController {
     private final Deque<Message> inboxMessageQueue = new ArrayDeque<>();
     private final Deque<Message> outboxMessageQueue = new ArrayDeque<>();
@@ -19,19 +19,15 @@ public class SmartController {
     private WebSocketSession webSocketSession;
     private Integer ownerID;
 
-    public SmartController() {
-        //characterList = new CharacterList(new CharacterList.CharacterListModel(this.getOwnerID()));
-        //activeChar = characterList.getCharacterList().get(0);
-    }
-
     public void tick() {
-        while(!inboxMessageQueue.isEmpty()){
+        while (!inboxMessageQueue.isEmpty()) {
             outboxMessageQueue.add(stateService.handleMessage(inboxMessageQueue.getFirst(), this.ownerID));
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public Message getOutboxMessage() {
-        if(outboxMessageQueue.isEmpty()){
+        if (outboxMessageQueue.isEmpty()) {
             return null;
         } else {
             return outboxMessageQueue.getFirst();
@@ -67,7 +63,7 @@ public class SmartController {
     }
 
     public Boolean isValid() {
-        return getWebSocketSession().isOpen();
+        return webSocketSession.isOpen();
     }
 
     public void setOwnerID(Integer ownerID) {

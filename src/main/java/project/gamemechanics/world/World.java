@@ -7,6 +7,7 @@ import project.gamemechanics.items.loot.PendingLootPool;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public interface World {
     void tick();
 

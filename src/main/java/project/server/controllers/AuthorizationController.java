@@ -11,10 +11,10 @@ import project.server.services.UserService;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings("unused")
 @RestController
 @CrossOrigin(origins = AuthorizationController.FRONTED_URL1)
-class AuthorizationController {
+public class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
     @SuppressWarnings("WeakerAccess")

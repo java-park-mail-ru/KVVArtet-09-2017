@@ -1,5 +1,6 @@
 package project.gamemechanics.components.properties;
 
+@SuppressWarnings("unused")
 public class PropertyCategories {
     // general properties
     public static final int PC_STATS = 1;

@@ -10,16 +10,16 @@ import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+
 @Component
 public class CharacterListRequestHandler extends MessageHandler<CharacterListRequestMessage> {
 
-    @NotNull
-    private final ConnectionPoolService connectionPoolService;
+    private final @NotNull ConnectionPoolService connectionPoolService;
 
-    @NotNull
-    private final CharacterListState characterListState;
+    private final @NotNull CharacterListState characterListState;
 
-    public CharacterListRequestHandler(@NotNull ConnectionPoolService connectionPoolService, @NotNull CharacterListState characterListState) {
+    public CharacterListRequestHandler(@NotNull ConnectionPoolService connectionPoolService,
+                                       @NotNull CharacterListState characterListState) {
         super(CharacterListRequestMessage.class);
         this.connectionPoolService = connectionPoolService;
         this.characterListState = characterListState;
@@ -29,9 +29,10 @@ public class CharacterListRequestHandler extends MessageHandler<CharacterListReq
     private void init() {
         characterListState.registerHandler(CharacterListRequestMessage.class, this);
     }
+
     @Override
     public Message handle(@NotNull CharacterListRequestMessage message, Integer forUser) {
-        SmartController activeSmart = connectionPoolService.getActiveSmartControllers().get(forUser);
+        final SmartController activeSmart = connectionPoolService.getActiveSmartControllers().get(forUser);
         return new CharacterListResponseMessage(activeSmart.getCharacterList().getCharacterList());
     }
 }

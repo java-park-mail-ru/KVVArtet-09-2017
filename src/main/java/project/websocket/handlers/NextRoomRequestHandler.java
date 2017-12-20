@@ -8,13 +8,12 @@ import project.websocket.messages.NextRoomRequestMessage;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+
 @Component
 public class NextRoomRequestHandler extends MessageHandler<NextRoomRequestMessage> {
 
-    @NotNull
-    private final World world;
-    @NotNull
-    private final DungeonState dungeonState;
+    private final @NotNull World world;
+    private final @NotNull DungeonState dungeonState;
 
     public NextRoomRequestHandler(@NotNull World world, @NotNull DungeonState dungeonState) {
         super(NextRoomRequestMessage.class);

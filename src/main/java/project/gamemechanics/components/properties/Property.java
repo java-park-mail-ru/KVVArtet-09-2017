@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(SingleValueProperty.class),
@@ -18,15 +19,15 @@ import java.util.Set;
 public interface Property {
     Integer getProperty();
 
+    Integer getProperty(@NotNull Integer propertyIndex);
+
     void setSingleProperty(@NotNull Integer property);
 
-    Integer getProperty(@NotNull Integer propertyIndex);
+    void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property);
 
     List<Integer> getPropertyList();
 
     void setPropertyList(@NotNull List<Integer> properties);
-
-    void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property);
 
     Map<Integer, Integer> getPropertyMap();
 

@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield;
 
+@SuppressWarnings("unused")
 public class BattlefieldObjectsCategories {
     public static final int BO_UNDEFINED = -1;
     public static final int BO_ALLY = 0;

@@ -19,6 +19,7 @@ import project.websocket.messages.Message;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class DungeonInstance extends AbstractInstance {
     private final Map<Integer, AI.BehaviorFunction> behaviors;
 

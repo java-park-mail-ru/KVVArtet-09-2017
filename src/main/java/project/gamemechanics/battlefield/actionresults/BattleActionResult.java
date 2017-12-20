@@ -10,6 +10,7 @@ import org.springframework.lang.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("RedundantSuppression")
 public class BattleActionResult implements ActionResult {
     private final Integer actionID;
     private final MapNode sender;
@@ -38,6 +39,7 @@ public class BattleActionResult implements ActionResult {
         return target;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Ability getAbility() {
         return ability;
@@ -54,6 +56,7 @@ public class BattleActionResult implements ActionResult {
         return events.size();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public TurnEvent getEvent(@NotNull Integer eventIndex) {
         if (eventIndex < 0 || eventIndex >= events.size()) {

@@ -24,12 +24,6 @@ public class ListAffector implements Affector {
     }
 
     @Override
-    @JsonIgnore
-    public Boolean setSingleAffection(@NotNull Integer affection) {
-        return false;
-    }
-
-    @Override
     public Integer getAffection(@NotNull Integer affectionIndex) {
         if (affectionIndex < 0 || affectionIndex >= affections.size()) {
             return 0;
@@ -38,15 +32,23 @@ public class ListAffector implements Affector {
     }
 
     @Override
+    @JsonIgnore
+    public Boolean setSingleAffection(@NotNull Integer affection) {
+        return false;
+    }
+
+    @Override
     @JsonProperty("affections")
     public List<Integer> getAffectionsList() {
         return affections;
     }
 
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affections")
     public Boolean setAffectionsList(@NotNull List<Integer> affections) {
+    // CHECKSTYLE:ON
         this.affections.clear();
         this.affections.addAll(affections);
         return true;
@@ -57,6 +59,7 @@ public class ListAffector implements Affector {
     public @Nullable Map<Integer, Integer> getAffectionsMap() {
         return null;
     }
+    // CHECKSTYLE:OFF
 
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
@@ -64,6 +67,7 @@ public class ListAffector implements Affector {
     public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
         return false;
     }
+    // CHECKSTYLE:ON
 
     @Override
     public void modifyByPercentage(@NotNull Float percentage) {

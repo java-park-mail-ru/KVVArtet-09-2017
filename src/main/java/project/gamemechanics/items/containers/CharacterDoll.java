@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 public class CharacterDoll extends StorageBag {
 
     private static final EmptyBagModel EMPTY_CHARACTER_DOLL = new EmptyBagModel("Equipped items",

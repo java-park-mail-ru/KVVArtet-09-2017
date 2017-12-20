@@ -4,6 +4,7 @@ import project.gamemechanics.battlefield.map.helpers.Route;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public class MoveEvent implements TurnEvent {
     private final Route route;
 

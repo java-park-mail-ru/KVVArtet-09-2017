@@ -10,6 +10,7 @@ import java.util.*;
 
 // pathfinding helper class
 // pathfinding is based on A* algorithm
+@SuppressWarnings("RedundantSuppression")
 public final class Pathfinder implements PathfindingAlgorithm {
     private static final Integer DEFAULT_OPEN_LIST_CAPACITY = 16;
 
@@ -19,6 +20,7 @@ public final class Pathfinder implements PathfindingAlgorithm {
         this.map = map;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Route getPath(List<Integer> fromPos, List<Integer> toPos) {
         final MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
@@ -28,6 +30,7 @@ public final class Pathfinder implements PathfindingAlgorithm {
         return getPath(fromTile, toTile);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private Route getPath(@NotNull MapNode start, @NotNull MapNode goal) {
 
         final Map<MapNode, Integer> gScore = new HashMap<>();

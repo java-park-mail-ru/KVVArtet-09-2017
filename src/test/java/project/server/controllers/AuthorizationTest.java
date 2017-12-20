@@ -21,7 +21,7 @@ import project.server.models.User;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"unused", "OverlyBroadThrowsClause", "InstanceMethodNamingConvention", "RedundantSuppression"})
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
@@ -47,6 +47,7 @@ class AuthorizationTest {
                 .andExpect(status().isOk()).andExpect(MockMvcResultMatchers.content().string(ApiResponse.SIGNUP_SUCCESS.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signUpWithoutUsernameTest() throws Exception {
         mockMvc
@@ -56,6 +57,7 @@ class AuthorizationTest {
                 .andExpect(status().is(FAILURE_STATUS)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.FIELD_EMPTY.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signUpWithoutEmailTest() throws Exception {
         mockMvc
@@ -65,6 +67,7 @@ class AuthorizationTest {
                 .andExpect(status().is(FAILURE_STATUS)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.FIELD_EMPTY.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signUpWithoutPasswordTest() throws Exception {
         mockMvc
@@ -112,6 +115,7 @@ class AuthorizationTest {
                 .andExpect(status().is(FAILURE_STATUS)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.SIGNUP_VALIDATION_FAILED.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signInTest() throws Exception {
         signIn(null);
@@ -129,6 +133,7 @@ class AuthorizationTest {
                 .andExpect(status().isOk()).andExpect(MockMvcResultMatchers.content().string(ApiResponse.SIGNIN_SUCCESS.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signInWithOnlyEmailTest() throws Exception {
         signUpTest();
@@ -149,6 +154,7 @@ class AuthorizationTest {
                 .andExpect(status().is(STATUS_403)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.LOGIN_OR_EMAIL_NOT_EXIST.getResponse()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signInWithOnlyUsernameTest() throws Exception {
         signUpTest();
@@ -179,6 +185,7 @@ class AuthorizationTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void sessionWithoutSessionIdTest() throws Exception {
         final MockHttpSession session = new MockHttpSession();
@@ -199,6 +206,7 @@ class AuthorizationTest {
                 .andExpect(status().isOk());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void signOutWithoutSessionIdThatMeansYouAreNotAuthorizedTest() throws Exception {
         final MockHttpSession session = new MockHttpSession();

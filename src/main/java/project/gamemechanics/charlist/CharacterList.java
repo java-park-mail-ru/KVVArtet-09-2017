@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("unused")
 public class CharacterList implements Charlist {
 
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
@@ -15,9 +16,14 @@ public class CharacterList implements Charlist {
     private List<UserCharacter> characterList = new ArrayList<>();
     private final Integer ownerID;
 
-    static class CharacterListModel {
+    @SuppressWarnings({"InstanceMethodNamingConvention", "unused", "RedundantSuppression"})
+    public static class CharacterListModel {
+        //noinspection VisibilityModifier
+        // CHECKSTYLE:OFF
+        @SuppressWarnings("RedundantSuppression")
         List<UserCharacter> characterList = new ArrayList<>();
         final Integer ownerID;
+        // CHECKSTYLE:ON
 
         public CharacterListModel(Integer ownerID, List<UserCharacter> characterList) {
             this.ownerID = ownerID;
@@ -26,11 +32,11 @@ public class CharacterList implements Charlist {
 
         public CharacterListModel(Integer ownerID) {
             this.ownerID = ownerID;
-            this.SetDefaultCharacters();
+            this.setDefaultCharacters();
         }
 
         @SuppressWarnings("EmptyMethod")
-        void SetDefaultCharacters() {
+        void setDefaultCharacters() {
             //TODO MAKE IT WORK
         }
     }

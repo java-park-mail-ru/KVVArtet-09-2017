@@ -3,6 +3,7 @@ package project.gamemechanics.charlist;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class CharacterListPoolImpl implements CharacterListPool {
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")

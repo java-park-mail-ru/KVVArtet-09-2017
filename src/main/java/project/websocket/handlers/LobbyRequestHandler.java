@@ -8,14 +8,13 @@ import project.websocket.messages.Message;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
-@SuppressWarnings("FieldCanBeLocal")
+
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 @Component
 public class LobbyRequestHandler extends MessageHandler<LobbyRequestMessage> {
 
-    @NotNull
-    private final World world;
-    @NotNull
-    private final LobbyState lobbyState;
+    private final @NotNull World world;
+    private final @NotNull LobbyState lobbyState;
 
     public LobbyRequestHandler(@NotNull World world, @NotNull LobbyState lobbyState) {
         super(LobbyRequestMessage.class);

@@ -6,6 +6,7 @@ import project.gamemechanics.interfaces.MapNode;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class BattleMapRoute implements Route {
     private static final int SOURCE_TILE_INDEX = 0;
 

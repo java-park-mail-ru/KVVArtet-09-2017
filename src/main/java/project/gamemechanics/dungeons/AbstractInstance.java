@@ -20,7 +20,10 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("RedundantSuppression")
 public abstract class AbstractInstance implements Instance {
+    //noinspection VisibilityModifier
+    @SuppressWarnings("RedundantSuppression")
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer instanceID = INSTANCE_COUNTER.getAndIncrement();
 
@@ -32,6 +35,7 @@ public abstract class AbstractInstance implements Instance {
     private final Integer gameMode;
 
     private final Integer roomsCount;
+    // CHECKSTYLE:OFF
     Integer roomsCleared = 0;
 
     private final List<CharactersParty> squads = new ArrayList<>();
@@ -40,6 +44,7 @@ public abstract class AbstractInstance implements Instance {
 
     Battlefield currentRoom;
 
+    @Override
     public abstract Message handleMessage(ActionRequestMessage message);
 
     private static class AbstractInstanceModel {
@@ -48,9 +53,7 @@ public abstract class AbstractInstance implements Instance {
         final Integer level;
         final Integer gameMode;
         final Integer roomsCount;
-        @SuppressWarnings("PublicField")
         final PcgContentFactory factory;
-        @SuppressWarnings("PublicField")
         final List<CharactersParty> squads;
 
         AbstractInstanceModel(@NotNull String name, @NotNull String description,
@@ -68,7 +71,6 @@ public abstract class AbstractInstance implements Instance {
     }
 
     public static class DungeonInstanceModel extends AbstractInstanceModel {
-        @SuppressWarnings("PublicField")
         final Map<Integer, AI.BehaviorFunction> behaviors;
 
         public DungeonInstanceModel(@NotNull String name, @NotNull String description,
@@ -80,7 +82,7 @@ public abstract class AbstractInstance implements Instance {
             this.behaviors = behaviors;
         }
     }
-
+    // CHECKSTYLE:ON
 
     public static class LandInstanceModel extends AbstractInstanceModel {
         public LandInstanceModel(@NotNull String name, @NotNull String description,
@@ -196,14 +198,13 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public List<Long> encodeCurrentRoomMap(){
+    public List<Long> encodeCurrentRoomMap() {
         return currentRoom.encodeMap();
     }
 
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
-    @Nullable
-    private MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
-                                      @NotNull Set<MapNode> occupiedNodes) {
+    private @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
+                                                @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
         }

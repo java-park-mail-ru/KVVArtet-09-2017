@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(GameResourceHolder.class)

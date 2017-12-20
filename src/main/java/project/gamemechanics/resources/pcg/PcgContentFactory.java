@@ -9,6 +9,7 @@ import project.gamemechanics.resources.pcg.npcs.NpcsFactory;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public interface PcgContentFactory {
     EquipableItem makeItem(@NotNull ItemBlueprint blueprint);
 

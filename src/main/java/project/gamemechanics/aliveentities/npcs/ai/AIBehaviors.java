@@ -33,11 +33,11 @@ public final class AIBehaviors {
     }
 
     /**
-     * get an AI behavior by given ID
+     * get an AI behavior by given ID.
      *
      * @param behaviorID ID of the wanted behavior
      * @return null if ID is invalid or {@link AI.BehaviorFunction} registered
-     * under given ID otherwise
+     *     under given ID otherwise
      */
     @SuppressWarnings("unused")
     public static AI.BehaviorFunction getBehavior(Integer behaviorID) {
@@ -47,8 +47,10 @@ public final class AIBehaviors {
     public static Map<Integer, AI.BehaviorFunction> getAllBehaviors() {
         return BEHAVIORS;
     }
-
+    // CHECKSTYLE:OFF
     /* TODO: find a better way to write and put BEHAVIORS in the map that that */
+    // CHECKSTYLE:ON
+
     @SuppressWarnings("OverlyComplexMethod")
     private static Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
         final Map<Integer, AI.BehaviorFunction> behaviorFunctionMap = new HashMap<>();
@@ -162,9 +164,9 @@ public final class AIBehaviors {
                             aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                                     DigitsPairIndices.COL_COORD_INDEX)));
         });
-
+        // CHECKSTYLE:OFF
         /* TODO: write more AIs for monsters and bosses */
-
+        // CHECKSTYLE:ON
         return behaviorFunctionMap;
     }
 
@@ -182,7 +184,9 @@ public final class AIBehaviors {
     private static Integer evaluateAlly(@NotNull AliveEntity ally, @NotNull AliveEntity evaluator) {
         //noinspection UnnecessaryLocalVariable
         final Integer score = 0;
+        // CHECKSTYLE:OFF
         /* TODO: for future use in more complicated AIs */
+        // CHECKSTYLE:ON
         return score;
     }
 
@@ -190,7 +194,9 @@ public final class AIBehaviors {
     private static Integer evaluateEnemy(@NotNull AliveEntity enemy, @NotNull AliveEntity npc) {
         //noinspection UnnecessaryLocalVariable
         final Integer score = 0;
+        // CHECKSTYLE:OFF
         /* TODO: for future use in more complicated AIs */
+        // CHECKSTYLE:ON
         return score;
     }
 

@@ -31,13 +31,13 @@ public class IngameItem implements EquipableItem {
 
     @SuppressWarnings("SameParameterValue")
     public static class ItemModel {
+        // CHECKSTYLE:OFF
         final Integer id;
         final String name;
         final String description;
-        @SuppressWarnings("PublicField")
         final Map<Integer, Property> properties = new HashMap<>();
-        @SuppressWarnings("PublicField")
         final Map<Integer, Affector> affectors = new HashMap<>();
+        // CHECKSTYLE:ON
 
         ItemModel(@NotNull Integer id,
                   @NotNull String name, @NotNull String description,

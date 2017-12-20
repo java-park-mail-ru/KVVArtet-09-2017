@@ -13,7 +13,8 @@ import project.websocket.messages.Message;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-@SuppressWarnings({"UnusedAssignment", "SameParameterValue"})
+
+@SuppressWarnings({"UnusedAssignment", "SameParameterValue", "unused"})
 @Service
 public class ConnectionPoolService {
 
@@ -26,11 +27,11 @@ public class ConnectionPoolService {
     }
 
     public void tick() {
-        for(SmartController smart : sessions.values()){
-            if(smart.isValid()) {
+        for (SmartController smart : sessions.values()) {
+            if (smart.isValid()) {
                 smart.tick();
                 Message response = null;
-                while((response = smart.getOutboxMessage()) != null){
+                while ((response = smart.getOutboxMessage()) != null) {
                     try {
                         this.sendMessageToUser(smart.getOwnerID(), response);
                     } catch (IOException e) {
@@ -59,8 +60,7 @@ public class ConnectionPoolService {
         return sessions.containsKey(userId) && sessions.get(userId).getWebSocketSession().isOpen();
     }
 
-    public void removeUser(@NotNull Integer userId)
-    {
+    public void removeUser(@NotNull Integer userId) {
         connectionPool.addElement(sessions.get(userId));
         sessions.remove(userId);
     }
@@ -68,10 +68,13 @@ public class ConnectionPoolService {
     private void cutDownConnection(@NotNull Integer userId, @NotNull CloseStatus closeStatus) {
         final WebSocketSession webSocketSession = sessions.get(userId).getWebSocketSession();
         if (webSocketSession != null && webSocketSession.isOpen()) {
+            /// CHECKSTYLE:OFF
             try {
                 webSocketSession.close(closeStatus);
             } catch (IOException ignore) {
             }
+            // CHECKSTYLE:ON
+
         }
     }
 

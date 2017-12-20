@@ -17,13 +17,14 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+@SuppressWarnings("RedundantSuppression")
 public class AreaEffectTileset extends MapNodeTileset {
     private final Integer abilityID;
     private final MapNode sender;
     private final List<Effect> effects;
     private final List<Integer> healthAffection;
     private final Set<Integer> affectedCategories;
-
+    // CHECKSTYLE:OFF
     public AreaEffectTileset(@NotNull Integer abilityID, @NotNull MapNode sender, @NotNull MapNode target,
                              @NotNull Integer shape, @NotNull Integer size, @NotNull List<Effect> effects,
                              @NotNull List<Integer> healthAffection, @NotNull Set<Integer> affectedCategories) {
@@ -34,6 +35,7 @@ public class AreaEffectTileset extends MapNodeTileset {
         this.healthAffection = healthAffection;
         this.affectedCategories = affectedCategories;
     }
+    // CHECKSTYLE:ON
 
     @Override
     public void applyEffects(@NotNull List<TurnEvent> events) {
@@ -45,11 +47,13 @@ public class AreaEffectTileset extends MapNodeTileset {
             }
         }
     }
-
-    @SuppressWarnings("ParameterHidesMemberVariable")
+    // CHECKSTYLE:OFF
+    @SuppressWarnings({"ParameterHidesMemberVariable", "OverlyComplexBooleanExpression"})
     private void applyOnInhabitant(@NotNull AliveEntity sender, @NotNull MapNode target,
                                    @NotNull List<TurnEvent> events) {
         //noinspection OverlyComplexBooleanExpression
+        // CHECKSTYLE:ON
+
         if ((affectedCategories.contains(BattlefieldObjectsCategories.BO_ENEMY) && !areOnSameSide(sender,
                 target.getInhabitant())) || (affectedCategories.contains(BattlefieldObjectsCategories.BO_ALLY)
                 && areOnSameSide(sender, target.getInhabitant()))) {
@@ -67,12 +71,14 @@ public class AreaEffectTileset extends MapNodeTileset {
         return Objects.equals(lhs.getProperty(PropertyCategories.PC_SQUAD_ID),
                 rhs.getProperty(PropertyCategories.PC_SQUAD_ID));
     }
-
+    // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     private Integer getAffection(@NotNull AliveEntity sender) {
+        // CHECKSTYLE:ON
+
         final Random random = new Random(System.currentTimeMillis());
-        Integer resultingHealthAffection = healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX) +
-                random.nextInt(healthAffection.get(DigitsPairIndices.MAX_VALUE_INDEX)
+        Integer resultingHealthAffection = healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX)
+                + random.nextInt(healthAffection.get(DigitsPairIndices.MAX_VALUE_INDEX)
                         - healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX));
         final Integer criticalChance = sender.getProperty(PropertyCategories.PC_RATINGS,
                 CharacterRatings.CR_CRITICAL_HIT.asInt());

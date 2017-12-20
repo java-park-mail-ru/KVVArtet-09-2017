@@ -3,6 +3,7 @@ package project.server.dao;
 import project.server.models.User;
 
 import java.util.List;
+
 @SuppressWarnings("unused")
 public interface UserDao {
 

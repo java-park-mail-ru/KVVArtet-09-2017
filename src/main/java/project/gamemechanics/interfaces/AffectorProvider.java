@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public interface AffectorProvider {
     /**
-     * check if entity has an affector
+     * check if entity has an affector.
      *
      * @param affectorKind affector ID
      * @return true if entity has an affector or false otherwise
@@ -17,14 +17,14 @@ public interface AffectorProvider {
     Boolean hasAffector(Integer affectorKind);
 
     /**
-     * get IDs of all entity's affectors
+     * get IDs of all entity's affectors.
      *
      * @return entity's affectors' IDs set.
      */
     Set<Integer> getAvailableAffectors();
 
     /**
-     * get single value from multi-value affector
+     * get single value from multi-value affector.
      *
      * @param affectorKind   affector ID
      * @param affectionIndex value index in affector
@@ -33,7 +33,7 @@ public interface AffectorProvider {
     Integer getAffection(Integer affectorKind, Integer affectionIndex);
 
     /**
-     * get an affector value from single-value or reducable affector
+     * get an affector value from single-value or reducable affector.
      *
      * @param affectorKind affector ID
      * @return affector value

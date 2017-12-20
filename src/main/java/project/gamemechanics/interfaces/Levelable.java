@@ -5,9 +5,10 @@ package project.gamemechanics.interfaces;
  * Allows to ask for entity's current level and implements some
  * level-up logic. Extends {@link GameEntity} interface
  */
+@SuppressWarnings("unused")
 public interface Levelable extends GameEntity {
     /**
-     * get an entity's current level
+     * get an entity's current level.
      *
      * @return entity's current level
      */

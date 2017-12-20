@@ -201,6 +201,7 @@ public class CharactersParty implements Countable {
         return members.keySet();
     }
 
+    @SuppressWarnings("unused")
     private void initMembers() {
         members.put(CharacterRoleIds.CR_TANK, null);
         members.put(CharacterRoleIds.CR_SUPPORT, null);

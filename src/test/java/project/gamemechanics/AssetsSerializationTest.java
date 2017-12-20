@@ -28,7 +28,9 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings({"unused", "InstanceMethodNamingConvention"})
 class AssetsSerializationTest {
+    @SuppressWarnings("unused")
     @Test
     public void itemPartStringSerializationDeserialization() {
         final Map<Integer, Property> testProperty = new HashMap<>();
@@ -80,6 +82,7 @@ class AssetsSerializationTest {
                 deserialized.getProperty(PropertyCategories.PC_LEVEL));
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void itemPartsLoading() {
         final ObjectMapper mapper = new ObjectMapper();
@@ -94,6 +97,7 @@ class AssetsSerializationTest {
         assertNotEquals(testFactory, null);
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void makeRandomItemTest() {
         final ObjectMapper mapper = new ObjectMapper();
@@ -123,6 +127,7 @@ class AssetsSerializationTest {
         }
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void perksTest() {
         final AssetHolder.PerkHolder testHolder = new PerkAssetHolder(ResourcesConfig.getAssetHoldersFileNames()
@@ -133,6 +138,7 @@ class AssetsSerializationTest {
                 .getAvailableAffectors().isEmpty());
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void perkBranchesTest() {
         final AssetHolder.PerkHolder perkHolder = new PerkAssetHolder(ResourcesConfig.getAssetHoldersFileNames()
@@ -145,6 +151,7 @@ class AssetsSerializationTest {
                 .getPerk(0).getAvailableAffectors().isEmpty());
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void characterRacesTest() {
         final AssetHolder.CharacterRaceHolder testHolder = new CharacterRaceAssetHolder(
@@ -152,6 +159,7 @@ class AssetsSerializationTest {
         assertFalse(testHolder.getAllAssets().isEmpty());
     }
 
+    @SuppressWarnings("unused")
     @Test
     public void abilitiesTest() {
         final AssetHolder.AbilityHolder testHolder = new AbilityAssetHolder(

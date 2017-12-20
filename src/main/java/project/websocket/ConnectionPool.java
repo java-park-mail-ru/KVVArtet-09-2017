@@ -19,8 +19,8 @@ public class ConnectionPool implements ObjectivePool.SmartControllersPool {
     }
 
     private void initializeNewElements() {
-        Integer fixedSize = connectionPool.size();
-        for(int i = 0; i < capacity - fixedSize; ++i ) {
+        final Integer fixedSize = connectionPool.size();
+        for (int i = 0; i < capacity - fixedSize; ++i) {
             connectionPool.add(new SmartController());
         }
     }

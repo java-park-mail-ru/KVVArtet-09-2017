@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public abstract class MapNodeTileset implements Tileset {
     private final Set<MapNode> tileset = new HashSet<>();
 

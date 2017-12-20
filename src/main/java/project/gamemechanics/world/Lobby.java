@@ -6,6 +6,7 @@ import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public interface Lobby {
     Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode);
 

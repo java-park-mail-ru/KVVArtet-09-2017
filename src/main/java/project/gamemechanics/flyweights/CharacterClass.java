@@ -25,15 +25,14 @@ public class CharacterClass implements CharacterRole {
     private final Map<Integer, Property> properties;
 
     public static class CharacterClassModel {
+        // CHECKSTYLE:OFF
         public final Integer id;
         final String name;
         final String description;
-        @SuppressWarnings("PublicField")
         final Map<Integer, Ability> abilities;
-        @SuppressWarnings("PublicField")
         final Map<Integer, PerkBranch> branches;
-        @SuppressWarnings("PublicField")
         final Map<Integer, Property> properties;
+        // CHECKSTYLE:ON
 
         public CharacterClassModel(@NotNull Integer id, @NotNull String name,
                                    @NotNull String description, @NotNull Map<Integer, Ability> abilities,

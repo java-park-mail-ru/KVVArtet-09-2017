@@ -6,13 +6,11 @@ import org.slf4j.LoggerFactory;
 import project.gamemechanics.world.World;
 import project.websocket.services.ConnectionPoolService;
 
-class GameExecutor implements Runnable {
+final class GameExecutor implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameExecutor.class);
-    @NotNull
-    private final World world;
-    @NotNull
-    private final ConnectionPoolService connectionPoolService;
+    private final @NotNull World world;
+    private final @NotNull ConnectionPoolService connectionPoolService;
 
     private GameExecutor(@NotNull World world, @NotNull ConnectionPoolService connectionPoolService) {
         this.world = world;
@@ -29,7 +27,7 @@ class GameExecutor implements Runnable {
     }
 
     private void mainCycle() {
-        while(true){
+        while (true) {
             try {
                 connectionPoolService.tick();
                 world.tick();

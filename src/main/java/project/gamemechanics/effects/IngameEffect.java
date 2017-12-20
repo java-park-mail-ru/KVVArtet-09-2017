@@ -23,14 +23,18 @@ public class IngameEffect implements Effect {
 
     private final Map<Integer, Affector> affectors;
 
+    @SuppressWarnings("RedundantSuppression")
     public static class EffectModel {
+        //noinspection VisibilityModifier
+        // CHECKSTYLE:OFF
+        @SuppressWarnings("RedundantSuppression")
         final String name;
         final String description;
 
         final Integer duration;
 
-        @SuppressWarnings("PublicField")
         final Map<Integer, Affector> affectors;
+        // CHECKSTYLE:ON
 
         public EffectModel(@NotNull String name, @NotNull String description,
                            @NotNull Integer duration,

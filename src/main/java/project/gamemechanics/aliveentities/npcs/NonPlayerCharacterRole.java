@@ -23,15 +23,14 @@ public class NonPlayerCharacterRole implements CharacterRole {
     private final Map<Integer, Ability> abilities;
 
     public static class NPCRoleModel {
+        // CHECKSTYLE:OFF
         public final Integer id;
         final String name;
         final String description;
-        @SuppressWarnings("PublicField")
         final Map<Integer, Affector> affectors;
-        @SuppressWarnings("PublicField")
         final List<Integer> behaviorIds;
-        @SuppressWarnings("PublicField")
         final Map<Integer, Ability> abilities;
+        // CHECKSTYLE:ON
 
         public NPCRoleModel(@NotNull Integer id,
                             @NotNull String name, @NotNull String description,

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public final class ItemBlueprint {
     private final Integer dropChance;
     private final Map<Integer, Property> properties;

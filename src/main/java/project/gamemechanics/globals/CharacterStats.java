@@ -1,5 +1,6 @@
 package project.gamemechanics.globals;
 
+@SuppressWarnings("unused")
 public enum CharacterStats {
     CS_ENDURANCE(0, "Endurance"),
     CS_STRENGTH(1, "Strength"),

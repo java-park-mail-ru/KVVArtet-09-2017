@@ -107,7 +107,9 @@ public class LobbyImpl implements Lobby {
                 final AbstractInstance.DungeonInstanceModel newDungeonModel = makePveInstanceModel(parties);
                 final Instance newPveInstance = new DungeonInstance(newDungeonModel);
                 instancesPool.put(newPveInstance.getID(), newPveInstance);
+                // CHECKSTYLE:OFF
                 return new LobbyConfirmationMessage(); /* TODO: change to proper message */
+                // CHECKSTYLE:ON
             }
         }
         for (Integer gameModeId : wipPartiesPool.keySet()) {
@@ -221,11 +223,12 @@ public class LobbyImpl implements Lobby {
             party.removeMember(roleId);
         }
     }
-
+    // CHECKSTYLE:OFF
     private void sendInvitations(@NotNull Instance instance, @NotNull List<CharactersParty> parties) {
         final Message invitation = new LobbyConfirmationMessage(); /* TODO: change on something more correct */
+        // CHECKSTYLE:ON
         final List<Integer> notifiedUsersList = new ArrayList<>();
-        for(CharactersParty matchedParty : parties) {
+        for (CharactersParty matchedParty : parties) {
             for (Integer roleId : matchedParty.getRoleIds()) {
                 if (!notifiedUsersList.contains(matchedParty.getMember(roleId)
                         .getProperty(PropertyCategories.PC_OWNER_ID))) {

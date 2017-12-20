@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @see GameEntity
  * @see EquipableItem
  */
-@SuppressWarnings({"NewClassNamingConvention", "UnusedReturnValue"})
+@SuppressWarnings({"UnusedReturnValue", "InterfaceNamingConvention", "unused"})
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(StorageBag.class),
@@ -23,21 +23,21 @@ import javax.validation.constraints.NotNull;
 })
 public interface Bag extends GameEntity {
     /**
-     * get total slots count
+     * get total slots count.
      *
      * @return slots number in the bag
      */
     Integer getSlotsCount();
 
     /**
-     * get free slots number
+     * get free slots number.
      *
      * @return free slots count
      */
     Integer getFreeSlotsCount();
 
     /**
-     * swap two slots inside single bag
+     * swap two slots inside single bag.
      *
      * @param fromPos first slot's index
      * @param toPos   second slot's index
@@ -46,7 +46,7 @@ public interface Bag extends GameEntity {
     Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos);
 
     /**
-     * swap two slots in different bag
+     * swap two slots in different bag.
      *
      * @param fromPos index of first slot to swap (in this bag)
      * @param toBag   bag to swap slots with
@@ -56,7 +56,7 @@ public interface Bag extends GameEntity {
     Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos);
 
     /**
-     * put a new item in the bag
+     * put a new item in the bag.
      *
      * @param item new item to put in the bag
      * @return true if there're free slots in the bag or false otherwise
@@ -65,7 +65,7 @@ public interface Bag extends GameEntity {
     Boolean addItem(@NotNull EquipableItem item);
 
     /**
-     * put a new item  in the concrete slot
+     * put a new item  in the concrete slot.
      *
      * @param item  new item to put in the bag
      * @param toPos slot index to put new item in
@@ -75,7 +75,7 @@ public interface Bag extends GameEntity {
     Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos);
 
     /**
-     * remove the item from the bag
+     * remove the item from the bag.
      *
      * @param fromPos     slot index to remove item from
      * @param isConfirmed is operation confirmed by the user
@@ -84,11 +84,11 @@ public interface Bag extends GameEntity {
     void throwAway(@NotNull Integer fromPos, @NotNull Boolean isConfirmed);
 
     /**
-     * get the item from the bag by slot index
+     * get the item from the bag by slot index.
      *
      * @param itemIndex slot index to get the item from
      * @return null if index is invalid or slot's contents
-     * (null if the slot's empty or {@link EquipableItem} otherwise)
+     *     (null if the slot's empty or {@link EquipableItem} otherwise)
      * @see EquipableItem
      */
     EquipableItem getItem(@NotNull Integer itemIndex);

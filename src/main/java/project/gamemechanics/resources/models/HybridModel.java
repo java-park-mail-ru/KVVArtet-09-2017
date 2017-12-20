@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class HybridModel extends AbstractModel {
     private final Map<Integer, Property> properties = new HashMap<>();
     private final Map<Integer, Affector> affectors = new HashMap<>();

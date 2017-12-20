@@ -6,7 +6,7 @@ import project.gamemechanics.resources.models.InstanceNameDescription;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-class InstanceNameDescriptionAssetHolder extends AbstractAssetHolder<InstanceNameDescription>
+public class InstanceNameDescriptionAssetHolder extends AbstractAssetHolder<InstanceNameDescription>
         implements AssetHolder.InstanceNameDescriptionHolder {
     public InstanceNameDescriptionAssetHolder(
             @JsonProperty("assets") @NotNull Map<Integer, InstanceNameDescription> assets) {

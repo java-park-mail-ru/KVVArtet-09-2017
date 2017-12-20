@@ -7,7 +7,8 @@ import project.gamemechanics.interfaces.AliveEntity;
 import java.util.Deque;
 import java.util.List;
 
-class NextRoomResponseMessage extends Message {
+@SuppressWarnings("unused")
+public class NextRoomResponseMessage extends Message {
     private final BattleMap map;
     private final Deque<AliveEntity> battlersQueue;
     private final List<ActionResult> battleLog;

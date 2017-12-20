@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.actionresults.events;
 
+@SuppressWarnings("unused")
 public class EndTurnEvent implements TurnEvent {
 
     @Override

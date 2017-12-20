@@ -2,6 +2,7 @@ package project.gamemechanics.globals;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public enum ItemRarity {
     IR_UNDEFINED(Constants.UNDEFINED_ID, 0, "undefined"),
     IR_TRASH(0, Constants.WIDE_PERCENTAGE_CAP_INT, "Trash"),

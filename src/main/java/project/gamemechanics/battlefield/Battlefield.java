@@ -30,6 +30,7 @@ import project.websocket.messages.Message;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Battlefield implements Updateable {
     private static final int SQUADS_COUNT = 2;
 
@@ -44,7 +45,6 @@ public class Battlefield implements Updateable {
     private final Map<Integer, AI.BehaviorFunction> behaviors;
 
     private final BattleMap map;
-    @SuppressWarnings("FieldCanBeLocal")
     private final Pathfinder pathfinder;
 
     private final List<Squad> squads = new ArrayList<>(SQUADS_COUNT);
@@ -64,15 +64,13 @@ public class Battlefield implements Updateable {
     private final Integer mode;
 
     public static class BattlefieldModel {
-        @SuppressWarnings("PublicField")
+        // CHECKSTYLE:OFF
         final Map<Integer, AI.BehaviorFunction> behaviors;
-        @SuppressWarnings("PublicField")
         final BattleMap map;
-        @SuppressWarnings("PublicField")
         final List<SpawnPoint> spawnPoints;
-        @SuppressWarnings("PublicField")
         final ItemsFactory itemsGenerator;
         final Integer mode;
+        // CHECKSTYLE:ON
 
         public BattlefieldModel(@Nullable Map<Integer, AI.BehaviorFunction> behaviors, @NotNull BattleMap map,
                                 @NotNull List<SpawnPoint> spawnPoints, @NotNull ItemsFactory itemsGenerator,
@@ -205,9 +203,9 @@ public class Battlefield implements Updateable {
 
     @SuppressWarnings({"SameReturnValue", "ConstantConditions"})
     public Message pushAction(ActionRequestMessage message) {
-        MapNode senderTile = map.getTile(message.getSender().getCoordinate(0), message.getSender().getCoordinate(1));
-        if(senderTile.isOccupied() && senderTile != null){
-            BattleAction battleAction = new BattleAction(message.getSender(), message.getTarget(), message.getAbility(), pathfinder);
+        final MapNode senderTile = map.getTile(message.getSender().getCoordinate(0), message.getSender().getCoordinate(1));
+        if (senderTile.isOccupied() && senderTile != null) {
+            final BattleAction battleAction = new BattleAction(message.getSender(), message.getTarget(), message.getAbility(), pathfinder);
             pushAction(battleAction);
             return new ActionConfirmationMessage("Action delivered");
         } else {

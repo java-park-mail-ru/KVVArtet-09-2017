@@ -17,11 +17,12 @@ public class CharacterRace implements GameEntity, AffectorProvider {
     private final Map<Integer, Affector> affectors;
 
     public static class CharacterRaceModel {
+        // CHECKSTYLE:OFF
         public final Integer id;
         final String name;
         final String description;
-        @SuppressWarnings("PublicField")
         final Map<Integer, Affector> affectors;
+        // CHECKSTYLE:ON
 
         public CharacterRaceModel(@NotNull Integer id,
                                   @NotNull String name, @NotNull String description,

@@ -10,7 +10,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("PublicField")
+@SuppressWarnings({"PublicField", "unused"})
+// CHECKSTYLE:OFF
 public class AggregatedAbilityAction {
     public final MapNode sender;
     public final MapNode target;
@@ -18,7 +19,7 @@ public class AggregatedAbilityAction {
     public final Map<Integer, Affector> abilityAffectors;
     public final Map<Integer, Property> abilityProperties;
     public final List<IngameEffect.EffectModel> abilityEffects;
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"WeakerAccess"})
     public final PathfindingAlgorithm pathfinder;
 
     public AggregatedAbilityAction(@NotNull MapNode sender, @NotNull MapNode target, @NotNull Integer abilityID,
@@ -35,3 +36,4 @@ public class AggregatedAbilityAction {
         this.pathfinder = pathfinder;
     }
 }
+// CHECKSTYLE:ON

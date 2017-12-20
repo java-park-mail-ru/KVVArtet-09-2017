@@ -12,7 +12,6 @@ import project.gamemechanics.globals.ItemRarity;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.resources.assets.AssetProvider;
-import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemFactoryImpl;
 import project.gamemechanics.resources.pcg.items.ItemPart;
@@ -27,6 +26,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("OverlyBroadCatchBlock")
 public class PcgFactory implements PcgContentFactory {
     private ItemsFactory itemsFactory = null;
     private NpcsFactory npcsFactory = null;
@@ -54,6 +54,7 @@ public class PcgFactory implements PcgContentFactory {
     public EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
         return itemsFactory.makeItem(blueprint);
     }
+
     @Override
     public EquipableItem makeItem(@NotNull Integer level) {
         final Map<Integer, Integer> parts = new HashMap<>();

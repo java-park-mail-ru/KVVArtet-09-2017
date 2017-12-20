@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class BasicModel extends AbstractModel {
     private final Map<Integer, Property> properties;
     private final Map<Integer, Affector> affectors;

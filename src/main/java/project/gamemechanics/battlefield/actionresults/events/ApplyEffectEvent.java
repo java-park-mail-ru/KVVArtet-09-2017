@@ -25,6 +25,7 @@ public class ApplyEffectEvent implements TurnEvent {
         return where;
     }
 
+    @SuppressWarnings("unused")
     @JsonProperty("effect")
     public Effect getAppliedEffect() {
         return appliedEffect;

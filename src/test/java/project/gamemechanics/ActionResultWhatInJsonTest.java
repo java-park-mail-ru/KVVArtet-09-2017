@@ -35,20 +35,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+@SuppressWarnings({"MagicNumber", "RedundantSuppression"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
 class ActionResultWhatInJsonTest {
     @Autowired
     private UserDao dao;
+    @SuppressWarnings({"unused", "ConstantConditions"})
     @Test
     public void actionResultInJson() {
         final User newUser1 = new User("testname1", "testemail1@mail.ru", "testpassword");
         final User user1 = dao.setUser(newUser1);
         final User newUser2 = new User("testname2", "testemail2@mail.ru", "testpassword");
         final User user2 = dao.setUser(newUser2);
-
-        final Map<Integer, Property> propertys= new HashMap<>();
 
         final List<Bag> mockBags = new ArrayList<>();
         final StorageBag.EmptyBagModel emptyBagModel = new StorageBag.EmptyBagModel("testbag", "something inside", 10);
@@ -57,8 +57,9 @@ class ActionResultWhatInJsonTest {
 
         final Map<Integer, Ability> abilityMap = new HashMap<>();
         final Map<Integer, PerkBranch> perkBranchMap = new HashMap<>();
+        final Map<Integer, Property> propertys = new HashMap<>();
         final CharacterClass.CharacterClassModel class1 = new CharacterClass.CharacterClassModel(0, "Warrior", "Cool man", abilityMap, perkBranchMap, propertys);
-        CharacterClass characterClass = new CharacterClass(class1);
+        final CharacterClass characterClass = new CharacterClass(class1);
 
         final Map<Integer, Affector> affectorMap = new HashMap<>();
         final CharacterRace.CharacterRaceModel humanModel = new CharacterRace.CharacterRaceModel(0, "Human", "Humans better then everyone. Always.", affectorMap);

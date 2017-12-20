@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("UnusedAssignment")
+@SuppressWarnings({"UnusedAssignment", "RedundantSuppression"})
 public class StorageBag implements Bag {
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer bagID;
@@ -22,9 +22,11 @@ public class StorageBag implements Bag {
     private final List<EquipableItem> contents;
 
     public static class EmptyBagModel {
+        // CHECKSTYLE:OFF
         final String name;
         final String description;
         final Integer bagSize;
+        // CHECKSTYLE:ON
 
         public EmptyBagModel(@NotNull String name, @NotNull String description, @NotNull Integer bagSize) {
             this.name = name;
@@ -33,12 +35,14 @@ public class StorageBag implements Bag {
         }
     }
 
-    static class FilledBagModel {
+    @SuppressWarnings("unused")
+    public static class FilledBagModel {
+        // CHECKSTYLE:OFF
         final Integer id;
         final String name;
         final String description;
-        @SuppressWarnings("PublicField")
         final List<EquipableItem> contents;
+        // CHECKSTYLE:ON
 
         public FilledBagModel(@NotNull Integer id, @NotNull String name,
                               @NotNull String description, @NotNull List<EquipableItem> contents) {
@@ -158,6 +162,7 @@ public class StorageBag implements Bag {
         contents.set(fromPos, null);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public EquipableItem getItem(@NotNull Integer itemIndex) {
         if (itemIndex < 0 || itemIndex >= contents.size()) {

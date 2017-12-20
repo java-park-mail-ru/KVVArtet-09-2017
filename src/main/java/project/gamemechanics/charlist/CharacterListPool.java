@@ -1,6 +1,6 @@
 package project.gamemechanics.charlist;
 
-@SuppressWarnings("EmptyMethod")
+@SuppressWarnings({"EmptyMethod", "unused"})
 interface CharacterListPool {
 
     CharacterList getCharacterList(Integer ownerID);

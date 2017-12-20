@@ -8,16 +8,17 @@ import project.websocket.messages.Message;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+
+@SuppressWarnings("unused")
 @Component
 public class CreateCharacterRequestHandler extends MessageHandler<CreateCharacterRequestMessage> {
 
     @SuppressWarnings("FieldCanBeLocal")
-    @NotNull
-    private final World world;
-    @NotNull
-    private final CharacterListState characterListState;
+    private final @NotNull World world;
+    private final @NotNull CharacterListState characterListState;
 
-    public CreateCharacterRequestHandler(@NotNull World world, @NotNull CharacterListState characterListState) {
+    public CreateCharacterRequestHandler(@NotNull World world,
+                                         @NotNull CharacterListState characterListState) {
         super(CreateCharacterRequestMessage.class);
         this.world = world;
         this.characterListState = characterListState;

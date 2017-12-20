@@ -1,6 +1,7 @@
 package project.websocket.handlers;
 
-class HandleException extends Exception {
+@SuppressWarnings("unused")
+public class HandleException extends Exception {
     public HandleException(String message, Throwable cause) {
         super(message, cause);
     }

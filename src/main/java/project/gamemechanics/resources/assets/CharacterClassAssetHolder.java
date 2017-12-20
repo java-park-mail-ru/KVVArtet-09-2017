@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
+@SuppressWarnings("ConstantConditions")
+public class CharacterClassAssetHolder extends AbstractAssetHolder<CharacterRole>
         implements AssetHolder.CharacterClassHolder {
     public CharacterClassAssetHolder(@NotNull String fileName, @NotNull Map<Integer, Ability> abilities,
                                      @NotNull Map<Integer, PerkBranch> perkBranches) {
