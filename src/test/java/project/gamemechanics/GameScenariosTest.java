@@ -1,12 +1,22 @@
 package project.gamemechanics;
 
 import org.junit.Test;
+import project.gamemechanics.aliveentities.helpers.CashCalculator;
+import project.gamemechanics.aliveentities.helpers.ExperienceCalculator;
+import project.gamemechanics.battlefield.actionresults.ActionResult;
+import project.gamemechanics.battlefield.actionresults.events.EventCategories;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
+import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.battlefield.map.BattleMapGenerator;
+import project.gamemechanics.battlefield.map.actions.BattleAction;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
+import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.interfaces.Action;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.interfaces.MapNode;
 import project.gamemechanics.items.loot.PendingLootPool;
 import project.gamemechanics.items.loot.PendingLootPoolImpl;
 import project.gamemechanics.resources.assets.AssetProvider;
@@ -16,6 +26,7 @@ import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
 import project.gamemechanics.world.config.ResourcesConfig;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.Assert.*;
@@ -73,8 +84,10 @@ public class GameScenariosTest {
                 .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
 
         final CharactersParty party = new CharactersParty(lootPool);
-        party.addMember(firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE), firstUserCharacter);
-        party.addMember(secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE), secondUserCharacter);
+        assertTrue(party.addMember(firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE),
+                firstUserCharacter));
+        assertTrue(party.addMember(secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE),
+                secondUserCharacter));
 
         final Squad squad = party.toSquad();
         assertEquals(squad.getSquadID().intValue(), Squad.PLAYERS_SQUAD_ID);
@@ -138,5 +151,114 @@ public class GameScenariosTest {
             secondCharTotalSlotsCount += secondUserCharacter.getBag(i).getSlotsCount();
         }
         assertEquals(secondCharTotalSlotsCount - secondCharFreeSlotsCount, 0);
+    }
+
+    @Test
+    public void partyTwoTanksJoinTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+        final PendingLootPool lootPool = new PendingLootPoolImpl();
+
+        final AliveEntity firstUserCharacter = dummiesFactory.makeNewDummy(0, "warrior", "");
+        assertNotEquals(null, firstUserCharacter );
+        assertEquals(Constants.UNDEFINED_ID, Objects.requireNonNull(firstUserCharacter)
+                .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
+        final AliveEntity secondUserCharacter = dummiesFactory.makeNewDummy(0, "mage", "");
+        assertNotEquals(null, secondUserCharacter );
+        assertEquals(Constants.UNDEFINED_ID, Objects.requireNonNull(secondUserCharacter)
+                .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
+
+        final CharactersParty party = new CharactersParty(lootPool);
+        assertTrue(party.addMember(firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE),
+                firstUserCharacter));
+        assertFalse(party.addMember(secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE),
+                secondUserCharacter));
+    }
+
+    @Test
+    public void partyTwoDamagersJoinTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+        final PendingLootPool lootPool = new PendingLootPoolImpl();
+
+        final AliveEntity firstUserCharacter = dummiesFactory.makeNewDummy(1, "warrior", "");
+        assertNotEquals(null, firstUserCharacter );
+        assertEquals(Constants.UNDEFINED_ID, Objects.requireNonNull(firstUserCharacter)
+                .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
+        final AliveEntity secondUserCharacter = dummiesFactory.makeNewDummy(1, "mage", "");
+        assertNotEquals(null, secondUserCharacter );
+        assertEquals(Constants.UNDEFINED_ID, Objects.requireNonNull(secondUserCharacter)
+                .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
+
+        final CharactersParty party = new CharactersParty(lootPool);
+        assertTrue(party.addMember(firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE),
+                firstUserCharacter));
+        assertTrue(party.addMember(secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE),
+                secondUserCharacter));
+    }
+
+    @Test
+    public void mapGenerationTest() {
+        final int passableTilesCount = 16;
+        final List<List<MapNode>> tiles = BattleMapGenerator.generateBattleMap(4, 4, passableTilesCount);
+        Integer passableTiles = 0;
+        for (List<MapNode> mapRow : tiles) {
+            for (MapNode tile : mapRow) {
+                if (tile.getIsPassable()) {
+                    ++passableTiles;
+                }
+            }
+        }
+        assertEquals(passableTilesCount, passableTiles.intValue());
+    }
+
+    @Test
+    public void oneVsOneBattleTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+        final PcgContentFactory factory = new PcgFactory(ResourcesConfig.getItemPartsFilename(),
+                ResourcesConfig.getNpcPartsFilename(), assets);
+
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        assertEquals(sideSize, map.getSize().get(0).intValue());
+        assertEquals(sideSize, map.getSize().get(1).intValue());
+
+        final AliveEntity warrior = dummiesFactory.makeNewDummy(0, "warrior", "");
+        assertNotNull(warrior);
+
+        final MapNode warriorTile = map.getTile(sideSize / 2, sideSize / 2 - 1);
+        warriorTile.occupy(warrior);
+        assertTrue(warriorTile.isOccupied());
+
+        final AliveEntity monster = factory.makeNpc(Constants.START_LEVEL);
+        final Integer monsterCurrentHealth = 1;
+        monster.setProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX,
+                monsterCurrentHealth);
+        final MapNode monsterTile = map.getTile(sideSize / 2, sideSize / 2);
+        monsterTile.occupy(monster);
+        assertTrue(monsterTile.isOccupied());
+
+        final Integer xpReward = ExperienceCalculator.getXPReward(warrior.getLevel(), monster.getLevel());
+        final Integer goldReward = CashCalculator.getCashReward(monster.getLevel());
+
+        final Action warriorAttack = new BattleAction(warriorTile, monsterTile,
+                warrior.getAbility(0), null);
+        final ActionResult attackResult = warriorAttack.execute();
+        if (!monster.isAlive()) {
+            warrior.modifyPropertyByAddition(PropertyCategories.PC_XP_POINTS,
+                    DigitsPairIndices.CURRENT_VALUE_INDEX, xpReward);
+            warrior.modifyPropertyByAddition(PropertyCategories.PC_CASH_AMOUNT, goldReward);
+        }
+        assertFalse(monster.isAlive());
+        assertEquals(xpReward, warrior.getProperty(PropertyCategories.PC_XP_POINTS,
+                DigitsPairIndices.CURRENT_VALUE_INDEX));
+        assertEquals(goldReward, warrior.getProperty(PropertyCategories.PC_CASH_AMOUNT));
+
+        assertFalse(attackResult.getEventsCount() == 0);
+        assertTrue(attackResult.getEvent(0).getEventKind() == EventCategories.EC_HITPOINTS_CHANGE);
+        assertTrue(Math.abs(attackResult.getEvent(0).getAmount()) > monsterCurrentHealth);
     }
 }

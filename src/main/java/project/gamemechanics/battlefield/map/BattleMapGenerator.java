@@ -19,26 +19,31 @@ public final class BattleMapGenerator {
         final List<Integer> mapSize = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         mapSize.add(DigitsPairIndices.ROW_COORD_INDEX, height);
         mapSize.add(DigitsPairIndices.COL_COORD_INDEX, width);
-        final List<List<MapNode>> map = new ArrayList<>(height);
-        for (Integer i = 0; i < map.size(); ++i) {
-            map.add(i, new ArrayList<>(width));
-            for (Integer j = 0; j < map.get(i).size(); ++j) {
-                map.get(i).add(j, new Tile(i, j));
+        final List<List<MapNode>> map = new ArrayList<>();
+        for (Integer i = 0; i < height; ++i) {
+            map.add(i, new ArrayList<>());
+            for (Integer j = 0; j < width; ++j) {
+                map.get(i).add(new Tile(i, j));
             }
         }
-        final List<Integer> coords = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        final List<Integer> coords = new ArrayList<>();
+        for (Integer i = 0; i < DigitsPairIndices.PAIR_SIZE; ++i) {
+            coords.add(0);
+        }
         final Random random = new Random(System.currentTimeMillis());
-        coords.add(DigitsPairIndices.ROW_COORD_INDEX, random.nextInt() % height);
-        coords.add(DigitsPairIndices.COL_COORD_INDEX, random.nextInt() % width);
-        map.get(coords.get(DigitsPairIndices.ROW_COORD_INDEX)).get(DigitsPairIndices.COL_COORD_INDEX).setIsPassable(true);
+        coords.set(DigitsPairIndices.ROW_COORD_INDEX, random.nextInt(height));
+        coords.set(DigitsPairIndices.COL_COORD_INDEX, random.nextInt(width));
+        map.get(coords.get(DigitsPairIndices.ROW_COORD_INDEX))
+                .get(DigitsPairIndices.COL_COORD_INDEX).setIsPassable(true);
         Integer tilesMadePassable = 1;
+
         while (tilesMadePassable < passableTilesCount) {
             Integer direction = Directions.DIRECTIONS_COUNT;
             while (!isDirectionValid(coords, mapSize, direction)) {
-                direction = random.nextInt() % Directions.DIRECTIONS_COUNT;
+                direction = random.nextInt(Directions.DIRECTIONS_COUNT);
             }
             final List<Integer> movement = MOVEMENTS_MAP.get(direction);
-            for (Integer i = 0; i < coords.size(); ++i) {
+            for (Integer i = 0; i < DigitsPairIndices.PAIR_SIZE; ++i) {
                 coords.set(i, coords.get(i) + movement.get(i));
             }
             if (!map.get(coords.get(DigitsPairIndices.ROW_COORD_INDEX))
@@ -48,13 +53,12 @@ public final class BattleMapGenerator {
                 ++tilesMadePassable;
             }
         }
-
         setAdjacencies(map);
-
         return map;
     }
 
-    private static Boolean isDirectionValid(List<Integer> coords, List<Integer> mapSize, Integer direction) {
+    private static Boolean isDirectionValid(@NotNull List<Integer> coords, @NotNull List<Integer> mapSize,
+                                            @NotNull Integer direction) {
         switch (direction) {
             case Directions.UP:
                 return coords.get(DigitsPairIndices.COL_COORD_INDEX) > 0;

@@ -67,14 +67,14 @@ public class Tile implements MapNode {
     @Override
     @JsonIgnore
     public Boolean isOccupied() {
-        return inhabitant == null;
+        return inhabitant != null;
     }
 
     @Override
     public Boolean occupy(@NotNull AliveEntity stander) {
         Boolean isSuccessful = true;
-        if (this.inhabitant == null) {
-            this.inhabitant = stander;
+        if (inhabitant == null) {
+            inhabitant = stander;
             if (stander.hasProperty(PropertyCategories.PC_COORDINATES)) {
                 stander.setProperty(PropertyCategories.PC_COORDINATES, coordinates);
             } else {
@@ -118,7 +118,7 @@ public class Tile implements MapNode {
     public void setAdjacentTiles(@NotNull List<MapNode> adjacencyList) {
         Integer adjacencyIndex = Directions.UP;
         for (MapNode tile : adjacencyList) {
-            adjacentTiles.set(adjacencyIndex++, tile);
+            adjacentTiles.add(adjacencyIndex++, tile);
             if (adjacencyIndex == Directions.DIRECTIONS_COUNT) {
                 break;
             }

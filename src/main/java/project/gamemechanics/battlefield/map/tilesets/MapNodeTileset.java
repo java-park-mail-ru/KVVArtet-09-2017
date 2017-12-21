@@ -252,7 +252,7 @@ public abstract class MapNodeTileset implements Tileset {
         }
         final List<Integer> coordinatesDiff = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         for (Integer i = DigitsPairIndices.ROW_COORD_INDEX; i < DigitsPairIndices.PAIR_SIZE; ++i) {
-            coordinatesDiff.set(i, target.getCoordinate(i) - sender.getCoordinate(i));
+            coordinatesDiff.add(i, target.getCoordinate(i) - sender.getCoordinate(i));
         }
         final Integer majorDiffIndex = coordinatesDiff.get(DigitsPairIndices.ROW_COORD_INDEX)
                 >= coordinatesDiff.get(DigitsPairIndices.COL_COORD_INDEX) ? DigitsPairIndices.ROW_COORD_INDEX

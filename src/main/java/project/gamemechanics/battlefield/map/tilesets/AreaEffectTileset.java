@@ -78,8 +78,8 @@ public class AreaEffectTileset extends MapNodeTileset {
 
         final Random random = new Random(System.currentTimeMillis());
         Integer resultingHealthAffection = healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX)
-                + random.nextInt(healthAffection.get(DigitsPairIndices.MAX_VALUE_INDEX)
-                        - healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX));
+                + random.nextInt(Math.abs(healthAffection.get(DigitsPairIndices.MAX_VALUE_INDEX)
+                        - healthAffection.get(DigitsPairIndices.MIN_VALUE_INDEX))) * -1;
         final Integer criticalChance = sender.getProperty(PropertyCategories.PC_RATINGS,
                 CharacterRatings.CR_CRITICAL_HIT.asInt());
         if (random.nextInt(Constants.PERCENTAGE_CAP_INT) < criticalChance) {
