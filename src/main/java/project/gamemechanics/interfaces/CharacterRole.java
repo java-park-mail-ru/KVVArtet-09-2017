@@ -3,11 +3,11 @@ package project.gamemechanics.interfaces;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.npcs.NonPlayerCharacterRole;
 import project.gamemechanics.flyweights.CharacterClass;
 import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.globals.Constants;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -162,6 +162,20 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
 
     @JsonIgnore
     default @Nullable Set<Integer> getEquipableKinds() {
+        return null;
+    }
+
+    @JsonIgnore
+    default @Nullable Set<Integer> getPerkBranchesIds() {
+        return null;
+    }
+
+    default @Nullable Set<Integer> getBranchPerksIds(@NotNull Integer branchId) {
+        return null;
+    }
+
+    @JsonIgnore
+    default @Nullable Set<Integer> getAvailableRoles() {
         return null;
     }
 }

@@ -1,10 +1,13 @@
 package project.gamemechanics.flyweights;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import project.gamemechanics.interfaces.GameEntity;
 import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("RedundantSuppression")
 public class PerkBranch implements GameEntity {
@@ -65,5 +68,14 @@ public class PerkBranch implements GameEntity {
             return null;
         }
         return perks.get(perkIndex);
+    }
+
+    @JsonIgnore
+    public Set<Integer> getPerkIds() {
+        final Set<Integer> perkIds = new HashSet<>();
+        for (Perk perk : perks) {
+            perkIds.add(perk.getID());
+        }
+        return perkIds;
     }
 }

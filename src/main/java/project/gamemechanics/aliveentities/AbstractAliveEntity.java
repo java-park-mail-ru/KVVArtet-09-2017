@@ -1,6 +1,7 @@
 package project.gamemechanics.aliveentities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.AffectorCategories;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
@@ -9,7 +10,6 @@ import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.interfaces.*;
 import project.gamemechanics.items.containers.CharacterDoll;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -298,7 +298,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
 
     @Override
     public @Nullable Bag getBag(@NotNull Integer bagIndex) {
-        if (bagIndex < 0 || bagIndex > bags.size()) {
+        if (bagIndex < 0 || bagIndex >= bags.size()) {
             return null;
         }
         return bags.get(bagIndex);

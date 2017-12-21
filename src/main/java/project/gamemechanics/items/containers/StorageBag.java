@@ -58,6 +58,9 @@ public class StorageBag implements Bag {
         name = model.name;
         description = model.description;
         contents = new ArrayList<>(model.bagSize);
+        for (Integer i = 0; i < model.bagSize; ++i) {
+            contents.add(null);
+        }
     }
 
     public StorageBag(@NotNull FilledBagModel model) {
