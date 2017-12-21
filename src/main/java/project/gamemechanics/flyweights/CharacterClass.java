@@ -1,13 +1,13 @@
 package project.gamemechanics.flyweights;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.CharacterRole;
 import project.gamemechanics.interfaces.Perk;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
@@ -125,5 +125,22 @@ public class CharacterClass implements CharacterRole {
             return null;
         }
         return availableEquipmentProperty.getPropertySet();
+    }
+
+    @Override
+    @JsonIgnore
+    public @Nullable Set<Integer> getPerkBranchesIds() {
+        return branches.keySet();
+    }
+
+    @Override
+    public @Nullable Set<Integer> getBranchPerksIds(@NotNull Integer branchId) {
+        return branches.containsKey(branchId) ? branches.get(branchId).getPerkIds() : null;
+    }
+
+    @Override
+    @JsonIgnore
+    public @Nullable Set<Integer> getAvailableRoles() {
+        return properties.get(PropertyCategories.PC_AVAILABLE_ROLES).getPropertySet();
     }
 }

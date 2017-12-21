@@ -1,0 +1,72 @@
+{
+  "properties" : {
+    "1" : {
+      "type" : "ListProperty",
+      "properties" : [4, 4, 4, 4]
+    },
+    "2" : {
+      "type" : "ListProperty",
+      "properties" : [5, 2, 0]
+    },
+    "3" : {
+      "type" : "ListProperty",
+      "properties" : [100, 100]
+    },
+    "4" : {
+      "type" : "ListProperty",
+      "properties" : [0, 100]
+    },
+    "5" : {
+      "type" : "SingleValueProperty",
+      "property" : 0
+    },
+    "6" : {
+      "type" : "ListProperty",
+      "properties" : [-20, -35]
+    },
+    "7" : {
+      "type" : "SingleValueProperty",
+      "property" : 15
+    },
+    "8" : {
+      "type" : "SingleValueProperty",
+      "property" : 1
+    },
+    "10" : {
+      "type" : "SingleValueProperty",
+      "property" : 10
+    },
+    "11" : {
+      "type" : "SingleValueProperty",
+      "property" : 4
+    },
+    "17" : {
+      "type" : "SingleValueProperty",
+      "property" : -1
+    },
+    "18" : {
+      "type" : "SingleValueProperty",
+      "property" : 0
+    },
+    "19" : {
+      "type" : "SingleValueProperty",
+      "property" : 0
+    },
+    "28" : {
+      "type" : "SingleValueProperty",
+      "property" : 0
+    },
+    "30" : {
+      "type" : "SingleValueProperty",
+      "property" : -1
+    },
+    "31" : {
+      "type" : "SingleValueProperty",
+      "property" : -1
+    },
+    "34" : {
+      "type" : "ListProperty",
+      "properties" : [0, 0, 0, 0, 0, 0, 0]
+    }
+  }
+}

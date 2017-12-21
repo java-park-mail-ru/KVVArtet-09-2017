@@ -7,8 +7,11 @@ import java.util.List;
 
 public final class ResourcesConfig {
     private static final List<String> ASSET_HOLDERS_FILE_NAMES = initAssetHoldersFileNames();
+
     private static final String NPC_PARTS_FILENAME = "npcParts.json";
     private static final String ITEM_PARTS_FILENAME = "itemParts.json";
+
+    private static final String NEW_CHARACTER_PROPS = "newCharacterResource.json";
 
     private ResourcesConfig() {
     }
@@ -40,5 +43,9 @@ public final class ResourcesConfig {
 
     public static String getItemPartsFilename() {
         return ITEM_PARTS_FILENAME;
+    }
+
+    public static String getNewCharacterPropsName() {
+        return NEW_CHARACTER_PROPS;
     }
 }
