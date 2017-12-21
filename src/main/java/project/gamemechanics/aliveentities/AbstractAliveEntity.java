@@ -150,8 +150,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             final Random random = new Random(System.currentTimeMillis());
             final List<Integer> damage = properties.get(propertyKind).getPropertyList();
             return damage.get(DigitsPairIndices.MIN_VALUE_INDEX)
-                    + random.nextInt(damage.get(DigitsPairIndices.MAX_VALUE_INDEX)
-                    - damage.get(DigitsPairIndices.MIN_VALUE_INDEX));
+                    + random.nextInt(Math.abs(damage.get(DigitsPairIndices.MAX_VALUE_INDEX)
+                    - damage.get(DigitsPairIndices.MIN_VALUE_INDEX))) * -1;
         }
         return properties.get(propertyKind).getProperty();
     }

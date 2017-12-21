@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.map.actions;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.actionresults.BattleActionResult;
 import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
@@ -17,7 +18,7 @@ public class BattleAction extends AbstractAction {
     private final PathfindingAlgorithm pathfinder;
 
     public BattleAction(@NotNull MapNode sender, @NotNull MapNode target,
-                        @NotNull Ability ability, PathfindingAlgorithm pathfinder) {
+                        @NotNull Ability ability, @Nullable PathfindingAlgorithm pathfinder) {
         this.sender = sender;
         this.target = target;
         this.ability = ability;
