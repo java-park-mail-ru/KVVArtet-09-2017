@@ -1,0 +1,525 @@
+{
+  "type" : "GameResourceHolder",
+  "resources" : {
+    "0" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 0,
+      "name" : "Swing",
+      "description" : "Strikes enemy with the equipped weapon",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-15, -20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "1" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 1,
+      "name" : "Shield bash",
+      "description" : "Bash single enemy with the shield",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 2
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-15, -20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "2" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 2,
+      "name" : "Heavy blow",
+      "description" : "Deals double damage to one enemy",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 3
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-30, -40]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "3" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 3,
+      "name" : "Magical charge",
+      "description" : "Shots relatively weak bolt that hits single enemy",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-10, -20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "4" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 4,
+      "name" : "Thunderbolt",
+      "description" : "Sends an electic charge that makes double damage to the enemy",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 2
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-20, -40]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "5" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 5,
+      "name" : "Fireball",
+      "description" : "Sends ",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 6
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 2
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1, 2]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 3
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 4
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-35, -50]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "6" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 6,
+      "name" : "Stab",
+      "description" : "Quick thrust dealing damage to the single enemy",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-10, -20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "7" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 7,
+      "name" : "Jagged edge",
+      "description" : "Attacks single enemy with double damage",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-20, -40]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "8" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 8,
+      "name" : "Swirling blades",
+      "description" : "Deals damage to all adjacent enemies",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1,2]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 2
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [10, 20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "9" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 9,
+      "name" : "Lesser heal",
+      "description" : "Heals small to medium hitpoints amount to single ally",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [0]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [15, 20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "10" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 10,
+      "name" : "Massive heal",
+      "description" : "Heals all allies in the ares",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 3
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [0, 2]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 3
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 4
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [15, 20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "11" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 11,
+      "name" : "Holy wrath",
+      "description" : "Sends a bolt of divine energy hitting a single enemy",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [-15, -20]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    },
+    "12" : {
+      "type" : "HybridModelWithInlays",
+      "modelId" : 12,
+      "name" : "Attack",
+      "description" : "Attacks single target using equipped weapon",
+      "properties" : {
+        "21" : {
+          "type" : "SingleValueProperty",
+          "property" : 1
+        },
+        "22" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "23" : {
+          "type" : "SetProperty",
+          "properties" : [1]
+        },
+        "24" : {
+          "type" : "SingleValueProperty",
+          "property" : 0
+        },
+        "25" : {
+          "type" : "SingleValueProperty",
+          "property" : 5
+        }
+      },
+      "affectors" : {
+        "256" : {
+          "type" : "ListAffector",
+          "affections" : [0, 0]
+        }
+      },
+      "mappings" : {
+        "2" : [0]
+      },
+      "inlaid" : [
+
+      ]
+    }
+  }
+}

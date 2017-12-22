@@ -1,0 +1,64 @@
+{
+  "assets" : {
+    "0" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 0,
+      "name" : "Tomb",
+      "description" : ""
+    },
+    "1" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 1,
+      "name" : "Crypt",
+      "description" : ""
+    },
+    "2" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 2,
+      "name" : "Halls",
+      "description" : ""
+    },
+    "3" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 3,
+      "name" : "Cave",
+      "description" : ""
+    },
+    "4" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 4,
+      "name" : "Mine",
+      "description" : ""
+    },
+    "5" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 5,
+      "name" : "Tunnels",
+      "description" : ""
+    },
+    "6" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 6,
+      "name" : "Maze",
+      "description" : ""
+    },
+    "7" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 7,
+      "name" : "Labyrinth",
+      "description" : ""
+    },
+    "8" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 8,
+      "name" : "Temple",
+      "description" : ""
+    },
+    "9" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 9,
+      "name" : "Cavern",
+      "description" : ""
+    }
+  }
+}
