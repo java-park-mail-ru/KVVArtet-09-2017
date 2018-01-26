@@ -10,6 +10,9 @@ import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.battlefield.map.BattleMapGenerator;
 import project.gamemechanics.battlefield.map.actions.BattleAction;
+import project.gamemechanics.battlefield.map.helpers.Pathfinder;
+import project.gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
+import project.gamemechanics.battlefield.map.helpers.Route;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
@@ -26,6 +29,7 @@ import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
 import project.gamemechanics.world.config.ResourcesConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -230,7 +234,7 @@ public class GameScenariosTest {
         assertNotNull(warrior);
 
         final MapNode warriorTile = map.getTile(sideSize / 2, sideSize / 2 - 1);
-        warriorTile.occupy(warrior);
+        Objects.requireNonNull(warriorTile).occupy(warrior);
         assertTrue(warriorTile.isOccupied());
 
         final AliveEntity monster = factory.makeNpc(Constants.START_LEVEL);
@@ -238,7 +242,7 @@ public class GameScenariosTest {
         monster.setProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX,
                 monsterCurrentHealth);
         final MapNode monsterTile = map.getTile(sideSize / 2, sideSize / 2);
-        monsterTile.occupy(monster);
+        Objects.requireNonNull(monsterTile).occupy(monster);
         assertTrue(monsterTile.isOccupied());
 
         final Integer xpReward = ExperienceCalculator.getXPReward(warrior.getLevel(), monster.getLevel());
@@ -260,5 +264,253 @@ public class GameScenariosTest {
         assertFalse(attackResult.getEventsCount() == 0);
         assertTrue(attackResult.getEvent(0).getEventKind() == EventCategories.EC_HITPOINTS_CHANGE);
         assertTrue(Math.abs(attackResult.getEvent(0).getAmount()) > monsterCurrentHealth);
+    }
+
+    @Test
+    public void pathfindingTestValidDataTest() {
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final List<Integer> sourceCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        sourceCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        sourceCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+
+        final List<Integer> goalCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        goalCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        goalCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, sideSize - 1);
+
+        assertNotNull(map.getTile(sourceCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                sourceCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+        assertNotNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+
+        final Route route = pathfinder.getPath(sourceCoordinates, goalCoordinates);
+        final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
+
+        assertNotNull(route);
+        assertTrue(route.getLength() > 0);
+        assertEquals(route.getGoalCoordinates(), goalCoordinates);
+        assertEquals(route.getStartCoordinates(), sourceCoordinates);
+        assertEquals(route.getLength().intValue(), sideSize - 1);
+
+        assertNotNull(reversedRoute);
+        assertTrue(reversedRoute.getLength() > 0);
+        assertEquals(reversedRoute.getStartCoordinates(), goalCoordinates);
+        assertEquals(reversedRoute.getGoalCoordinates(), sourceCoordinates);
+        assertEquals(reversedRoute.getLength().intValue(), sideSize - 1);
+
+        assertEquals(route.getGoalCoordinates(), reversedRoute.getStartCoordinates());
+        assertEquals(route.getStartCoordinates(), reversedRoute.getGoalCoordinates());
+    }
+
+    @Test
+    public void pathfindingTestInvalidDataTest() {
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final List<Integer> sourceCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        sourceCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, -1);
+        sourceCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, -1);
+
+        final List<Integer> goalCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        goalCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, sideSize);
+        goalCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, sideSize);
+
+        assertNull(map.getTile(sourceCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                sourceCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+        assertNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+
+        final Route route = pathfinder.getPath(sourceCoordinates, goalCoordinates);
+        final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
+
+        assertNull(route);
+        assertNull(reversedRoute);
+
+        goalCoordinates.set(DigitsPairIndices.ROW_COORD_INDEX, sideSize - 1);
+        goalCoordinates.set(DigitsPairIndices.COL_COORD_INDEX, sideSize - 1);
+
+        assertNull(pathfinder.getPath(sourceCoordinates, goalCoordinates));
+        assertNull(pathfinder.getPath(goalCoordinates, sourceCoordinates));
+    }
+
+    @Test
+    public void pathfinderDiagonalMovementTest() {
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final List<Integer> sourceCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        sourceCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        sourceCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+
+        final List<Integer> goalCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        goalCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, sideSize - 1);
+        goalCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, sideSize - 1);
+
+        assertNotNull(map.getTile(sourceCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                sourceCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+        assertNotNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+
+        final Route route = pathfinder.getPath(sourceCoordinates, goalCoordinates);
+        final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
+
+        assertNotNull(route);
+        assertNotNull(reversedRoute);
+
+        assertEquals(route.getLength().intValue(), reversedRoute.getLength().intValue());
+
+        assertEquals(route.getStartCoordinates(), reversedRoute.getGoalCoordinates());
+        assertEquals(route.getGoalCoordinates(), reversedRoute.getStartCoordinates());
+
+        assertEquals(route.getLength().intValue(), (sideSize - 1) * 2);
+    }
+
+    @Test
+    public void pathfinderComplexMovementTest() {
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final List<Integer> sourceCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        sourceCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        sourceCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+
+        final List<Integer> goalCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        goalCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, sideSize / 2 - 1);
+        goalCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, sideSize - 1);
+
+        assertNotNull(map.getTile(sourceCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                sourceCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+        assertNotNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+
+        final Route route = pathfinder.getPath(sourceCoordinates, goalCoordinates);
+        final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
+
+        assertNotNull(route);
+        assertNotNull(reversedRoute);
+
+        assertEquals(route.getLength().intValue(), reversedRoute.getLength().intValue());
+        assertEquals(route.getStartCoordinates(), reversedRoute.getGoalCoordinates());
+        assertEquals(route.getGoalCoordinates(), reversedRoute.getStartCoordinates());
+    }
+
+    @Test
+    public void pathfinderMapWithWallsTest() {
+        final int sideSize = 5;
+        final int halfSize = 2;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+
+        Objects.requireNonNull(map.getTile(halfSize, halfSize)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize, halfSize - 1)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize, halfSize + 1)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize + 1, halfSize)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize - 1, halfSize)).setIsPassable(false);
+
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+
+        final List<Integer> sourceCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        sourceCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        sourceCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+
+        final List<Integer> goalCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        goalCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, halfSize);
+        goalCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, sideSize - 1);
+
+        assertNotNull(map.getTile(sourceCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                sourceCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+        assertNotNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+
+        final Route route = pathfinder.getPath(sourceCoordinates, goalCoordinates);
+        final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
+
+        final List<Integer> fourthStep = new ArrayList<>();
+        fourthStep.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        fourthStep.add(DigitsPairIndices.COL_COORD_INDEX, 4);
+
+        assertNotNull(route);
+        assertNotNull(reversedRoute);
+        assertEquals(6, route.getLength().intValue());
+        assertEquals(route.getLength().intValue(), reversedRoute.getLength().intValue());
+        assertEquals(route.getGoalCoordinates(4).get(DigitsPairIndices.ROW_COORD_INDEX).intValue(),
+                fourthStep.get(DigitsPairIndices.ROW_COORD_INDEX).intValue());
+        assertEquals(route.getGoalCoordinates(4).get(DigitsPairIndices.COL_COORD_INDEX).intValue(),
+                fourthStep.get(DigitsPairIndices.COL_COORD_INDEX).intValue());
+    }
+
+    @Test
+    public void pathfinderTraverseTest() {
+        final int sideSize = 5;
+        final int halfSize = 2;
+        final int passableTilesCount = sideSize * sideSize;
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+
+        Objects.requireNonNull(map.getTile(halfSize, halfSize)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize, halfSize - 1)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize, halfSize + 1)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize + 1, halfSize)).setIsPassable(false);
+        Objects.requireNonNull(map.getTile(halfSize - 1, halfSize)).setIsPassable(false);
+
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final AliveEntity walker = dummiesFactory.makeNewDummy(0, "warrior", "");
+        assertNotNull(walker);
+
+        Objects.requireNonNull(map.getTile(0, 0)).occupy(walker);
+
+        final List<Integer> sourceCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        sourceCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        sourceCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+
+        final List<Integer> goalCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        goalCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, halfSize);
+        goalCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, sideSize - 1);
+
+        assertNotNull(map.getTile(sourceCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                sourceCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+        assertNotNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)));
+
+        final Route route = pathfinder.getPath(sourceCoordinates, goalCoordinates);
+        final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
+
+        assertNotNull(route);
+        assertNotNull(reversedRoute);
+
+        route.walkThrough();
+        assertEquals(walker.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
+                route.getGoalCoordinates().get(DigitsPairIndices.ROW_COORD_INDEX));
+        assertEquals(walker.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX),
+                route.getGoalCoordinates().get(DigitsPairIndices.COL_COORD_INDEX));
+        assertFalse(Objects.requireNonNull(map.getTile(0,0)).isOccupied());
+        assertTrue(Objects.requireNonNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX))).isOccupied());
+
+        reversedRoute.walkThrough();
+        assertEquals(walker.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
+                reversedRoute.getGoalCoordinates().get(DigitsPairIndices.ROW_COORD_INDEX));
+        assertEquals(walker.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX),
+                reversedRoute.getGoalCoordinates().get(DigitsPairIndices.COL_COORD_INDEX));
+        assertTrue(Objects.requireNonNull(map.getTile(0,0)).isOccupied());
+        assertFalse(Objects.requireNonNull(map.getTile(goalCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
+                goalCoordinates.get(DigitsPairIndices.COL_COORD_INDEX))).isOccupied());
+    }
+
+    @Test
+    public void aiDecisionMakingTest() {
+
     }
 }

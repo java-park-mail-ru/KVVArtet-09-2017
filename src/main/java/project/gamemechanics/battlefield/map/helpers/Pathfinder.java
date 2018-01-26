@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.map.helpers;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
@@ -16,13 +17,13 @@ public final class Pathfinder implements PathfindingAlgorithm {
 
     private final BattleMap map;
 
-    public Pathfinder(BattleMap map) {
+    public Pathfinder(@NotNull BattleMap map) {
         this.map = map;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public Route getPath(List<Integer> fromPos, List<Integer> toPos) {
+    public @Nullable Route getPath(@NotNull List<Integer> fromPos, @NotNull List<Integer> toPos) {
         final MapNode fromTile = map.getTile(fromPos.get(DigitsPairIndices.ROW_COORD_INDEX),
                 fromPos.get(DigitsPairIndices.COL_COORD_INDEX));
         final MapNode toTile = map.getTile(toPos.get(DigitsPairIndices.ROW_COORD_INDEX),
@@ -30,23 +31,25 @@ public final class Pathfinder implements PathfindingAlgorithm {
         return getPath(fromTile, toTile);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    private Route getPath(@NotNull MapNode start, @NotNull MapNode goal) {
+    @SuppressWarnings({"ConstantConditions", "OverlyComplexMethod"})
+    private @Nullable Route getPath(@Nullable MapNode start, @Nullable MapNode goal) {
+        if (goal == null || start == null || !goal.getIsPassable()) {
+            return null;
+        }
 
-        final Map<MapNode, Integer> gScore = new HashMap<>();
         final Map<MapNode, Integer> fScore = new HashMap<>();
-
-        // map containing parent tiles for each tile in the route
-
         final PriorityQueue<MapNode> open = new PriorityQueue<>(DEFAULT_OPEN_LIST_CAPACITY,
                 Comparator.comparingInt(fScore::get));
 
+        final Map<MapNode, Integer> gScore = new HashMap<>();
         gScore.put(start, 0);
         fScore.put(start, start.getH(goal));
+        open.offer(start);
 
         final Set<MapNode> closed = new HashSet<>();
+        // map containing parent tiles for each tile in the route
         final Map<MapNode, MapNode> routeMap = new HashMap<>();
-        final List<MapNode> route = new LinkedList<>();
+        final List<MapNode> route = new ArrayList<>();
         while (!open.isEmpty()) {
             MapNode current = open.poll();
 
@@ -61,20 +64,29 @@ public final class Pathfinder implements PathfindingAlgorithm {
             closed.add(current);
 
             for (MapNode adjacent : current.getAdjacentTiles()) {
-                if (closed.contains(adjacent)) {
+                if (adjacent == null || closed.contains(adjacent)) {
                     continue;
                 }
                 if (!adjacent.getIsPassable()) {
                     closed.add(adjacent);
                     continue;
                 }
+
                 final Integer tentativeG = gScore.get(current)
                         + getG(current, adjacent, gScore.get(current));
-                final Boolean contains = open.contains(adjacent);
-                if (!contains || tentativeG < gScore.get(adjacent)) {
-                    gScore.put(adjacent, tentativeG);
-                    fScore.put(adjacent, tentativeG + adjacent.getH(goal));
-                    if (contains) {
+                final Boolean containsOpen = open.contains(adjacent);
+                if (!containsOpen || tentativeG < gScore.getOrDefault(adjacent, 0)) {
+                    if(!gScore.containsKey(adjacent)) {
+                        gScore.put(adjacent, tentativeG);
+                    } else {
+                        gScore.replace(adjacent, tentativeG);
+                    }
+                    if (!fScore.containsKey(adjacent)) {
+                        fScore.put(adjacent, tentativeG + adjacent.getH(goal));
+                    } else {
+                        fScore.replace(adjacent, tentativeG + adjacent.getH(goal));
+                    }
+                    if (containsOpen) {
                         open.remove(adjacent);
                     }
                     open.offer(adjacent);
@@ -86,9 +98,9 @@ public final class Pathfinder implements PathfindingAlgorithm {
         return null;
     }
 
-    private Integer getG(@NotNull MapNode from, @NotNull MapNode to, Integer fromCost) {
+    private Integer getG(@NotNull MapNode from, @NotNull MapNode to, @NotNull Integer fromCost) {
         if (!from.isAdjacentTo(to)) {
-            return Integer.MIN_VALUE;
+            return 0;
         }
         return Constants.DEFAULT_MOVEMENT_COST + fromCost;
     }

@@ -14,20 +14,20 @@ import java.util.List;
 })
 public interface Route {
     @JsonIgnore
-    Integer getLength();
+    @NotNull Integer getLength();
 
     @JsonIgnore
-    Integer getTravelCost();
+    @NotNull Integer getTravelCost();
 
     void walkThrough(@NotNull Integer distance);
 
     void walkThrough();
 
     @JsonIgnore
-    List<Integer> getStartCoordinates();
+    @NotNull List<Integer> getStartCoordinates();
 
-    List<Integer> getGoalCoordinates(@NotNull Integer distance);
+    @NotNull List<Integer> getGoalCoordinates(@NotNull Integer distance);
 
     @JsonIgnore
-    List<Integer> getGoalCoordinates();
+    @NotNull List<Integer> getGoalCoordinates();
 }
