@@ -3,6 +3,9 @@ package project.gamemechanics;
 import org.junit.Test;
 import project.gamemechanics.aliveentities.helpers.CashCalculator;
 import project.gamemechanics.aliveentities.helpers.ExperienceCalculator;
+import project.gamemechanics.aliveentities.npcs.ai.AI;
+import project.gamemechanics.aliveentities.npcs.ai.AIBehaviors;
+import project.gamemechanics.aliveentities.npcs.ai.BehaviorCategories;
 import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.actionresults.events.EventCategories;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
@@ -16,10 +19,7 @@ import project.gamemechanics.battlefield.map.helpers.Route;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
-import project.gamemechanics.interfaces.Action;
-import project.gamemechanics.interfaces.AliveEntity;
-import project.gamemechanics.interfaces.EquipableItem;
-import project.gamemechanics.interfaces.MapNode;
+import project.gamemechanics.interfaces.*;
 import project.gamemechanics.items.loot.PendingLootPool;
 import project.gamemechanics.items.loot.PendingLootPoolImpl;
 import project.gamemechanics.resources.assets.AssetProvider;
@@ -29,9 +29,7 @@ import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
 import project.gamemechanics.world.config.ResourcesConfig;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -510,7 +508,66 @@ public class GameScenariosTest {
     }
 
     @Test
+    public void aiBrainlessUnitTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+
+        final AliveEntity warrior = dummiesFactory.makeNewDummy(0, "warrior", "");
+        assertNotNull(warrior);
+        assertNull(warrior.makeDecision());
+    }
+
+    @Test
     public void aiDecisionMakingTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+        final PcgContentFactory factory = new PcgFactory(ResourcesConfig.getItemPartsFilename(),
+                ResourcesConfig.getNpcPartsFilename(), assets);
+
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        assertEquals(sideSize, map.getSize().get(0).intValue());
+        assertEquals(sideSize, map.getSize().get(1).intValue());
+
+        final AliveEntity warrior = dummiesFactory.makeNewDummy(0, "warrior", "");
+        assertNotNull(warrior);
+
+        final MapNode warriorTile = map.getTile(sideSize / 2, sideSize / 2 - 1);
+        Objects.requireNonNull(warriorTile).occupy(warrior);
+        assertTrue(warriorTile.isOccupied());
+
+        final AliveEntity monster = factory.makeNpc(Constants.START_LEVEL);
+        final MapNode monsterTile = map.getTile(sideSize / 2, sideSize / 2);
+        Objects.requireNonNull(monsterTile).occupy(monster);
+        assertTrue(monsterTile.isOccupied());
+
+        final Squad playersSquad = new Squad(new ArrayList<>(), Squad.PLAYERS_SQUAD_ID);
+        playersSquad.addMember(warrior);
+        final Squad monstersSquad = new Squad(new ArrayList<>(), Squad.MONSTER_SQUAD_ID);
+        monstersSquad.addMember(monster);
+
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
+        for (Integer behaviorId : Objects.requireNonNull(monster.getCharacterRole().getBehaviorIds())) {
+            monsterBehaviors.put(behaviorId, AIBehaviors.getBehavior(behaviorId));
+        }
+
+        final DecisionMaker monsterAI = new AI(monster, monstersSquad, playersSquad, map, pathfinder,
+                monster.getCharacterRole().getAllAbilities(), monsterBehaviors,
+                BehaviorCategories.BC_COMMON_MONSTER_AI);
+        monster.setBehavior(monsterAI);
+
+        assertNull(warrior.makeDecision());
+        final Action monsterDecision = monster.makeDecision();
+        assertNotNull(monsterDecision);
+        assertTrue(monsterDecision.getAbility() != null
+                && !monsterDecision.isMovement() && !monsterDecision.isSkip());
+    }
+
+    @Test
+    public void aiFullTurnTest() {
 
     }
 }

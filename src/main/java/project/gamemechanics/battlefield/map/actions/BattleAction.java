@@ -46,6 +46,7 @@ public class BattleAction extends AbstractAction {
         if (isSenderValid()) {
             result = new BattleActionResult(getID(), sender, target, ability,
                     ability.execute(aggregateActionData()));
+            sender.getInhabitant().useAbility(ability.getID());
         } else {
             result = new BattleActionResult(getID(), sender, target, ability, new ArrayList<>());
             result.addEvent(EventsFactory.makeRollbackEvent());
@@ -59,6 +60,7 @@ public class BattleAction extends AbstractAction {
 
     private AggregatedAbilityAction aggregateActionData() {
         return new AggregatedAbilityAction(sender, target, ability.getID(),
-                ability.getAffectorsMap(), ability.getPropertiesMap(), ability.getAppliedEffects(), pathfinder);
+                ability.getAffectorsMap(), ability.getPropertiesMap(),
+                ability.getAppliedEffects(), pathfinder);
     }
 }

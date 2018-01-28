@@ -151,7 +151,7 @@ public class AI implements DecisionMaker {
     }
 
     private List<Integer> sortSquadByHitpoints(@NotNull Squad squad) {
-        if (squad.areAllDead()) {
+        if (squad.areAllDead() || squad.getSquadSize() == 0) {
             return null;
         }
 
@@ -163,7 +163,7 @@ public class AI implements DecisionMaker {
             Integer weakestMemberIndex = squad.getSquadSize();
 
             for (Integer memberIndex : uncheckedMembers) {
-                if (!uncheckedMembers.contains(memberIndex) && squad.getMember(memberIndex).isAlive()) {
+                if (squad.getMember(memberIndex).isAlive()) {
                     final Integer memberHitpoints = squad.getMember(memberIndex)
                             .getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX);
                     if (minimalHitpoints > memberHitpoints) {
@@ -182,7 +182,7 @@ public class AI implements DecisionMaker {
     }
 
     private List<Integer> sortSquadByDistance(@NotNull Squad squad) {
-        if (squad.areAllDead()) {
+        if (squad.areAllDead() || squad.getSquadSize() == 0) {
             return null;
         }
 

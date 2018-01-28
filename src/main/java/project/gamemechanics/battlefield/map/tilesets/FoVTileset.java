@@ -211,36 +211,36 @@ public class FoVTileset implements FieldOfVision {
             final List<Integer> directions = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
             switch (direction) {
                 case OD_NORTH:
-                    directions.set(0, Directions.UP);
-                    directions.set(1, Directions.RIGHT);
+                    directions.add(0, Directions.UP);
+                    directions.add(1, Directions.RIGHT);
                     break;
                 case OD_NORTH_EAST:
-                    directions.set(0, Directions.RIGHT);
-                    directions.set(1, Directions.UP);
+                    directions.add(0, Directions.RIGHT);
+                    directions.add(1, Directions.UP);
                     break;
                 case OD_EAST:
-                    directions.set(0, Directions.RIGHT);
-                    directions.set(1, Directions.DOWN);
+                    directions.add(0, Directions.RIGHT);
+                    directions.add(1, Directions.DOWN);
                     break;
                 case OD_SOUTH_EAST:
-                    directions.set(0, Directions.DOWN);
-                    directions.set(1, Directions.RIGHT);
+                    directions.add(0, Directions.DOWN);
+                    directions.add(1, Directions.RIGHT);
                     break;
                 case OD_SOUTH:
-                    directions.set(0, Directions.DOWN);
-                    directions.set(1, Directions.LEFT);
+                    directions.add(0, Directions.DOWN);
+                    directions.add(1, Directions.LEFT);
                     break;
                 case OD_SOUTH_WEST:
-                    directions.set(0, Directions.LEFT);
-                    directions.set(1, Directions.DOWN);
+                    directions.add(0, Directions.LEFT);
+                    directions.add(1, Directions.DOWN);
                     break;
                 case OD_WEST:
-                    directions.set(0, Directions.LEFT);
-                    directions.set(1, Directions.UP);
+                    directions.add(0, Directions.LEFT);
+                    directions.add(1, Directions.UP);
                     break;
                 case OD_NORTH_WEST:
-                    directions.set(0, Directions.UP);
-                    directions.set(1, Directions.LEFT);
+                    directions.add(0, Directions.UP);
+                    directions.add(1, Directions.LEFT);
                     break;
                 default:
                     break;
@@ -285,10 +285,10 @@ public class FoVTileset implements FieldOfVision {
 
         private List<Integer> getRelativeNodeCoordinates(@NotNull List<Integer> nodeCoordinates) {
             final List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-            relativeCoordinates.set(DigitsPairIndices.ROW_COORD_INDEX,
+            relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX,
                     nodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)
                             - source.getCoordinate(DigitsPairIndices.COL_COORD_INDEX));
-            relativeCoordinates.set(DigitsPairIndices.COL_COORD_INDEX,
+            relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX,
                     nodeCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX)
                             - source.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX));
             return relativeCoordinates;

@@ -76,7 +76,7 @@ public class NonPlayerCharacterRole implements CharacterRole {
     }
 
     @Override
-    public Ability getAbility(Integer abilityID) {
+    public Ability getAbility(@NotNull Integer abilityID) {
         return abilities.getOrDefault(abilityID, null);
     }
 
@@ -86,7 +86,7 @@ public class NonPlayerCharacterRole implements CharacterRole {
     }
 
     @Override
-    public Boolean hasAffector(Integer affectorKind) {
+    public Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
@@ -96,7 +96,7 @@ public class NonPlayerCharacterRole implements CharacterRole {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind) {
+    public Integer getAffection(@NotNull Integer affectorKind) {
         if (!hasAffector(affectorKind)) {
             return 0;
         }
@@ -104,7 +104,7 @@ public class NonPlayerCharacterRole implements CharacterRole {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    public Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if (!hasAffector(affectorKind)) {
             return 0;
         }

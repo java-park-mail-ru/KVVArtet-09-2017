@@ -145,8 +145,8 @@ public class Tile implements MapNode {
 
     private Integer manhattanDistance(@NotNull List<Integer> fromCoords, @NotNull List<Integer> toCoords) {
         return Math.abs(fromCoords.get(DigitsPairIndices.ROW_COORD_INDEX)
-                + toCoords.get(DigitsPairIndices.ROW_COORD_INDEX))
+                - toCoords.get(DigitsPairIndices.ROW_COORD_INDEX))
                 + Math.abs(fromCoords.get(DigitsPairIndices.COL_COORD_INDEX)
-                + toCoords.get(DigitsPairIndices.COL_COORD_INDEX));
+                - toCoords.get(DigitsPairIndices.COL_COORD_INDEX));
     }
 }

@@ -139,13 +139,12 @@ public interface AliveEntity extends Levelable, ModifiablePropertyProvider, Upda
      * @see Ability
      */
     @SuppressWarnings("ConstantConditions")
-    default Ability useAbility(@NotNull Integer abilityID) {
+    default void useAbility(@NotNull Integer abilityID) {
         final Ability ability = getAbility(abilityID);
-        if (ability != null) {
+        if (ability != null && ability.getProperty(PropertyCategories.PC_COOLDOWN) >= 0) {
             setProperty(PropertyCategories.PC_ABILITIES_COOLDOWN, abilityID,
                     ability.getProperty(PropertyCategories.PC_COOLDOWN));
         }
-        return ability;
     }
 
     /**

@@ -236,6 +236,12 @@ public class NpcsFactoryImpl implements NpcsFactory {
         mergedProperties.put(PropertyCategories.PC_HITPOINTS, new ListProperty(hitpoints));
         mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
 
+        final Map<Integer, Integer> cooldowns = new HashMap<>();
+        for (Integer abilityId : npcRole.getAllAbilities().keySet()) {
+            cooldowns.put(abilityId, 0);
+        }
+        mergedProperties.put(PropertyCategories.PC_ABILITIES_COOLDOWN, new MapProperty(cooldowns));
+
         return mergedProperties;
     }
 

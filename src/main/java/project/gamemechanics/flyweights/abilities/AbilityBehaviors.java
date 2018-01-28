@@ -47,12 +47,15 @@ public final class AbilityBehaviors {
                 damage.set(DigitsPairIndices.MAX_VALUE_INDEX, damage.get(DigitsPairIndices.MAX_VALUE_INDEX)
                         + senderDamage);
 
+                final List<IngameEffect.EffectModel> effectModels = aggregatedAbilityAction.abilityEffects == null
+                        ? new ArrayList<>() : aggregatedAbilityAction.abilityEffects;
+
                 final Tileset affectedArea = new AreaEffectTileset(aggregatedAbilityAction.abilityID,
                         aggregatedAbilityAction.sender,
                         aggregatedAbilityAction.target,
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_AREA_SHAPE).getProperty(),
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_AREA).getProperty(),
-                        makeEffects(aggregatedAbilityAction.abilityEffects), damage,
+                        makeEffects(effectModels), damage,
                         aggregatedAbilityAction.abilityProperties.get(PropertyCategories.PC_INFLICTED_CATEGORIES)
                                 .getPropertySet());
                 affectedArea.applyEffects(causedEvents);

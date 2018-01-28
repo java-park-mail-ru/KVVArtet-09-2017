@@ -1,5 +1,8 @@
 package project.gamemechanics.aliveentities.npcs.ai;
 
+import org.jetbrains.annotations.Nullable;
+import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
+import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.battlefield.map.actions.BattleAction;
 import project.gamemechanics.battlefield.map.actions.MovementAction;
 import project.gamemechanics.battlefield.map.actions.SkipTurnAction;
@@ -40,7 +43,7 @@ public final class AIBehaviors {
      *     under given ID otherwise
      */
     @SuppressWarnings("unused")
-    public static AI.BehaviorFunction getBehavior(Integer behaviorID) {
+    public static AI.BehaviorFunction getBehavior(@NotNull Integer behaviorID) {
         return BEHAVIORS.getOrDefault(behaviorID, null);
     }
 
@@ -51,118 +54,61 @@ public final class AIBehaviors {
     /* TODO: find a better way to write and put BEHAVIORS in the map that that */
     // CHECKSTYLE:ON
 
-    @SuppressWarnings("OverlyComplexMethod")
     private static Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
         final Map<Integer, AI.BehaviorFunction> behaviorFunctionMap = new HashMap<>();
 
         behaviorFunctionMap.put(BehaviorCategories.BC_COMMON_MONSTER_AI, aggregatedBattleState -> {
             final Set<Ability> attacks = getDamagingAbilities(aggregatedBattleState
                     .self.getCharacterRole().getAllAbilities());
-            if (!attacks.isEmpty()) {
-                Integer maximalScore = Integer.MIN_VALUE;
-                Integer enemyIdWithMaximalScore = Constants.WRONG_INDEX;
+            if (!attacks.isEmpty() && aggregatedBattleState.enemies != null) {
+                final AliveEntity targetEnemy = selectTarget(aggregatedBattleState.self,
+                        aggregatedBattleState.aggroMap, aggregatedBattleState.enemies);
 
-                for (Integer enemyID = 0; enemyID < aggregatedBattleState.enemies.getSquadSize(); ++enemyID) {
-                    final AliveEntity enemy = aggregatedBattleState.enemies.getMember(enemyID);
-                    if (enemy != null) {
-                        if (enemy.isAlive()) {
-                            final Integer enemyDistanceScore = getDistanceScore(enemy, aggregatedBattleState.self);
-                            final Integer enemyHealthScore = getHitpointsScore(enemy, aggregatedBattleState.self);
-                            final Integer enemyAggroScore = getAggroScore(enemy, aggregatedBattleState.self,
-                                    aggregatedBattleState.aggroMap);
-                            if (enemyDistanceScore + enemyHealthScore + enemyAggroScore > maximalScore) {
-                                maximalScore = enemyDistanceScore + enemyHealthScore + enemyAggroScore;
-                                enemyIdWithMaximalScore = enemyID;
-                            } else {
-                                if (enemyDistanceScore + enemyHealthScore + enemyAggroScore == maximalScore) {
-                                    if (enemyDistanceScore > getDistanceScore(Objects.requireNonNull(
-                                            aggregatedBattleState.enemies.getMember(enemyIdWithMaximalScore)),
-                                            aggregatedBattleState.self)) {
-                                        enemyIdWithMaximalScore = enemyID;
-                                    } else {
-                                        if (aggregatedBattleState.aggroMap.get(enemy.getID())
-                                                > aggregatedBattleState.aggroMap.get(
-                                                        Objects.requireNonNull(aggregatedBattleState.enemies
-                                                .getMember(enemyIdWithMaximalScore)).getID())) {
-                                            enemyIdWithMaximalScore = enemyID;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                final AliveEntity targetEnemy = aggregatedBattleState.enemies.getMember(enemyIdWithMaximalScore);
-
-                assert targetEnemy != null;
-                final Integer distanceToTarget = aggregatedBattleState.map
-                        .getTile(aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
-                                DigitsPairIndices.ROW_COORD_INDEX), aggregatedBattleState.self
-                                .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX))
-                        .getH(aggregatedBattleState.map.getTile(targetEnemy
-                                        .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
-                                targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
-                                        DigitsPairIndices.COL_COORD_INDEX)));
-
-                Integer maxAttackDamage = Integer.MIN_VALUE;
-                Ability bestAttack = null;
-                for (Ability attack : attacks) {
-                    if (aggregatedBattleState.self.getProperty(PropertyCategories.PC_ABILITIES_COOLDOWN,
-                            attack.getID()) == 0) {
-                        if (attack.getProperty(PropertyCategories.PC_MAX_DISTANCE) >= distanceToTarget) {
-                            if (attack.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
-                                    DigitsPairIndices.MIN_VALUE_INDEX) > maxAttackDamage) {
-                                bestAttack = attack;
-                                maxAttackDamage = attack.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
-                                        DigitsPairIndices.MIN_VALUE_INDEX);
-                            } else {
-                                if (attack.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
-                                        DigitsPairIndices.MAX_VALUE_INDEX) > maxAttackDamage) {
-                                    bestAttack = attack;
-                                    maxAttackDamage = attack.getAffection(
-                                            AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
-                                            DigitsPairIndices.MAX_VALUE_INDEX);
-                                }
-                            }
-                        }
-                    }
-                }
+                final List<Integer> enemyCoords = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+                enemyCoords.add(DigitsPairIndices.ROW_COORD_INDEX,
+                        Objects.requireNonNull(targetEnemy).getProperty(PropertyCategories.PC_COORDINATES,
+                                DigitsPairIndices.ROW_COORD_INDEX));
+                enemyCoords.add(DigitsPairIndices.COL_COORD_INDEX,
+                        targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
+                                DigitsPairIndices.COL_COORD_INDEX));
+                final Ability bestAttack = aggregatedBattleState.fov.isVisible(enemyCoords)
+                        ? selectAbility(aggregatedBattleState.self, aggregatedBattleState.map, attacks, targetEnemy)
+                        : null;
 
                 Action choice = null;
                 if (bestAttack == null) {
-                    choice = new MovementAction(aggregatedBattleState.map.getTile(
+                    choice = new MovementAction(Objects.requireNonNull(aggregatedBattleState.map.getTile(
                             aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                                     DigitsPairIndices.ROW_COORD_INDEX), aggregatedBattleState.self
                                     .getProperty(PropertyCategories.PC_COORDINATES,
-                                            DigitsPairIndices.COL_COORD_INDEX)),
-                            aggregatedBattleState.map.getTile(
+                                            DigitsPairIndices.COL_COORD_INDEX))),
+                            Objects.requireNonNull(aggregatedBattleState.map.getTile(
                                     targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
                                             DigitsPairIndices.ROW_COORD_INDEX),
                                     targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
-                                            DigitsPairIndices.COL_COORD_INDEX)),
+                                            DigitsPairIndices.COL_COORD_INDEX))),
                             aggregatedBattleState.pathfinder);
                 } else {
-                    choice = new BattleAction(aggregatedBattleState.map.getTile(
+                    choice = new BattleAction(Objects.requireNonNull(aggregatedBattleState.map.getTile(
                             aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                                     DigitsPairIndices.ROW_COORD_INDEX), aggregatedBattleState.self
                                     .getProperty(PropertyCategories.PC_COORDINATES,
-                                            DigitsPairIndices.COL_COORD_INDEX)),
-                            aggregatedBattleState.map.getTile(
+                                            DigitsPairIndices.COL_COORD_INDEX))),
+                            Objects.requireNonNull(aggregatedBattleState.map.getTile(
                                     targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
                                             DigitsPairIndices.ROW_COORD_INDEX),
                                     targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
-                                            DigitsPairIndices.COL_COORD_INDEX)),
+                                            DigitsPairIndices.COL_COORD_INDEX))),
                             bestAttack, aggregatedBattleState.pathfinder);
                 }
                 return choice;
             }
 
-            return new SkipTurnAction(aggregatedBattleState.map
+            return new SkipTurnAction(Objects.requireNonNull(aggregatedBattleState.map
                     .getTile(aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
                             DigitsPairIndices.ROW_COORD_INDEX),
                             aggregatedBattleState.self.getProperty(PropertyCategories.PC_COORDINATES,
-                                    DigitsPairIndices.COL_COORD_INDEX)));
+                                    DigitsPairIndices.COL_COORD_INDEX))));
         });
         // CHECKSTYLE:OFF
         /* TODO: write more AIs for monsters and bosses */
@@ -265,12 +211,91 @@ public final class AIBehaviors {
             final Ability ability = abilities.get(abilityID);
             if (ability.hasAffector(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR)) {
                 if (ability.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
-                        DigitsPairIndices.MIN_VALUE_INDEX) < 0) {
+                        DigitsPairIndices.MIN_VALUE_INDEX) <= 0) {
                     damagingAbilities.add(ability);
                 }
             }
         }
 
         return damagingAbilities;
+    }
+
+    private static @Nullable AliveEntity selectTarget(@NotNull AliveEntity self,
+                                                      @NotNull Map<Integer, Integer> aggroMap,
+                                                      @NotNull Squad enemies) {
+        Integer maximalScore = Integer.MIN_VALUE;
+        Integer enemyIdWithMaximalScore = Constants.WRONG_INDEX;
+
+        for (Integer enemyID = 0; enemyID < enemies.getSquadSize(); ++enemyID) {
+            final AliveEntity enemy = enemies.getMember(enemyID);
+            if (enemy != null) {
+                if (enemy.isAlive()) {
+                    final Integer enemyDistanceScore = getDistanceScore(enemy, self);
+                    final Integer enemyHealthScore = getHitpointsScore(enemy, self);
+                    final Integer enemyAggroScore = getAggroScore(enemy, self,
+                            aggroMap);
+                    if (enemyDistanceScore + enemyHealthScore + enemyAggroScore > maximalScore) {
+                        maximalScore = enemyDistanceScore + enemyHealthScore + enemyAggroScore;
+                        enemyIdWithMaximalScore = enemyID;
+                    } else {
+                        if (enemyDistanceScore + enemyHealthScore + enemyAggroScore == maximalScore) {
+                            if (enemyDistanceScore > getDistanceScore(Objects.requireNonNull(
+                                    enemies.getMember(enemyIdWithMaximalScore)), self)) {
+                                enemyIdWithMaximalScore = enemyID;
+                            } else {
+                                if (aggroMap.get(enemy.getID()) > aggroMap.get(
+                                        Objects.requireNonNull(enemies
+                                                .getMember(enemyIdWithMaximalScore)).getID())) {
+                                    enemyIdWithMaximalScore = enemyID;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return enemies.getMember(enemyIdWithMaximalScore);
+    }
+
+    private static @Nullable Ability selectAbility(@NotNull AliveEntity self, @NotNull BattleMap map,
+                                                   @NotNull Set<Ability> attacks,
+                                                   @NotNull AliveEntity targetEnemy) {
+        final Integer distanceToTarget = Objects.requireNonNull(map
+                .getTile(self.getProperty(PropertyCategories.PC_COORDINATES,
+                        DigitsPairIndices.ROW_COORD_INDEX), self
+                        .getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX)))
+                .getH(Objects.requireNonNull(map.getTile(
+                        Objects.requireNonNull(targetEnemy)
+                                .getProperty(PropertyCategories.PC_COORDINATES,
+                                        DigitsPairIndices.ROW_COORD_INDEX),
+                        targetEnemy.getProperty(PropertyCategories.PC_COORDINATES,
+                                DigitsPairIndices.COL_COORD_INDEX))));
+
+        Ability bestAttack = null;
+        Integer maxAttackDamage = Integer.MIN_VALUE;
+        for (Ability attack : attacks) {
+            if (self.getProperty(PropertyCategories.PC_ABILITIES_COOLDOWN,
+                    attack.getID()) == 0) {
+                if (attack.getProperty(PropertyCategories.PC_MAX_DISTANCE) >= distanceToTarget) {
+                    if (attack.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
+                            DigitsPairIndices.MIN_VALUE_INDEX) > maxAttackDamage) {
+                        bestAttack = attack;
+                        maxAttackDamage = attack.getAffection(
+                                AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
+                                DigitsPairIndices.MIN_VALUE_INDEX);
+                    } else {
+                        if (attack.getAffection(AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
+                                DigitsPairIndices.MAX_VALUE_INDEX) > maxAttackDamage) {
+                            bestAttack = attack;
+                            maxAttackDamage = attack.getAffection(
+                                    AffectorCategories.AC_ABILITY_HEALTH_AFFECTOR,
+                                    DigitsPairIndices.MAX_VALUE_INDEX);
+                        }
+                    }
+                }
+            }
+        }
+        return bestAttack;
     }
 }
