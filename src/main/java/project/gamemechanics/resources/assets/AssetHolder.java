@@ -1,5 +1,6 @@
 package project.gamemechanics.resources.assets;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.flyweights.CharacterRace;
 import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.interfaces.Ability;
@@ -14,13 +15,13 @@ import java.util.Set;
 
 @SuppressWarnings("unused")
 public interface AssetHolder<T extends Countable> {
-    T getAsset(@NotNull Integer assetIndex);
+    @Nullable T getAsset(@NotNull Integer assetIndex);
 
-    Boolean hasAsset(@NotNull Integer assetIndex);
+    @NotNull Boolean hasAsset(@NotNull Integer assetIndex);
 
-    Set<Integer> getAvailableAssets();
+    @NotNull Set<Integer> getAvailableAssets();
 
-    Map<Integer, T> getAllAssets();
+    @NotNull Map<Integer, T> getAllAssets();
 
     interface PerkHolder extends AssetHolder<Perk> {
     }

@@ -16,7 +16,7 @@ public abstract class AbstractState implements State {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public Message handleMessage(Message message, Integer forUser)  {
+    public @NotNull Message handleMessage(@NotNull Message message, @NotNull Integer forUser)  {
         final MessageHandler<?> messageHandler = handlersMap.get(message.getClass());
         if (messageHandler == null) {
             return null;
@@ -25,7 +25,7 @@ public abstract class AbstractState implements State {
     }
 
     @Override
-    public <T extends Message> void registerHandler(@NotNull Class<T> clazz, MessageHandler<T> handler) {
+    public <T extends Message> void registerHandler(@NotNull Class<T> clazz, @NotNull MessageHandler<T> handler) {
         handlersMap.put(clazz, handler);
     }
 }

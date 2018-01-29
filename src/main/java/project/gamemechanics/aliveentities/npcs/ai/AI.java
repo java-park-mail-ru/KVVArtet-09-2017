@@ -1,5 +1,6 @@
 package project.gamemechanics.aliveentities.npcs.ai;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
@@ -108,17 +109,17 @@ public class AI implements DecisionMaker {
     // CHECKSTYLE:ON
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return aiID;
     }
 
     @Override
-    public Action makeDecision() {
+    public @NotNull Action makeDecision() {
         return behaviours.get(activeBehaviourID).apply(aggregateBattleState());
     }
 
@@ -138,19 +139,19 @@ public class AI implements DecisionMaker {
         gotDamageFrom.replace(enemyID, gotDamageFrom.get(enemyID) + amount);
     }
 
-    private AggregatedBattleState aggregateBattleState() {
+    private @NotNull AggregatedBattleState aggregateBattleState() {
         return new AggregatedBattleState(npc, map, pathfinder, lookAround(), allies, enemies,
                 sortSquadByHitpoints(allies), sortSquadByDistance(allies),
                 sortSquadByHitpoints(enemies), sortSquadByDistance(enemies),
                 aggro, gotDamageFrom, abilities);
     }
 
-    private FieldOfVision lookAround() {
+    private @NotNull FieldOfVision lookAround() {
         return new FoVTileset(map.getTile(npc.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
                 npc.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX)));
     }
 
-    private List<Integer> sortSquadByHitpoints(@NotNull Squad squad) {
+    private @Nullable List<Integer> sortSquadByHitpoints(@NotNull Squad squad) {
         if (squad.areAllDead() || squad.getSquadSize() == 0) {
             return null;
         }
@@ -181,7 +182,7 @@ public class AI implements DecisionMaker {
         return unitsWeaknessOrder;
     }
 
-    private List<Integer> sortSquadByDistance(@NotNull Squad squad) {
+    private @Nullable List<Integer> sortSquadByDistance(@NotNull Squad squad) {
         if (squad.areAllDead() || squad.getSquadSize() == 0) {
             return null;
         }
@@ -223,7 +224,7 @@ public class AI implements DecisionMaker {
         return unitsDistanceOrder;
     }
 
-    private Set<Integer> getAliveMembersIndices(@NotNull Squad squad) {
+    private @Nullable Set<Integer> getAliveMembersIndices(@NotNull Squad squad) {
         final Set<Integer> aliveMembersSet = new HashSet<>();
 
         for (Integer memberIndex = 0; memberIndex < squad.getSquadSize(); ++memberIndex) {

@@ -20,7 +20,7 @@ public class ItemFactoryImpl implements ItemsFactory {
     }
 
     @Override
-    public EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
+    public @NotNull EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
         final Random random = new Random(System.currentTimeMillis());
         final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL)
                 ? blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty()
@@ -38,8 +38,8 @@ public class ItemFactoryImpl implements ItemsFactory {
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));
     }
 
-    private List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
-                                        @NotNull Map<Integer, Integer> itemPartsList) {
+    private @NotNull List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
+                                                 @NotNull Map<Integer, Integer> itemPartsList) {
         final Random random = new Random(System.currentTimeMillis());
         final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
 
@@ -61,8 +61,9 @@ public class ItemFactoryImpl implements ItemsFactory {
                             && (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY).equals(rarity)
                                 || partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY)
                                 <= ItemRarity.IR_COMMON.asInt())) {
-                        if (!parts.isEmpty() && partsScope.get(tmpId).getAllProperties()
-                                .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet()
+                        if (!parts.isEmpty()
+                                && Objects.requireNonNull(partsScope.get(tmpId).getAllProperties()
+                                .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet())
                                 .equals(parts.get(itemPartIndex - 1).getAllProperties()
                                         .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet())) {
                             partId = tmpId;
@@ -79,8 +80,8 @@ public class ItemFactoryImpl implements ItemsFactory {
         return parts;
     }
 
-    private IngameItem.ItemModel makeItemModel(@NotNull Integer level, @NotNull Integer rarity,
-                                               @NotNull List<ItemPart> parts) {
+    private @NotNull IngameItem.ItemModel makeItemModel(@NotNull Integer level, @NotNull Integer rarity,
+                                                        @NotNull List<ItemPart> parts) {
         final Random random = new Random(System.currentTimeMillis());
         final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
         for (Integer i = 0; i < parts.size(); ++i) {
@@ -123,9 +124,9 @@ public class ItemFactoryImpl implements ItemsFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    private Map<Integer, Affector> mergeAffectors(@NotNull List<ItemPart> parts,
-                                                  @NotNull List<Integer> rarities,
-                                                  @NotNull Float growth) {
+    private @NotNull Map<Integer, Affector> mergeAffectors(@NotNull List<ItemPart> parts,
+                                                           @NotNull List<Integer> rarities,
+                                                           @NotNull Float growth) {
 
         final Set<Integer> affectorIds = new HashSet<>();
         for (ItemPart itemPart : parts) {
@@ -218,9 +219,9 @@ public class ItemFactoryImpl implements ItemsFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    private Map<Integer, Property> mergeProperties(@NotNull List<ItemPart> parts,
-                                                   @NotNull List<Integer> rarities,
-                                                   @NotNull Float growth) {
+    private @NotNull Map<Integer, Property> mergeProperties(@NotNull List<ItemPart> parts,
+                                                            @NotNull List<Integer> rarities,
+                                                            @NotNull Float growth) {
 
         final Set<Integer> propertyIds = new HashSet<>();
         for (ItemPart part : parts) {
@@ -344,20 +345,20 @@ public class ItemFactoryImpl implements ItemsFactory {
         return mergedProperties;
     }
 
-    private Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
+    private @NotNull Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
         return propertyKind == PropertyCategories.PC_LEVEL || propertyKind == PropertyCategories.PC_ITEM_KIND
                 || propertyKind == PropertyCategories.PC_ITEM_SLOTS;
     }
 
-    private Boolean isPropertyAlterable(@NotNull Integer propertyKind) {
+    private @NotNull Boolean isPropertyAlterable(@NotNull Integer propertyKind) {
         return propertyKind == PropertyCategories.PC_ITEM_PRICE;
     }
 
-    private Boolean isPropertyLevelable(@NotNull Integer propertyKind) {
+    private @NotNull Boolean isPropertyLevelable(@NotNull Integer propertyKind) {
         return propertyKind == PropertyCategories.PC_ITEM_PRICE;
     }
 
-    private Integer applyRarityBonus(@NotNull Integer baseValue, @NotNull Integer rarity) {
+    private @NotNull Integer applyRarityBonus(@NotNull Integer baseValue, @NotNull Integer rarity) {
         return Long.valueOf(Math.round(baseValue.floatValue() * Math.pow(Constants.STATS_GROWTH_PER_LEVEL,
                 rarity.floatValue() - ItemRarity.IR_COMMON.asInt().floatValue()))).intValue();
     }

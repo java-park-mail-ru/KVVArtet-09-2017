@@ -1,5 +1,6 @@
 package project.gamemechanics.items.loot;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.EquipableItem;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public interface PendingLootPool {
-    List<EquipableItem> getLootPool(@NotNull AliveEntity owner);
+    @Nullable List<EquipableItem> getLootPool(@NotNull AliveEntity owner);
 
     void clearLootPool(@NotNull AliveEntity owner);
 

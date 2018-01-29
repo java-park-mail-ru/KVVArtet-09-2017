@@ -108,33 +108,33 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Integer getLevel() {
+    public @NotNull Integer getLevel() {
         return getProperty(PropertyCategories.PC_LEVEL);
     }
 
     @Override
-    public Boolean hasProperty(Integer propertyKind) {
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -142,7 +142,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -198,7 +198,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean setProperty(@NotNull Integer propertyKind, @NotNull Map<Integer, Integer> propertyValue) {
+    public @NotNull Boolean setProperty(@NotNull Integer propertyKind, @NotNull Map<Integer, Integer> propertyValue) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
@@ -206,7 +206,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind, @NotNull Float percentage) {
+    public @NotNull Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind, @NotNull Float percentage) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
@@ -214,8 +214,9 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind, @NotNull Integer propertyIndex,
-                                              @NotNull Float percentage) {
+    public @NotNull Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind,
+                                                       @NotNull Integer propertyIndex,
+                                                       @NotNull Float percentage) {
         if (!hasProperty(propertyKind)) {
             return false;
         }
@@ -231,7 +232,8 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public void modifyPropertyByAddition(@NotNull Integer propertyKind, @NotNull Integer propertyIndex,
+    public void modifyPropertyByAddition(@NotNull Integer propertyKind,
+                                         @NotNull Integer propertyIndex,
                                          @NotNull Integer toAdd) {
         if (!hasProperty(propertyKind)) {
             return;
@@ -240,7 +242,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean isAlive() {
+    public @NotNull Boolean isAlive() {
         return getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX) > 0;
     }
 
@@ -250,8 +252,9 @@ public abstract class AbstractAliveEntity implements AliveEntity {
             return;
         }
         if (amount > 0) {
-            final Integer missingHitpoints = getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.MAX_VALUE_INDEX)
-                    - getProperty(PropertyCategories.PC_HITPOINTS, DigitsPairIndices.CURRENT_VALUE_INDEX);
+            final Integer missingHitpoints = getProperty(PropertyCategories.PC_HITPOINTS,
+                    DigitsPairIndices.MAX_VALUE_INDEX) - getProperty(PropertyCategories.PC_HITPOINTS,
+                    DigitsPairIndices.CURRENT_VALUE_INDEX);
             if (missingHitpoints < amount) {
                 modifyPropertyByAddition(PropertyCategories.PC_HITPOINTS,
                         DigitsPairIndices.CURRENT_VALUE_INDEX, missingHitpoints);
@@ -266,7 +269,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Integer getCash() {
+    public @NotNull Integer getCash() {
         if (hasProperty(PropertyCategories.PC_CASH_AMOUNT)) {
             return getProperty(PropertyCategories.PC_CASH_AMOUNT);
         }
@@ -279,7 +282,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean removeEffect(Integer effectIndex) {
+    public @NotNull Boolean removeEffect(Integer effectIndex) {
         if (effectIndex < 0 || effectIndex >= effects.size()) {
             return false;
         }
@@ -288,7 +291,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Boolean removeAllEffects() {
+    public @NotNull Boolean removeAllEffects() {
         if (effects.isEmpty()) {
             return false;
         }
@@ -305,7 +308,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public CharacterRole getCharacterRole() {
+    public @NotNull CharacterRole getCharacterRole() {
         return characterRole;
     }
 
@@ -319,12 +322,12 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @Override
-    public Integer getInitiative() {
+    public @NotNull Integer getInitiative() {
         return getProperty(PropertyCategories.PC_INITIATIVE);
     }
 
     @Override
-    public Integer getSpeed() {
+    public @NotNull Integer getSpeed() {
         return getProperty(PropertyCategories.PC_SPEED);
     }
 
@@ -354,11 +357,11 @@ public abstract class AbstractAliveEntity implements AliveEntity {
     }
 
     @SuppressWarnings("unused")
-    List<Effect> getEffects() {
+    @NotNull List<Effect> getEffects() {
         return effects;
     }
 
-    private Float getDamageReduction() {
+    private @NotNull Float getDamageReduction() {
         final Float damageReduction = ((Constants.MINIMAL_DAMAGE_REDUCTION * Constants.PERCENTAGE_CAP_INT
                 * getDefense().floatValue()) / getProperty(PropertyCategories.PC_BASE_DEFENSE))
                 * Constants.ONE_PERCENT_FLOAT;
@@ -371,12 +374,12 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         return damageReduction;
     }
 
-    Float intToFloatPercentage(@NotNull Integer value) {
+    @NotNull Float intToFloatPercentage(@NotNull Integer value) {
         return value.floatValue() / Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue();
     }
 
     @SuppressWarnings("SameParameterValue")
-    Integer getEffectsAffection(@NotNull Integer affectorKind) {
+    @NotNull Integer getEffectsAffection(@NotNull Integer affectorKind) {
         Integer effectsAffection = 0;
         for (Effect effect : effects) {
             if (!effect.isExpired()) {
@@ -389,7 +392,7 @@ public abstract class AbstractAliveEntity implements AliveEntity {
         return effectsAffection;
     }
 
-    Integer getEffectsAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
+    @NotNull Integer getEffectsAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         Integer effectsAffection = 0;
         for (Effect effect : effects) {
             if (!effect.isExpired()) {

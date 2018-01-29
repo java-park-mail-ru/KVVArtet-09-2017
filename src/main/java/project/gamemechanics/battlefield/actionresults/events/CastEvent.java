@@ -16,17 +16,17 @@ public class CastEvent implements TurnEvent {
     }
 
     @Override
-    public Integer getEventKind() {
+    public @NotNull Integer getEventKind() {
         return EventCategories.EC_CAST;
     }
 
     @Override
-    public MapNode getWhere() {
+    public @NotNull MapNode getWhere() {
         return where;
     }
 
     @JsonProperty("abilityId")
-    public Integer getAbilityID() {
+    public @NotNull Integer getAbilityID() {
         return abilityID;
     }
 }

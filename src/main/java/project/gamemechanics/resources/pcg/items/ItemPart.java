@@ -9,6 +9,7 @@ import project.gamemechanics.interfaces.AffectorProvider;
 import project.gamemechanics.interfaces.GameEntity;
 import project.gamemechanics.interfaces.PropertyProvider;
 
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @SuppressWarnings("unused")
@@ -23,11 +24,11 @@ public interface ItemPart extends GameEntity, AffectorProvider, PropertyProvider
     int ITEM_PARTS_COUNT = 3;
 
     @JsonIgnore
-    Integer getLevel();
+    @NotNull Integer getLevel();
 
-    Integer getPartIndex();
+    @NotNull Integer getPartIndex();
 
-    Map<Integer, Affector> getAllAffectors();
+    @NotNull Map<Integer, Affector> getAllAffectors();
 
-    Map<Integer, Property> getAllProperties();
+    @NotNull Map<Integer, Property> getAllProperties();
 }

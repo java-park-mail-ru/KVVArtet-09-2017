@@ -3,6 +3,7 @@ package project.gamemechanics.components.affectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
@@ -20,12 +21,12 @@ public class MapAffector implements Affector {
 
     @Override
     @JsonIgnore
-    public Integer getAffection() {
+    public @NotNull Integer getAffection() {
         return 0;
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectionIndex) {
         if (!affections.containsKey(affectionIndex)) {
             return 0;
         }
@@ -34,13 +35,13 @@ public class MapAffector implements Affector {
 
     @Override
     @JsonIgnore
-    public Boolean setSingleAffection(@NotNull Integer affection) {
+    public @NotNull Boolean setSingleAffection(@NotNull Integer affection) {
         return false;
     }
 
     @Override
     @JsonProperty("affections")
-    public Map<Integer, Integer> getAffectionsMap() {
+    public @NotNull Map<Integer, Integer> getAffectionsMap() {
         return affections;
     }
 
@@ -48,7 +49,7 @@ public class MapAffector implements Affector {
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affections")
-    public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
+    public @NotNull Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
     // CHECKSTYLE:ON
         if (!Objects.equals(this.affections.keySet(), affections.keySet())) {
             return false;
@@ -62,7 +63,7 @@ public class MapAffector implements Affector {
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    public List<Integer> getAffectionsList() {
+    public @Nullable List<Integer> getAffectionsList() {
         return null;
     }
 
@@ -70,7 +71,7 @@ public class MapAffector implements Affector {
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
-    public Boolean setAffectionsList(@NotNull List<Integer> affections) {
+    public @NotNull Boolean setAffectionsList(@NotNull List<Integer> affections) {
         return false;
     }
     // CHECKSTYLE:ON
@@ -84,7 +85,7 @@ public class MapAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer toAdd) {
+    public @NotNull Boolean modifyByAddition(@NotNull Integer toAdd) {
         for (Integer key : affections.keySet()) {
             affections.replace(key, affections.get(key) + toAdd);
         }

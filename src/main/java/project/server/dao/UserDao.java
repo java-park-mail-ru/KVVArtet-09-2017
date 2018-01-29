@@ -1,38 +1,40 @@
 package project.server.dao;
 
+import org.jetbrains.annotations.Nullable;
 import project.server.models.User;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @SuppressWarnings("unused")
 public interface UserDao {
 
-    User getUserById(Integer id);
+    @Nullable User getUserById(@NotNull Integer id);
 
-    User getUserByUsernameOrEmail(String usernameOrEmail);
+    @Nullable User getUserByUsernameOrEmail(@NotNull String usernameOrEmail);
 
-    Integer getUserIdByUsername(String username);
+    @NotNull Integer getUserIdByUsername(@NotNull String username);
 
-    Integer getUserIdByEmail(String email);
+    @NotNull Integer getUserIdByEmail(@NotNull String email);
 
-    Integer getUserIdByUsernameOrEmail(String usernameOrEmail);
+    @NotNull Integer getUserIdByUsernameOrEmail(@NotNull String usernameOrEmail);
 
-    User setUser(User newUser);
+    @NotNull User setUser(@NotNull User newUser);
 
-    User updateUserPassword(User user, String password);
+    @NotNull User updateUserPassword(@NotNull User user, @NotNull String password);
 
-    User updateUserLogin(User user, String username);
+    @NotNull User updateUserLogin(@NotNull User user, @NotNull String username);
 
-    boolean isUsernameExists(String username);
+    boolean isUsernameExists(@NotNull String username);
 
-    boolean isEmailExists(String email);
+    boolean isEmailExists(@NotNull String email);
 
-    boolean isIdExists(Integer id);
+    boolean isIdExists(@NotNull Integer id);
 
-    boolean isExist(String usernameOrEmail);
+    boolean isExist(@NotNull String usernameOrEmail);
 
-    void deleteUser(Integer id);
+    void deleteUser(@NotNull Integer id);
 
-    List<User> getAllUsers();
+    @NotNull List<User> getAllUsers();
 
 }

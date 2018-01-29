@@ -1,11 +1,13 @@
 package project.gamemechanics.smartcontroller;
 
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
 import project.statemachine.StateService;
 import project.websocket.messages.Message;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -26,7 +28,7 @@ public class SmartController {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public Message getOutboxMessage() {
+    public @Nullable Message getOutboxMessage() {
         if (outboxMessageQueue.isEmpty()) {
             return null;
         } else {
@@ -34,43 +36,43 @@ public class SmartController {
         }
     }
 
-    public void addInboxMessage(Message inboxMessage) {
+    public void addInboxMessage(@NotNull Message inboxMessage) {
         this.inboxMessageQueue.add(inboxMessage);
     }
 
-    public UserCharacter getActiveChar() {
+    public @Nullable UserCharacter getActiveChar() {
         return activeChar;
     }
 
-    public void setActiveChar(UserCharacter activeChar) {
+    public void setActiveChar(@Nullable UserCharacter activeChar) {
         this.activeChar = activeChar;
     }
 
-    public CharacterList getCharacterList() {
+    public @NotNull CharacterList getCharacterList() {
         return characterList;
     }
 
-    public void setCharacterList(CharacterList characterList) {
+    public void setCharacterList(@NotNull CharacterList characterList) {
         this.characterList = characterList;
     }
 
-    public WebSocketSession getWebSocketSession() {
+    public @Nullable WebSocketSession getWebSocketSession() {
         return webSocketSession;
     }
 
-    public void setWebSocketSession(WebSocketSession webSocketSession) {
+    public void setWebSocketSession(@NotNull WebSocketSession webSocketSession) {
         this.webSocketSession = webSocketSession;
     }
 
-    public Boolean isValid() {
+    public @NotNull Boolean isValid() {
         return webSocketSession.isOpen();
     }
 
-    public void setOwnerID(Integer ownerID) {
+    public void setOwnerID(@NotNull Integer ownerID) {
         this.ownerID = ownerID;
     }
 
-    public Integer getOwnerID() {
+    public @NotNull Integer getOwnerID() {
         return ownerID;
     }
 }

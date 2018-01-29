@@ -17,7 +17,7 @@ public abstract class MessageHandler<T extends Message> {
         this.clazz = clazz;
     }
 
-    public Message handleMessage(@NotNull Message message, Integer forUser) {
+    public Message handleMessage(@NotNull Message message, @NotNull Integer forUser) {
         try {
             return handle(clazz.cast(message), forUser);
         } catch (ClassCastException e) {
@@ -27,5 +27,5 @@ public abstract class MessageHandler<T extends Message> {
         }
     }
 
-    protected abstract Message handle(@NotNull T message, Integer forUser);
+    protected abstract @NotNull Message handle(@NotNull T message, @NotNull Integer forUser);
 }

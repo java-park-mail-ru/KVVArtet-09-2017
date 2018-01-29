@@ -13,7 +13,7 @@ public class NewCharacterModel {
         this.properties = properties;
     }
 
-    public Map<Integer, Property> getProperties() {
+    public @NotNull Map<Integer, Property> getProperties() {
         return properties;
     }
 }

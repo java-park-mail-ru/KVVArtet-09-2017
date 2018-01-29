@@ -98,7 +98,7 @@ public final class Pathfinder implements PathfindingAlgorithm {
         return null;
     }
 
-    private Integer getG(@NotNull MapNode from, @NotNull MapNode to, @NotNull Integer fromCost) {
+    private @NotNull Integer getG(@NotNull MapNode from, @NotNull MapNode to, @NotNull Integer fromCost) {
         if (!from.isAdjacentTo(to)) {
             return 0;
         }

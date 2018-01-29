@@ -8,17 +8,19 @@ import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("unused")
 public interface Lobby {
-    Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode);
+    @NotNull Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode);
 
-    Message enqueue(@NotNull CharactersParty party, @NotNull Integer gameMode);
+    @NotNull Message enqueue(@NotNull CharactersParty party, @NotNull Integer gameMode);
 
-    Message dequeue(@NotNull AliveEntity character);
+    @NotNull Message dequeue(@NotNull AliveEntity character);
 
-    Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode);
+    @NotNull Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode);
 
-    Message dequeue(@NotNull CharactersParty party, @NotNull Boolean dismissParty);
+    @NotNull Message dequeue(@NotNull CharactersParty party, @NotNull Boolean dismissParty);
 
-    Message dequeue(@NotNull CharactersParty party, @NotNull Integer gameMode, @NotNull Boolean dismissParty);
+    @NotNull Message dequeue(@NotNull CharactersParty party,
+                             @NotNull Integer gameMode,
+                             @NotNull Boolean dismissParty);
 
     void tick();
 }

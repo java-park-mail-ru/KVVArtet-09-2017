@@ -28,7 +28,7 @@ public class LobbyRequestHandler extends MessageHandler<LobbyRequestMessage> {
     }
 
     @Override
-    public Message handle(@NotNull LobbyRequestMessage message, Integer forUser) {
+    public Message handle(@NotNull LobbyRequestMessage message, @NotNull Integer forUser) {
         //TODO some world class method
         return message;
     }

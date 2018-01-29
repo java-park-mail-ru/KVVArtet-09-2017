@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(ApplyEffectEvent.class),
@@ -16,13 +18,13 @@ import project.gamemechanics.interfaces.MapNode;
         @JsonSubTypes.Type(RollbackEvent.class),
 })
 public interface TurnEvent {
-    Integer getEventKind();
+    @NotNull Integer getEventKind();
 
     default @Nullable MapNode getWhere() {
         return null;
     }
 
-    default Integer getAmount() {
+    default @NotNull Integer getAmount() {
         return 0;
     }
 }

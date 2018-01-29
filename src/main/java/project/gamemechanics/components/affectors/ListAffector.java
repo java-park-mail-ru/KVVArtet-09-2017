@@ -19,12 +19,12 @@ public class ListAffector implements Affector {
 
     @Override
     @JsonIgnore
-    public Integer getAffection() {
+    public @NotNull Integer getAffection() {
         return 0;
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectionIndex) {
         if (affectionIndex < 0 || affectionIndex >= affections.size()) {
             return 0;
         }
@@ -33,13 +33,13 @@ public class ListAffector implements Affector {
 
     @Override
     @JsonIgnore
-    public Boolean setSingleAffection(@NotNull Integer affection) {
+    public @NotNull Boolean setSingleAffection(@NotNull Integer affection) {
         return false;
     }
 
     @Override
     @JsonProperty("affections")
-    public List<Integer> getAffectionsList() {
+    public @NotNull List<Integer> getAffectionsList() {
         return affections;
     }
 
@@ -47,7 +47,7 @@ public class ListAffector implements Affector {
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affections")
-    public Boolean setAffectionsList(@NotNull List<Integer> affections) {
+    public @NotNull Boolean setAffectionsList(@NotNull List<Integer> affections) {
     // CHECKSTYLE:ON
         this.affections.clear();
         this.affections.addAll(affections);
@@ -64,7 +64,7 @@ public class ListAffector implements Affector {
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
-    public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
+    public @NotNull Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
         return false;
     }
     // CHECKSTYLE:ON
@@ -79,7 +79,7 @@ public class ListAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer toAdd) {
+    public @NotNull Boolean modifyByAddition(@NotNull Integer toAdd) {
         for (Integer affectionIndex = 0; affectionIndex < affections.size(); ++affectionIndex) {
             affections.set(affectionIndex, affections.get(affectionIndex) + toAdd);
         }

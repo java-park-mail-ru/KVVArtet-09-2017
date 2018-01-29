@@ -37,16 +37,16 @@ public class CharactersParty implements Countable {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return partyID;
     }
 
-    private Squad toSquad(@NotNull Integer squadId) {
+    private @NotNull Squad toSquad(@NotNull Integer squadId) {
         final List<AliveEntity> membersList = new ArrayList<>();
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
@@ -56,11 +56,11 @@ public class CharactersParty implements Countable {
         return new Squad(membersList, lootPool, squadId);
     }
 
-    public Squad toSquad() {
+    public @NotNull Squad toSquad() {
         return this.toSquad(Squad.PLAYERS_SQUAD_ID);
     }
 
-    public Boolean hasRole(@NotNull Integer roleId) {
+    public @NotNull Boolean hasRole(@NotNull Integer roleId) {
         final Integer parsedRoleId = parseRoleId(roleId);
         return parsedRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
                 ? members.getOrDefault(parsedRoleId, null) != null
@@ -68,7 +68,7 @@ public class CharactersParty implements Countable {
                 && members.getOrDefault(CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null) != null;
     }
 
-    public Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
+    public @NotNull Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
         Integer realRoleId = parseRoleId(roleId);
         if (hasRole(realRoleId) || !members.containsKey(realRoleId)) {
             return false;
@@ -90,7 +90,7 @@ public class CharactersParty implements Countable {
         return true;
     }
 
-    public Boolean removeMember(@NotNull Integer roleId) {
+    public @NotNull Boolean removeMember(@NotNull Integer roleId) {
         final Integer realRoleId = parseRoleId(roleId);
         if (!hasRole(realRoleId)) {
             return false;
@@ -105,11 +105,11 @@ public class CharactersParty implements Countable {
         return true;
     }
 
-    public AliveEntity getMember(@NotNull Integer roleId) {
+    public @Nullable AliveEntity getMember(@NotNull Integer roleId) {
         return members.getOrDefault(roleId, null);
     }
 
-    public Integer getPartySize() {
+    public @NotNull Integer getPartySize() {
         Integer membersCount = 0;
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
@@ -119,7 +119,7 @@ public class CharactersParty implements Countable {
         return membersCount;
     }
 
-    public Boolean areAllDead() {
+    public @NotNull Boolean areAllDead() {
         for (Integer roleId : members.keySet()) {
             if (members.get(roleId) != null) {
                 if (members.get(roleId).isAlive()) {
@@ -130,7 +130,7 @@ public class CharactersParty implements Countable {
         return true;
     }
 
-    public Integer getAverageLevel() {
+    public @NotNull Integer getAverageLevel() {
         Integer accumulatedLevel = 0;
         Integer partySize = 0;
         for (Integer roleId : members.keySet()) {
@@ -198,7 +198,7 @@ public class CharactersParty implements Countable {
     }
 
     @JsonIgnore
-    public Set<Integer> getRoleIds() {
+    public @NotNull Set<Integer> getRoleIds() {
         return members.keySet();
     }
 
@@ -209,7 +209,7 @@ public class CharactersParty implements Countable {
         members.put(CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null);
     }
 
-    private Integer parseRoleId(@NotNull Integer roleId) {
+    private @NotNull Integer parseRoleId(@NotNull Integer roleId) {
         return roleId == CharacterRoleIds.CR_MELEE_DAMAGE_DEALER
                 || roleId == CharacterRoleIds.CR_RANGED_DAMAGE_DEALER
                 ? CharacterRoleIds.CR_DAMAGE_DEALER_ONE : roleId;

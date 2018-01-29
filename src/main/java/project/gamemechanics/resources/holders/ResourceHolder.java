@@ -2,6 +2,7 @@ package project.gamemechanics.resources.holders;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
@@ -14,11 +15,11 @@ import java.util.Set;
         @JsonSubTypes.Type(GameResourceHolder.class)
 })
 public interface ResourceHolder {
-    Boolean hasResource(@NotNull Integer resourceIndex);
+    @NotNull Boolean hasResource(@NotNull Integer resourceIndex);
 
-    GameResource getResource(@NotNull Integer resourceIndex);
+    @Nullable GameResource getResource(@NotNull Integer resourceIndex);
 
-    Set<Integer> getAvailableResources();
+    @NotNull Set<Integer> getAvailableResources();
 
-    Map<Integer, GameResource> getAllResources();
+    @NotNull Map<Integer, GameResource> getAllResources();
 }

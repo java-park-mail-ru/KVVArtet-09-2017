@@ -2,6 +2,7 @@ package project.gamemechanics.resources.assets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.flyweights.CharacterRace;
 import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.globals.DigitsPairIndices;
@@ -11,10 +12,7 @@ import project.gamemechanics.interfaces.Perk;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class AssetProviderImpl implements AssetProvider {
     private final AssetHolder.PerkHolder perkHolder;
@@ -61,64 +59,69 @@ public class AssetProviderImpl implements AssetProvider {
     }
 
     @Override
-    public Perk getPerk(@NotNull Integer perkId) {
+    public @Nullable Perk getPerk(@NotNull Integer perkId) {
         return perkHolder.getAsset(perkId);
     }
 
     @Override
-    public PerkBranch getPerkBranch(@NotNull Integer branchId) {
+    public @Nullable PerkBranch getPerkBranch(@NotNull Integer branchId) {
         return perkBranchHolder.getAsset(branchId);
     }
 
     @Override
-    public CharacterRace getCharacterRace(@NotNull Integer raceId) {
+    public @Nullable CharacterRace getCharacterRace(@NotNull Integer raceId) {
         return characterRaceHolder.getAsset(raceId);
     }
 
     @Override
-    public CharacterRace getCharacterRace() {
+    public @NotNull CharacterRace getCharacterRace() {
         final List<Integer> characterRaceKeyList = new ArrayList<>(characterRaceHolder.getAvailableAssets());
         final Random random = new Random(System.currentTimeMillis());
-        return getCharacterRace(characterRaceKeyList.get(random.nextInt(characterRaceKeyList.size())));
+        return Objects.requireNonNull(getCharacterRace(characterRaceKeyList
+                .get(random.nextInt(characterRaceKeyList.size()))));
     }
 
     @Override
-    public Ability getAbility(@NotNull Integer abilityId) {
+    public @Nullable Ability getAbility(@NotNull Integer abilityId) {
         return abilityHolder.getAsset(abilityId);
     }
 
     @Override
-    public CharacterRole getCharacterClass(@NotNull Integer classId) {
+    public @Nullable CharacterRole getCharacterClass(@NotNull Integer classId) {
         return characterClassHolder.getAsset(classId);
     }
 
     @Override
-    public CharacterRole getNpcRole(@NotNull Integer roleId) {
+    public @Nullable CharacterRole getNpcRole(@NotNull Integer roleId) {
         return npcRoleHolder.getAsset(roleId);
     }
 
     @Override
-    public CharacterRole getNpcRole() {
+    public @NotNull CharacterRole getNpcRole() {
         final List<Integer> npcRoleKeysList = new ArrayList<>(npcRoleHolder.getAvailableAssets());
         final Random random = new Random(System.currentTimeMillis());
-        return getNpcRole(npcRoleKeysList.get(random.nextInt(npcRoleKeysList.size())));
+        return Objects.requireNonNull(getNpcRole(npcRoleKeysList
+                .get(random.nextInt(npcRoleKeysList.size()))));
     }
 
     @Override
-    public List<String> makeInstanceNameDescription() {
+    public @NotNull List<String> makeInstanceNameDescription() {
         final Random random = new Random(System.currentTimeMillis());
 
         final StringBuilder nameBuilder = new StringBuilder();
         final StringBuilder descriptionBuilder = new StringBuilder();
 
         for (Integer i = 0; i < DigitsPairIndices.PAIR_SIZE; ++i) {
-            final List<Integer> idsList = new ArrayList<>(instanceNameDescriptionHolders.get(i).getAvailableAssets());
+            final List<Integer> idsList = new ArrayList<>(instanceNameDescriptionHolders.get(i)
+                    .getAvailableAssets());
             final Integer chosenId = random.nextInt(idsList.size());
-            nameBuilder.append(instanceNameDescriptionHolders.get(i).getAsset(chosenId).getName());
+            nameBuilder.append(Objects.requireNonNull(instanceNameDescriptionHolders.get(i)
+                    .getAsset(chosenId)).getName());
             if (i > 0) {
                 nameBuilder.append(' ');
             }
-            descriptionBuilder.append(instanceNameDescriptionHolders.get(i).getAsset(chosenId).getDescription());
+            descriptionBuilder.append(Objects.requireNonNull(instanceNameDescriptionHolders
+                    .get(i).getAsset(chosenId)).getDescription());
             if (i > 0) {
                 descriptionBuilder.append(' ');
             }

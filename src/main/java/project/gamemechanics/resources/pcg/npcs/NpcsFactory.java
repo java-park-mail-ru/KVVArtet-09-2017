@@ -13,6 +13,6 @@ import javax.validation.constraints.NotNull;
         @JsonSubTypes.Type(NpcsFactoryImpl.class),
 })
 public interface NpcsFactory {
-    AliveEntity makeNpc(@NotNull NpcBlueprint blueprint, @NotNull AssetProvider assetProvider,
-                        @NotNull ItemsFactory itemsGenerator);
+    @NotNull AliveEntity makeNpc(@NotNull NpcBlueprint blueprint, @NotNull AssetProvider assetProvider,
+                                 @NotNull ItemsFactory itemsGenerator);
 }

@@ -51,7 +51,7 @@ public class FoVTileset implements FieldOfVision {
             this.end = end;
         }
 
-        Boolean contains(@NotNull Shadow other) {
+        @NotNull Boolean contains(@NotNull Shadow other) {
             return start <= other.start && end >= other.end;
         }
     }
@@ -71,7 +71,7 @@ public class FoVTileset implements FieldOfVision {
          * @param projection node coordinates projection from the current PoV.
          * @return true is this projection is covered by shadow line or false otherwise.
          */
-        Boolean isInShadow(@NotNull Shadow projection) {
+        @NotNull Boolean isInShadow(@NotNull Shadow projection) {
             for (Shadow shadow : shadows) {
                 if (shadow.contains(projection)) {
                     return true;
@@ -122,7 +122,7 @@ public class FoVTileset implements FieldOfVision {
          * @param width observed row's width.
          * @return true if the shadow line is represented by the single shadow and covers the whole row width
          */
-        Boolean isFullShadow(@NotNull Integer width) {
+        @NotNull Boolean isFullShadow(@NotNull Integer width) {
             return shadows.size() == 1 && Objects.equals(shadows.get(0).start, 0)
                     && Objects.equals(shadows.get(0).end, width);
         }
@@ -166,7 +166,7 @@ public class FoVTileset implements FieldOfVision {
          *
          * @return list of visible nodes
          */
-        List<MapNode> getVisibleNodes() {
+        @NotNull List<MapNode> getVisibleNodes() {
             final List<MapNode> visibleNodes = new LinkedList<>();
             final ShadowLine shadows = new ShadowLine();
             for (List<MapNode> row : octant) {
@@ -249,7 +249,7 @@ public class FoVTileset implements FieldOfVision {
         }
 
         @SuppressWarnings("ParameterHidesMemberVariable")
-        private List<MapNode> getHalfConeRow(@NotNull MapNode rowHead, @NotNull Integer direction) {
+        private @NotNull List<MapNode> getHalfConeRow(@NotNull MapNode rowHead, @NotNull Integer direction) {
             final List<MapNode> row = new LinkedList<>();
             row.add(rowHead);
             MapNode nextNode = rowHead.getAdjacent(direction);
@@ -263,7 +263,7 @@ public class FoVTileset implements FieldOfVision {
             return row;
         }
 
-        private Shadow projectNode(@NotNull Integer row, @NotNull Integer column) {
+        private @NotNull Shadow projectNode(@NotNull Integer row, @NotNull Integer column) {
             //noinspection OverlyComplexBooleanExpression
             final Integer nominator = direction == OD_NORTH || direction == OD_SOUTH_EAST
                     || direction == OD_SOUTH || direction == OD_NORTH_WEST ? column : row;
@@ -276,14 +276,14 @@ public class FoVTileset implements FieldOfVision {
             return new Shadow(start, end);
         }
 
-        private Integer getShadowLineCoordinateIndex() {
+        private @NotNull Integer getShadowLineCoordinateIndex() {
             //noinspection OverlyComplexBooleanExpression
             return direction == OD_NORTH || direction == OD_SOUTH_EAST
                     || direction == OD_SOUTH || direction == OD_NORTH_WEST
                     ? DigitsPairIndices.ROW_COORD_INDEX : DigitsPairIndices.COL_COORD_INDEX;
         }
 
-        private List<Integer> getRelativeNodeCoordinates(@NotNull List<Integer> nodeCoordinates) {
+        private @NotNull List<Integer> getRelativeNodeCoordinates(@NotNull List<Integer> nodeCoordinates) {
             final List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
             relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX,
                     nodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)
@@ -318,7 +318,7 @@ public class FoVTileset implements FieldOfVision {
     }
 
     @Override
-    public Boolean isVisible(@NotNull List<Integer> position) {
+    public @NotNull Boolean isVisible(@NotNull List<Integer> position) {
         return fieldOfVision.containsKey(position);
     }
 
@@ -342,7 +342,8 @@ public class FoVTileset implements FieldOfVision {
                 currentPosition = currentPosition.getAdjacent(
                         rowDifference < 0 ? Directions.UP : Directions.DOWN);
             }
-            final Integer colDifference = currentPosition.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+            final Integer colDifference = Objects.requireNonNull(currentPosition)
+                    .getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
                     - goal.get(DigitsPairIndices.COL_COORD_INDEX);
             if (colDifference != 0) {
                 currentPosition = currentPosition.getAdjacent(colDifference < 0 ? Directions.LEFT : Directions.RIGHT);

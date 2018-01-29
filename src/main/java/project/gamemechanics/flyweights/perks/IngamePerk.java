@@ -44,37 +44,37 @@ public class IngamePerk implements Perk {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return perkID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Boolean hasAffector(Integer affectorKind) {
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
-    public Set<Integer> getAvailableAffectors() {
+    public @NotNull Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         if (!hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -91,7 +91,7 @@ public class IngamePerk implements Perk {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if ((affectorKind & AffectorCategories.AC_MULTI_VALUE_AFFECTORS) == 0 || !hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -99,7 +99,9 @@ public class IngamePerk implements Perk {
     }
 
     @Override
-    public Integer getRankBasedAffection(Integer affectorKind, Integer affectionIndex, Integer perkRank) {
+    public @NotNull Integer getRankBasedAffection(@NotNull Integer affectorKind,
+                                                  @NotNull Integer affectionIndex,
+                                                  @NotNull Integer perkRank) {
         Integer baseValue = getAffection(affectorKind, affectionIndex);
         if (baseValue != Integer.MIN_VALUE && perkRank > 0) {
             baseValue *= perkRank;
@@ -108,7 +110,8 @@ public class IngamePerk implements Perk {
     }
 
     @Override
-    public Integer getRankBasedAffection(Integer affectorKind, Integer perkRank) {
+    public @NotNull Integer getRankBasedAffection(@NotNull Integer affectorKind,
+                                                  @NotNull Integer perkRank) {
         Integer baseValue = getAffection(affectorKind);
         if (baseValue != Integer.MIN_VALUE && perkRank > 0) {
             baseValue *= perkRank;

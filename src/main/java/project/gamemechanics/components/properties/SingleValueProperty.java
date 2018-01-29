@@ -3,6 +3,7 @@ package project.gamemechanics.components.properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
@@ -20,12 +21,12 @@ public class SingleValueProperty implements Property {
 
     @Override
     @JsonProperty("property")
-    public Integer getProperty() {
+    public @NotNull Integer getProperty() {
         return property;
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyIndex) {
         return 0;
     }
     // CHECKSTYLE:OFF
@@ -45,13 +46,13 @@ public class SingleValueProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Float percentage) {
+    public @NotNull Boolean modifyByPercentage(@NotNull Float percentage) {
         property = Math.round(property * (percentage + Constants.PERCENTAGE_CAP_FLOAT));
         return true;
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Integer propertyIndex, @NotNull Float percentage) {
+    public @NotNull Boolean modifyByPercentage(@NotNull Integer propertyIndex, @NotNull Float percentage) {
         return false;
     }
 
@@ -63,27 +64,27 @@ public class SingleValueProperty implements Property {
     // CHECKSTYLE:ON
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd) {
+    public @NotNull Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd) {
         return false;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    public Map<Integer, Integer> getPropertyMap() {
+    public @Nullable Map<Integer, Integer> getPropertyMap() {
         return null;
     }
 
     @JsonIgnore
     @Override
-    public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
+    public @NotNull Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
         return false;
     }
 
     @SuppressWarnings("ConstantConditions")
     @JsonIgnore
     @Override
-    public List<Integer> getPropertyList() {
+    public @Nullable List<Integer> getPropertyList() {
         return null;
     }
 
@@ -95,13 +96,13 @@ public class SingleValueProperty implements Property {
     @SuppressWarnings("ConstantConditions")
     @JsonIgnore
     @Override
-    public Set<Integer> getPropertySet() {
+    public @Nullable Set<Integer> getPropertySet() {
         return null;
     }
 
     @JsonIgnore
     @Override
-    public Boolean setPropertySet(@NotNull Set<Integer> properties) {
+    public @NotNull Boolean setPropertySet(@NotNull Set<Integer> properties) {
         return false;
     }
 }

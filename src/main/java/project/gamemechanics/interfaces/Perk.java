@@ -35,8 +35,8 @@ public interface Perk extends GameEntity, AffectorProvider {
      * @see project.gamemechanics.components.affectors.ListAffector
      * @see project.gamemechanics.components.affectors.MapAffector
      */
-    Integer getRankBasedAffection(@NotNull Integer affectorKind, @NotNull Integer affectorIndex,
-                                  @NotNull Integer perkRank);
+    @NotNull Integer getRankBasedAffection(@NotNull Integer affectorKind, @NotNull Integer affectorIndex,
+                                           @NotNull Integer perkRank);
 
     /**
      * get a rank-based affection value from the single-value affector by its ID.
@@ -49,5 +49,5 @@ public interface Perk extends GameEntity, AffectorProvider {
      * @see project.gamemechanics.components.affectors.Affector
      * @see project.gamemechanics.components.affectors.SingleValueAffector
      */
-    Integer getRankBasedAffection(@NotNull Integer affectorKind, @NotNull Integer perkRank);
+    @NotNull Integer getRankBasedAffection(@NotNull Integer affectorKind, @NotNull Integer perkRank);
 }

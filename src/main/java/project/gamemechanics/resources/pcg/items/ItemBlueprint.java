@@ -23,25 +23,25 @@ public final class ItemBlueprint {
         this.itemParts.putAll(itemParts);
     }
 
-    public Integer getDropChance() {
+    public @NotNull Integer getDropChance() {
         return dropChance;
     }
 
-    public Map<Integer, Property> getProperties() {
+    public @NotNull Map<Integer, Property> getProperties() {
         return properties;
     }
 
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
-    public Map<Integer, Integer> getItemParts() {
+    public @NotNull Map<Integer, Integer> getItemParts() {
         return itemParts;
     }
 
     @JsonIgnore
-    public Set<Integer> getAvailableItemParts() {
+    public @NotNull Set<Integer> getAvailableItemParts() {
         return itemParts.keySet();
     }
 }

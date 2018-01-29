@@ -13,11 +13,11 @@ public class MoveEvent implements TurnEvent {
     }
 
     @Override
-    public Integer getEventKind() {
+    public @NotNull Integer getEventKind() {
         return EventCategories.EC_MOVE;
     }
 
-    public Route getRoute() {
+    public @NotNull Route getRoute() {
         return route;
     }
 }

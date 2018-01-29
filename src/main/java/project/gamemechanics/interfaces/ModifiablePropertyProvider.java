@@ -4,6 +4,7 @@ import project.gamemechanics.components.properties.ListProperty;
 import project.gamemechanics.components.properties.MapProperty;
 import project.gamemechanics.components.properties.Property;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *                     or false if there's already a property registered under such index
      * @see Property
      */
-    void addProperty(Integer propertyKind, Property property);
+    void addProperty(@NotNull Integer propertyKind, @NotNull Property property);
 
     /**
      * remove {@link Property} by index.
@@ -34,7 +35,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *                     or false if there're no properties registered under such index
      * @see Property
      */
-    void removeProperty(Integer propertyKind);
+    void removeProperty(@NotNull Integer propertyKind);
 
     /**
      * set a new value for the single-value {@link Property} by its index.
@@ -47,7 +48,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @see Property
      * @see project.gamemechanics.components.properties.SingleValueProperty
      */
-    void setProperty(Integer propertyKind, Integer propertyValue);
+    void setProperty(@NotNull Integer propertyKind, @NotNull Integer propertyValue);
 
     /**
      * set a new value for the multi-value {@link Property} by the property ID and
@@ -64,7 +65,9 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @see ListProperty
      * @see MapProperty
      */
-    void setProperty(Integer propertyKind, Integer propertyIndex, Integer propertyValue);
+    void setProperty(@NotNull Integer propertyKind,
+                     @NotNull Integer propertyIndex,
+                     @NotNull Integer propertyValue);
 
     /**
      * set a {@link List} of values to the multi-value property by its index.
@@ -76,7 +79,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @see Property
      * @see ListProperty
      */
-    void setProperty(Integer propertyKind, List<Integer> propertyValue);
+    void setProperty(@NotNull Integer propertyKind, @NotNull List<Integer> propertyValue);
 
     /**
      * set a {@link Map} of values to the multi-value property by its index.
@@ -89,7 +92,8 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @see Property
      * @see MapProperty
      */
-    Boolean setProperty(Integer propertyKind, Map<Integer, Integer> propertyValue);
+    @NotNull Boolean setProperty(@NotNull Integer propertyKind,
+                                 @NotNull Map<Integer, Integer> propertyValue);
 
     /**
      * modify property value(s) by the given percentage.
@@ -103,7 +107,8 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *     or false if there's no property registered under such index
      * @see Property
      */
-    Boolean modifyPropertyByPercentage(Integer propertyKind, Float percentage);
+    @NotNull Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind,
+                                                @NotNull Float percentage);
 
     /**
      * modify a single value in multi-value property by the given percentage.
@@ -122,7 +127,9 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @see ListProperty
      * @see MapProperty
      */
-    Boolean modifyPropertyByPercentage(Integer propertyKind, Integer propertyIndex, Float percentage);
+    @NotNull Boolean modifyPropertyByPercentage(@NotNull Integer propertyKind,
+                                                @NotNull Integer propertyIndex,
+                                                @NotNull Float percentage);
 
     /**
      * modify property value(s) by the given percentage.
@@ -132,7 +139,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      *                     or false if there's no property registered under such index
      * @see Property
      */
-    void modifyPropertyByAddition(Integer propertyKind, Integer toAdd);
+    void modifyPropertyByAddition(@NotNull Integer propertyKind, @NotNull Integer toAdd);
 
     /**
      * modify property value by the given percentage.
@@ -147,5 +154,7 @@ public interface ModifiablePropertyProvider extends PropertyProvider {
      * @see ListProperty
      * @see MapProperty
      */
-    void modifyPropertyByAddition(Integer propertyKind, Integer propertyIndex, Integer toAdd);
+    void modifyPropertyByAddition(@NotNull Integer propertyKind,
+                                  @NotNull Integer propertyIndex,
+                                  @NotNull Integer toAdd);
 }

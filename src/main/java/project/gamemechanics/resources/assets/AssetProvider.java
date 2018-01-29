@@ -1,5 +1,6 @@
 package project.gamemechanics.resources.assets;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.flyweights.CharacterRace;
 import project.gamemechanics.flyweights.PerkBranch;
 import project.gamemechanics.interfaces.Ability;
@@ -25,23 +26,23 @@ public interface AssetProvider {
 
     int ASSET_HOLDERS_FILES_COUNT = 8;
 
-    Perk getPerk(@NotNull Integer perkId);
+    @Nullable Perk getPerk(@NotNull Integer perkId);
 
-    PerkBranch getPerkBranch(@NotNull Integer branchId);
+    @Nullable PerkBranch getPerkBranch(@NotNull Integer branchId);
 
-    Ability getAbility(@NotNull Integer abilityId);
+    @Nullable Ability getAbility(@NotNull Integer abilityId);
 
-    CharacterRace getCharacterRace(@NotNull Integer raceId);
+    @Nullable CharacterRace getCharacterRace(@NotNull Integer raceId);
 
-    CharacterRace getCharacterRace();
+    @NotNull CharacterRace getCharacterRace();
 
-    CharacterRole getCharacterClass(@NotNull Integer classId);
+    @Nullable CharacterRole getCharacterClass(@NotNull Integer classId);
 
-    CharacterRole getNpcRole(@NotNull Integer roleId);
+    @Nullable CharacterRole getNpcRole(@NotNull Integer roleId);
 
-    CharacterRole getNpcRole();
+    @NotNull CharacterRole getNpcRole();
 
-    List<String> makeInstanceNameDescription();
+    @NotNull List<String> makeInstanceNameDescription();
 
     void reset();
 }

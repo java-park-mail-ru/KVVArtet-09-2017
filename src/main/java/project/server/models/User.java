@@ -1,5 +1,9 @@
 package project.server.models;
 
+import org.jetbrains.annotations.Nullable;
+
+import javax.validation.constraints.NotNull;
+
 @SuppressWarnings("unused")
 public class User {
     private String username;
@@ -7,14 +11,15 @@ public class User {
     private String password;
     private Integer id;
 
-    public User(String username, String email, String password) {
+    public User(@NotNull String username, @NotNull String email, @NotNull String password) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.id = 0;
     }
 
-    public User(Integer id, String username, String email, String password) {
+    public User(@NotNull Integer id, @NotNull String username,
+                @NotNull String email, @NotNull String password) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -25,41 +30,41 @@ public class User {
 
     }
 
-    public Integer getId() {
+    public @NotNull Integer getId() {
         return this.id;
     }
 
-    public String getUsername() {
+    public @NotNull String getUsername() {
         return this.username;
     }
 
-    public String getEmail() {
+    public @NotNull String getEmail() {
         return this.email;
     }
 
-    public String getPassword() {
+    public @NotNull String getPassword() {
         return this.password;
     }
 
-    public void setId(Integer id) {
+    public void setId(@NotNull Integer id) {
         this.id = id;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NotNull String username) {
         this.username = username;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotNull String email) {
         this.email = email;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@NotNull String password) {
         this.password = password;
     }
 
     @SuppressWarnings("OverlyComplexMethod")
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }

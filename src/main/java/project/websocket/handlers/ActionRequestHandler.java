@@ -10,6 +10,7 @@ import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Component
 public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
@@ -34,9 +35,10 @@ public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
     }
 
     @Override
-    public Message handle(@NotNull ActionRequestMessage message, Integer forUser) {
+    public @NotNull Message handle(@NotNull ActionRequestMessage message, @NotNull Integer forUser) {
         final Integer dungeonID =
-                connectionPoolService.getSmartController(forUser).getActiveChar().getProperty(PropertyCategories.PC_INSTANCE_ID);
+                Objects.requireNonNull(connectionPoolService.getSmartController(forUser)
+                        .getActiveChar()).getProperty(PropertyCategories.PC_INSTANCE_ID);
         return world.getActiveInstances().get(dungeonID).handleMessage(message);
     }
 }

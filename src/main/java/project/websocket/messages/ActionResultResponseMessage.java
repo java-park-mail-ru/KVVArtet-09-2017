@@ -1,9 +1,11 @@
 package project.websocket.messages;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -13,29 +15,29 @@ public class ActionResultResponseMessage extends Message {
     private final Ability ability;
     private final List<TurnEvent> events;
 
-    public ActionResultResponseMessage(List<TurnEvent> events,
-                                       MapNode sender,
-                                       MapNode target,
-                                       Ability ability) {
+    public ActionResultResponseMessage(@NotNull List<TurnEvent> events,
+                                       @NotNull MapNode sender,
+                                       @Nullable MapNode target,
+                                       @Nullable Ability ability) {
         this.events = events;
         this.sender = sender;
         this.target = target;
         this.ability = ability;
     }
 
-    public MapNode getSender() {
+    public @NotNull MapNode getSender() {
         return sender;
     }
 
-    public MapNode getTarget() {
+    public @Nullable MapNode getTarget() {
         return target;
     }
 
-    public Ability getAbility() {
+    public @Nullable Ability getAbility() {
         return ability;
     }
 
-    public List<TurnEvent> getEvents() {
+    public @NotNull List<TurnEvent> getEvents() {
         return events;
     }
 }

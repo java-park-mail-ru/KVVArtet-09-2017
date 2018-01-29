@@ -1,11 +1,11 @@
 package project.gamemechanics.components.affectors;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.CharacterRatings;
 import project.gamemechanics.globals.CharacterStats;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.EquipmentKind;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,53 +58,53 @@ public final class AffectorsFactory {
         return affector;
     }
 
-    private static Affector makeStatsAffector() {
+    private static @NotNull Affector makeStatsAffector() {
         return new ListAffector(new ArrayList<>(CharacterStats.CS_SIZE.asInt()));
     }
 
-    private static Affector makeRatingsAffector() {
+    private static @NotNull Affector makeRatingsAffector() {
         return new ListAffector(new ArrayList<>(CharacterRatings.CR_SIZE.asInt()));
     }
 
-    private static Affector makeDamageAffector() {
+    private static @NotNull Affector makeDamageAffector() {
         final Map<Integer, Integer> damageAffections = initializeDamageMap();
         return new MapAffector(damageAffections);
     }
 
-    private static Affector makeDefenseAffector() {
+    private static @NotNull Affector makeDefenseAffector() {
         final Map<Integer, Integer> defenseAffections = initializeDefenseMap();
         return new MapAffector(defenseAffections);
     }
 
-    private static Affector makeHealthAffector() {
+    private static @NotNull Affector makeHealthAffector() {
         return new SingleValueAffector(0);
     }
 
-    private static Affector makeArmourDefenseAffector() {
+    private static @NotNull Affector makeArmourDefenseAffector() {
         return new SingleValueAffector(0);
     }
 
-    private static Affector makeOverTimeAffector() {
+    private static @NotNull Affector makeOverTimeAffector() {
         return new ListAffector(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
     }
 
-    private static Affector makeWeaponDamageAffector() {
+    private static @NotNull Affector makeWeaponDamageAffector() {
         return new ListAffector(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
     }
 
-    private static Affector makeAbilityHealthAffector() {
+    private static @NotNull Affector makeAbilityHealthAffector() {
         return new ListAffector(new ArrayList<>(DigitsPairIndices.PAIR_SIZE));
     }
 
-    private static Affector makeBaseDamageRoleAffector() {
+    private static @NotNull Affector makeBaseDamageRoleAffector() {
         return new SingleValueAffector(0);
     }
 
-    private static Affector makeBaseDefenseRoleAffector() {
+    private static @NotNull Affector makeBaseDefenseRoleAffector() {
         return new SingleValueAffector(0);
     }
 
-    private static Map<Integer, Integer> initializeDamageMap() {
+    private static @NotNull Map<Integer, Integer> initializeDamageMap() {
         final Map<Integer, Integer> affections = new HashMap<>();
         affections.put(EquipmentKind.EK_SWORD.asInt(), 0);
         affections.put(EquipmentKind.EK_DAGGER.asInt(), 0);
@@ -117,7 +117,7 @@ public final class AffectorsFactory {
         return affections;
     }
 
-    private static Map<Integer, Integer> initializeDefenseMap() {
+    private static @NotNull Map<Integer, Integer> initializeDefenseMap() {
         final Map<Integer, Integer> affections = new HashMap<>();
         affections.put(EquipmentKind.EK_CLOTH_ARMOUR.asInt(), 0);
         affections.put(EquipmentKind.EK_LEATHER_ARMOUR.asInt(), 0);

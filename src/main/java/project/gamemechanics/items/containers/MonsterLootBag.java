@@ -1,5 +1,6 @@
 package project.gamemechanics.items.containers;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
@@ -8,7 +9,6 @@ import project.gamemechanics.interfaces.Bag;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -43,52 +43,54 @@ public class MonsterLootBag implements Bag {
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return Constants.UNDEFINED_ID;
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "";
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return "";
     }
 
     @Override
-    public Integer getSlotsCount() {
+    public @NotNull Integer getSlotsCount() {
         return itemPresets.size();
     }
 
     @Override
-    public Integer getFreeSlotsCount() {
+    public @NotNull Integer getFreeSlotsCount() {
         return 0;
     }
 
     @Override
-    public Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos) {
+    public @NotNull Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos) {
         return false;
     }
 
     @Override
-    public Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos) {
+    public @NotNull Boolean swap(@NotNull Integer fromPos,
+                                 @NotNull Bag toBag,
+                                 @NotNull Integer toPos) {
         return false;
     }
 
     @Override
-    public Boolean addItem(@NotNull EquipableItem item) {
+    public @NotNull Boolean addItem(@NotNull EquipableItem item) {
         return false;
     }
 
     @Override
-    public Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos) {
+    public @NotNull Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos) {
         return false;
     }
 

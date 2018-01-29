@@ -2,6 +2,7 @@ package project.gamemechanics.resources.holders;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.resources.models.GameResource;
 
 import javax.validation.constraints.NotNull;
@@ -20,24 +21,24 @@ public class GameResourceHolder implements ResourceHolder {
     }
 
     @Override
-    public Boolean hasResource(@NotNull Integer resourceIndex) {
+    public @NotNull Boolean hasResource(@NotNull Integer resourceIndex) {
         return resources.containsKey(resourceIndex);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableResources() {
+    public @NotNull Set<Integer> getAvailableResources() {
         return resources.keySet();
     }
 
     @Override
-    public GameResource getResource(@NotNull Integer resourceIndex) {
+    public @Nullable GameResource getResource(@NotNull Integer resourceIndex) {
         return resources.getOrDefault(resourceIndex, null);
     }
 
     @Override
     @JsonProperty("resources")
-    public Map<Integer, GameResource> getAllResources() {
+    public @NotNull Map<Integer, GameResource> getAllResources() {
         return resources;
     }
 }

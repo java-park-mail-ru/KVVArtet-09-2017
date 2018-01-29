@@ -23,7 +23,7 @@ import java.util.Set;
         @JsonSubTypes.Type(InstanceNameDescription.class),
 })
 public interface GameResource extends GameEntity {
-    default Boolean hasProperty(@NotNull Integer propertyKind) {
+    default @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return false;
     }
 
@@ -38,7 +38,7 @@ public interface GameResource extends GameEntity {
         return null;
     }
 
-    default Boolean hasAffector(@NotNull Integer propertyKind) {
+    default @NotNull Boolean hasAffector(@NotNull Integer propertyKind) {
         return false;
     }
 
@@ -56,7 +56,7 @@ public interface GameResource extends GameEntity {
     default void scaleToLevel(@NotNull Integer level) {
     }
 
-    default Boolean hasMapping(@NotNull Integer mappingIndex) {
+    default @NotNull Boolean hasMapping(@NotNull Integer mappingIndex) {
         return false;
     }
 

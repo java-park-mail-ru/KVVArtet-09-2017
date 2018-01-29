@@ -31,14 +31,14 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     public GameSocketHandler(@NotNull UserService authService,
                              @NotNull ConnectionPoolService connectionPoolService,
-                             ObjectMapper objectMapper) {
+                             @NotNull ObjectMapper objectMapper) {
         this.userService = authService;
         this.connectionPoolService = connectionPoolService;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession webSocketSession) {
+    public void afterConnectionEstablished(@NotNull WebSocketSession webSocketSession) {
         final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
         if (userId == null || userService.getUserById(userId) == null) {
             LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
@@ -49,7 +49,8 @@ public class GameSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession webSocketSession, TextMessage message) {
+    protected void handleTextMessage(@NotNull WebSocketSession webSocketSession,
+                                     @NotNull TextMessage message) {
         if (!webSocketSession.isOpen()) {
             return;
         }
@@ -66,7 +67,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
     }
 
     @SuppressWarnings("OverlyBroadCatchBlock")
-    private void handleMessage(User user, TextMessage text) {
+    private void handleMessage(@NotNull User user, @NotNull TextMessage text) {
         final Message message;
         try {
             message = objectMapper.readValue(text.getPayload(), Message.class);
@@ -78,12 +79,14 @@ public class GameSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) {
+    public void handleTransportError(@NotNull WebSocketSession webSocketSession,
+                                     @NotNull Throwable throwable) {
         LOGGER.warn("Websocket transport problem", throwable);
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) {
+    public void afterConnectionClosed(@NotNull WebSocketSession webSocketSession,
+                                      @NotNull CloseStatus closeStatus) {
         final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
         if (userId == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + closeStatus + ')');

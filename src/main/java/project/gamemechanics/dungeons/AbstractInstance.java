@@ -45,7 +45,7 @@ public abstract class AbstractInstance implements Instance {
     Battlefield currentRoom;
 
     @Override
-    public abstract Message handleMessage(ActionRequestMessage message);
+    public abstract @NotNull Message handleMessage(@NotNull ActionRequestMessage message);
 
     private static class AbstractInstanceModel {
         final String name;
@@ -114,47 +114,47 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return instanceID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Integer getLevel() {
+    public @NotNull Integer getLevel() {
         return level;
     }
 
     @Override
-    public Integer getRoomsCount() {
+    public @NotNull Integer getRoomsCount() {
         return roomsCount;
     }
 
     @Override
-    public Integer getClearedRoomsCount() {
+    public @NotNull Integer getClearedRoomsCount() {
         return roomsCleared;
     }
 
     @Override
-    public Integer getBattleLogLength() {
+    public @NotNull Integer getBattleLogLength() {
         return currentRoom.getBattleLogLength();
     }
 
     @Override
-    public List<ActionResult> getBattleLog() {
+    public @NotNull List<ActionResult> getBattleLog() {
         return currentRoom.getBattleLog();
     }
 
@@ -164,12 +164,12 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public Integer getGameMode() {
+    public @NotNull Integer getGameMode() {
         return gameMode;
     }
 
     @Override
-    public List<Integer> getBattlingSquadsIds() {
+    public @NotNull List<Integer> getBattlingSquadsIds() {
         final List<Integer> ids = new ArrayList<>();
         for (CharactersParty squad : squads) {
             if (squad != null) {
@@ -180,12 +180,12 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public Boolean isInstanceCleared() {
+    public @NotNull Boolean isInstanceCleared() {
         return Objects.equals(roomsCleared, roomsCount);
     }
 
     @Override
-    public Boolean isInstanceFailed() {
+    public @NotNull Boolean isInstanceFailed() {
         return squads.get(Squad.PLAYERS_SQUAD_ID).areAllDead();
     }
 
@@ -198,7 +198,7 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @Override
-    public List<Long> encodeCurrentRoomMap() {
+    public @NotNull List<Long> encodeCurrentRoomMap() {
         return currentRoom.encodeMap();
     }
 
@@ -223,12 +223,13 @@ public abstract class AbstractInstance implements Instance {
             if (triesCount > mapHeight * mapWidth) {
                 break;
             }
-            final MapNode spawnPointCenter = map.getTile(halfWidthBegin + random.nextInt(halfWidthEnd
+            final MapNode spawnPointCenter = map.getTile(halfWidthBegin
+                    + random.nextInt(halfWidthEnd
                     - halfWidthBegin), random.nextInt(mapHeight));
             final Set<MapNode> rowCenters = new HashSet<>();
             rowCenters.add(spawnPointCenter);
             final Integer halfSide = (sideSize - 1) / 2;
-            MapNode upperRowCenter = spawnPointCenter.getAdjacent(Directions.UP);
+            MapNode upperRowCenter = Objects.requireNonNull(spawnPointCenter).getAdjacent(Directions.UP);
             MapNode lowerRowCenter = spawnPointCenter.getAdjacent(Directions.DOWN);
             for (Integer i = 0; i < halfSide; ++i) {
                 if (upperRowCenter != null) {
@@ -278,7 +279,7 @@ public abstract class AbstractInstance implements Instance {
     }
 
 
-    List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
+    @NotNull List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
         final List<SpawnPoint> spawnPoints = new ArrayList<>();
         final Set<MapNode> reservedNodes = new HashSet<>();
         for (Squad squad : squadList) {

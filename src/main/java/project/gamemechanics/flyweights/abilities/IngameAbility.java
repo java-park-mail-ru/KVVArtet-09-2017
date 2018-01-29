@@ -24,7 +24,7 @@ public class IngameAbility implements Ability {
     private final List<IngameEffect.EffectModel> appliedEffects;
     private final AbilityBehavior perform;
 
-    interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {
+    public interface AbilityBehavior extends Function<AggregatedAbilityAction, List<TurnEvent>> {
     }
 
     public static class AbilityModel {
@@ -65,37 +65,37 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return abilityID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Boolean hasProperty(Integer propertyKind) {
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind, Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -103,7 +103,7 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Integer getProperty(Integer propertyKind) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -111,17 +111,17 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Boolean hasAffector(Integer affectorKind) {
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
-    public Set<Integer> getAvailableAffectors() {
+    public @NotNull Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if (!hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -129,7 +129,7 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         if (!hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -137,22 +137,22 @@ public class IngameAbility implements Ability {
     }
 
     @Override
-    public List<TurnEvent> execute(AggregatedAbilityAction action) {
+    public @NotNull List<TurnEvent> execute(@NotNull AggregatedAbilityAction action) {
         return perform.apply(action);
     }
 
     @Override
-    public Map<Integer, Property> getPropertiesMap() {
+    public @NotNull Map<Integer, Property> getPropertiesMap() {
         return properties;
     }
 
     @Override
-    public Map<Integer, Affector> getAffectorsMap() {
+    public @NotNull Map<Integer, Affector> getAffectorsMap() {
         return affectors;
     }
 
     @Override
-    public List<IngameEffect.EffectModel> getAppliedEffects() {
+    public @NotNull List<IngameEffect.EffectModel> getAppliedEffects() {
         return appliedEffects;
     }
 }

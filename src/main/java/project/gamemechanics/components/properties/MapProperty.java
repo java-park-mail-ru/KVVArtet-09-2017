@@ -3,6 +3,7 @@ package project.gamemechanics.components.properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
@@ -20,12 +21,12 @@ public class MapProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Integer getProperty() {
+    public @NotNull Integer getProperty() {
         return 0;
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyIndex) {
         if (!properties.containsKey(propertyIndex)) {
             return Constants.WRONG_INDEX;
         }
@@ -34,14 +35,14 @@ public class MapProperty implements Property {
 
     @Override
     @JsonProperty("properties")
-    public Map<Integer, Integer> getPropertyMap() {
+    public @NotNull Map<Integer, Integer> getPropertyMap() {
         return properties;
     }
     // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("properties")
-    public Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
+    public @NotNull Boolean setPropertyMap(@NotNull Map<Integer, Integer> properties) {
         if (properties.isEmpty()) {
             return false;
         }
@@ -78,7 +79,7 @@ public class MapProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd) {
+    public @NotNull Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd) {
         if (!properties.containsKey(propertyIndex)) {
             return false;
         }
@@ -87,7 +88,7 @@ public class MapProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Integer propertyIndex, @NotNull Float percentage) {
+    public @NotNull Boolean modifyByPercentage(@NotNull Integer propertyIndex, @NotNull Float percentage) {
         if (!properties.containsKey(propertyIndex)) {
             return false;
         }
@@ -97,7 +98,7 @@ public class MapProperty implements Property {
     }
 
     @Override
-    public Boolean modifyByPercentage(@NotNull Float percentage) {
+    public @NotNull Boolean modifyByPercentage(@NotNull Float percentage) {
         for (Integer key : properties.keySet()) {
             final Boolean result = modifyByPercentage(key, percentage);
             if (!result) {
@@ -111,7 +112,7 @@ public class MapProperty implements Property {
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    public List<Integer> getPropertyList() {
+    public @Nullable List<Integer> getPropertyList() {
         return null;
     }
 
@@ -123,14 +124,14 @@ public class MapProperty implements Property {
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    public Set<Integer> getPropertySet() {
+    public @Nullable Set<Integer> getPropertySet() {
         return null;
     }
 
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonIgnore
-    public Boolean setPropertySet(@NotNull Set<Integer> properties) {
+    public @NotNull Boolean setPropertySet(@NotNull Set<Integer> properties) {
         return false;
     }
 }

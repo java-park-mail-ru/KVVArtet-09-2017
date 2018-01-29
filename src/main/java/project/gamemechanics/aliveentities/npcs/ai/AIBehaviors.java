@@ -43,18 +43,18 @@ public final class AIBehaviors {
      *     under given ID otherwise
      */
     @SuppressWarnings("unused")
-    public static AI.BehaviorFunction getBehavior(@NotNull Integer behaviorID) {
+    public static @Nullable AI.BehaviorFunction getBehavior(@NotNull Integer behaviorID) {
         return BEHAVIORS.getOrDefault(behaviorID, null);
     }
 
-    public static Map<Integer, AI.BehaviorFunction> getAllBehaviors() {
+    public static @NotNull Map<Integer, AI.BehaviorFunction> getAllBehaviors() {
         return BEHAVIORS;
     }
     // CHECKSTYLE:OFF
     /* TODO: find a better way to write and put BEHAVIORS in the map that that */
     // CHECKSTYLE:ON
 
-    private static Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
+    private static @NotNull Map<Integer, AI.BehaviorFunction> initializeBehaviorFunctions() {
         final Map<Integer, AI.BehaviorFunction> behaviorFunctionMap = new HashMap<>();
 
         behaviorFunctionMap.put(BehaviorCategories.BC_COMMON_MONSTER_AI, aggregatedBattleState -> {
@@ -118,7 +118,7 @@ public final class AIBehaviors {
 
 
     @SuppressWarnings("unused")
-    private static Integer evaluateUnit(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
+    private static @NotNull Integer evaluateUnit(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
         if (areAllies(unit, evaluator)) {
             return evaluateAlly(unit, evaluator);
         } else {
@@ -127,7 +127,7 @@ public final class AIBehaviors {
     }
 
     @SuppressWarnings("unused")
-    private static Integer evaluateAlly(@NotNull AliveEntity ally, @NotNull AliveEntity evaluator) {
+    private static @NotNull Integer evaluateAlly(@NotNull AliveEntity ally, @NotNull AliveEntity evaluator) {
         //noinspection UnnecessaryLocalVariable
         final Integer score = 0;
         // CHECKSTYLE:OFF
@@ -137,7 +137,7 @@ public final class AIBehaviors {
     }
 
     @SuppressWarnings("unused")
-    private static Integer evaluateEnemy(@NotNull AliveEntity enemy, @NotNull AliveEntity npc) {
+    private static @NotNull Integer evaluateEnemy(@NotNull AliveEntity enemy, @NotNull AliveEntity npc) {
         //noinspection UnnecessaryLocalVariable
         final Integer score = 0;
         // CHECKSTYLE:OFF
@@ -146,12 +146,12 @@ public final class AIBehaviors {
         return score;
     }
 
-    private static Boolean areAllies(@NotNull AliveEntity lhs, @NotNull AliveEntity rhs) {
+    private static @NotNull Boolean areAllies(@NotNull AliveEntity lhs, @NotNull AliveEntity rhs) {
         return Objects.equals(lhs.getProperty(PropertyCategories.PC_SQUAD_ID),
                 rhs.getProperty(PropertyCategories.PC_SQUAD_ID));
     }
 
-    private static Integer getDistanceScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
+    private static @NotNull Integer getDistanceScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
         Integer distance = Math.abs(unit.getProperty(PropertyCategories.PC_COORDINATES,
                 DigitsPairIndices.ROW_COORD_INDEX) - evaluator.getProperty(PropertyCategories.PC_COORDINATES,
                 DigitsPairIndices.ROW_COORD_INDEX)) + Math.abs(unit.getProperty(PropertyCategories.PC_COORDINATES,
@@ -168,7 +168,7 @@ public final class AIBehaviors {
     }
 
     @SuppressWarnings("unused")
-    private static Integer getHitpointsScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
+    private static @NotNull Integer getHitpointsScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
         return Math.round(unit.getProperty(PropertyCategories.PC_HITPOINTS,
                 DigitsPairIndices.CURRENT_VALUE_INDEX).floatValue()
                 / unit.getProperty(PropertyCategories.PC_HITPOINTS,
@@ -176,8 +176,8 @@ public final class AIBehaviors {
                 * Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue());
     }
 
-    private static Integer getAggroScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator,
-                                         @NotNull Map<Integer, Integer> aggroMap) {
+    private static @NotNull Integer getAggroScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator,
+                                                  @NotNull Map<Integer, Integer> aggroMap) {
         if (areAllies(unit, evaluator)) {
             return 0;
         }
@@ -188,7 +188,7 @@ public final class AIBehaviors {
     }
 
     @SuppressWarnings("unused")
-    private static Set<Ability> getHealingAbilities(@NotNull Map<Integer, Ability> abilities) {
+    private static @NotNull Set<Ability> getHealingAbilities(@NotNull Map<Integer, Ability> abilities) {
         final Set<Ability> healingAbilities = new HashSet<>();
 
         for (Integer abilityID : abilities.keySet()) {
@@ -204,7 +204,7 @@ public final class AIBehaviors {
         return healingAbilities;
     }
 
-    private static Set<Ability> getDamagingAbilities(@NotNull Map<Integer, Ability> abilities) {
+    private static @NotNull Set<Ability> getDamagingAbilities(@NotNull Map<Integer, Ability> abilities) {
         final Set<Ability> damagingAbilities = new HashSet<>();
 
         for (Integer abilityID : abilities.keySet()) {

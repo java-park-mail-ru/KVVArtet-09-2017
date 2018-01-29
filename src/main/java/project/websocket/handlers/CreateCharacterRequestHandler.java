@@ -30,7 +30,7 @@ public class CreateCharacterRequestHandler extends MessageHandler<CreateCharacte
     }
 
     @Override
-    public Message handle(@NotNull CreateCharacterRequestMessage message, Integer forUser) {
+    public Message handle(@NotNull CreateCharacterRequestMessage message, @NotNull Integer forUser) {
         //TODO NOT AVAILABLE NOW
         return message;
     }

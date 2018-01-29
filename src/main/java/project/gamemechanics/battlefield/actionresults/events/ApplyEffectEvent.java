@@ -16,18 +16,18 @@ public class ApplyEffectEvent implements TurnEvent {
     }
 
     @Override
-    public Integer getEventKind() {
+    public @NotNull Integer getEventKind() {
         return EventCategories.EC_APPLY_EFFECT;
     }
 
     @Override
-    public MapNode getWhere() {
+    public @NotNull MapNode getWhere() {
         return where;
     }
 
     @SuppressWarnings("unused")
     @JsonProperty("effect")
-    public Effect getAppliedEffect() {
+    public @NotNull Effect getAppliedEffect() {
         return appliedEffect;
     }
 }

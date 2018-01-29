@@ -32,14 +32,14 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
      * @param abilityID ID of ability to get
      * @return null if there's no {@link Ability} with such ID or {@link Ability} otherwise
      */
-    Ability getAbility(@NotNull Integer abilityID);
+    @Nullable Ability getAbility(@NotNull Integer abilityID);
 
     /**
      * get all abilities available for that role.
      *
      * @return all available abilities
      */
-    Map<Integer, Ability> getAllAbilities();
+    @NotNull Map<Integer, Ability> getAllAbilities();
 
     /**
      * get {@link PerkBranch} by ID.
@@ -51,7 +51,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
      * @see PerkBranch
      */
     @SuppressWarnings("ConstantConditions")
-    default PerkBranch getBranch(@NotNull Integer branchID) {
+    default @Nullable PerkBranch getBranch(@NotNull Integer branchID) {
         return null;
     }
 
@@ -67,7 +67,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
      * @see Perk
      */
     @SuppressWarnings("ConstantConditions")
-    default Perk getPerk(@NotNull Integer branchID, @NotNull Integer perkID) {
+    default @Nullable Perk getPerk(@NotNull Integer branchID, @NotNull Integer perkID) {
         return null;
     }
 
@@ -82,7 +82,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
      * @see project.gamemechanics.components.affectors.Affector
      */
     @Override
-    default Boolean hasAffector(@NotNull Integer affectorKind) {
+    default @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return false;
     }
 
@@ -96,7 +96,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    default Set<Integer> getAvailableAffectors() {
+    default @NotNull Set<Integer> getAvailableAffectors() {
         return null;
     }
 
@@ -110,7 +110,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
      * @see AffectorProvider
      */
     @Override
-    default Integer getAffection(@NotNull Integer affectorKind) {
+    default @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         return 0;
     }
 
@@ -126,7 +126,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
      * @see AffectorProvider
      */
     @Override
-    default Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
+    default @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         return 0;
     }
 
@@ -136,7 +136,7 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
     }
 
     @Override
-    default Boolean hasProperty(@NotNull Integer propertyKind) {
+    default @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return false;
     }
 
@@ -147,16 +147,16 @@ public interface CharacterRole extends GameEntity, PropertyProvider, AffectorPro
     }
 
     @Override
-    default Integer getProperty(@NotNull Integer propertyKind) {
+    default @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         return 0;
     }
 
     @Override
-    default Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
+    default @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         return Constants.WRONG_INDEX;
     }
 
-    default Boolean canEquip(@NotNull Integer equipmentKindId) {
+    default @NotNull Boolean canEquip(@NotNull Integer equipmentKindId) {
         return false;
     }
 
