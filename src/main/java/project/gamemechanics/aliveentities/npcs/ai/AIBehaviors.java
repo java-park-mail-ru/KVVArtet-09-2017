@@ -169,7 +169,8 @@ public final class AIBehaviors {
 
     @SuppressWarnings("unused")
     private static @NotNull Integer getHitpointsScore(@NotNull AliveEntity unit, @NotNull AliveEntity evaluator) {
-        return Math.round(unit.getProperty(PropertyCategories.PC_HITPOINTS,
+        return Constants.PERCENTAGE_CAP_INT
+                - Math.round(unit.getProperty(PropertyCategories.PC_HITPOINTS,
                 DigitsPairIndices.CURRENT_VALUE_INDEX).floatValue()
                 / unit.getProperty(PropertyCategories.PC_HITPOINTS,
                 DigitsPairIndices.MAX_VALUE_INDEX).floatValue()
@@ -223,9 +224,9 @@ public final class AIBehaviors {
     private static @Nullable AliveEntity selectTarget(@NotNull AliveEntity self,
                                                       @NotNull Map<Integer, Integer> aggroMap,
                                                       @NotNull Squad enemies) {
-        Integer maximalScore = Integer.MIN_VALUE;
-        Integer enemyIdWithMaximalScore = Constants.WRONG_INDEX;
 
+        Integer enemyIdWithMaximalScore = Constants.WRONG_INDEX;
+        Integer maximalScore = Integer.MIN_VALUE;
         for (Integer enemyID = 0; enemyID < enemies.getSquadSize(); ++enemyID) {
             final AliveEntity enemy = enemies.getMember(enemyID);
             if (enemy != null) {
