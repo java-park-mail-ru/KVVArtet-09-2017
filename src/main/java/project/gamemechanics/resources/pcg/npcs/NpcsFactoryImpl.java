@@ -242,7 +242,17 @@ public class NpcsFactoryImpl implements NpcsFactory {
         for (Integer abilityId : npcRole.getAllAbilities().keySet()) {
             cooldowns.put(abilityId, 0);
         }
-        mergedProperties.put(PropertyCategories.PC_ABILITIES_COOLDOWN, new MapProperty(cooldowns));
+        mergedProperties.put(PropertyCategories.PC_ABILITIES_COOLDOWN, new AbilitiesCooldownProperty(cooldowns));
+
+        if (mergedProperties.containsKey(PropertyCategories.PC_SPEED)) {
+            if (mergedProperties.get(PropertyCategories.PC_SPEED).getProperty() <= 0) {
+                mergedProperties.get(PropertyCategories.PC_SPEED)
+                        .setSingleProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED);
+            }
+        } else {
+            mergedProperties.put(PropertyCategories.PC_SPEED,
+                    new SingleValueProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED));
+        }
 
         return mergedProperties;
     }

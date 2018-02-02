@@ -73,7 +73,7 @@ public class Tile implements MapNode {
     @Override
     public @NotNull Boolean occupy(@NotNull AliveEntity stander) {
         Boolean isSuccessful = true;
-        if (inhabitant == null) {
+        if (inhabitant == null && isPassable) {
             inhabitant = stander;
             if (stander.hasProperty(PropertyCategories.PC_COORDINATES)) {
                 stander.setProperty(PropertyCategories.PC_COORDINATES, coordinates);

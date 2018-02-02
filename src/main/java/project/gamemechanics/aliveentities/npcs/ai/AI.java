@@ -147,8 +147,9 @@ public class AI implements DecisionMaker {
     }
 
     private @NotNull FieldOfVision lookAround() {
-        return new FoVTileset(map.getTile(npc.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.ROW_COORD_INDEX),
-                npc.getProperty(PropertyCategories.PC_COORDINATES, DigitsPairIndices.COL_COORD_INDEX)));
+        return new FoVTileset(map.getTile(npc.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.ROW_COORD_INDEX), npc.getProperty(PropertyCategories.PC_COORDINATES,
+                DigitsPairIndices.COL_COORD_INDEX)), map);
     }
 
     private @Nullable List<Integer> sortSquadByHitpoints(@NotNull Squad squad) {

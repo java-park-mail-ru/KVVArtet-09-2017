@@ -40,9 +40,7 @@ public class BattleMapRoute implements Route {
         if (tileToMoveAt > route.size()) {
             tileToMoveAt = route.size() - 1;
         }
-        if (!route.get(tileToMoveAt).occupy(pedestrian)) {
-            route.get(SOURCE_TILE_INDEX).occupy(pedestrian);
-        }
+        walkThrough(tileToMoveAt, pedestrian);
     }
 
     @Override
@@ -67,5 +65,15 @@ public class BattleMapRoute implements Route {
 
     public @NotNull List<MapNode> getRoute() {
         return route;
+    }
+
+    private void walkThrough(@NotNull Integer distance, @NotNull AliveEntity walker) {
+        if (!route.get(distance).occupy(walker)) {
+            if (distance > SOURCE_TILE_INDEX) {
+                walkThrough(distance - 1, walker);
+            } else {
+                route.get(SOURCE_TILE_INDEX).occupy(walker);
+            }
+        }
     }
 }

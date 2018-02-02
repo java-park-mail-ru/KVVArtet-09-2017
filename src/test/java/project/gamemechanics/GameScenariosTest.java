@@ -21,6 +21,7 @@ import project.gamemechanics.battlefield.map.tilesets.FoVTileset;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
+import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.*;
 import project.gamemechanics.items.loot.PendingLootPool;
 import project.gamemechanics.items.loot.PendingLootPoolImpl;
@@ -442,8 +443,8 @@ public class GameScenariosTest {
         final Route reversedRoute = pathfinder.getPath(goalCoordinates, sourceCoordinates);
 
         final List<Integer> fourthStep = new ArrayList<>();
-        fourthStep.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
-        fourthStep.add(DigitsPairIndices.COL_COORD_INDEX, 4);
+        fourthStep.add(DigitsPairIndices.ROW_COORD_INDEX, 1);
+        fourthStep.add(DigitsPairIndices.COL_COORD_INDEX, 3);
 
         assertNotNull(route);
         assertNotNull(reversedRoute);
@@ -523,11 +524,11 @@ public class GameScenariosTest {
         final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
                 sideSize, sideSize, passableTilesCount));
         final FieldOfVision fovOne = new FoVTileset(
-                Objects.requireNonNull(map.getTile(halfSide, halfSide)));
+                Objects.requireNonNull(map.getTile(halfSide, halfSide)), map);
         final FieldOfVision fovTwo = new FoVTileset(
-                Objects.requireNonNull(map.getTile(0, 0)));
+                Objects.requireNonNull(map.getTile(0, 0)), map);
         final FieldOfVision fovThree = new FoVTileset(
-                Objects.requireNonNull(map.getTile(sideSize - 1, sideSize - 1)));
+                Objects.requireNonNull(map.getTile(sideSize - 1, sideSize - 1)), map);
 
         assertNotNull(fovOne);
         assertNotNull(fovTwo);
@@ -551,21 +552,33 @@ public class GameScenariosTest {
                 sideSize, sideSize, passableTilesCount));
         Objects.requireNonNull(map.getTile(halfSide, halfSide)).setIsPassable(false);
         final FieldOfVision fovOne = new FoVTileset(
-                Objects.requireNonNull(map.getTile(halfSide, sideSize - 1)));
+                Objects.requireNonNull(map.getTile(halfSide, sideSize - 1)), map);
         final FieldOfVision fovTwo = new FoVTileset(
-                Objects.requireNonNull(map.getTile(halfSide, 0)));
+                Objects.requireNonNull(map.getTile(halfSide, 0)), map);
 
         assertNotNull(fovOne);
+        Integer fovOneVisibleTilesCount = 0;
+        for (Integer i = 0; i < sideSize; ++i) {
+            for (Integer j = 0; j < sideSize; ++j) {
+                final List<Integer> position = new ArrayList<>();
+                position.add(i);
+                position.add(j);
+                if (fovOne.isVisible(position)) {
+                    ++fovOneVisibleTilesCount;
+                }
+            }
+        }
+        assertFalse(fovOneVisibleTilesCount == sideSize * sideSize);
         assertNotNull(fovTwo);
 
-        final List<Integer> povOne = new ArrayList<>();
-        povOne.add(halfSide);
-        povOne.add(sideSize - 1);
-        assertFalse(fovTwo.isVisible(povOne));
         final List<Integer> povTwo = new ArrayList<>();
         povTwo.add(halfSide);
         povTwo.add(0);
         assertFalse(fovOne.isVisible(povTwo));
+        final List<Integer> povOne = new ArrayList<>();
+        povOne.add(halfSide);
+        povOne.add(sideSize - 1);
+        assertFalse(fovTwo.isVisible(povOne));
     }
 
     @Test
@@ -576,9 +589,9 @@ public class GameScenariosTest {
         final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
                 sideSize, sideSize, passableTilesCount));
         final FieldOfVision fovOne = new FoVTileset(
-                Objects.requireNonNull(map.getTile(halfSide, halfSide)));
+                Objects.requireNonNull(map.getTile(halfSide, halfSide)), map);
         final FieldOfVision fovTwo = new FoVTileset(
-                Objects.requireNonNull(map.getTile(0, 0)));
+                Objects.requireNonNull(map.getTile(0, 0)), map);
 
         assertNotNull(fovOne);
         assertNotNull(fovTwo);
@@ -645,7 +658,58 @@ public class GameScenariosTest {
 
     @Test
     public void aiFullTurnTest() {
+        final AssetProvider assets = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+        final DummiesFactory dummiesFactory = new DummiesFactory(assets);
+        final PcgContentFactory factory = new PcgFactory(ResourcesConfig.getItemPartsFilename(),
+                ResourcesConfig.getNpcPartsFilename(), assets);
 
+        final int sideSize = 4;
+        final int passableTilesCount = sideSize * sideSize;
+        final BattleMap map = new BattleMap(BattleMapGenerator.generateBattleMap(
+                sideSize, sideSize, passableTilesCount));
+        assertEquals(sideSize, map.getSize().get(0).intValue());
+        assertEquals(sideSize, map.getSize().get(1).intValue());
+
+        final AliveEntity warrior = dummiesFactory.makeNewDummy(0, "warrior", "");
+        assertNotNull(warrior);
+
+        final MapNode warriorTile = map.getTile(sideSize / 2, 0);
+        Objects.requireNonNull(warriorTile).occupy(warrior);
+        assertTrue(warriorTile.isOccupied());
+
+        final AliveEntity monster = factory.makeNpc(Constants.START_LEVEL);
+        final MapNode monsterTile = map.getTile(sideSize / 2, sideSize / 2);
+        Objects.requireNonNull(monsterTile).occupy(monster);
+        assertTrue(monsterTile.isOccupied());
+
+        final Squad playersSquad = new Squad(new ArrayList<>(), Squad.PLAYERS_SQUAD_ID);
+        playersSquad.addMember(warrior);
+        final Squad monstersSquad = new Squad(new ArrayList<>(), Squad.MONSTER_SQUAD_ID);
+        monstersSquad.addMember(monster);
+
+        final PathfindingAlgorithm pathfinder = new Pathfinder(map);
+        final Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
+        for (Integer behaviorId : Objects.requireNonNull(monster.getCharacterRole().getBehaviorIds())) {
+            monsterBehaviors.put(behaviorId, AIBehaviors.getBehavior(behaviorId));
+        }
+
+        final DecisionMaker monsterAI = new AI(monster, monstersSquad, playersSquad, map, pathfinder,
+                monster.getCharacterRole().getAllAbilities(), monsterBehaviors,
+                BehaviorCategories.BC_COMMON_MONSTER_AI);
+        monster.setBehavior(monsterAI);
+
+        assertNull(warrior.makeDecision());
+
+        final Action monsterActionOne = monster.makeDecision();
+        assertNotNull(monsterActionOne);
+        assertTrue(monsterActionOne.isMovement()
+                && Objects.equals(monsterActionOne.getTarget(), warriorTile));
+        final ActionResult resultOne = monsterActionOne.execute();
+        assertTrue(resultOne.getEventsCount() > 0);
+        assertTrue(Objects.requireNonNull(resultOne.getEvent(0)).getEventKind()
+                == EventCategories.EC_MOVE);
+        assertTrue(!monsterTile.isOccupied());
+        assertTrue(Objects.requireNonNull(warriorTile.getAdjacent(Directions.RIGHT)).isOccupied());
     }
 
     @Test
