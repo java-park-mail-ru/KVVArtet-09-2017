@@ -14,7 +14,7 @@ public class CharacterList implements Charlist {
 
     private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer charlistID = INSTANCE_COUNTER.getAndIncrement();
-    private List<UserCharacter> characterList;
+    private final List<UserCharacter> characterList;
     private final Integer ownerID;
 
     @SuppressWarnings({"InstanceMethodNamingConvention", "unused", "RedundantSuppression"})

@@ -1,5 +1,6 @@
 package project.gamemechanics.aliveentities.npcs.ai;
 
+@SuppressWarnings("unused")
 public final class BehaviorCategories {
     public static final int BC_COMMON_MONSTER_AI = 0;
     public static final int BC_SUPPORT_MONSTER_AI = 1;

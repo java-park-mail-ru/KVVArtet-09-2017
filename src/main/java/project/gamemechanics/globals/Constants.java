@@ -1,6 +1,6 @@
 package project.gamemechanics.globals;
 
-@SuppressWarnings({"ConstantNamingConvention", "unused"})
+@SuppressWarnings({"unused"})
 public final class Constants {
     public static final int WRONG_INDEX = Integer.MIN_VALUE;
     public static final int UNDEFINED_SQUAD_ID = -1;
@@ -28,10 +28,12 @@ public final class Constants {
     public static final int GENERIC_REWARD_LOOT_BAG_ID = 0;
     public static final int PERSONAL_REWARD_LOOT_BAG_ID = 1;
     public static final int DEFAULT_PERSONAL_REWARD_BAG_SIZE = 3;
+    @SuppressWarnings("FieldNamingConvention")
     public static final int UNDEFINED_RARITY_DEFAULT_DROP_CHANCE = 5000;
 
     public static final int INITIAL_HITPOINTS_CAP = 100;
     public static final int HITPOINTS_PER_ENDURANCE_POINT = 60;
+    @SuppressWarnings("FieldNamingConvention")
     public static final int HITPOINTS_PER_FIRST_TWENTY_POINTS = 1;
     public static final int ENDURANCE_BONUS_JUMP_POINT = 20;
 

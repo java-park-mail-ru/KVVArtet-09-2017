@@ -53,7 +53,6 @@ public class FoVTileset implements FieldOfVision {
         }
 
         @NotNull Boolean contains(@NotNull Shadow other) {
-            //noinspection OverlyComplexBooleanExpression
             return start <= other.start && end >= other.end;
         }
     }
