@@ -1,5 +1,7 @@
 package project.gamemechanics.interfaces;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for various monster AI implementations.
  */
@@ -12,7 +14,7 @@ public interface DecisionMaker extends Countable {
      * @return chosen action
      * @see Action
      */
-    Action makeDecision();
+    @NotNull Action makeDecision();
 
     /**
      * updates Aggro level for NPC's enemy on given amount by given index.
@@ -20,7 +22,7 @@ public interface DecisionMaker extends Countable {
      * @param enemyID enemy ID to update aggro for
      * @param amount  aggro amount to add
      */
-    void updateAggro(Integer enemyID, Integer amount);
+    void updateAggro(@NotNull Integer enemyID, @NotNull Integer amount);
 
     /**
      * updates amount of damage received from the enemy by given ID on given amount.
@@ -28,5 +30,5 @@ public interface DecisionMaker extends Countable {
      * @param enemyID enemy ID to update damage for
      * @param amount  amount of damage to add
      */
-    void updateDamageFrom(Integer enemyID, Integer amount);
+    void updateDamageFrom(@NotNull Integer enemyID, @NotNull Integer amount);
 }

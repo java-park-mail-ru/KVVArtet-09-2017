@@ -20,12 +20,12 @@ public class ListProperty implements Property {
 
     @Override
     @JsonIgnore
-    public Integer getProperty() {
+    public @NotNull Integer getProperty() {
         return 0;
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyIndex) {
         if (propertyIndex == null) {
             return Constants.WRONG_INDEX;
         }
@@ -37,7 +37,7 @@ public class ListProperty implements Property {
 
     @Override
     @JsonProperty("properties")
-    public List<Integer> getPropertyList() {
+    public @NotNull List<Integer> getPropertyList() {
         return properties;
     }
 

@@ -2,6 +2,7 @@ package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.properties.Property;
 
@@ -19,25 +20,25 @@ public class InstanceNameDescription extends AbstractModel {
 
     @Override
     @JsonIgnore
-    public Map<Integer, Property> getAllProperties() {
+    public @Nullable Map<Integer, Property> getAllProperties() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public Map<Integer, Affector> getAllAffectors() {
+    public @Nullable Map<Integer, Affector> getAllAffectors() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public List<GameResource> getAllInlaid() {
+    public @Nullable List<GameResource> getAllInlaid() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public Map<Integer, List<Integer>> getAllMappings() {
+    public @Nullable Map<Integer, List<Integer>> getAllMappings() {
         return null;
     }
 }

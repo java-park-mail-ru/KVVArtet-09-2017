@@ -29,11 +29,11 @@ public class DungeonInstance extends AbstractInstance {
         currentRoom = generateNewRoom();
     }
 
-    private Boolean isRoomCleared() {
+    private @NotNull Boolean isRoomCleared() {
         return currentRoom.isVictory();
     }
 
-    private Battlefield generateNewRoom() {
+    private @NotNull Battlefield generateNewRoom() {
         final List<Squad> squadList = new ArrayList<>();
         squadList.add(Objects.requireNonNull(getParty(Squad.PLAYERS_SQUAD_ID)).toSquad());
         final Integer packsCount = generatePacksCount();
@@ -54,12 +54,12 @@ public class DungeonInstance extends AbstractInstance {
         return new Battlefield(newRoomModel);
     }
 
-    private Integer generatePacksCount() {
+    private @NotNull Integer generatePacksCount() {
         return Constants.DEFAULT_PACKS_COUNT + (new Random(System.currentTimeMillis())
                 .nextInt(Constants.DEFAULT_PACKS_COUNT) - 1);
     }
 
-    private Squad generateMonsterSquad(@NotNull Integer level) {
+    private @NotNull Squad generateMonsterSquad(@NotNull Integer level) {
         Integer chanceToContinue = Constants.PERCENTAGE_CAP_INT;
         final Random random = new Random(System.currentTimeMillis());
 
@@ -75,7 +75,7 @@ public class DungeonInstance extends AbstractInstance {
         return new Squad(monsters, Squad.MONSTER_SQUAD_ID);
     }
 
-    private AliveEntity generateMonster(@NotNull Integer level) {
+    private @NotNull AliveEntity generateMonster(@NotNull Integer level) {
         return factory.makeNpc(level);
     }
 
@@ -103,7 +103,7 @@ public class DungeonInstance extends AbstractInstance {
     }
 
     @Override
-    public Message handleMessage(ActionRequestMessage message) {
+    public @NotNull Message handleMessage(@NotNull ActionRequestMessage message) {
         if (!isInstanceCleared() && !isInstanceFailed()) {
             return currentRoom.pushAction(message);
         } else {

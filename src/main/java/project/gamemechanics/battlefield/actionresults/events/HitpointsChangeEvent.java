@@ -14,17 +14,17 @@ public class HitpointsChangeEvent implements TurnEvent {
     }
 
     @Override
-    public Integer getEventKind() {
+    public @NotNull Integer getEventKind() {
         return EventCategories.EC_HITPOINTS_CHANGE;
     }
 
     @Override
-    public MapNode getWhere() {
+    public @NotNull MapNode getWhere() {
         return where;
     }
 
     @Override
-    public Integer getAmount() {
+    public @NotNull Integer getAmount() {
         return amount;
     }
 }

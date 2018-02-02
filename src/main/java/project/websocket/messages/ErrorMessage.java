@@ -15,7 +15,7 @@ public class ErrorMessage extends Message {
         this.message = "some error occured";
     }
 
-    public String getMessage() {
+    public @NotNull String getMessage() {
         return message;
     }
 }

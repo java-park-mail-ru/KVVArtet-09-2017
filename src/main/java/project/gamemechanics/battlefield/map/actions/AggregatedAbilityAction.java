@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.map.actions;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.map.helpers.PathfindingAlgorithm;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.properties.Property;
@@ -26,7 +27,7 @@ public class AggregatedAbilityAction {
                                    @NotNull Map<Integer, Affector> abilityAffectors,
                                    @NotNull Map<Integer, Property> abilityProperties,
                                    @NotNull List<IngameEffect.EffectModel> abilityEffects,
-                                   PathfindingAlgorithm pathfinder) {
+                                   @Nullable PathfindingAlgorithm pathfinder) {
         this.sender = sender;
         this.target = target;
         this.abilityID = abilityID;

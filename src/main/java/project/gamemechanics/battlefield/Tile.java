@@ -37,19 +37,19 @@ public class Tile implements MapNode {
 
     @Override
     @JsonIgnore
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
     @JsonIgnore
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return tileID;
     }
 
     @Override
     @JsonIgnore
-    public Boolean getIsPassable() {
+    public @NotNull Boolean getIsPassable() {
         return isPassable;
     }
 
@@ -60,25 +60,26 @@ public class Tile implements MapNode {
 
     @Override
     @JsonIgnore
-    public AliveEntity getInhabitant() {
+    public @Nullable AliveEntity getInhabitant() {
         return inhabitant;
     }
 
     @Override
     @JsonIgnore
-    public Boolean isOccupied() {
+    public @NotNull Boolean isOccupied() {
         return inhabitant != null;
     }
 
     @Override
-    public Boolean occupy(@NotNull AliveEntity stander) {
+    public @NotNull Boolean occupy(@NotNull AliveEntity stander) {
         Boolean isSuccessful = true;
-        if (inhabitant == null) {
+        if (inhabitant == null && isPassable) {
             inhabitant = stander;
             if (stander.hasProperty(PropertyCategories.PC_COORDINATES)) {
                 stander.setProperty(PropertyCategories.PC_COORDINATES, coordinates);
             } else {
-                final Property coordinatesProperty = PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES);
+                final Property coordinatesProperty =
+                        PropertiesFactory.makeProperty(PropertyCategories.PC_COORDINATES);
                 Objects.requireNonNull(coordinatesProperty).setPropertyList(coordinates);
                 stander.addProperty(PropertyCategories.PC_COORDINATES, coordinatesProperty);
             }
@@ -105,12 +106,12 @@ public class Tile implements MapNode {
 
     @Override
     @JsonIgnore
-    public List<MapNode> getAdjacentTiles() {
+    public @NotNull List<MapNode> getAdjacentTiles() {
         return adjacentTiles;
     }
 
     @Override
-    public Boolean isAdjacentTo(@NotNull MapNode tile) {
+    public @NotNull Boolean isAdjacentTo(@NotNull MapNode tile) {
         return adjacentTiles.contains(tile);
     }
 
@@ -126,12 +127,12 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public List<Integer> getCoordinates() {
+    public @NotNull List<Integer> getCoordinates() {
         return coordinates;
     }
 
     @Override
-    public Integer getCoordinate(@NotNull Integer coordinateIndex) {
+    public @NotNull Integer getCoordinate(@NotNull Integer coordinateIndex) {
         if (coordinateIndex < 0 || coordinateIndex >= coordinates.size()) {
             return Integer.MIN_VALUE;
         }
@@ -139,14 +140,15 @@ public class Tile implements MapNode {
     }
 
     @Override
-    public Integer getH(@NotNull MapNode goal) {
+    public @NotNull Integer getH(@NotNull MapNode goal) {
         return manhattanDistance(coordinates, goal.getCoordinates());
     }
 
-    private Integer manhattanDistance(@NotNull List<Integer> fromCoords, @NotNull List<Integer> toCoords) {
+    private @NotNull Integer manhattanDistance(@NotNull List<Integer> fromCoords,
+                                               @NotNull List<Integer> toCoords) {
         return Math.abs(fromCoords.get(DigitsPairIndices.ROW_COORD_INDEX)
-                + toCoords.get(DigitsPairIndices.ROW_COORD_INDEX))
+                - toCoords.get(DigitsPairIndices.ROW_COORD_INDEX))
                 + Math.abs(fromCoords.get(DigitsPairIndices.COL_COORD_INDEX)
-                + toCoords.get(DigitsPairIndices.COL_COORD_INDEX));
+                - toCoords.get(DigitsPairIndices.COL_COORD_INDEX));
     }
 }

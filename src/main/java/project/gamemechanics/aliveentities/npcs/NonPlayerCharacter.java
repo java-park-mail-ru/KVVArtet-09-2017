@@ -20,27 +20,27 @@ public class NonPlayerCharacter extends AbstractAliveEntity {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return npcID;
     }
 
     @Override
-    public Integer getDamage() {
+    public @NotNull Integer getDamage() {
         return getProperty(PropertyCategories.PC_BASE_DAMAGE);
     }
 
     @Override
-    public Integer getDefense() {
+    public @NotNull Integer getDefense() {
         return getProperty(PropertyCategories.PC_BASE_DEFENSE);
     }
 
     @Override
-    public Action makeDecision() {
+    public @NotNull Action makeDecision() {
         return behavior.makeDecision();
     }
 

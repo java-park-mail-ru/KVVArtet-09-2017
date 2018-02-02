@@ -51,12 +51,12 @@ public class PcgFactory implements PcgContentFactory {
     }
 
     @Override
-    public EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
+    public @NotNull EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
         return itemsFactory.makeItem(blueprint);
     }
 
     @Override
-    public EquipableItem makeItem(@NotNull Integer level) {
+    public @NotNull EquipableItem makeItem(@NotNull Integer level) {
         final Map<Integer, Integer> parts = new HashMap<>();
         for (Integer i = 0; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
             parts.put(i, Constants.UNDEFINED_ID);
@@ -72,12 +72,12 @@ public class PcgFactory implements PcgContentFactory {
     }
 
     @Override
-    public AliveEntity makeNpc(@NotNull NpcBlueprint blueprint) {
+    public @NotNull AliveEntity makeNpc(@NotNull NpcBlueprint blueprint) {
         return npcsFactory.makeNpc(blueprint, assetProvider, itemsFactory);
     }
 
     @Override
-    public AliveEntity makeNpc(@NotNull Integer level) {
+    public @NotNull AliveEntity makeNpc(@NotNull Integer level) {
         final Map<Integer, Integer> parts = new HashMap<>();
         for (Integer i = 0; i < NpcPart.NPC_PARTS_COUNT; ++i) {
             parts.put(i, Constants.UNDEFINED_ID);
@@ -91,13 +91,13 @@ public class PcgFactory implements PcgContentFactory {
 
     @Override
     @JsonIgnore
-    public ItemsFactory getItemsFactory() {
+    public @NotNull ItemsFactory getItemsFactory() {
         return itemsFactory;
     }
 
     @Override
     @JsonIgnore
-    public NpcsFactory getNpcsFactory() {
+    public @NotNull NpcsFactory getNpcsFactory() {
         return npcsFactory;
     }
 

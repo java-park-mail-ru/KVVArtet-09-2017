@@ -123,147 +123,147 @@ public final class PropertiesFactory {
         return property;
     }
 
-    private static Property makeStatsProperty() {
+    private static @NotNull Property makeStatsProperty() {
         return new ListProperty(new ArrayList<>(CharacterStats.CS_SIZE.asInt()));
     }
 
-    private static Property makeRatingsProperty() {
+    private static @NotNull Property makeRatingsProperty() {
         return new ListProperty(new ArrayList<>(CharacterRatings.CR_SIZE.asInt()));
     }
 
-    private static Property makeHitpointsProperty() {
+    private static @NotNull Property makeHitpointsProperty() {
         final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         list.add(DigitsPairIndices.MIN_VALUE_INDEX, 0);
         list.add(DigitsPairIndices.MAX_VALUE_INDEX, 0);
         return new ListProperty(list);
     }
 
-    private static Property makeXpPointsProperty() {
+    private static @NotNull Property makeXpPointsProperty() {
         final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         list.add(DigitsPairIndices.MIN_VALUE_INDEX, 0);
         list.add(DigitsPairIndices.MAX_VALUE_INDEX, 0);
         return new ListProperty(list);
     }
 
-    private static Property makeBaseDamageProperty() {
+    private static @NotNull Property makeBaseDamageProperty() {
         final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         list.add(DigitsPairIndices.MIN_VALUE_INDEX, 0);
         list.add(DigitsPairIndices.MAX_VALUE_INDEX, 0);
         return new ListProperty(list);
     }
 
-    private static Property makeBaseDefenseProperty() {
+    private static @NotNull Property makeBaseDefenseProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeLevelProperty() {
+    private static @NotNull Property makeLevelProperty() {
         return new SingleValueProperty(Constants.START_LEVEL);
     }
 
-    private static Property makeItemKindProperty() {
+    private static @NotNull Property makeItemKindProperty() {
         return new SingleValueProperty(EquipmentKind.EK_UNDEFINED.asInt());
     }
 
-    private static Property makeItemSlotsProperty() {
+    private static @NotNull Property makeItemSlotsProperty() {
         return new ListProperty(new ArrayList<>(EquipmentSlot.ES_SIZE));
     }
 
-    private static Property makeItemPriceProperty() {
+    private static @NotNull Property makeItemPriceProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeItemRarityProperty() {
+    private static @NotNull Property makeItemRarityProperty() {
         return new SingleValueProperty(ItemRarity.IR_COMMON.asInt());
     }
 
-    private static Property makeCoordinatesProperty() {
+    private static @NotNull Property makeCoordinatesProperty() {
         final List<Integer> list = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         list.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
         list.add(DigitsPairIndices.COL_COORD_INDEX, 0);
         return new ListProperty(list);
     }
 
-    private static Property makeSquadIdProperty() {
+    private static @NotNull Property makeSquadIdProperty() {
         return new SingleValueProperty(Constants.UNDEFINED_SQUAD_ID);
     }
 
-    private static Property makeOwnerIdProperty() {
+    private static @NotNull Property makeOwnerIdProperty() {
         return new SingleValueProperty(Constants.AI_CONTROLLED_NPC_ID);
     }
 
-    private static Property makeSkillPointsProperty() {
+    private static @NotNull Property makeSkillPointsProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeAbilitiesCooldownProperty() {
+    private static @NotNull Property makeAbilitiesCooldownProperty() {
         return new AbilitiesCooldownProperty(new HashMap<>());
     }
 
-    private static Property makeInitiativeProperty() {
+    private static @NotNull Property makeInitiativeProperty() {
         return new SingleValueProperty(Constants.DEFAULT_INITIATIVE_VALUE);
     }
 
-    private static Property makeSpeedProperty() {
+    private static @NotNull Property makeSpeedProperty() {
         return new SingleValueProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED);
     }
 
-    private static Property makeBaseHitpointsProperty() {
+    private static @NotNull Property makeBaseHitpointsProperty() {
         return new SingleValueProperty(Constants.INITIAL_HITPOINTS_CAP);
     }
 
-    private static Property makeCashAmountProperty() {
+    private static @NotNull Property makeCashAmountProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeMaxDistanceProperty() {
+    private static @NotNull Property makeMaxDistanceProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeAreaProperty() {
+    private static @NotNull Property makeAreaProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeAreaShapeProperty() {
+    private static @NotNull Property makeAreaShapeProperty() {
         return new SingleValueProperty(TilesetShapes.TS_POINT);
     }
 
-    private static Property makeInflictedCategoriesProperty() {
+    private static @NotNull Property makeInflictedCategoriesProperty() {
         return new SetProperty(new HashSet<>());
     }
 
-    private static Property makeItemBlueprintIdProperty() {
+    private static @NotNull Property makeItemBlueprintIdProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeCharacterRoleProperty() {
+    private static @NotNull Property makeCharacterRoleProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeCharacterRaceProperty() {
+    private static @NotNull Property makeCharacterRaceProperty() {
         return new SingleValueProperty(0);
     }
 
-    private static Property makeAvailableEquipmentProperty() {
+    private static @NotNull Property makeAvailableEquipmentProperty() {
         return new SetProperty(new HashSet<>(PropertyCategories.PC_AVAILABLE_EQUIPMENT));
     }
 
-    private static Property makeActiveRoleProperty() {
+    private static @NotNull Property makeActiveRoleProperty() {
         return new SingleValueProperty(Constants.UNDEFINED_ID);
     }
 
-    private static Property makeAvailableRolesProperty() {
+    private static @NotNull Property makeAvailableRolesProperty() {
         return new SetProperty(new HashSet<>(CharacterRoleIds.CR_SIZE));
     }
 
-    private static Property makePartyIdProperty() {
+    private static @NotNull Property makePartyIdProperty() {
         return new SingleValueProperty(Constants.UNDEFINED_ID);
     }
 
-    private static Property makeInstanceId() {
+    private static @NotNull Property makeInstanceId() {
         return new SingleValueProperty(Constants.UNDEFINED_ID);
     }
 
-    private static Property makeStatisticsProperty() {
+    private static @NotNull Property makeStatisticsProperty() {
         final List<Integer> list = new ArrayList<>(UserCharacterStatistics.US_SIZE);
         for (Integer i = 0; i < UserCharacterStatistics.US_SIZE; ++i) {
             list.add(i, 0);

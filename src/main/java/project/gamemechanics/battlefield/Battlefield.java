@@ -140,7 +140,7 @@ public class Battlefield implements Updateable {
         }
     }
 
-    public Integer getTurn() {
+    public @NotNull Integer getTurn() {
         return turnCounter;
     }
 
@@ -160,7 +160,7 @@ public class Battlefield implements Updateable {
             final AliveEntity activeBattler = battlersQueue.getFirst();
             if (activeBattler.isControlledByAI()) {
                 while (activeBattlerActionsPooled < ACTIONS_PER_TURN) {
-                    pushAction(activeBattler.makeDecision());
+                    pushAction(Objects.requireNonNull(activeBattler.makeDecision()));
                     actionsQueue.pollFirst().execute();
                 }
             }
@@ -178,20 +178,20 @@ public class Battlefield implements Updateable {
         }
     }
 
-    public Boolean isBattleFinished() {
+    public @NotNull Boolean isBattleFinished() {
         return isVictory() || isDefeat();
     }
 
-    public Boolean isVictory() {
+    public @NotNull Boolean isVictory() {
         return squads.get(Squad.TEAM_TWO_SQUAD_ID).areAllDead();
     }
 
-    private Boolean isDefeat() {
+    private @NotNull Boolean isDefeat() {
         return squads.get(Squad.TEAM_ONE_SQUAD_ID).areAllDead();
     }
 
     private void pushAction(@NotNull Action action) {
-        if (action.getSender().getInhabitant().equals(battlersQueue.getFirst())
+        if (Objects.requireNonNull(action.getSender().getInhabitant()).equals(battlersQueue.getFirst())
                 && activeBattlerActionsPooled < ACTIONS_PER_TURN) {
             actionsQueue.addLast(action);
             ++activeBattlerActionsPooled;
@@ -199,10 +199,12 @@ public class Battlefield implements Updateable {
     }
 
     @SuppressWarnings({"SameReturnValue", "ConstantConditions"})
-    public Message pushAction(ActionRequestMessage message) {
-        final MapNode senderTile = map.getTile(message.getSender().getCoordinate(0), message.getSender().getCoordinate(1));
+    public @NotNull Message pushAction(@NotNull ActionRequestMessage message) {
+        final MapNode senderTile = map.getTile(message.getSender().getCoordinate(0),
+                message.getSender().getCoordinate(1));
         if (senderTile.isOccupied() && senderTile != null) {
-            final BattleAction battleAction = new BattleAction(message.getSender(), message.getTarget(), message.getAbility(), pathfinder);
+            final BattleAction battleAction = new BattleAction(message.getSender(),
+                    message.getTarget(), message.getAbility(), pathfinder);
             pushAction(battleAction);
             return new ActionConfirmationMessage("Action delivered");
         } else {
@@ -211,11 +213,11 @@ public class Battlefield implements Updateable {
 
     }
 
-    public Integer getBattleLogLength() {
+    public @NotNull Integer getBattleLogLength() {
         return battleLog.size();
     }
 
-    public List<ActionResult> getBattleLog() {
+    public @NotNull List<ActionResult> getBattleLog() {
         return battleLog;
     }
 
@@ -226,7 +228,7 @@ public class Battlefield implements Updateable {
         return battleLog.get(entryIndex);
     }
 
-    public List<Long> encodeMap() {
+    public @NotNull List<Long> encodeMap() {
         return map.encode();
     }
 
@@ -473,7 +475,7 @@ public class Battlefield implements Updateable {
         }
     }
 
-    private ItemRarity defineItemRarity(@NotNull Random random) {
+    private @NotNull ItemRarity defineItemRarity(@NotNull Random random) {
         final Integer roll = random.nextInt(Constants.WIDE_PERCENTAGE_CAP_INT);
         if (roll < ItemRarity.IR_LEGENDARY.getDefaultDropChance()) {
             return ItemRarity.IR_LEGENDARY;

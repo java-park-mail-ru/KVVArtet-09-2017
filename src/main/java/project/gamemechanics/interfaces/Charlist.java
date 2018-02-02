@@ -4,6 +4,8 @@ import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterMode
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for charlist {@link CharacterList}.
  * Implementations shall always provide access to the {@link CharacterList}.
@@ -17,7 +19,7 @@ public interface Charlist extends Countable {
      * @return null if there's no {@link UserCharacterModel} in @param or {@link UserCharacter} otherwise
      */
     @SuppressWarnings("ConstantConditions")
-    default UserCharacter createChar(UserCharacterModel userCharacterModel) {
+    default @NotNull UserCharacter createChar(@NotNull UserCharacterModel userCharacterModel) {
         return null;
     }
 
@@ -26,7 +28,7 @@ public interface Charlist extends Countable {
      *
      * @param index of {@link UserCharacter} in {@link CharacterList}
      */
-    default void deleteChar(Integer index) {
+    default void deleteChar(@NotNull Integer index) {
 
     }
 
@@ -35,7 +37,7 @@ public interface Charlist extends Countable {
      *
      * @return null if there's empty ownerID in {@link CharacterList} and ownerID otherwise
      */
-    default Integer getOwnerId() {
+    default @NotNull Integer getOwnerId() {
         return 0;
     }
 

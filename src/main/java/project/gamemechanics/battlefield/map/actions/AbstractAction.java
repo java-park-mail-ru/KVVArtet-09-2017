@@ -2,6 +2,7 @@ package project.gamemechanics.battlefield.map.actions;
 
 import project.gamemechanics.interfaces.Action;
 
+import javax.validation.constraints.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractAction implements Action {
@@ -9,12 +10,12 @@ public abstract class AbstractAction implements Action {
     private final Integer actionID = instanceCounter.getAndIncrement();
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return instanceCounter.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return actionID;
     }
 }

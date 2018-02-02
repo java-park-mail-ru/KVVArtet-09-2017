@@ -1,6 +1,7 @@
 package project.gamemechanics.resources.assets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.interfaces.Countable;
 
 import javax.validation.constraints.NotNull;
@@ -14,24 +15,24 @@ public abstract class AbstractAssetHolder<T extends Countable> implements AssetH
     // CHECKSTYLE:ON
 
     @Override
-    public Boolean hasAsset(@NotNull Integer assetIndex) {
+    public @NotNull Boolean hasAsset(@NotNull Integer assetIndex) {
         return assets.containsKey(assetIndex);
     }
 
     @Override
-    public T getAsset(@NotNull Integer assetIndex) {
+    public @Nullable T getAsset(@NotNull Integer assetIndex) {
         return assets.getOrDefault(assetIndex, null);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableAssets() {
+    public @NotNull Set<Integer> getAvailableAssets() {
         return assets.keySet();
     }
 
     @Override
     @JsonIgnore
-    public Map<Integer, T> getAllAssets() {
+    public @NotNull Map<Integer, T> getAllAssets() {
         return assets;
     }
 }

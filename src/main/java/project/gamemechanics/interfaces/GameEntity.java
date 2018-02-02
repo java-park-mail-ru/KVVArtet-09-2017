@@ -1,5 +1,7 @@
 package project.gamemechanics.interfaces;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * An interface for entities that have name and description.
  * Extends {@link Countable} interface
@@ -10,12 +12,12 @@ public interface GameEntity extends Countable {
      *
      * @return entity's name
      */
-    String getName();
+    @NotNull String getName();
 
     /**
      * get entity's description.
      *
      * @return entity's description
      */
-    String getDescription();
+    @NotNull String getDescription();
 }

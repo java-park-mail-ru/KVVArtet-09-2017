@@ -1,9 +1,9 @@
 package project.gamemechanics.items.loot;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.Bag;
 import project.gamemechanics.interfaces.EquipableItem;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class PendingLootPoolImpl implements PendingLootPool {
     private final Map<AliveEntity, List<EquipableItem>> lootPools = new ConcurrentHashMap<>();
 
     @Override
-    public List<EquipableItem> getLootPool(@NotNull AliveEntity owner) {
+    public @Nullable List<EquipableItem> getLootPool(@NotNull AliveEntity owner) {
         return lootPools.getOrDefault(owner, null);
     }
 

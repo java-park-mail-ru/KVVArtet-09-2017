@@ -3,6 +3,7 @@ package project.gamemechanics.components.affectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 
 import javax.validation.constraints.NotNull;
@@ -18,38 +19,38 @@ public class SingleValueAffector implements Affector {
     }
 
     @Override
-    public Integer getAffection() {
+    public @NotNull Integer getAffection() {
         return affection;
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectionIndex) {
         return 0;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    public List<Integer> getAffectionsList() {
+    public @Nullable List<Integer> getAffectionsList() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public Boolean setAffectionsList(@NotNull List<Integer> affections) {
+    public @NotNull Boolean setAffectionsList(@NotNull List<Integer> affections) {
         return false;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     @JsonIgnore
-    public Map<Integer, Integer> getAffectionsMap() {
+    public @Nullable Map<Integer, Integer> getAffectionsMap() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
+    public @NotNull Boolean setAffectionsMap(@NotNull Map<Integer, Integer> affections) {
         return false;
     }
 
@@ -57,7 +58,7 @@ public class SingleValueAffector implements Affector {
     @SuppressWarnings("ParameterHidesMemberVariable")
     @Override
     @JsonSetter("affection")
-    public Boolean setSingleAffection(@NotNull Integer affection) {
+    public @NotNull Boolean setSingleAffection(@NotNull Integer affection) {
     // CHECKSTYLE:ON
         this.affection = affection;
         return true;
@@ -69,7 +70,7 @@ public class SingleValueAffector implements Affector {
     }
 
     @Override
-    public Boolean modifyByAddition(@NotNull Integer toAdd) {
+    public @NotNull Boolean modifyByAddition(@NotNull Integer toAdd) {
         affection += toAdd;
         return true;
     }

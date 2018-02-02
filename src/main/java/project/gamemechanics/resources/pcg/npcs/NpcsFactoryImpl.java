@@ -26,8 +26,8 @@ public class NpcsFactoryImpl implements NpcsFactory {
     }
 
     @Override
-    public AliveEntity makeNpc(@NotNull NpcBlueprint blueprint, @NotNull AssetProvider assetProvider,
-                               @NotNull ItemsFactory itemsGenerator) {
+    public @NotNull AliveEntity makeNpc(@NotNull NpcBlueprint blueprint, @NotNull AssetProvider assetProvider,
+                                        @NotNull ItemsFactory itemsGenerator) {
         final Map<Integer, Integer> parts = getNpcPartIds(blueprint);
         final CharacterRole npcRole = getNpcRole(blueprint, assetProvider);
 
@@ -54,7 +54,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
         return new NonPlayerCharacter(model);
     }
 
-    private Map<Integer, Integer> getNpcPartIds(@NotNull NpcBlueprint blueprint) {
+    private @NotNull Map<Integer, Integer> getNpcPartIds(@NotNull NpcBlueprint blueprint) {
         final Map<Integer, Integer> partIds = new HashMap<>(blueprint.getNpcParts());
         final Random random = new Random(System.currentTimeMillis());
         for (Integer partIndex : partIds.keySet()) {
@@ -66,7 +66,8 @@ public class NpcsFactoryImpl implements NpcsFactory {
         return partIds;
     }
 
-    private CharacterRole getNpcRole(@NotNull NpcBlueprint blueprint, @NotNull AssetProvider assetProvider) {
+    private @NotNull CharacterRole getNpcRole(@NotNull NpcBlueprint blueprint,
+                                               @NotNull AssetProvider assetProvider) {
         final CharacterRole npcRole;
         if (blueprint.getAvailableProperties().contains(PropertyCategories.PC_CHARACTER_ROLE_ID)) {
             if (blueprint.getProperties().get(PropertyCategories.PC_CHARACTER_ROLE_ID).getProperty()
@@ -79,10 +80,10 @@ public class NpcsFactoryImpl implements NpcsFactory {
         } else {
             npcRole = assetProvider.getNpcRole();
         }
-        return npcRole;
+        return Objects.requireNonNull(npcRole);
     }
 
-    private List<NpcPart> getNpcParts(@NotNull Map<Integer, Integer> npcPartsIndices) {
+    private @NotNull List<NpcPart> getNpcParts(@NotNull Map<Integer, Integer> npcPartsIndices) {
         final List<NpcPart> partsList = new ArrayList<>();
         for (Integer partId : npcPartsIndices.keySet()) {
             final Integer partIndex = npcPartsIndices.get(partId);
@@ -91,14 +92,14 @@ public class NpcsFactoryImpl implements NpcsFactory {
         return partsList;
     }
 
-    private List<Bag> generateLoot(@NotNull List<NpcPart> npcPartsList, @NotNull Integer level,
-                                   @NotNull ItemsFactory itemsGenerator) {
+    private @NotNull List<Bag> generateLoot(@NotNull List<NpcPart> npcPartsList, @NotNull Integer level,
+                                            @NotNull ItemsFactory itemsGenerator) {
         final List<Bag> lootBags = new ArrayList<>();
         lootBags.add(new MonsterLootBag(mergeLootLists(npcPartsList), level, itemsGenerator));
         return lootBags;
     }
 
-    private List<ItemBlueprint> mergeLootLists(@NotNull List<NpcPart> npcPartsList) {
+    private @NotNull List<ItemBlueprint> mergeLootLists(@NotNull List<NpcPart> npcPartsList) {
         if (npcPartsList.isEmpty()) {
             return new ArrayList<>();
         }
@@ -110,8 +111,9 @@ public class NpcsFactoryImpl implements NpcsFactory {
     }
 
     @SuppressWarnings("OverlyComplexMethod")
-    private Map<Integer, Property> mergeProperties(@NotNull List<NpcPart> npcPartList, @NotNull Integer level,
-                                                   @NotNull CharacterRole npcRole) {
+    private @NotNull Map<Integer, Property> mergeProperties(@NotNull List<NpcPart> npcPartList,
+                                                            @NotNull Integer level,
+                                                            @NotNull CharacterRole npcRole) {
         final Set<Integer> propertyIds = new HashSet<>();
         for (NpcPart part : npcPartList) {
             //noinspection Duplicates
@@ -236,29 +238,46 @@ public class NpcsFactoryImpl implements NpcsFactory {
         mergedProperties.put(PropertyCategories.PC_HITPOINTS, new ListProperty(hitpoints));
         mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
 
+        final Map<Integer, Integer> cooldowns = new HashMap<>();
+        for (Integer abilityId : npcRole.getAllAbilities().keySet()) {
+            cooldowns.put(abilityId, 0);
+        }
+        mergedProperties.put(PropertyCategories.PC_ABILITIES_COOLDOWN, new AbilitiesCooldownProperty(cooldowns));
+
+        if (mergedProperties.containsKey(PropertyCategories.PC_SPEED)) {
+            if (mergedProperties.get(PropertyCategories.PC_SPEED).getProperty() <= 0) {
+                mergedProperties.get(PropertyCategories.PC_SPEED)
+                        .setSingleProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED);
+            }
+        } else {
+            mergedProperties.put(PropertyCategories.PC_SPEED,
+                    new SingleValueProperty(Constants.DEFAULT_ALIVE_ENTITY_SPEED));
+        }
+
         return mergedProperties;
     }
 
-    private Float intPercentageToFloat(@NotNull Integer intPercentage) {
+    private @NotNull Float intPercentageToFloat(@NotNull Integer intPercentage) {
         return intPercentage.floatValue() / Integer.valueOf(Constants.PERCENTAGE_CAP_INT).floatValue();
     }
 
-    private Float countLevelGrowth(@NotNull Integer level) {
+    private @NotNull Float countLevelGrowth(@NotNull Integer level) {
         return Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
     }
 
-    private Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
+    private @NotNull Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
         return propertyKind == PropertyCategories.PC_LEVEL;
     }
 
-    private Boolean isPropertyLevelable(@NotNull Integer propertyKind) {
+    private @NotNull Boolean isPropertyLevelable(@NotNull Integer propertyKind) {
         //noinspection OverlyComplexBooleanExpression
         return propertyKind == PropertyCategories.PC_STATS || propertyKind == PropertyCategories.PC_BASE_HEALTH
                 || propertyKind == PropertyCategories.PC_BASE_DAMAGE
                 || propertyKind == PropertyCategories.PC_BASE_DEFENSE;
     }
 
-    private Integer getRoleProperAffector(@NotNull CharacterRole npcRole, @NotNull Integer propertyKind) {
+    private @NotNull Integer getRoleProperAffector(@NotNull CharacterRole npcRole,
+                                                   @NotNull Integer propertyKind) {
         switch (propertyKind) {
             case PropertyCategories.PC_BASE_HEALTH:
                 return npcRole.hasAffector(AffectorCategories.AC_HEALTH_AFFECTOR)

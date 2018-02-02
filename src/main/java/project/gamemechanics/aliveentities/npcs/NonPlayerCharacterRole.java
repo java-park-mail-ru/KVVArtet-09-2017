@@ -1,5 +1,6 @@
 package project.gamemechanics.aliveentities.npcs;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.CharacterRole;
@@ -56,47 +57,47 @@ public class NonPlayerCharacterRole implements CharacterRole {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return npcRoleID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Ability getAbility(Integer abilityID) {
+    public @Nullable Ability getAbility(@NotNull Integer abilityID) {
         return abilities.getOrDefault(abilityID, null);
     }
 
     @Override
-    public Map<Integer, Ability> getAllAbilities() {
+    public @NotNull Map<Integer, Ability> getAllAbilities() {
         return abilities;
     }
 
     @Override
-    public Boolean hasAffector(Integer affectorKind) {
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
-    public Set<Integer> getAvailableAffectors() {
+    public @NotNull Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         if (!hasAffector(affectorKind)) {
             return 0;
         }
@@ -104,7 +105,7 @@ public class NonPlayerCharacterRole implements CharacterRole {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if (!hasAffector(affectorKind)) {
             return 0;
         }

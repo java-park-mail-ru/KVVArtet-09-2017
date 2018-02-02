@@ -2,6 +2,8 @@ package project.gamemechanics.battlefield.actionresults;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
 import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.MapNode;
@@ -15,31 +17,31 @@ import javax.validation.constraints.NotNull;
 })
 public interface ActionResult {
     @SuppressWarnings("unused")
-    Integer getActionID();
+    @NonNull Integer getActionID();
 
-    MapNode getSender();
+    @NonNull MapNode getSender();
 
     @SuppressWarnings({"ConstantConditions", "unused"})
-    default MapNode getTarget() {
+    default @Nullable MapNode getTarget() {
         return null;
     }
 
     @SuppressWarnings({"ConstantConditions", "unused"})
-    default Ability getAbility() {
+    default @Nullable Ability getAbility() {
         return null;
     }
 
-    Integer getEventsCount();
+    @NonNull Integer getEventsCount();
 
-    TurnEvent getEvent(@NotNull Integer eventIndex);
+    @Nullable TurnEvent getEvent(@NotNull Integer eventIndex);
 
     void addEvent(@NotNull TurnEvent event);
 
     void addEvent(@NotNull Integer position, @NotNull TurnEvent event);
 
-    Integer getEventIndex(@NotNull TurnEvent event);
+    @NotNull Integer getEventIndex(@NotNull TurnEvent event);
 
-    Boolean getIsProcessed();
+    @NotNull Boolean getIsProcessed();
 
     void markProcessed();
 }

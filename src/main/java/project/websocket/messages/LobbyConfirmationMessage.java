@@ -16,7 +16,7 @@ public class LobbyConfirmationMessage extends Message {
         this("success");
     }
 
-    public String getMessage() {
+    public @NotNull String getMessage() {
         return message;
     }
 }

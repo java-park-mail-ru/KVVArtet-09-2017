@@ -40,51 +40,51 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     @JsonProperty("itemPartId")
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return itemPartId;
     }
 
     @Override
     @JsonIgnore
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
     @JsonIgnore
-    public Integer getLevel() {
+    public @NotNull Integer getLevel() {
         return getProperty(PropertyCategories.PC_LEVEL);
     }
 
     @Override
-    public Integer getPartIndex() {
+    public @NotNull Integer getPartIndex() {
         return partIndex;
     }
 
 
     @Override
-    public Boolean hasProperty(@NotNull Integer propertyKind) {
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         final Property property = properties.getOrDefault(propertyKind, null);
         if (property != null) {
             return property.getProperty();
@@ -93,7 +93,7 @@ public class ItemPartAsset implements ItemPart {
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         final Property property = properties.getOrDefault(propertyKind, null);
         if (property == null) {
             return Constants.WRONG_INDEX;
@@ -103,7 +103,7 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     @JsonProperty("properties")
-    public Map<Integer, Property> getAllProperties() {
+    public @NotNull Map<Integer, Property> getAllProperties() {
         return properties;
     }
 
@@ -113,18 +113,18 @@ public class ItemPartAsset implements ItemPart {
     }
 
     @Override
-    public Boolean hasAffector(@NotNull Integer affectorKind) {
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableAffectors() {
+    public @NotNull Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectorKind) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         final Affector affector = affectors.getOrDefault(affectorKind, null);
         if (affector == null) {
             return Constants.WRONG_INDEX;
@@ -133,7 +133,7 @@ public class ItemPartAsset implements ItemPart {
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         final Affector affector = affectors.getOrDefault(affectorKind, null);
         if (affector == null) {
             return Constants.WRONG_INDEX;
@@ -143,7 +143,7 @@ public class ItemPartAsset implements ItemPart {
 
     @Override
     @JsonProperty("affectors")
-    public Map<Integer, Affector> getAllAffectors() {
+    public @NotNull Map<Integer, Affector> getAllAffectors() {
         return affectors;
     }
 }

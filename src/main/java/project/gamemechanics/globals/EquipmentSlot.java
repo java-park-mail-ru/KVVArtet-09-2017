@@ -1,5 +1,7 @@
 package project.gamemechanics.globals;
 
+import javax.validation.constraints.NotNull;
+
 @SuppressWarnings("unused")
 public enum EquipmentSlot {
     ES_HEAD(0, "Head"),
@@ -19,16 +21,16 @@ public enum EquipmentSlot {
     private final Integer slotID;
     private final String description;
 
-    EquipmentSlot(Integer slotID, String description) {
+    EquipmentSlot(@NotNull Integer slotID, @NotNull String description) {
         this.slotID = slotID;
         this.description = description;
     }
 
-    public Integer asInt() {
+    public @NotNull Integer asInt() {
         return slotID;
     }
 
-    public String asText() {
+    public @NotNull String asText() {
         return description;
     }
 }

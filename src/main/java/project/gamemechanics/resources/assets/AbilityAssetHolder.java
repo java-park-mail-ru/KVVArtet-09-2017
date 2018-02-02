@@ -49,9 +49,9 @@ public class AbilityAssetHolder extends AbstractAssetHolder<Ability> implements 
                         abilityResource.getName(), abilityResource.getDescription(),
                         Objects.requireNonNull(abilityResource.getAllProperties()),
                         Objects.requireNonNull(abilityResource.getAllAffectors()),
-                        effectModels, AbilityBehaviors.getBehavior(
+                        effectModels, Objects.requireNonNull(AbilityBehaviors.getBehavior(
                         Objects.requireNonNull(abilityResource
-                                .getMapping(MappingIndices.ABILITY_BEHAVIOR_MAPPING)).get(0)));
+                                .getMapping(MappingIndices.ABILITY_BEHAVIOR_MAPPING)).get(0))));
                 assets.put(abilityModel.id, new IngameAbility(abilityModel));
             }
         } catch (JsonParseException e) {

@@ -1,5 +1,7 @@
 package project.gamemechanics.interfaces;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Interface for entities that have level property.
  * Allows to ask for entity's current level and implements some
@@ -12,7 +14,7 @@ public interface Levelable extends GameEntity {
      *
      * @return entity's current level
      */
-    Integer getLevel();
+    @NotNull Integer getLevel();
 
     /**
      * method for level-up logic.

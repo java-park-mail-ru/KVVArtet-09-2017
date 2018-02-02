@@ -30,12 +30,12 @@ public abstract class MapNodeTileset implements Tileset {
     }
 
     @Override
-    public Boolean isValid() {
+    public @NotNull Boolean isValid() {
         return !tileset.isEmpty();
     }
 
     @Override
-    public Integer getTilesCount() {
+    public @NotNull Integer getTilesCount() {
         return tileset.size();
     }
 
@@ -242,11 +242,11 @@ public abstract class MapNodeTileset implements Tileset {
         }
     }
 
-    Set<MapNode> getTileset() {
+    @NotNull Set<MapNode> getTileset() {
         return tileset;
     }
 
-    static Integer calculateDirection(@NotNull MapNode sender, @NotNull MapNode target) {
+    static @NotNull Integer calculateDirection(@NotNull MapNode sender, @NotNull MapNode target) {
         if (sender.equals(target)) {
             return Directions.DIRECTIONS_COUNT;
         }

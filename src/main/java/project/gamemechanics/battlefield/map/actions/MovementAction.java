@@ -10,6 +10,7 @@ import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MovementAction extends AbstractAction {
     private final MapNode sender;
@@ -24,29 +25,31 @@ public class MovementAction extends AbstractAction {
     }
 
     @Override
-    public MapNode getSender() {
+    public @NotNull MapNode getSender() {
         return sender;
     }
 
     @Override
-    public MapNode getTarget() {
+    public @NotNull MapNode getTarget() {
         return target;
     }
 
     @Override
-    public Boolean isMovement() {
+    public @NotNull Boolean isMovement() {
         return true;
     }
 
     @Override
-    public ActionResult execute() {
+    public @NotNull ActionResult execute() {
         final ActionResult result = new BattleActionResult(getID(), sender, target, null, new ArrayList<>());
         if (!sender.isOccupied()) {
             result.addEvent(EventsFactory.makeRollbackEvent());
             return result;
         }
         final Route route = pathfinder.getPath(sender.getCoordinates(), target.getCoordinates());
-        if (route.getLength() <= sender.getInhabitant().getProperty(PropertyCategories.PC_SPEED)) {
+        if (Objects.requireNonNull(route).getLength()
+                <= Objects.requireNonNull(sender.getInhabitant())
+                .getProperty(PropertyCategories.PC_SPEED)) {
             route.walkThrough();
         } else {
             route.walkThrough(sender.getInhabitant().getProperty(PropertyCategories.PC_SPEED));

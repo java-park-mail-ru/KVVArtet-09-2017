@@ -21,27 +21,27 @@ public final class NpcBlueprint {
         this.npcParts = npcParts;
     }
 
-    public Map<Integer, Property> getProperties() {
+    public @NotNull Map<Integer, Property> getProperties() {
         return properties;
     }
 
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @JsonIgnore
-    public Integer getLevel() {
+    public @NotNull Integer getLevel() {
         return properties.containsKey(PropertyCategories.PC_LEVEL)
                 ? properties.get(PropertyCategories.PC_LEVEL).getProperty() : Constants.UNDEFINED_ID;
     }
 
-    public Map<Integer, Integer> getNpcParts() {
+    public @NotNull Map<Integer, Integer> getNpcParts() {
         return npcParts;
     }
 
     @JsonIgnore
-    public Set<Integer> getAvailableNpcParts() {
+    public @NotNull Set<Integer> getAvailableNpcParts() {
         return npcParts.keySet();
     }
 }

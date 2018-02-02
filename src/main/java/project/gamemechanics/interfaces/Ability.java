@@ -34,11 +34,11 @@ public interface Ability extends GameEntity, PropertyProvider, AffectorProvider 
      * @return list of {@link TurnEvent}s caused by ability. This list shall be added
      *     to {@link project.gamemechanics.battlefield.actionresults.ActionResult}'s event list
      */
-    List<TurnEvent> execute(@NotNull AggregatedAbilityAction action);
+    @NotNull List<TurnEvent> execute(@NotNull AggregatedAbilityAction action);
 
-    Map<Integer, Property> getPropertiesMap();
+    @NotNull Map<Integer, Property> getPropertiesMap();
 
-    Map<Integer, Affector> getAffectorsMap();
+    @NotNull Map<Integer, Affector> getAffectorsMap();
 
-    List<IngameEffect.EffectModel> getAppliedEffects();
+    @NotNull List<IngameEffect.EffectModel> getAppliedEffects();
 }

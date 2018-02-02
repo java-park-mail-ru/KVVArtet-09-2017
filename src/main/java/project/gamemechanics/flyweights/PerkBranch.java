@@ -1,6 +1,7 @@
 package project.gamemechanics.flyweights;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.interfaces.GameEntity;
 import project.gamemechanics.interfaces.Perk;
 
@@ -43,27 +44,27 @@ public class PerkBranch implements GameEntity {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return branchID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @SuppressWarnings("ConstantConditions")
-    public Perk getPerk(Integer perkIndex) {
+    public @Nullable Perk getPerk(@NotNull Integer perkIndex) {
         if (perkIndex < 0 || perkIndex >= perks.size()) {
             return null;
         }
@@ -71,7 +72,7 @@ public class PerkBranch implements GameEntity {
     }
 
     @JsonIgnore
-    public Set<Integer> getPerkIds() {
+    public @NotNull Set<Integer> getPerkIds() {
         final Set<Integer> perkIds = new HashSet<>();
         for (Perk perk : perks) {
             perkIds.add(perk.getID());

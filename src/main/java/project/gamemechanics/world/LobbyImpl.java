@@ -21,10 +21,7 @@ import project.websocket.messages.LobbyConfirmationMessage;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
@@ -59,7 +56,7 @@ public class LobbyImpl implements Lobby {
 
     @Override
     @SuppressWarnings("OverlyComplexMethod")
-    public Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
+    public @NotNull Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
         if (!queuedCharacters.containsKey(gameMode)) {
             return new ErrorMessage("unknown game mode");
         }
@@ -96,7 +93,7 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public Message enqueue(@NotNull CharactersParty party, @NotNull Integer gameMode) {
+    public @NotNull Message enqueue(@NotNull CharactersParty party, @NotNull Integer gameMode) {
         if (!wipPartiesPool.containsKey(gameMode)) {
             // as PvP modes always require enqueuing, we check if that non-enqueuing mode is a PvE one
             if (!GameModes.isPve(gameMode)) {
@@ -122,7 +119,7 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public Message dequeue(@NotNull AliveEntity character) {
+    public @NotNull Message dequeue(@NotNull AliveEntity character) {
         for (Integer gameMode : queuedCharacters.keySet()) {
             dequeueCharacterFromQueue(character, gameMode);
         }
@@ -135,14 +132,14 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
+    public @NotNull Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
         dequeueCharacterFromQueue(character, gameMode);
         dequeueCharacterFromParties(character, gameMode);
         return new LobbyConfirmationMessage();
     }
 
     @Override
-    public Message dequeue(@NotNull CharactersParty party, @NotNull Boolean dismissParty) {
+    public @NotNull Message dequeue(@NotNull CharactersParty party, @NotNull Boolean dismissParty) {
         for (Integer gameMode : wipPartiesPool.keySet()) {
             if (wipPartiesPool.get(gameMode).contains(party)) {
                 wipPartiesPool.get(gameMode).remove(party);
@@ -155,7 +152,9 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public Message dequeue(@NotNull CharactersParty party, @NotNull Integer gameMode, @NotNull Boolean dismissParty)  {
+    public @NotNull Message dequeue(@NotNull CharactersParty party,
+                                    @NotNull Integer gameMode,
+                                    @NotNull Boolean dismissParty)  {
         if (dismissParty) {
             return dequeue(party, true);
         }
@@ -175,10 +174,12 @@ public class LobbyImpl implements Lobby {
         traverseCharactersQueue();
     }
 
-    private Boolean dequeueCharacterFromParties(@NotNull AliveEntity character, @NotNull Integer gameMode) {
+    private @NotNull Boolean dequeueCharacterFromParties(@NotNull AliveEntity character,
+                                                         @NotNull Integer gameMode) {
         for (CharactersParty party : wipPartiesPool.get(gameMode)) {
             for (Integer roleId : party.getRoleIds()) {
-                if (party.getMember(roleId).equals(character)) {
+                if (Objects.requireNonNull(party.getMember(roleId))
+                        .equals(character)) {
                     party.removeMember(roleId);
                     return true;
                 }
@@ -187,7 +188,8 @@ public class LobbyImpl implements Lobby {
         return false;
     }
 
-    private void dequeueCharacterFromQueue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
+    private void dequeueCharacterFromQueue(@NotNull AliveEntity character,
+                                           @NotNull Integer gameMode) {
         for (Integer roleId : queuedCharacters.get(gameMode).keySet()) {
             final Deque<AliveEntity> queuedForRole = queuedCharacters.get(gameMode).get(roleId);
             if (queuedForRole.contains(character)) {
@@ -224,36 +226,45 @@ public class LobbyImpl implements Lobby {
         }
     }
     // CHECKSTYLE:OFF
-    private void sendInvitations(@NotNull Instance instance, @NotNull List<CharactersParty> parties) {
+    private void sendInvitations(@NotNull Instance instance,
+                                 @NotNull List<CharactersParty> parties) {
         final Message invitation = new LobbyConfirmationMessage(); /* TODO: change on something more correct */
         // CHECKSTYLE:ON
         final List<Integer> notifiedUsersList = new ArrayList<>();
         for (CharactersParty matchedParty : parties) {
             for (Integer roleId : matchedParty.getRoleIds()) {
-                if (!notifiedUsersList.contains(matchedParty.getMember(roleId)
+                if (!notifiedUsersList.contains(
+                        Objects.requireNonNull(matchedParty.getMember(roleId))
                         .getProperty(PropertyCategories.PC_OWNER_ID))) {
-                    smartControllersPool.get(matchedParty.getMember(roleId)
+                    smartControllersPool.get(
+                            Objects.requireNonNull(matchedParty.getMember(roleId))
                             .getProperty(PropertyCategories.PC_OWNER_ID)).addInboxMessage(invitation);
-                    notifiedUsersList.add(matchedParty.getMember(roleId).getProperty(PropertyCategories.PC_OWNER_ID));
+                    notifiedUsersList.add(Objects.requireNonNull(matchedParty.getMember(roleId))
+                            .getProperty(PropertyCategories.PC_OWNER_ID));
                 }
-                if (matchedParty.getMember(roleId).hasProperty(PropertyCategories.PC_INSTANCE_ID)) {
-                    matchedParty.getMember(roleId).setProperty(PropertyCategories.PC_INSTANCE_ID, instance.getID());
+                if (Objects.requireNonNull(matchedParty.getMember(roleId))
+                        .hasProperty(PropertyCategories.PC_INSTANCE_ID)) {
+                    Objects.requireNonNull(matchedParty.getMember(roleId))
+                            .setProperty(PropertyCategories.PC_INSTANCE_ID, instance.getID());
                 } else {
-                    matchedParty.getMember(roleId).addProperty(PropertyCategories.PC_INSTANCE_ID,
+                    Objects.requireNonNull(matchedParty.getMember(roleId))
+                            .addProperty(PropertyCategories.PC_INSTANCE_ID,
                             new SingleValueProperty(instance.getID()));
                 }
             }
         }
     }
 
-    private AbstractInstance.DungeonInstanceModel makePveInstanceModel(@NotNull List<CharactersParty> parties) {
+    private @NotNull AbstractInstance.DungeonInstanceModel makePveInstanceModel(
+            @NotNull List<CharactersParty> parties) {
         final List<String> instanceNameDescription = assetProvider.makeInstanceNameDescription();
         return new AbstractInstance.DungeonInstanceModel(instanceNameDescription.get(0),
                         instanceNameDescription.get(1), parties.get(0).getAverageLevel(),
                         Constants.DEFAULT_ROOMS_COUNT, factory, parties, AIBehaviors.getAllBehaviors());
     }
 
-    private AbstractInstance.LandInstanceModel makePvpInstanceModel(@NotNull List<CharactersParty> parties) {
+    private @NotNull AbstractInstance.LandInstanceModel makePvpInstanceModel(
+            @NotNull List<CharactersParty> parties) {
         final List<String> nameDescription = assetProvider.makeInstanceNameDescription();
         return new AbstractInstance.LandInstanceModel(nameDescription.get(0),
                         nameDescription.get(1), parties.get(0).getAverageLevel(),

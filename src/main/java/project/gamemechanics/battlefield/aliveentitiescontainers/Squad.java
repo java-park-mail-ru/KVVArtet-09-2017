@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.aliveentitiescontainers;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.globals.Constants;
@@ -11,7 +12,6 @@ import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.items.loot.IngameLootContainer;
 import project.gamemechanics.items.loot.LootContainer;
 import project.gamemechanics.items.loot.PendingLootPool;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -56,16 +56,16 @@ public class Squad implements Countable {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return id;
     }
 
-    public @Nullable AliveEntity getMember(Integer memberIndex) {
+    public @Nullable AliveEntity getMember(@NotNull Integer memberIndex) {
         if (memberIndex < 0 && memberIndex >= members.size()) {
             return null;
         }
@@ -88,7 +88,7 @@ public class Squad implements Countable {
         }
     }
 
-    public void removeMember(Integer memberIndex) {
+    public void removeMember(@NotNull Integer memberIndex) {
         if (memberIndex < 0 || memberIndex >= members.size()) {
             return;
         }
@@ -97,11 +97,11 @@ public class Squad implements Countable {
         members.remove(memberIndex.intValue());
     }
 
-    public Integer getSquadSize() {
+    public @NotNull Integer getSquadSize() {
         return members.size();
     }
 
-    public Integer getAliveMembersCount() {
+    public @NotNull Integer getAliveMembersCount() {
         Integer aliveMembers = 0;
         for (AliveEntity member : members) {
             if (member != null) {
@@ -113,7 +113,7 @@ public class Squad implements Countable {
         return aliveMembers;
     }
 
-    public Integer getAverageLevel() {
+    public @NotNull Integer getAverageLevel() {
         Integer accumulatedLevel = 0;
         Integer partySize = 0;
         for (AliveEntity member : members) {
@@ -128,11 +128,11 @@ public class Squad implements Countable {
         return accumulatedLevel / partySize;
     }
 
-    public Integer getSquadID() {
+    public @NotNull Integer getSquadID() {
         return squadID;
     }
 
-    public Boolean areAllDead() {
+    public @NotNull Boolean areAllDead() {
         return getAliveMembersCount() == 0;
     }
 

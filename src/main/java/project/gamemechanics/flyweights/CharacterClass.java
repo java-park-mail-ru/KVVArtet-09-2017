@@ -57,52 +57,52 @@ public class CharacterClass implements CharacterRole {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return characterClassID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Ability getAbility(@NotNull Integer abilityID) {
+    public @NotNull Ability getAbility(@NotNull Integer abilityID) {
         return abilities.getOrDefault(abilityID, null);
     }
 
     @Override
-    public Map<Integer, Ability> getAllAbilities() {
+    public @NotNull Map<Integer, Ability> getAllAbilities() {
         return abilities;
     }
 
     @Override
-    public PerkBranch getBranch(@NotNull Integer branchID) {
+    public @Nullable PerkBranch getBranch(@NotNull Integer branchID) {
         return branches.get(branchID);
     }
 
     @Override
-    public Perk getPerk(@NotNull Integer branchID, @NotNull Integer perkID) {
+    public @Nullable Perk getPerk(@NotNull Integer branchID, @NotNull Integer perkID) {
         return branches.get(branchID).getPerk(perkID);
     }
 
     @Override
-    public Boolean hasProperty(@NotNull Integer propertyKind) {
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         final Property property = properties.getOrDefault(propertyKind, null);
         if (property == null) {
             return Constants.WRONG_INDEX;
@@ -111,7 +111,7 @@ public class CharacterClass implements CharacterRole {
     }
 
     @Override
-    public Boolean canEquip(@NotNull Integer equipmentKindId) {
+    public @NotNull Boolean canEquip(@NotNull Integer equipmentKindId) {
         final Set<Integer> availableEquipmentIds = getEquipableKinds();
         return availableEquipmentIds != null && availableEquipmentIds.contains(equipmentKindId);
     }

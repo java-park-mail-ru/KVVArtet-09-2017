@@ -1,5 +1,6 @@
 package project.gamemechanics.components.actionmakers;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.battlefield.map.actions.BattleAction;
 import project.gamemechanics.interfaces.Ability;
@@ -20,8 +21,9 @@ public class BattleActionMaker implements ActionMaker {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public BattleAction makeAction(@NotNull Ability ability, @NotNull AliveEntity sender,
-                                   @NotNull List<Integer> targetCoords) {
+    public @Nullable BattleAction makeAction(@NotNull Ability ability,
+                                             @NotNull AliveEntity sender,
+                                             @NotNull List<Integer> targetCoords) {
         return null;
     }
 }

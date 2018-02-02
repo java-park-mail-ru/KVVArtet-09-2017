@@ -2,6 +2,7 @@ package project.gamemechanics.components.properties;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -17,32 +18,32 @@ import java.util.Set;
         @JsonSubTypes.Type(SetProperty.class),
 })
 public interface Property {
-    Integer getProperty();
+    @NotNull Integer getProperty();
 
-    Integer getProperty(@NotNull Integer propertyIndex);
+    @NotNull Integer getProperty(@NotNull Integer propertyIndex);
 
     void setSingleProperty(@NotNull Integer property);
 
     void setSingleProperty(@NotNull Integer propertyIndex, @NotNull Integer property);
 
-    List<Integer> getPropertyList();
+    @Nullable List<Integer> getPropertyList();
 
     void setPropertyList(@NotNull List<Integer> properties);
 
-    Map<Integer, Integer> getPropertyMap();
+    @Nullable Map<Integer, Integer> getPropertyMap();
 
-    Boolean setPropertyMap(@NotNull Map<Integer, Integer> property);
+    @NotNull Boolean setPropertyMap(@NotNull Map<Integer, Integer> property);
 
-    Set<Integer> getPropertySet();
+    @Nullable Set<Integer> getPropertySet();
 
-    Boolean setPropertySet(@NotNull Set<Integer> property);
+    @NotNull Boolean setPropertySet(@NotNull Set<Integer> property);
 
-    Boolean modifyByPercentage(@NotNull Float percentage);
+    @NotNull Boolean modifyByPercentage(@NotNull Float percentage);
 
-    Boolean modifyByPercentage(@NotNull Integer itemIndex, @NotNull Float percentage);
+    @NotNull Boolean modifyByPercentage(@NotNull Integer itemIndex, @NotNull Float percentage);
 
     void modifyByAddition(@NotNull Integer toAdd);
 
-    Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd);
+    @NotNull Boolean modifyByAddition(@NotNull Integer propertyIndex, @NotNull Integer toAdd);
 }
 

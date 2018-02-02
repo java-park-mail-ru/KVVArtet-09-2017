@@ -9,13 +9,15 @@ import project.states.State;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
 
-import java.util.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StateService {
     private static final Logger LOGGER = LoggerFactory.getLogger(StateService.class);
     private final List<State> stateList = new ArrayList<>();
 
-    public Message handleMessage(final Message message, Integer forUser) {
+    public @NotNull Message handleMessage(@NotNull Message message, @NotNull Integer forUser) {
         LOGGER.info("StateService call: ");
         Message response = null;
         for (State state : stateList) {

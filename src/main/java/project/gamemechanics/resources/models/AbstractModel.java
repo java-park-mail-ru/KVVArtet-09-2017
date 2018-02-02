@@ -21,23 +21,23 @@ public abstract class AbstractModel implements GameResource {
 
     @Override
     @JsonIgnore
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
     @JsonProperty("modelId")
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return modelID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 }

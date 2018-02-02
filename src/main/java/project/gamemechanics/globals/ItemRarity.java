@@ -23,15 +23,15 @@ public enum ItemRarity {
         this.description = description;
     }
 
-    public Integer asInt() {
+    public @NotNull Integer asInt() {
         return rarityGrade;
     }
 
-    public Integer getDefaultDropChance() {
+    public @NotNull Integer getDefaultDropChance() {
         return defaultDropChance;
     }
 
-    public String asText() {
+    public @NotNull String asText() {
         return description;
     }
 }

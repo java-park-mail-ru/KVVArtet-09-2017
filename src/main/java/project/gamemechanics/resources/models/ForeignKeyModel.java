@@ -2,6 +2,7 @@ package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.properties.Property;
 
@@ -24,42 +25,42 @@ public class ForeignKeyModel extends AbstractModel {
     }
 
     @Override
-    public Boolean hasMapping(@NotNull Integer mappingIndex) {
+    public @NotNull Boolean hasMapping(@NotNull Integer mappingIndex) {
         return mappings.containsKey(mappingIndex);
     }
 
     @Override
     @JsonIgnore
-    public Map<Integer, Property> getAllProperties() {
+    public @Nullable Map<Integer, Property> getAllProperties() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public Map<Integer, Affector> getAllAffectors() {
+    public @Nullable Map<Integer, Affector> getAllAffectors() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public List<GameResource> getAllInlaid() {
+    public @Nullable List<GameResource> getAllInlaid() {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableMappings() {
+    public @NotNull Set<Integer> getAvailableMappings() {
         return mappings.keySet();
     }
 
     @Override
-    public List<Integer> getMapping(@NotNull Integer mappingIndex) {
+    public @Nullable List<Integer> getMapping(@NotNull Integer mappingIndex) {
         return mappings.getOrDefault(mappingIndex, null);
     }
 
     @Override
     @JsonProperty("mappings")
-    public Map<Integer, List<Integer>> getAllMappings() {
+    public @NotNull Map<Integer, List<Integer>> getAllMappings() {
         return mappings;
     }
 }

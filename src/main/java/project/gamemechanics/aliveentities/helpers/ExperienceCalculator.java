@@ -2,11 +2,12 @@ package project.gamemechanics.aliveentities.helpers;
 
 import project.gamemechanics.globals.Constants;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-@SuppressWarnings("ConstantNamingConvention")
 public final class ExperienceCalculator {
 
+    @SuppressWarnings("FieldNamingConvention")
     private static final int LEVEL_UP_CAP_CALCULATION_CONSTANT = 8;
     private static final int BASE_XP_REWARD = 45;
     private static final int XP_CALCULATION_CONSTANT = 5;
@@ -22,11 +23,11 @@ public final class ExperienceCalculator {
     private ExperienceCalculator() {
     }
 
-    public static Integer getNewLevelUpCap(Integer level) {
+    public static @NotNull Integer getNewLevelUpCap(@NotNull Integer level) {
         return LEVEL_UP_CAP_CALCULATION_CONSTANT * level * getXPReward(level, level);
     }
 
-    public static Integer getXPReward(Integer killerLevel, Integer killedLevel) {
+    public static @NotNull Integer getXPReward(@NotNull Integer killerLevel, @NotNull Integer killedLevel) {
         if (!Objects.equals(killerLevel, killedLevel)) {
             final Integer levelDifference = killedLevel - killerLevel;
             if (Math.abs(levelDifference) > NO_XP_LEVEL_DIFFERENCE_CAP) {
@@ -43,7 +44,8 @@ public final class ExperienceCalculator {
         return getBasicXPReward(killerLevel);
     }
 
-    public static Integer getPartyBiasedXPReward(Integer reward, Integer alivePartyMembersCount) {
+    public static @NotNull Integer getPartyBiasedXPReward(@NotNull Integer reward,
+                                                          @NotNull Integer alivePartyMembersCount) {
         return reward / alivePartyMembersCount;
     }
 

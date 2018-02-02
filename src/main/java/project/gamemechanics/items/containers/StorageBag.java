@@ -2,6 +2,7 @@ package project.gamemechanics.items.containers;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.interfaces.Bag;
 import project.gamemechanics.interfaces.EquipableItem;
@@ -72,36 +73,36 @@ public class StorageBag implements Bag {
 
     @Override
     @JsonIgnore
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
     @JsonProperty("id")
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return bagID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
     @JsonProperty("slotsCount")
-    public Integer getSlotsCount() {
+    public @NotNull Integer getSlotsCount() {
         return contents.size();
     }
 
     @Override
     @JsonProperty("freeSlots")
-    public Integer getFreeSlotsCount() {
-        Integer freeSlotsCount = 0;
+    public @NotNull Integer getFreeSlotsCount() {
+        @NotNull Integer freeSlotsCount = 0;
         for (EquipableItem item : contents) {
             if (item == null) {
                 ++freeSlotsCount;
@@ -111,7 +112,7 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos) {
+    public @NotNull Boolean swap(@NotNull Integer fromPos, @NotNull Integer toPos) {
         //noinspection OverlyComplexBooleanExpression
         if (fromPos < 0 || toPos < 0 || fromPos >= contents.size() || toPos >= contents.size()) {
             return false;
@@ -124,7 +125,7 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos) {
+    public @NotNull Boolean swap(@NotNull Integer fromPos, @NotNull Bag toBag, @NotNull Integer toPos) {
         //noinspection OverlyComplexBooleanExpression
         if (fromPos < 0 || fromPos >= contents.size() || toBag == null || toPos < 0) {
             return false;
@@ -140,13 +141,13 @@ public class StorageBag implements Bag {
     }
 
     @Override
-    public Boolean addItem(@NotNull EquipableItem item) {
+    public @NotNull Boolean addItem(@NotNull EquipableItem item) {
         final Integer putIndex = getFirstFreeSlot();
         return addItem(item, putIndex);
     }
 
     @Override
-    public Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos) {
+    public @NotNull Boolean addItem(@NotNull EquipableItem item, @NotNull Integer toPos) {
         if (toPos < 0 || toPos >= contents.size()) {
             return false;
         }
@@ -167,7 +168,7 @@ public class StorageBag implements Bag {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public EquipableItem getItem(@NotNull Integer itemIndex) {
+    public @Nullable EquipableItem getItem(@NotNull Integer itemIndex) {
         if (itemIndex < 0 || itemIndex >= contents.size()) {
             return null;
         }
@@ -175,12 +176,12 @@ public class StorageBag implements Bag {
     }
 
     @JsonProperty("items")
-    List<EquipableItem> getContents() {
+    @NotNull List<EquipableItem> getContents() {
         return contents;
     }
 
     @JsonIgnore
-    private Integer getFirstFreeSlot() {
+    private @NotNull Integer getFirstFreeSlot() {
         if (contents.isEmpty()) {
             return Constants.WRONG_INDEX;
         }

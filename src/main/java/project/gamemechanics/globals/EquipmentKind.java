@@ -34,11 +34,11 @@ public enum EquipmentKind {
         this.description = description;
     }
 
-    public Integer asInt() {
+    public @NotNull Integer asInt() {
         return kindID;
     }
 
-    public String asText() {
+    public @NotNull String asText() {
         return description;
     }
 }

@@ -41,7 +41,7 @@ public class AreaEffectTileset extends MapNodeTileset {
     public void applyEffects(@NotNull List<TurnEvent> events) {
         for (MapNode tile : getTileset()) {
             if (tile.isOccupied()) {
-                applyOnInhabitant(sender.getInhabitant(), tile, events);
+                applyOnInhabitant(Objects.requireNonNull(sender.getInhabitant()), tile, events);
             } else {
                 events.add(EventsFactory.makeCastEvent(tile, abilityID));
             }
@@ -55,8 +55,9 @@ public class AreaEffectTileset extends MapNodeTileset {
         // CHECKSTYLE:ON
 
         if ((affectedCategories.contains(BattlefieldObjectsCategories.BO_ENEMY) && !areOnSameSide(sender,
-                target.getInhabitant())) || (affectedCategories.contains(BattlefieldObjectsCategories.BO_ALLY)
-                && areOnSameSide(sender, target.getInhabitant()))) {
+                Objects.requireNonNull(target.getInhabitant())))
+                || (affectedCategories.contains(BattlefieldObjectsCategories.BO_ALLY)
+                && areOnSameSide(sender, Objects.requireNonNull(target.getInhabitant())))) {
             for (Effect effect : effects) {
                 target.getInhabitant().addEffect(effect);
                 events.add(EventsFactory.makeApplyEffectEvent(target, effect));
@@ -67,13 +68,13 @@ public class AreaEffectTileset extends MapNodeTileset {
         }
     }
 
-    private Boolean areOnSameSide(@NotNull AliveEntity lhs, @NotNull AliveEntity rhs) {
+    private @NotNull Boolean areOnSameSide(@NotNull AliveEntity lhs, @NotNull AliveEntity rhs) {
         return Objects.equals(lhs.getProperty(PropertyCategories.PC_SQUAD_ID),
                 rhs.getProperty(PropertyCategories.PC_SQUAD_ID));
     }
     // CHECKSTYLE:OFF
     @SuppressWarnings("ParameterHidesMemberVariable")
-    private Integer getAffection(@NotNull AliveEntity sender) {
+    private @NotNull Integer getAffection(@NotNull AliveEntity sender) {
         // CHECKSTYLE:ON
 
         final Random random = new Random(System.currentTimeMillis());

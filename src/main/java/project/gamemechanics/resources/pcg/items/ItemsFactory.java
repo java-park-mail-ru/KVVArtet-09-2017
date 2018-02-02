@@ -11,5 +11,5 @@ import javax.validation.constraints.NotNull;
         @JsonSubTypes.Type(ItemFactoryImpl.class),
 })
 public interface ItemsFactory {
-    EquipableItem makeItem(@NotNull ItemBlueprint blueprint);
+    @NotNull EquipableItem makeItem(@NotNull ItemBlueprint blueprint);
 }
