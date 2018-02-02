@@ -48,6 +48,16 @@ public class BattleMapRoute implements Route {
         walkThrough(route.size() - 1);
     }
 
+    private void walkThrough(@NotNull Integer distance, @NotNull AliveEntity walker) {
+        if (!route.get(distance).occupy(walker)) {
+            if (distance > SOURCE_TILE_INDEX) {
+                walkThrough(distance - 1, walker);
+            } else {
+                route.get(SOURCE_TILE_INDEX).occupy(walker);
+            }
+        }
+    }
+
     @Override
     public @NotNull List<Integer> getStartCoordinates() {
         return route.get(0).getCoordinates();
@@ -65,15 +75,5 @@ public class BattleMapRoute implements Route {
 
     public @NotNull List<MapNode> getRoute() {
         return route;
-    }
-
-    private void walkThrough(@NotNull Integer distance, @NotNull AliveEntity walker) {
-        if (!route.get(distance).occupy(walker)) {
-            if (distance > SOURCE_TILE_INDEX) {
-                walkThrough(distance - 1, walker);
-            } else {
-                route.get(SOURCE_TILE_INDEX).occupy(walker);
-            }
-        }
     }
 }

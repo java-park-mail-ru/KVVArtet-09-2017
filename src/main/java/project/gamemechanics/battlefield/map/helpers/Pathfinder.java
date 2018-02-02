@@ -76,7 +76,7 @@ public final class Pathfinder implements PathfindingAlgorithm {
                         + getG(current, adjacent, gScore.get(current));
                 final Boolean containsOpen = open.contains(adjacent);
                 if (!containsOpen || tentativeG < gScore.getOrDefault(adjacent, 0)) {
-                    if(!gScore.containsKey(adjacent)) {
+                    if (!gScore.containsKey(adjacent)) {
                         gScore.put(adjacent, tentativeG);
                     } else {
                         gScore.replace(adjacent, tentativeG);

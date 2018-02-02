@@ -39,7 +39,7 @@ public class HybridModel extends AbstractModel {
 
     @Override
     public @Nullable Property getProperty(@NotNull Integer propertyIndex) {
-        return properties != null ?properties.getOrDefault(propertyIndex, null) : null;
+        return properties != null ? properties.getOrDefault(propertyIndex, null) : null;
     }
 
     @Override
