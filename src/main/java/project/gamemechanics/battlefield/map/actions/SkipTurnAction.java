@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.map.actions;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.actionresults.BattleActionResult;
 import project.gamemechanics.battlefield.actionresults.events.EventsFactory;
@@ -17,24 +18,24 @@ public class SkipTurnAction extends AbstractAction {
     }
 
     @Override
-    public Boolean isSkip() {
+    public @NotNull Boolean isSkip() {
         return true;
     }
 
     @Override
-    public MapNode getSender() {
+    public @NotNull MapNode getSender() {
         return sender;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public MapNode getTarget() {
+    public @Nullable MapNode getTarget() {
         return null;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public ActionResult execute() {
+    public @NotNull ActionResult execute() {
         final ActionResult result = new BattleActionResult(getID(), sender, null, null, new ArrayList<>());
         result.addEvent(EventsFactory.makeEndTurnEvent());
         return result;

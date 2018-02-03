@@ -26,7 +26,7 @@ public class ConnectionPool implements ObjectivePool.SmartControllersPool {
     }
 
     @Override
-    public SmartController getElement() {
+    public @NotNull SmartController getElement() {
         if (isEmpty()) {
             addMore();
         }
@@ -44,7 +44,7 @@ public class ConnectionPool implements ObjectivePool.SmartControllersPool {
     }
 
     @Override
-    public Boolean isEmpty() {
+    public @NotNull Boolean isEmpty() {
         return connectionPool.isEmpty();
     }
 }

@@ -1,6 +1,6 @@
 package project.gamemechanics.battlefield.map.tilesets;
 
-import project.gamemechanics.globals.Constants;
+import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.MapNode;
@@ -32,6 +32,7 @@ public class FoVTileset implements FieldOfVision {
      * nodes visible from the current PoV.
      */
     private final Map<List<Integer>, MapNode> fieldOfVision = new HashMap<>();
+    private final BattleMap map;
 
     /**
      * current PoV.
@@ -47,11 +48,11 @@ public class FoVTileset implements FieldOfVision {
         Integer end;
 
         Shadow(@NotNull Integer start, @NotNull Integer end) {
-            this.start = start;
-            this.end = end;
+            this.start = start < end ? start : end;
+            this.end = this.start.equals(start) ? end : start;
         }
 
-        Boolean contains(@NotNull Shadow other) {
+        @NotNull Boolean contains(@NotNull Shadow other) {
             return start <= other.start && end >= other.end;
         }
     }
@@ -71,7 +72,7 @@ public class FoVTileset implements FieldOfVision {
          * @param projection node coordinates projection from the current PoV.
          * @return true is this projection is covered by shadow line or false otherwise.
          */
-        Boolean isInShadow(@NotNull Shadow projection) {
+        @NotNull Boolean isInShadow(@NotNull Shadow projection) {
             for (Shadow shadow : shadows) {
                 if (shadow.contains(projection)) {
                     return true;
@@ -122,186 +123,127 @@ public class FoVTileset implements FieldOfVision {
          * @param width observed row's width.
          * @return true if the shadow line is represented by the single shadow and covers the whole row width
          */
-        Boolean isFullShadow(@NotNull Integer width) {
+        @NotNull Boolean isFullShadow(@NotNull Integer width) {
             return shadows.size() == 1 && Objects.equals(shadows.get(0).start, 0)
                     && Objects.equals(shadows.get(0).end, width);
         }
     }
 
-    /**
-     * octant is a 45-degrees sector of the FoV.
-     */
-    @SuppressWarnings("unused")
     private static class Octant {
-        /**
-         * octant's map nodes.
-         */
-        private final List<List<MapNode>> octant = new LinkedList<>();
-
-        /**
-         * current PoV.
-         */
+        private final Integer direction;
         private final MapNode source;
 
-        /**
-         * octant's direction.
-         */
-        private final Integer direction;
-
-        /**
-         * create new octant for given PoV in given direction.
-         *
-         * @param source    PoV to build an octant from
-         * @param direction direction to build an octant in
-         */
-        Octant(@NotNull MapNode source, Integer direction) {
-            this.source = source;
+        Octant(@NotNull Integer direction, @NotNull MapNode source) {
             this.direction = direction;
-
-            getHalfCone();
+            this.source = source;
         }
 
-        /**
-         * get octant nodes visible from the current PoV.
-         *
-         * @return list of visible nodes
-         */
-        List<MapNode> getVisibleNodes() {
-            final List<MapNode> visibleNodes = new LinkedList<>();
-            final ShadowLine shadows = new ShadowLine();
-            for (List<MapNode> row : octant) {
-                for (MapNode node : row) {
-                    if (!shadows.isFullShadow(row.size())) {
-                        final List<Integer> relativeNodeCoordinates = getRelativeNodeCoordinates(node.getCoordinates());
-                        final Shadow projection = projectNode(
-                                relativeNodeCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX),
-                                relativeNodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX));
-                        final Boolean nodeVisibility = !shadows.isInShadow(projection);
-                        if (!node.getIsPassable() && nodeVisibility) {
-                            shadows.add(projection);
-                        }
-                        if (node.getIsPassable() && nodeVisibility) {
-                            visibleNodes.add(node);
-                        }
-                    }
-                }
-            }
-            return visibleNodes;
-        }
-
-        private void getHalfCone() {
-            final List<Integer> coneDirections = setConeDirections();
-            final List<MapNode> coneHeads = new LinkedList<>();
-            coneHeads.add(source);
-            MapNode nextHead = source.getAdjacent(coneDirections.get(0));
-            while (nextHead != null) {
-                if (source.getH(nextHead) > Constants.MAXIMAL_FOV_DISTANCE) {
-                    break;
-                }
-                coneHeads.add(nextHead);
-                nextHead = nextHead.getAdjacent(coneDirections.get(0));
-            }
-            for (MapNode head : coneHeads) {
-                final List<MapNode> coneRow = getHalfConeRow(head, coneDirections.get(1));
-                octant.add(coneRow);
-            }
-        }
-
-        private List<Integer> setConeDirections() {
-            final List<Integer> directions = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+        private List<Integer> getRelativeCoordinates(@NotNull Integer row, @NotNull Integer column) {
+            final List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
             switch (direction) {
                 case OD_NORTH:
-                    directions.set(0, Directions.UP);
-                    directions.set(1, Directions.RIGHT);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, column);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, -1 * row);
                     break;
                 case OD_NORTH_EAST:
-                    directions.set(0, Directions.RIGHT);
-                    directions.set(1, Directions.UP);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, row);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, -1 * column);
                     break;
                 case OD_EAST:
-                    directions.set(0, Directions.RIGHT);
-                    directions.set(1, Directions.DOWN);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, row);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, column);
                     break;
                 case OD_SOUTH_EAST:
-                    directions.set(0, Directions.DOWN);
-                    directions.set(1, Directions.RIGHT);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, column);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, row);
                     break;
                 case OD_SOUTH:
-                    directions.set(0, Directions.DOWN);
-                    directions.set(1, Directions.LEFT);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, -1 * column);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, row);
                     break;
                 case OD_SOUTH_WEST:
-                    directions.set(0, Directions.LEFT);
-                    directions.set(1, Directions.DOWN);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, -1 * row);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, column);
                     break;
                 case OD_WEST:
-                    directions.set(0, Directions.LEFT);
-                    directions.set(1, Directions.UP);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, -1 * row);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, -1 * column);
                     break;
                 case OD_NORTH_WEST:
-                    directions.set(0, Directions.UP);
-                    directions.set(1, Directions.LEFT);
+                    relativeCoordinates.add(DigitsPairIndices.ROW_COORD_INDEX, -1 * column);
+                    relativeCoordinates.add(DigitsPairIndices.COL_COORD_INDEX, -1 * row);
                     break;
                 default:
                     break;
             }
-            return directions;
+            return relativeCoordinates;
         }
 
-        @SuppressWarnings("ParameterHidesMemberVariable")
-        private List<MapNode> getHalfConeRow(@NotNull MapNode rowHead, @NotNull Integer direction) {
-            final List<MapNode> row = new LinkedList<>();
-            row.add(rowHead);
-            MapNode nextNode = rowHead.getAdjacent(direction);
-            while (nextNode != null) {
-                if (source.getH(rowHead) < rowHead.getH(nextNode)) {
-                    break;
-                }
-                row.add(nextNode);
-                nextNode = nextNode.getAdjacent(direction);
-            }
-            return row;
-        }
-
-        private Shadow projectNode(@NotNull Integer row, @NotNull Integer column) {
-            //noinspection OverlyComplexBooleanExpression
-            final Integer nominator = direction == OD_NORTH || direction == OD_SOUTH_EAST
-                    || direction == OD_SOUTH || direction == OD_NORTH_WEST ? column : row;
-            final Integer denominator = nominator.equals(column) ? row : column;
-            final Integer start = denominator > 0 ? nominator / (denominator + 2)
-                    : nominator / (denominator - 2);
-            Integer end = nominator > 0 ? nominator + 1 : nominator - 1;
-            end = denominator > 0 ? end / (denominator + 1)
-                    : end / (denominator - 1);
+        private Shadow projectTile(@NotNull Integer row, @NotNull Integer column) {
+            final Integer start = column / (row + 2);
+            final Integer end = (column + 1) / (row + 1);
             return new Shadow(start, end);
         }
 
-        private Integer getShadowLineCoordinateIndex() {
-            //noinspection OverlyComplexBooleanExpression
-            return direction == OD_NORTH || direction == OD_SOUTH_EAST
-                    || direction == OD_SOUTH || direction == OD_NORTH_WEST
-                    ? DigitsPairIndices.ROW_COORD_INDEX : DigitsPairIndices.COL_COORD_INDEX;
-        }
-
-        private List<Integer> getRelativeNodeCoordinates(@NotNull List<Integer> nodeCoordinates) {
-            final List<Integer> relativeCoordinates = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-            relativeCoordinates.set(DigitsPairIndices.ROW_COORD_INDEX,
-                    nodeCoordinates.get(DigitsPairIndices.COL_COORD_INDEX)
-                            - source.getCoordinate(DigitsPairIndices.COL_COORD_INDEX));
-            relativeCoordinates.set(DigitsPairIndices.COL_COORD_INDEX,
-                    nodeCoordinates.get(DigitsPairIndices.ROW_COORD_INDEX)
-                            - source.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX));
-            return relativeCoordinates;
+        public @NotNull List<MapNode> getVisibleNodes(@NotNull BattleMap map) {
+            final List<MapNode> visbleNodes = new ArrayList<>();
+            final ShadowLine shadows = new ShadowLine();
+            visbleNodes.add(source);
+            for (Integer row = 0;; ++row) {
+                final List<Integer> relativeCoords = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
+                final List<Integer> octantRow = getRelativeCoordinates(row, 0);
+                relativeCoords.add(DigitsPairIndices.ROW_COORD_INDEX,
+                        source.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
+                                + octantRow.get(DigitsPairIndices.ROW_COORD_INDEX));
+                relativeCoords.add(DigitsPairIndices.COL_COORD_INDEX,
+                        source.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+                                + octantRow.get(DigitsPairIndices.COL_COORD_INDEX));
+                if (map.getTile(relativeCoords.get(DigitsPairIndices.ROW_COORD_INDEX),
+                        relativeCoords.get(DigitsPairIndices.COL_COORD_INDEX)) == null) {
+                    break;
+                }
+                for (Integer column = 0; column <= row; ++column) {
+                    final List<Integer> octantCoords = getRelativeCoordinates(row, column);
+                    relativeCoords.set(DigitsPairIndices.ROW_COORD_INDEX,
+                            source.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
+                                    + octantCoords.get(DigitsPairIndices.ROW_COORD_INDEX));
+                    relativeCoords.set(DigitsPairIndices.COL_COORD_INDEX,
+                            source.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+                                    + octantCoords.get(DigitsPairIndices.COL_COORD_INDEX));
+                    if (map.getTile(relativeCoords.get(DigitsPairIndices.ROW_COORD_INDEX),
+                            relativeCoords.get(DigitsPairIndices.COL_COORD_INDEX)) == null) {
+                        break;
+                    }
+                    if (!shadows.isFullShadow(row)) {
+                        final Shadow projection = projectTile(row, column);
+                        final Boolean isVisible = !shadows.isInShadow(projection);
+                        if (isVisible) {
+                            final MapNode node = map.getTile(
+                                    relativeCoords.get(DigitsPairIndices.ROW_COORD_INDEX),
+                                    relativeCoords.get(DigitsPairIndices.COL_COORD_INDEX));
+                            if (node != null && !visbleNodes.contains(node)) {
+                                visbleNodes.add(node);
+                                if (!node.getIsPassable()) {
+                                    shadows.add(projection);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return visbleNodes;
         }
     }
+
 
     /**
      * create and calculate FoV for the given PoV.
      *
      * @param currentPosition point of view
      */
-    public FoVTileset(@NotNull MapNode currentPosition) {
+    public FoVTileset(@NotNull MapNode currentPosition, @NotNull BattleMap map) {
         this.currentPosition = currentPosition;
+        this.map = map;
         initializeFoV();
     }
 
@@ -318,14 +260,14 @@ public class FoVTileset implements FieldOfVision {
     }
 
     @Override
-    public Boolean isVisible(@NotNull List<Integer> position) {
+    public @NotNull Boolean isVisible(@NotNull List<Integer> position) {
         return fieldOfVision.containsKey(position);
     }
 
     private void initializeFoV() {
         for (Integer octantDirection = OD_NORTH; octantDirection <= OD_NORTH_WEST; ++octantDirection) {
-            final Octant octant = new Octant(currentPosition, octantDirection);
-            final List<MapNode> visibleNodes = octant.getVisibleNodes();
+            final Octant octant = new Octant(octantDirection, currentPosition);
+            final List<MapNode> visibleNodes = octant.getVisibleNodes(map);
             for (MapNode node : visibleNodes) {
                 if (!fieldOfVision.containsKey(node.getCoordinates())) {
                     fieldOfVision.put(node.getCoordinates(), node);
@@ -342,7 +284,8 @@ public class FoVTileset implements FieldOfVision {
                 currentPosition = currentPosition.getAdjacent(
                         rowDifference < 0 ? Directions.UP : Directions.DOWN);
             }
-            final Integer colDifference = currentPosition.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
+            final Integer colDifference = Objects.requireNonNull(currentPosition)
+                    .getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
                     - goal.get(DigitsPairIndices.COL_COORD_INDEX);
             if (colDifference != 0) {
                 currentPosition = currentPosition.getAdjacent(colDifference < 0 ? Directions.LEFT : Directions.RIGHT);

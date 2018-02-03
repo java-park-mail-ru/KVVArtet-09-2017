@@ -32,10 +32,9 @@ import project.gamemechanics.world.config.ResourcesConfig;
 import java.io.IOException;
 import java.util.*;
 
-
 import static org.junit.Assert.*;
 
-@SuppressWarnings({"unused", "InstanceMethodNamingConvention"})
+@SuppressWarnings({"unused"})
 public class AssetsSerializationTest {
     @SuppressWarnings("unused")
     @Test

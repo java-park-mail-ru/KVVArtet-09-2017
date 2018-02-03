@@ -1,5 +1,6 @@
 package project.gamemechanics.battlefield.map;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.MapNode;
@@ -17,7 +18,7 @@ public class BattleMap {
     }
 
     @SuppressWarnings("ConstantConditions")
-    private List<MapNode> getRow(Integer rowIndex) {
+    private @Nullable List<MapNode> getRow(@NotNull Integer rowIndex) {
         if (rowIndex >= 0 && rowIndex < rows.size()) {
             return rows.get(rowIndex);
         }
@@ -25,7 +26,7 @@ public class BattleMap {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public MapNode getTile(@NotNull Integer rowIndex, @NotNull Integer tileIndex) {
+    public @Nullable MapNode getTile(@NotNull Integer rowIndex, @NotNull Integer tileIndex) {
         final List<MapNode> row = getRow(rowIndex);
         if (row == null || tileIndex < 0) {
             return null;
@@ -37,7 +38,7 @@ public class BattleMap {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public AliveEntity getInhabitant(@NotNull Integer rowIndex, @NotNull Integer tileIndex) {
+    public @Nullable AliveEntity getInhabitant(@NotNull Integer rowIndex, @NotNull Integer tileIndex) {
         final MapNode tile = getTile(rowIndex, tileIndex);
         if (tile == null) {
             return null;
@@ -45,14 +46,14 @@ public class BattleMap {
         return tile.getInhabitant();
     }
 
-    public List<Integer> getSize() {
+    public @NotNull List<Integer> getSize() {
         final List<Integer> size = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         size.add(DigitsPairIndices.ROW_COORD_INDEX, rows.size());
         size.add(DigitsPairIndices.COL_COORD_INDEX, rows.get(0).size()); // we're assuming that all rows in the list have the same length
         return size;
     }
 
-    public List<Long> encode() {
+    public @NotNull List<Long> encode() {
         final List<Long> encodedMap = new ArrayList<>();
 
         Long chunk = 0L;

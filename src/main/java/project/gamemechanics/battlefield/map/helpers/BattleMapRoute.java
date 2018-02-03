@@ -17,12 +17,12 @@ public class BattleMapRoute implements Route {
     }
 
     @Override
-    public Integer getLength() {
+    public @NotNull Integer getLength() {
         return route.size() - 1;
     }
 
     @Override
-    public Integer getTravelCost() {
+    public @NotNull Integer getTravelCost() {
         // actually that's not useful info at the moment
         // as every tile has similar travel cost = 1,
         // so travel cost will always be equal to the route length
@@ -40,9 +40,7 @@ public class BattleMapRoute implements Route {
         if (tileToMoveAt > route.size()) {
             tileToMoveAt = route.size() - 1;
         }
-        if (!route.get(tileToMoveAt).occupy(pedestrian)) {
-            route.get(SOURCE_TILE_INDEX).occupy(pedestrian);
-        }
+        walkThrough(tileToMoveAt, pedestrian);
     }
 
     @Override
@@ -50,22 +48,32 @@ public class BattleMapRoute implements Route {
         walkThrough(route.size() - 1);
     }
 
+    private void walkThrough(@NotNull Integer distance, @NotNull AliveEntity walker) {
+        if (!route.get(distance).occupy(walker)) {
+            if (distance > SOURCE_TILE_INDEX) {
+                walkThrough(distance - 1, walker);
+            } else {
+                route.get(SOURCE_TILE_INDEX).occupy(walker);
+            }
+        }
+    }
+
     @Override
-    public List<Integer> getStartCoordinates() {
+    public @NotNull List<Integer> getStartCoordinates() {
         return route.get(0).getCoordinates();
     }
 
     @Override
-    public List<Integer> getGoalCoordinates(@NotNull Integer distance) {
+    public @NotNull List<Integer> getGoalCoordinates(@NotNull Integer distance) {
         return route.get(distance).getCoordinates();
     }
 
     @Override
-    public List<Integer> getGoalCoordinates() {
+    public @NotNull List<Integer> getGoalCoordinates() {
         return getGoalCoordinates(route.size() - 1);
     }
 
-    public List<MapNode> getRoute() {
+    public @NotNull List<MapNode> getRoute() {
         return route;
     }
 }

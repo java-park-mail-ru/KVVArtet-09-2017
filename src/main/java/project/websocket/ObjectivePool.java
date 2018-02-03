@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("unused")
 interface ObjectivePool<T> {
 
-    T getElement();
+    @NotNull T getElement();
 
     void addElement(@NotNull SmartController smartController);
 
-    Boolean isEmpty();
+    @NotNull Boolean isEmpty();
 
     interface SmartControllersPool extends ObjectivePool<SmartController> {
     }

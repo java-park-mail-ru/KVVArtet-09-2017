@@ -17,20 +17,20 @@ public class RewardEvent implements TurnEvent {
     }
 
     @Override
-    public Integer getEventKind() {
+    public @NotNull Integer getEventKind() {
         return EventCategories.EC_REWARD;
     }
 
     @Override
-    public MapNode getWhere() {
+    public @NotNull MapNode getWhere() {
         return where;
     }
 
-    public Integer getExpAmount() {
+    public @NotNull Integer getExpAmount() {
         return expAmount;
     }
 
-    public Integer getGoldAmount() {
+    public @NotNull Integer getGoldAmount() {
         return goldAmount;
     }
 }

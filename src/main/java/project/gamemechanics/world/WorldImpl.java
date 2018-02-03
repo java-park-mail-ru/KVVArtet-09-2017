@@ -57,27 +57,27 @@ public class WorldImpl implements World {
     }
 
     @Override
-    public Map<Integer, AliveEntity> getLoggedCharacters() {
+    public @NotNull Map<Integer, AliveEntity> getLoggedCharacters() {
         return charactersPool;
     }
 
     @Override
-    public Map<Integer, Instance> getActiveInstances() {
+    public @NotNull Map<Integer, Instance> getActiveInstances() {
         return instancesPool;
     }
 
     @Override
-    public Map<Integer, CharactersParty> getPartiesPool() {
+    public @NotNull Map<Integer, CharactersParty> getPartiesPool() {
         return partiesPool;
     }
 
     @Override
-    public PendingLootPool getPendingLootPool() {
+    public @NotNull PendingLootPool getPendingLootPool() {
         return lootPool;
     }
 
     @Override
-    public Lobby getLobby() {
+    public @NotNull Lobby getLobby() {
         return lobby;
     }
 }

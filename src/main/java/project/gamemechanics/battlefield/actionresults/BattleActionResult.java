@@ -1,11 +1,11 @@
 package project.gamemechanics.battlefield.actionresults;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.actionresults.events.TurnEvent;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.MapNode;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -20,7 +20,7 @@ public class BattleActionResult implements ActionResult {
     private Boolean isProcessed = false;
 
     public BattleActionResult(@NotNull Integer actionID, @NotNull MapNode sender,
-                              MapNode target, @Nullable Ability ability,
+                              @Nullable MapNode target, @Nullable Ability ability,
                               @NotNull List<TurnEvent> events) {
         this.actionID = actionID;
         this.sender = sender;
@@ -30,35 +30,35 @@ public class BattleActionResult implements ActionResult {
     }
 
     @Override
-    public MapNode getSender() {
+    public @NotNull MapNode getSender() {
         return sender;
     }
 
     @Override
-    public MapNode getTarget() {
+    public @Nullable MapNode getTarget() {
         return target;
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public Ability getAbility() {
+    public @Nullable Ability getAbility() {
         return ability;
     }
 
     @Override
-    public Integer getActionID() {
+    public @NotNull Integer getActionID() {
         return actionID;
     }
 
     @Override
     @JsonIgnore
-    public Integer getEventsCount() {
+    public @NotNull Integer getEventsCount() {
         return events.size();
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public TurnEvent getEvent(@NotNull Integer eventIndex) {
+    public @Nullable TurnEvent getEvent(@NotNull Integer eventIndex) {
         if (eventIndex < 0 || eventIndex >= events.size()) {
             return null;
         }
@@ -76,7 +76,7 @@ public class BattleActionResult implements ActionResult {
     }
 
     @Override
-    public Integer getEventIndex(@NotNull TurnEvent event) {
+    public @NotNull Integer getEventIndex(@NotNull TurnEvent event) {
         for (Integer i = 0; i < events.size(); ++i) {
             if (events.get(i).equals(event)) {
                 return i;
@@ -86,7 +86,7 @@ public class BattleActionResult implements ActionResult {
     }
 
     @Override
-    public Boolean getIsProcessed() {
+    public @NotNull Boolean getIsProcessed() {
         return isProcessed;
     }
 

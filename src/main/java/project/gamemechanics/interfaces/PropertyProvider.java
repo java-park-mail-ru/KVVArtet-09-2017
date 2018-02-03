@@ -4,6 +4,7 @@ import project.gamemechanics.components.properties.ListProperty;
 import project.gamemechanics.components.properties.MapProperty;
 import project.gamemechanics.components.properties.Property;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -19,14 +20,14 @@ public interface PropertyProvider {
      * @param propertyKind property ID to check
      * @return true if there's some property registered under such ID or false otherwise
      */
-    Boolean hasProperty(Integer propertyKind);
+    @NotNull Boolean hasProperty(@NotNull Integer propertyKind);
 
     /**
      * get all registered property IDs for the entity.
      *
      * @return set of registered properties' IDs
      */
-    Set<Integer> getAvailableProperties();
+    @NotNull Set<Integer> getAvailableProperties();
 
     /**
      * get single value from multi-value property by its ID.
@@ -41,7 +42,7 @@ public interface PropertyProvider {
      * @see ListProperty
      * @see MapProperty
      */
-    Integer getProperty(Integer propertyKind, Integer propertyIndex);
+    @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex);
 
     /**
      * get a single-value property's value by iD.
@@ -53,5 +54,5 @@ public interface PropertyProvider {
      * @see Property
      * @see project.gamemechanics.components.properties.SingleValueProperty
      */
-    Integer getProperty(Integer propertyIndex);
+    @NotNull Integer getProperty(@NotNull Integer propertyIndex);
 }

@@ -17,11 +17,11 @@ public enum CharacterRatings {
         this.description = description;
     }
 
-    public Integer asInt() {
+    public @NotNull Integer asInt() {
         return value;
     }
 
-    public String asText() {
+    public @NotNull String asText() {
         return description;
     }
 }

@@ -1,5 +1,6 @@
 package project.gamemechanics.interfaces;
 
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -14,14 +15,14 @@ public interface AffectorProvider {
      * @param affectorKind affector ID
      * @return true if entity has an affector or false otherwise
      */
-    Boolean hasAffector(Integer affectorKind);
+    @NotNull Boolean hasAffector(@NotNull Integer affectorKind);
 
     /**
      * get IDs of all entity's affectors.
      *
      * @return entity's affectors' IDs set.
      */
-    Set<Integer> getAvailableAffectors();
+    @NotNull Set<Integer> getAvailableAffectors();
 
     /**
      * get single value from multi-value affector.
@@ -30,7 +31,7 @@ public interface AffectorProvider {
      * @param affectionIndex value index in affector
      * @return value if both parameters are valid, 0 or Integer.MIN_VALUE otherwise
      */
-    Integer getAffection(Integer affectorKind, Integer affectionIndex);
+    @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex);
 
     /**
      * get an affector value from single-value or reducable affector.
@@ -41,5 +42,5 @@ public interface AffectorProvider {
      * @see project.gamemechanics.components.affectors.ListAffector
      * @see project.gamemechanics.components.affectors.MapAffector
      */
-    Integer getAffection(Integer affectorKind);
+    @NotNull Integer getAffection(@NotNull Integer affectorKind);
 }

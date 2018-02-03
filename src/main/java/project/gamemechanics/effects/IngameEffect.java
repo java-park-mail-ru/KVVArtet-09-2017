@@ -46,7 +46,7 @@ public class IngameEffect implements Effect {
         }
     }
 
-    public IngameEffect(EffectModel model) {
+    public IngameEffect(@NotNull EffectModel model) {
         name = model.name;
         description = model.description;
         duration = model.duration;
@@ -54,52 +54,52 @@ public class IngameEffect implements Effect {
     }
 
     @Override
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return INSTANCE_COUNTER.get();
     }
 
     @Override
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return effectID;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
-    public Integer getDuration() {
+    public @NotNull Integer getDuration() {
         return duration;
     }
 
     @Override
-    public Boolean isExpired() {
+    public @NotNull Boolean isExpired() {
         return duration > 0 && !isPerpetual();
     }
 
     @Override
-    public Boolean isPerpetual() {
+    public @NotNull Boolean isPerpetual() {
         return duration != Constants.PERPETUAL_EFFECT_DURATION;
     }
 
     @Override
-    public Set<Integer> getAvailableAffectors() {
+    public @NotNull Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Boolean hasAffector(Integer affectorKind) {
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind, Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if ((affectorKind & AffectorCategories.AC_MULTI_VALUE_AFFECTORS) == 0
                 || !affectors.containsKey(affectorKind)) {
             return Integer.MIN_VALUE;
@@ -108,7 +108,7 @@ public class IngameEffect implements Effect {
     }
 
     @Override
-    public Integer getAffection(Integer affectorKind) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         if (!affectors.containsKey(affectorKind)) {
             return Integer.MIN_VALUE;
         }

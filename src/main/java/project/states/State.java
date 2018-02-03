@@ -6,11 +6,11 @@ import project.websocket.messages.Message;
 
 @SuppressWarnings({"UnusedReturnValue", "SameReturnValue", "unused"})
 public interface State {
-    <T extends Message> void registerHandler(@NotNull Class<T> clazz, MessageHandler<T> handler);
+    <T extends Message> void registerHandler(@NotNull Class<T> clazz, @NotNull MessageHandler<T> handler);
 
     enum StateId { SI_NONE, SI_TITLE, SI_SIGNUP,
         SI_CHARACTER_LIST, SI_CITY, SI_DUNGEON, SI_CHARACTER_CREATION }
 
-    Message handleMessage(Message message, Integer forUser);
+    @NotNull Message handleMessage(@NotNull Message message, @NotNull Integer forUser);
 
 }

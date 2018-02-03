@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import project.gamemechanics.effects.IngameEffect;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for various effects (DoTs/HoTs, buffs/debuffs, etc.)
  * that may be applied on {@link AliveEntity} during the battle.
@@ -23,7 +25,7 @@ public interface Effect extends GameEntity, AffectorProvider {
      *
      * @return turns before expiring
      */
-    Integer getDuration();
+    @NotNull Integer getDuration();
 
     /**
      * check if the effect is expired.
@@ -31,14 +33,14 @@ public interface Effect extends GameEntity, AffectorProvider {
      * @return true if the effect's duration is less or equal to 0
      *     and the effect isn't perpetual or false otherwise
      */
-    Boolean isExpired();
+    @NotNull Boolean isExpired();
 
     /**
      * check if the effect is perpetual (like from {@link Perk} action).
      *
      * @return true if the effect is perpetual or false otherwise
      */
-    Boolean isPerpetual();
+    @NotNull Boolean isPerpetual();
 
     /**
      * make a single tick.

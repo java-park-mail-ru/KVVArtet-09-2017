@@ -26,7 +26,7 @@ public class CharacterDoll extends StorageBag {
         super(model);
     }
 
-    public Integer getStatBonus(@NotNull Integer statIndex) {
+    public @NotNull Integer getStatBonus(@NotNull Integer statIndex) {
         Integer statBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -36,7 +36,7 @@ public class CharacterDoll extends StorageBag {
         return statBonus;
     }
 
-    public List<Integer> getStatBonuses() {
+    public @NotNull List<Integer> getStatBonuses() {
         final List<Integer> statBonuses = new ArrayList<>(CharacterStats.CS_SIZE.asInt());
         for (Integer statIndex = 0; statIndex < CharacterStats.CS_SIZE.asInt(); ++statIndex) {
             statBonuses.set(statIndex, getStatBonus(statIndex));
@@ -44,7 +44,7 @@ public class CharacterDoll extends StorageBag {
         return statBonuses;
     }
 
-    private Integer getRatingBonus(@NotNull Integer ratingIndex) {
+    private @NotNull Integer getRatingBonus(@NotNull Integer ratingIndex) {
         Integer ratingBonus = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -54,7 +54,7 @@ public class CharacterDoll extends StorageBag {
         return ratingBonus;
     }
 
-    public List<Integer> getRatingBonuses() {
+    public @NotNull List<Integer> getRatingBonuses() {
         final List<Integer> ratingBonuses = new ArrayList<>(CharacterRatings.CR_SIZE.asInt());
         for (Integer ratingIndex = 0; ratingIndex < CharacterRatings.CR_SIZE.asInt(); ++ratingIndex) {
             ratingBonuses.set(ratingIndex, getRatingBonus(ratingIndex));
@@ -62,7 +62,7 @@ public class CharacterDoll extends StorageBag {
         return ratingBonuses;
     }
 
-    public Integer getDamage() {
+    public @NotNull Integer getDamage() {
         Integer damage = 0;
         if (getContents().get(EquipmentSlot.ES_MAINHAND.asInt()) != null) {
             damage += getContents().get(EquipmentSlot.ES_MAINHAND.asInt())
@@ -75,7 +75,7 @@ public class CharacterDoll extends StorageBag {
         return damage;
     }
 
-    public Integer getDefense() {
+    public @NotNull Integer getDefense() {
         Integer defense = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -85,7 +85,7 @@ public class CharacterDoll extends StorageBag {
         return defense;
     }
 
-    public Integer getDefense(@NotNull Integer armourKind) {
+    public @NotNull Integer getDefense(@NotNull Integer armourKind) {
         Integer armourKindDefense = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -97,7 +97,7 @@ public class CharacterDoll extends StorageBag {
         return armourKindDefense;
     }
 
-    public Integer getEquipmentAffection(@NotNull Integer affectorKind) {
+    public @NotNull Integer getEquipmentAffection(@NotNull Integer affectorKind) {
         Integer affection = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {
@@ -110,7 +110,7 @@ public class CharacterDoll extends StorageBag {
         return affection;
     }
 
-    public Integer getEquipmentAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
+    public @NotNull Integer getEquipmentAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         Integer affection = 0;
         for (EquipableItem item : getContents()) {
             if (item != null) {

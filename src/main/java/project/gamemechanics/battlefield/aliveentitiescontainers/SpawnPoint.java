@@ -5,6 +5,7 @@ import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.MapNode;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,13 +17,13 @@ public class SpawnPoint {
 
     private final Squad squad;
 
-    public SpawnPoint(MapNode center, Integer spawnAreaSide, Squad squad) {
+    public SpawnPoint(@NotNull MapNode center, @NotNull Integer spawnAreaSide, @NotNull Squad squad) {
         this.center = center;
         this.spawnAreaSide = spawnAreaSide;
         this.squad = squad;
     }
 
-    public Squad getSquad() {
+    public @NotNull Squad getSquad() {
         return squad;
     }
 

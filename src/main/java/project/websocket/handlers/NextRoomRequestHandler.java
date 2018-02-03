@@ -27,7 +27,7 @@ public class NextRoomRequestHandler extends MessageHandler<NextRoomRequestMessag
     }
 
     @Override
-    public Message handle(@NotNull NextRoomRequestMessage message, Integer forUser) {
+    public Message handle(@NotNull NextRoomRequestMessage message, @NotNull Integer forUser) {
         //TODO NOT AVAILABLE NOW CAUSE RESPONSE DOES'NT REQUIRE REQUEST AND SENDING BY HIMSELF
 
         world.getActiveInstances().get(forUser);

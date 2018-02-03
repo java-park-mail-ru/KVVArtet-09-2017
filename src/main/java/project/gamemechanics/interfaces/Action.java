@@ -1,15 +1,18 @@
 package project.gamemechanics.interfaces;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.actionresults.ActionResult;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * interface for various battle actions.
  */
 @SuppressWarnings({"RedundantSuppression", "unused"})
 public interface Action extends Countable {
-    MapNode getSender();
+    @NotNull MapNode getSender();
 
-    MapNode getTarget();
+    @Nullable MapNode getTarget();
 
     /**
      * get the {@link Ability} that's being implemented during the action.
@@ -18,7 +21,7 @@ public interface Action extends Countable {
      * @see Ability
      */
     @SuppressWarnings("ConstantConditions")
-    default Ability getAbility() {
+    default @Nullable Ability getAbility() {
         return null;
     }
 
@@ -28,7 +31,7 @@ public interface Action extends Countable {
      * @return true if the action is a {@link project.gamemechanics.battlefield.map.actions.MovementAction}
      *     or false otherwise.
      */
-    default Boolean isMovement() {
+    default @NotNull Boolean isMovement() {
         return false;
     }
 
@@ -38,7 +41,7 @@ public interface Action extends Countable {
      * @return true if the action is a {@link project.gamemechanics.battlefield.map.actions.SkipTurnAction}
      *     or false otherwise.
      */
-    default Boolean isSkip() {
+    default @NotNull Boolean isSkip() {
         return false;
     }
 
@@ -47,5 +50,5 @@ public interface Action extends Countable {
      *
      * @return {@link ActionResult}
      */
-    ActionResult execute();
+    @NotNull ActionResult execute();
 }

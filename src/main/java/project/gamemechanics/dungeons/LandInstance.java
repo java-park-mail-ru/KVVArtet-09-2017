@@ -40,12 +40,12 @@ public class LandInstance extends AbstractInstance {
     }
 
     @Override
-    public Boolean isInstanceCleared() {
+    public @NotNull Boolean isInstanceCleared() {
         return determineWinner() != Constants.UNDEFINED_ID;
     }
 
     @Override
-    public Boolean isInstanceFailed() {
+    public @NotNull Boolean isInstanceFailed() {
         return false;
     }
 

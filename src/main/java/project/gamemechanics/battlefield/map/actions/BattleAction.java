@@ -10,6 +10,7 @@ import project.gamemechanics.interfaces.MapNode;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class BattleAction extends AbstractAction {
     private final MapNode sender;
@@ -26,26 +27,27 @@ public class BattleAction extends AbstractAction {
     }
 
     @Override
-    public MapNode getSender() {
+    public @NotNull MapNode getSender() {
         return sender;
     }
 
     @Override
-    public MapNode getTarget() {
+    public @NotNull MapNode getTarget() {
         return target;
     }
 
     @Override
-    public Ability getAbility() {
+    public @NotNull Ability getAbility() {
         return ability;
     }
 
     @Override
-    public ActionResult execute() {
+    public @NotNull ActionResult execute() {
         final ActionResult result;
         if (isSenderValid()) {
             result = new BattleActionResult(getID(), sender, target, ability,
                     ability.execute(aggregateActionData()));
+            Objects.requireNonNull(sender.getInhabitant()).useAbility(ability.getID());
         } else {
             result = new BattleActionResult(getID(), sender, target, ability, new ArrayList<>());
             result.addEvent(EventsFactory.makeRollbackEvent());
@@ -53,12 +55,13 @@ public class BattleAction extends AbstractAction {
         return result;
     }
 
-    private Boolean isSenderValid() {
+    private @NotNull Boolean isSenderValid() {
         return sender.isOccupied();
     }
 
-    private AggregatedAbilityAction aggregateActionData() {
+    private @NotNull AggregatedAbilityAction aggregateActionData() {
         return new AggregatedAbilityAction(sender, target, ability.getID(),
-                ability.getAffectorsMap(), ability.getPropertiesMap(), ability.getAppliedEffects(), pathfinder);
+                ability.getAffectorsMap(), ability.getPropertiesMap(),
+                ability.getAppliedEffects(), pathfinder);
     }
 }

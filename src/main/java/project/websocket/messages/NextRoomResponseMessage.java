@@ -4,6 +4,7 @@ import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.interfaces.AliveEntity;
 
+import javax.validation.constraints.NotNull;
 import java.util.Deque;
 import java.util.List;
 
@@ -14,29 +15,29 @@ public class NextRoomResponseMessage extends Message {
     private final List<ActionResult> battleLog;
     private final Integer turnCounter;
 
-    public NextRoomResponseMessage(BattleMap map,
-                                  Deque<AliveEntity> battlersQueue,
-                                  List<ActionResult> battleLog,
-                                  Integer turnCounter) {
+    public NextRoomResponseMessage(@NotNull BattleMap map,
+                                   @NotNull Deque<AliveEntity> battlersQueue,
+                                   @NotNull List<ActionResult> battleLog,
+                                   @NotNull Integer turnCounter) {
         this.map = map;
         this.battlersQueue = battlersQueue;
         this.battleLog = battleLog;
         this.turnCounter = turnCounter;
     }
 
-    public List<Long> getMap() {
+    public @NotNull List<Long> getMap() {
         return map.encode();
     }
 
-    public Deque<AliveEntity> getBattlersQueue() {
+    public @NotNull Deque<AliveEntity> getBattlersQueue() {
         return battlersQueue;
     }
 
-    public List<ActionResult> getBattleLog() {
+    public @NotNull List<ActionResult> getBattleLog() {
         return battleLog;
     }
 
-    public Integer getTurnCounter() {
+    public @NotNull Integer getTurnCounter() {
         return turnCounter;
     }
 }

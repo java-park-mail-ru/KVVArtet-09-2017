@@ -2,14 +2,12 @@ package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.properties.Property;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class HybridModel extends AbstractModel {
@@ -21,8 +19,8 @@ public class HybridModel extends AbstractModel {
     public HybridModel(@JsonProperty("modelId") @NotNull Integer modelID,
                        @JsonProperty("name") @NotNull String name,
                        @JsonProperty("description") @NotNull String description,
-                       @JsonProperty("properties") Map<Integer, Property> properties,
-                       @JsonProperty("affectors") Map<Integer, Affector> affectors,
+                       @JsonProperty("properties") @Nullable Map<Integer, Property> properties,
+                       @JsonProperty("affectors") @Nullable Map<Integer, Affector> affectors,
                        @JsonProperty("mappings") @NotNull Map<Integer, List<Integer>> mappings) {
         super(modelID, name, description);
         if (properties != null) {
@@ -35,73 +33,73 @@ public class HybridModel extends AbstractModel {
     }
 
     @Override
-    public Boolean hasProperty(@NotNull Integer propertyIndex) {
-        return properties.containsKey(propertyIndex);
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyIndex) {
+        return properties != null && properties.containsKey(propertyIndex);
     }
 
     @Override
-    public Property getProperty(@NotNull Integer propertyIndex) {
-        return properties.getOrDefault(propertyIndex, null);
+    public @Nullable Property getProperty(@NotNull Integer propertyIndex) {
+        return properties != null ? properties.getOrDefault(propertyIndex, null) : null;
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
-        return properties.keySet();
+    public @NotNull Set<Integer> getAvailableProperties() {
+        return properties != null ? properties.keySet() : new HashSet<>();
     }
 
     @Override
     @JsonProperty("properties")
-    public Map<Integer, Property> getAllProperties() {
+    public @Nullable Map<Integer, Property> getAllProperties() {
         return properties;
     }
 
     @Override
-    public Boolean hasAffector(@NotNull Integer affectorIndex) {
-        return affectors.containsKey(affectorIndex);
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorIndex) {
+        return affectors != null && affectors.containsKey(affectorIndex);
     }
 
     @Override
-    public Affector getAffector(@NotNull Integer affectorIndex) {
-        return affectors.getOrDefault(affectorIndex, null);
+    public @Nullable Affector getAffector(@NotNull Integer affectorIndex) {
+        return affectors != null ? affectors.getOrDefault(affectorIndex, null) : null;
     }
 
     @Override
-    public Set<Integer> getAvailableAffectors() {
-        return affectors.keySet();
+    public @NotNull Set<Integer> getAvailableAffectors() {
+        return affectors != null ? affectors.keySet() : new HashSet<>();
     }
 
     @Override
     @JsonProperty("affectors")
-    public Map<Integer, Affector> getAllAffectors() {
+    public @Nullable Map<Integer, Affector> getAllAffectors() {
         return affectors;
     }
 
     @Override
-    public Boolean hasMapping(@NotNull Integer mappingIndex) {
+    public @NotNull Boolean hasMapping(@NotNull Integer mappingIndex) {
         return mappings.containsKey(mappingIndex);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableMappings() {
+    public @NotNull Set<Integer> getAvailableMappings() {
         return mappings.keySet();
     }
 
     @Override
-    public List<Integer> getMapping(@NotNull Integer mappingIndex) {
+    public @Nullable List<Integer> getMapping(@NotNull Integer mappingIndex) {
         return mappings.getOrDefault(mappingIndex, null);
     }
 
     @Override
     @JsonProperty("mappings")
-    public Map<Integer, List<Integer>> getAllMappings() {
+    public @NotNull Map<Integer, List<Integer>> getAllMappings() {
         return mappings;
     }
 
     @Override
     @JsonIgnore
-    public List<GameResource> getAllInlaid() {
+    public @Nullable List<GameResource> getAllInlaid() {
         return null;
     }
 }

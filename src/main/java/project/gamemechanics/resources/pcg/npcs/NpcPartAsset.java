@@ -40,67 +40,67 @@ public class NpcPartAsset implements NpcPart {
 
     @Override
     @JsonProperty("npcPartAssetId")
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return npcPartAssetId;
     }
 
     @Override
     @JsonIgnore
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return 0;
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
     @JsonIgnore
-    public Integer getLevel() {
+    public @NotNull Integer getLevel() {
         return properties.containsKey(PropertyCategories.PC_LEVEL)
                 ? properties.get(PropertyCategories.PC_LEVEL).getProperty() : Constants.UNDEFINED_ID;
     }
 
     @Override
-    public Boolean hasProperty(@NotNull Integer propertyKind) {
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         return hasProperty(propertyKind) ? properties.get(propertyKind).getProperty() : 0;
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         return hasProperty(propertyKind) ? properties.get(propertyKind).getProperty(propertyIndex) : 0;
     }
 
     @Override
     @JsonProperty("properties")
-    public Map<Integer, Property> getAllProperties() {
+    public @NotNull Map<Integer, Property> getAllProperties() {
         return properties;
     }
 
     @Override
-    public Integer getPartIndex() {
+    public @NotNull Integer getPartIndex() {
         return partIndex;
     }
 
     @Override
-    public List<ItemBlueprint> getLootList() {
+    public @NotNull List<ItemBlueprint> getLootList() {
         return lootList;
     }
 }

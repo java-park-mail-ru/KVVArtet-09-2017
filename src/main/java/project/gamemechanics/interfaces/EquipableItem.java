@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import project.gamemechanics.items.IngameItem;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * interface for items that may be stored in {@link Bag}s.
  * worn by {@link project.gamemechanics.aliveentities.UserCharacter}s or looted from NPC monsters
@@ -28,7 +30,7 @@ public interface EquipableItem extends Levelable, AffectorProvider, PropertyProv
      * @return true if it is or false otherwise
      */
     @JsonIgnore
-    default Boolean isWeapon() {
+    default @NotNull Boolean isWeapon() {
         return false;
     }
 
@@ -38,7 +40,7 @@ public interface EquipableItem extends Levelable, AffectorProvider, PropertyProv
      * @return true if it is or false otherwise
      */
     @JsonIgnore
-    default Boolean isArmour() {
+    default @NotNull Boolean isArmour() {
         return false;
     }
 
@@ -48,7 +50,7 @@ public interface EquipableItem extends Levelable, AffectorProvider, PropertyProv
      * @return true if it is or false otherwise
      */
     @JsonIgnore
-    default Boolean isTrinket() {
+    default @NotNull Boolean isTrinket() {
         return false;
     }
 }

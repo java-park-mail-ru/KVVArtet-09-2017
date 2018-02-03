@@ -1,5 +1,7 @@
 package project.gamemechanics.globals;
 
+import javax.validation.constraints.NotNull;
+
 @SuppressWarnings("unused")
 public enum CharacterStats {
     CS_ENDURANCE(0, "Endurance"),
@@ -11,16 +13,16 @@ public enum CharacterStats {
     private final Integer index;
     private final String name;
 
-    CharacterStats(Integer index, String name) {
+    CharacterStats(@NotNull Integer index, @NotNull String name) {
         this.index = index;
         this.name = name;
     }
 
-    public Integer asInt() {
+    public @NotNull Integer asInt() {
         return index;
     }
 
-    public String asText() {
+    public @NotNull String asText() {
         return name;
     }
 }

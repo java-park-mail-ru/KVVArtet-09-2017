@@ -1,5 +1,8 @@
 package project.gamemechanics.charlist;
 
+import org.jetbrains.annotations.Nullable;
+
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,12 +14,12 @@ public class CharacterListPoolImpl implements CharacterListPool {
 
 
     @Override
-    public CharacterList getCharacterList(Integer ownerID) {
+    public @Nullable CharacterList getCharacterList(@NotNull Integer ownerID) {
         return characterListMap.get(ownerID);
     }
 
     @Override
-    public void initCharacterList(Integer ownerID) {
+    public void initCharacterList(@NotNull Integer ownerID) {
         //TODO HOW TO INITIALIZE DEFAULT CHARACTERS
        // CharacterList characterListDefault = new CharacterList();
         //characterListMap.put(ownerID, characterListDefault);

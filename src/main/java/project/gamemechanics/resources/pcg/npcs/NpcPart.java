@@ -7,6 +7,7 @@ import project.gamemechanics.interfaces.Levelable;
 import project.gamemechanics.interfaces.PropertyProvider;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +21,9 @@ public interface NpcPart extends Levelable, PropertyProvider {
     int BODY_PART_ID = 1;
     int NPC_PARTS_COUNT = 2;
 
-    Integer getPartIndex();
+    @NotNull Integer getPartIndex();
 
-    Map<Integer, Property> getAllProperties();
+    @NotNull Map<Integer, Property> getAllProperties();
 
-    List<ItemBlueprint> getLootList();
+    @NotNull List<ItemBlueprint> getLootList();
 }

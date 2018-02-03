@@ -14,8 +14,9 @@ public final class BattleMapGenerator {
     private BattleMapGenerator() {
     }
 
-    public static List<List<MapNode>> generateBattleMap(@NotNull Integer width, @NotNull Integer height,
-                                                        @NotNull Integer passableTilesCount) {
+    public static @NotNull List<List<MapNode>> generateBattleMap(@NotNull Integer width,
+                                                                 @NotNull Integer height,
+                                                                 @NotNull Integer passableTilesCount) {
         final List<Integer> mapSize = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
         mapSize.add(DigitsPairIndices.ROW_COORD_INDEX, height);
         mapSize.add(DigitsPairIndices.COL_COORD_INDEX, width);
@@ -57,45 +58,45 @@ public final class BattleMapGenerator {
         return map;
     }
 
-    private static Boolean isDirectionValid(@NotNull List<Integer> coords, @NotNull List<Integer> mapSize,
-                                            @NotNull Integer direction) {
+    private static @NotNull Boolean isDirectionValid(@NotNull List<Integer> coords,
+                                                     @NotNull List<Integer> mapSize,
+                                                     @NotNull Integer direction) {
         switch (direction) {
             case Directions.UP:
-                return coords.get(DigitsPairIndices.COL_COORD_INDEX) > 0;
+                return coords.get(DigitsPairIndices.ROW_COORD_INDEX) > 0;
             case Directions.RIGHT:
-                return (coords.get(DigitsPairIndices.ROW_COORD_INDEX) + 1)
-                        < mapSize.get(DigitsPairIndices.ROW_COORD_INDEX);
-            case Directions.DOWN:
                 return (coords.get(DigitsPairIndices.COL_COORD_INDEX) + 1)
                         < mapSize.get(DigitsPairIndices.COL_COORD_INDEX);
+            case Directions.DOWN:
+                return (coords.get(DigitsPairIndices.ROW_COORD_INDEX) + 1)
+                        < mapSize.get(DigitsPairIndices.ROW_COORD_INDEX);
             case Directions.LEFT:
-                return coords.get(DigitsPairIndices.ROW_COORD_INDEX) > 0;
+                return coords.get(DigitsPairIndices.COL_COORD_INDEX) > 0;
             default: break;
         }
         return false;
     }
 
-    private static Map<Integer, List<Integer>> initDirectionsMap() {
-
+    private static @NotNull Map<Integer, List<Integer>> initDirectionsMap() {
         final List<Integer> upMovement = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-        upMovement.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
-        upMovement.add(DigitsPairIndices.COL_COORD_INDEX, -1);
+        upMovement.add(DigitsPairIndices.ROW_COORD_INDEX, -1);
+        upMovement.add(DigitsPairIndices.COL_COORD_INDEX, 0);
         final Map<Integer, List<Integer>> directionsMap = new HashMap<>();
         directionsMap.put(Directions.UP, upMovement);
 
         final List<Integer> rightMovement = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-        rightMovement.add(DigitsPairIndices.ROW_COORD_INDEX, 1);
-        rightMovement.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+        rightMovement.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        rightMovement.add(DigitsPairIndices.COL_COORD_INDEX, 1);
         directionsMap.put(Directions.RIGHT, rightMovement);
 
         final List<Integer> downMovement = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-        downMovement.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
-        downMovement.add(DigitsPairIndices.COL_COORD_INDEX, 1);
+        downMovement.add(DigitsPairIndices.ROW_COORD_INDEX, 1);
+        downMovement.add(DigitsPairIndices.COL_COORD_INDEX, 0);
         directionsMap.put(Directions.DOWN, downMovement);
 
         final List<Integer> leftMovement = new ArrayList<>(DigitsPairIndices.PAIR_SIZE);
-        leftMovement.add(DigitsPairIndices.ROW_COORD_INDEX, -1);
-        leftMovement.add(DigitsPairIndices.COL_COORD_INDEX, 0);
+        leftMovement.add(DigitsPairIndices.ROW_COORD_INDEX, 0);
+        leftMovement.add(DigitsPairIndices.COL_COORD_INDEX, -1);
         directionsMap.put(Directions.LEFT, leftMovement);
 
         return directionsMap;

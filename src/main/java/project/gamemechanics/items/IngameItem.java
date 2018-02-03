@@ -67,47 +67,47 @@ public class IngameItem implements EquipableItem {
 
     @Override
     @JsonIgnore
-    public Integer getInstancesCount() {
+    public @NotNull Integer getInstancesCount() {
         return instanceCounter.get();
     }
 
     @Override
     @JsonProperty("id")
-    public Integer getID() {
+    public @NotNull Integer getID() {
         return itemID;
     }
 
     @SuppressWarnings("unused")
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @SuppressWarnings("unused")
     @Override
-    public String getDescription() {
+    public @NotNull String getDescription() {
         return description;
     }
 
     @Override
     @JsonIgnore
-    public Integer getLevel() {
+    public @NotNull Integer getLevel() {
         return getProperty(PropertyCategories.PC_LEVEL);
     }
 
     @Override
-    public Boolean hasProperty(@NotNull Integer propertyKind) {
+    public @NotNull Boolean hasProperty(@NotNull Integer propertyKind) {
         return properties.containsKey(propertyKind);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableProperties() {
+    public @NotNull Set<Integer> getAvailableProperties() {
         return properties.keySet();
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -115,7 +115,7 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Integer getProperty(@NotNull Integer propertyKind) {
+    public @NotNull Integer getProperty(@NotNull Integer propertyKind) {
         if (!hasProperty(propertyKind)) {
             return Integer.MIN_VALUE;
         }
@@ -123,18 +123,18 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Boolean hasAffector(@NotNull Integer affectorKind) {
+    public @NotNull Boolean hasAffector(@NotNull Integer affectorKind) {
         return affectors.containsKey(affectorKind);
     }
 
     @Override
     @JsonIgnore
-    public Set<Integer> getAvailableAffectors() {
+    public @NotNull Set<Integer> getAvailableAffectors() {
         return affectors.keySet();
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectorKind) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind) {
         if (!hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -151,7 +151,7 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
+    public @NotNull Integer getAffection(@NotNull Integer affectorKind, @NotNull Integer affectionIndex) {
         if ((affectorKind & AffectorCategories.AC_MULTI_VALUE_AFFECTORS) == 0 || !hasAffector(affectorKind)) {
             return Integer.MIN_VALUE;
         }
@@ -159,19 +159,19 @@ public class IngameItem implements EquipableItem {
     }
 
     @Override
-    public Boolean isWeapon() {
+    public @NotNull Boolean isWeapon() {
         final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind >= EquipmentKind.EK_SWORD.asInt() && kind <= EquipmentKind.EK_CROSSBOW.asInt();
     }
 
     @Override
-    public Boolean isArmour() {
+    public @NotNull Boolean isArmour() {
         final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind >= EquipmentKind.EK_CLOTH_ARMOUR.asInt() && kind <= EquipmentKind.EK_PLATE_ARMOUR.asInt();
     }
 
     @Override
-    public Boolean isTrinket() {
+    public @NotNull Boolean isTrinket() {
         final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind.equals(EquipmentKind.EK_TRINKET.asInt());
     }

@@ -11,17 +11,17 @@ import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("unused")
 public interface PcgContentFactory {
-    EquipableItem makeItem(@NotNull ItemBlueprint blueprint);
+    @NotNull EquipableItem makeItem(@NotNull ItemBlueprint blueprint);
 
-    EquipableItem makeItem(@NotNull Integer level);
+    @NotNull EquipableItem makeItem(@NotNull Integer level);
 
-    AliveEntity makeNpc(@NotNull NpcBlueprint blueprint);
+    @NotNull AliveEntity makeNpc(@NotNull NpcBlueprint blueprint);
 
-    AliveEntity makeNpc(@NotNull Integer level);
+    @NotNull AliveEntity makeNpc(@NotNull Integer level);
 
-    ItemsFactory getItemsFactory();
+    @NotNull ItemsFactory getItemsFactory();
 
-    NpcsFactory getNpcsFactory();
+    @NotNull NpcsFactory getNpcsFactory();
 
     void reset();
 }

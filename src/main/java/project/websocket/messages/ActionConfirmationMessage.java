@@ -14,7 +14,7 @@ public class ActionConfirmationMessage extends Message {
         this.message = "success";
     }
 
-    public String getMessage() {
+    public @NotNull String getMessage() {
         return message;
     }
 

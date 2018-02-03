@@ -12,6 +12,7 @@ import project.websocket.messages.Message;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({"UnusedAssignment", "SameParameterValue", "unused"})
@@ -57,7 +58,8 @@ public class ConnectionPoolService {
     }
 
     public boolean isConnected(@NotNull Integer userId) {
-        return sessions.containsKey(userId) && sessions.get(userId).getWebSocketSession().isOpen();
+        return sessions.containsKey(userId) && Objects.requireNonNull(
+                sessions.get(userId).getWebSocketSession()).isOpen();
     }
 
     public void removeUser(@NotNull Integer userId) {
@@ -94,11 +96,11 @@ public class ConnectionPoolService {
         }
     }
 
-    public Map<Integer, SmartController> getActiveSmartControllers() {
+    public @NotNull Map<Integer, SmartController> getActiveSmartControllers() {
         return sessions;
     }
 
-    public SmartController getSmartController(Integer userID) {
+    public @NotNull SmartController getSmartController(@NotNull Integer userID) {
         return sessions.get(userID);
     }
 

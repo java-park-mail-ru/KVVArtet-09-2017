@@ -1,6 +1,7 @@
 package project.gamemechanics.resources.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.properties.Property;
 
@@ -25,7 +26,7 @@ public class HybridModelWithInlays extends HybridModel {
     }
 
     @Override
-    public GameResource getInlaid(@NotNull Integer inlaidIndex) {
+    public @Nullable GameResource getInlaid(@NotNull Integer inlaidIndex) {
         if (inlaidIndex < 0 || inlaidIndex >= inlaidModels.size()) {
             return null;
         }
@@ -34,7 +35,7 @@ public class HybridModelWithInlays extends HybridModel {
 
     @Override
     @JsonProperty("inlaid")
-    public List<GameResource> getAllInlaid() {
+    public @NotNull List<GameResource> getAllInlaid() {
         return inlaidModels;
     }
 }

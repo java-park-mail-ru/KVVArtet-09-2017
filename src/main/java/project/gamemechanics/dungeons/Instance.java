@@ -7,46 +7,47 @@ import project.gamemechanics.interfaces.Levelable;
 import project.gamemechanics.interfaces.Updateable;
 import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.Message;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @SuppressWarnings("unused")
 public interface Instance extends Levelable, Updateable {
     @SuppressWarnings("unused")
-    Integer getRoomsCount();
+    @NotNull Integer getRoomsCount();
 
     @SuppressWarnings("unused")
-    Integer getClearedRoomsCount();
+    @NotNull Integer getClearedRoomsCount();
 
     @SuppressWarnings("unused")
-    Integer getBattleLogLength();
+    @NotNull Integer getBattleLogLength();
 
     @SuppressWarnings("unused")
-    List<ActionResult> getBattleLog();
+    @NotNull List<ActionResult> getBattleLog();
 
     @SuppressWarnings("unused")
-    ActionResult getBattleLogEntry(@NotNull Integer entryIndex);
+    @Nullable ActionResult getBattleLogEntry(@NotNull Integer entryIndex);
 
     @SuppressWarnings("unused")
-    Integer getGameMode();
+    @NotNull Integer getGameMode();
 
     @SuppressWarnings("unused")
-    List<Integer> getBattlingSquadsIds();
+    @NotNull List<Integer> getBattlingSquadsIds();
 
     @SuppressWarnings("unused")
     @Nullable CharactersParty getParty(@NotNull Integer partyIndex);
 
     @SuppressWarnings("unused")
-    Boolean isInstanceCleared();
+    @NotNull Boolean isInstanceCleared();
 
     @SuppressWarnings("unused")
-    Boolean isInstanceFailed();
+    @NotNull Boolean isInstanceFailed();
 
     @SuppressWarnings("unused")
     void giveRewards();
 
     @SuppressWarnings("unused")
-    List<Long> encodeCurrentRoomMap();
+    @NotNull List<Long> encodeCurrentRoomMap();
 
-    Message handleMessage(ActionRequestMessage message);
+    @NotNull Message handleMessage(@NotNull ActionRequestMessage message);
 }

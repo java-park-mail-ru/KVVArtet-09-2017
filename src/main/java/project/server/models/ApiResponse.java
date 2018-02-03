@@ -1,5 +1,7 @@
 package project.server.models;
 
+import javax.validation.constraints.NotNull;
+
 @SuppressWarnings({"unused"})
 public enum ApiResponse {
     USERNAME_EXIST(0, "User with that name is already exist"),
@@ -20,11 +22,11 @@ public enum ApiResponse {
 
     private final String response;
 
-    ApiResponse(Integer status, String response) {
+    ApiResponse(@NotNull Integer status, @NotNull String response) {
         this.response = response;
     }
 
-    public String getResponse() {
+    public @NotNull String getResponse() {
         return response;
     }
 }
