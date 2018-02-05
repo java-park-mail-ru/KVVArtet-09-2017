@@ -12,6 +12,8 @@ import project.gamemechanics.resources.assets.AssetProviderImpl;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
 import project.gamemechanics.world.config.ResourcesConfig;
+import project.gamemechanics.world.matchmaking.Lobby;
+import project.gamemechanics.world.matchmaking.LobbyImpl;
 import project.websocket.services.ConnectionPoolService;
 
 import javax.validation.constraints.NotNull;

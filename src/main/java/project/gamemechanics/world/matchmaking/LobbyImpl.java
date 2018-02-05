@@ -1,4 +1,4 @@
-package project.gamemechanics.world;
+package project.gamemechanics.world.matchmaking;
 
 import project.gamemechanics.aliveentities.npcs.ai.AIBehaviors;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
