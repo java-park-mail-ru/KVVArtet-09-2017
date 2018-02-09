@@ -18,12 +18,17 @@ public interface Invitation {
     int TIMEOUT_LOOPS_COUNT = 7200; // 2 minutes on 60 loops per second
 
     @NotNull Integer getStatus();
+
     void setStatus(@NotNull Integer status);
 
     void update();
 
+    @SuppressWarnings("unused")
     @NotNull Boolean isIdle();
+
     @NotNull Boolean isConfirm();
+
     @NotNull Boolean isCancel();
+
     @NotNull Boolean isExpired();
 }

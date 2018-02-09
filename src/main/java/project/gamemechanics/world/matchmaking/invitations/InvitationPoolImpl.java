@@ -86,7 +86,9 @@ public class InvitationPoolImpl implements InvitationPool {
                 if (poll.isReady()) {
                     final Instance instance = makeInstance(poll);
                     instancesPool.put(instance.getID(), instance);
-                    //TODO: broadcast NewInstanceMessage to all participants
+                    // CHECKSTYLE:OFF
+                    // TODO: broadcast NewInstanceMessage to all participants
+                    // CHECKSTYLE:ON
                     polls.get(gameMode).remove(pollId);
                 }
                 poll.update();
@@ -252,8 +254,8 @@ public class InvitationPoolImpl implements InvitationPool {
             if (isExpired) {
                 notification = "your party was returned to the queue. Reason: timeout expired";
             } else {
-                notification = "someone has declined an invitation." +
-                        " Your party was returned to the top of the queue.";
+                notification = "someone has declined an invitation."
+                        + " Your party was returned to the top of the queue.";
             }
             broadcast(parties.get(partyId), new MatchmakingNotificationMessage(notification));
         }
