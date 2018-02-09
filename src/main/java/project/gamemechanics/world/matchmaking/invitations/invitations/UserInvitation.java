@@ -6,7 +6,8 @@ public class UserInvitation implements Invitation {
     private Integer status = VS_IDLE;
     private Integer lifetime = 0;
 
-    public UserInvitation() {}
+    public UserInvitation() {
+    }
 
     public UserInvitation(@NotNull Integer status) {
         this.status = status;

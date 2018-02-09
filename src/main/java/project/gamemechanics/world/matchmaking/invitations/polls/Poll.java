@@ -20,26 +20,34 @@ import java.util.Map;
         @JsonSubTypes.Type(CoopPvpPoll.class)
 })
 public interface Poll extends Countable {
-    interface InvitationPoll extends Map<Integer, Invitation> {}
-    class HashInvitationPoll extends HashMap<Integer, Invitation> implements InvitationPoll {}
+    interface InvitationPoll extends Map<Integer, Invitation> {
+    }
+
+    class HashInvitationPoll extends HashMap<Integer, Invitation> implements InvitationPoll {
+    }
 
     @JsonProperty("mode")
     @NotNull Integer getGameMode();
 
     @JsonProperty("status")
     @NotNull Map<Integer, InvitationPoll> getStatus();
+
     @Nullable InvitationPoll getPartyAnswers(@NotNull Integer partyId);
 
     void update();
 
     @NotNull Boolean isExpired();
+
     @NotNull Boolean isCanceled();
+
     @NotNull Boolean isReady();
 
     @JsonIgnore
     @Nullable CharactersParty getParty();
+
     @JsonIgnore
     @Nullable CharactersParty getParty(@NotNull Integer partyID);
+
     @JsonIgnore
     @NotNull Map<Integer, CharactersParty> getParties();
 }
