@@ -3,19 +3,13 @@ package project.websocket.messages;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public class ErrorMessage extends Message {
-
-    private final String message;
+public class ErrorMessage extends TextMessage {
 
     public ErrorMessage(@NotNull String message) {
-        this.message = message;
+        super(message);
     }
 
     public ErrorMessage() {
-        this.message = "some error occured";
-    }
-
-    public @NotNull String getMessage() {
-        return message;
+        super("some error occured");
     }
 }

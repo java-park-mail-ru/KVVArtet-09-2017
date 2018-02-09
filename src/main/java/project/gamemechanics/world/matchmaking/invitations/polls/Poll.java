@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
+import project.gamemechanics.interfaces.Countable;
 import project.gamemechanics.world.matchmaking.invitations.invitations.Invitation;
 
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import java.util.Map;
         @JsonSubTypes.Type(SquadPvpPoll.class),
         @JsonSubTypes.Type(CoopPvpPoll.class)
 })
-public interface Poll {
+public interface Poll extends Countable {
     interface InvitationPoll extends Map<Integer, Invitation> {}
     class HashInvitationPoll extends HashMap<Integer, Invitation> implements InvitationPoll {}
 
@@ -28,6 +29,8 @@ public interface Poll {
     @JsonProperty("status")
     @NotNull Map<Integer, InvitationPoll> getStatus();
     @Nullable InvitationPoll getPartyAnswers(@NotNull Integer partyId);
+
+    void update();
 
     @NotNull Boolean isExpired();
     @NotNull Boolean isCanceled();

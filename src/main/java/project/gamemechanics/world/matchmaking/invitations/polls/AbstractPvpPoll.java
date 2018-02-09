@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractPvpPoll implements Poll {
+public abstract class AbstractPvpPoll extends AbstractPoll {
     private final Map<Integer, CharactersParty> parties;
     private final Map<Integer, InvitationPoll> playersStatus = new HashMap<>();
 
@@ -37,6 +37,15 @@ public abstract class AbstractPvpPoll implements Poll {
             return null;
         }
         return playersStatus.get(partyId);
+    }
+
+    @Override
+    public void update() {
+        for (Integer partyId : playersStatus.keySet()) {
+            for (Integer roleId : playersStatus.get(partyId).keySet()) {
+                playersStatus.get(partyId).get(roleId).update();
+            }
+        }
     }
 
     @Override

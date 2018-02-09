@@ -3,6 +3,14 @@ package project.websocket.messages;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import project.websocket.messages.battle.*;
+import project.websocket.messages.charlist.CharacterListRequestMessage;
+import project.websocket.messages.charlist.CharacterListResponseMessage;
+import project.websocket.messages.charlist.CreateCharacterRequestMessage;
+import project.websocket.messages.charlist.DeleteCharacterRequestMessage;
+import project.websocket.messages.matchmaking.LobbyConfirmationMessage;
+import project.websocket.messages.matchmaking.LobbyRequestMessage;
+import project.websocket.messages.matchmaking.MatchmakingNotificationMessage;
 
 @SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "class")
@@ -17,7 +25,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(NextRoomRequestMessage.class),
         @Type(NextRoomResponseMessage.class),
         @Type(LobbyConfirmationMessage.class),
-        @Type(ActionConfirmationMessage.class)
+        @Type(ActionConfirmationMessage.class),
+        @Type(MatchmakingNotificationMessage.class)
 })
 public abstract class Message {
     // CHECKSTYLE:OFF

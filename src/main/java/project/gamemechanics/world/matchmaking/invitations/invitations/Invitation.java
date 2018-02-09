@@ -15,8 +15,12 @@ public interface Invitation {
     int VS_CANCEL = 2;
     int VS_EXPIRED = 3;
 
+    int TIMEOUT_LOOPS_COUNT = 7200; // 2 minutes on 60 loops per second
+
     @NotNull Integer getStatus();
     void setStatus(@NotNull Integer status);
+
+    void update();
 
     @NotNull Boolean isIdle();
     @NotNull Boolean isConfirm();

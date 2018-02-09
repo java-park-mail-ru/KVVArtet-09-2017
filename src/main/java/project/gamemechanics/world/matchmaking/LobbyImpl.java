@@ -3,11 +3,9 @@ package project.gamemechanics.world.matchmaking;
 import project.gamemechanics.aliveentities.npcs.ai.AIBehaviors;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.components.properties.PropertyCategories;
-import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.dungeons.AbstractInstance;
 import project.gamemechanics.dungeons.DungeonInstance;
 import project.gamemechanics.dungeons.Instance;
-import project.gamemechanics.dungeons.LandInstance;
 import project.gamemechanics.globals.CharacterRoleIds;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.GameModes;
@@ -16,9 +14,11 @@ import project.gamemechanics.items.loot.PendingLootPool;
 import project.gamemechanics.resources.assets.AssetProvider;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.smartcontroller.SmartController;
+import project.gamemechanics.world.matchmaking.invitations.InvitationPool;
+import project.gamemechanics.world.matchmaking.invitations.InvitationPoolImpl;
 import project.websocket.messages.ErrorMessage;
-import project.websocket.messages.LobbyConfirmationMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.matchmaking.LobbyConfirmationMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -29,14 +29,17 @@ public class LobbyImpl implements Lobby {
     private final AssetProvider assetProvider;
     private final PcgContentFactory factory;
     private final PendingLootPool lootPool;
-    private final Map<Integer, SmartController> smartControllersPool;
 
     private final Map<Integer, CharactersParty> globalPartiesPool;
 
     private final Map<Integer, Instance> instancesPool;
 
-    private final Map<Integer, Deque<CharactersParty>> wipPartiesPool = new ConcurrentHashMap<>();
-    private final Map<Integer, Map<Integer, Deque<AliveEntity>>> queuedCharacters = new ConcurrentHashMap<>();
+    private final Map<Integer, Deque<CharactersParty>> wipPartiesPool =
+            new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, Deque<AliveEntity>>> queuedCharacters =
+            new ConcurrentHashMap<>();
+
+    private final InvitationPool invitationService;
 
     public LobbyImpl(@NotNull AssetProvider assetProvider,
                      @NotNull PcgContentFactory factory,
@@ -47,9 +50,13 @@ public class LobbyImpl implements Lobby {
         this.assetProvider = assetProvider;
         this.factory = factory;
         this.lootPool = lootPool;
-        this.smartControllersPool = smartControllersPool;
         this.globalPartiesPool = globalPartiesPool;
         this.instancesPool = instancesPool;
+
+        this.invitationService = new InvitationPoolImpl(
+                this.assetProvider, this.factory,
+                smartControllersPool, this.globalPartiesPool,
+                this.wipPartiesPool, this.instancesPool);
 
         initGameModeQueues();
     }
@@ -61,19 +68,23 @@ public class LobbyImpl implements Lobby {
             return new ErrorMessage("unknown game mode");
         }
         if (character.hasProperty(PropertyCategories.PC_INSTANCE_ID)
-                && character.getProperty(PropertyCategories.PC_INSTANCE_ID) != Constants.UNDEFINED_ID) {
+                && character.getProperty(PropertyCategories.PC_INSTANCE_ID)
+                != Constants.UNDEFINED_ID) {
             return new ErrorMessage("character is already in an instance");
         }
         if (!character.hasProperty(PropertyCategories.PC_ACTIVE_ROLE)
-                || character.getProperty(PropertyCategories.PC_ACTIVE_ROLE) == Constants.UNDEFINED_ID) {
+                || character.getProperty(PropertyCategories.PC_ACTIVE_ROLE)
+                == Constants.UNDEFINED_ID) {
             return new ErrorMessage("uknown character role");
         }
         // note: do we need to actually check character's presence in currently WIP parties?
         if (character.hasProperty(PropertyCategories.PC_PARTY_ID)
-                && character.getProperty(PropertyCategories.PC_PARTY_ID) != Constants.UNDEFINED_ID) {
+                && character.getProperty(PropertyCategories.PC_PARTY_ID)
+                != Constants.UNDEFINED_ID) {
             for (Integer gameModeId : wipPartiesPool.keySet()) {
                 for (CharactersParty wipParty : wipPartiesPool.get(gameModeId)) {
-                    if (wipParty.getID().equals(character.getProperty(PropertyCategories.PC_PARTY_ID))) {
+                    if (wipParty.getID().equals(character
+                            .getProperty(PropertyCategories.PC_PARTY_ID))) {
                         return new ErrorMessage("character is already in queued party");
                     }
                 }
@@ -87,7 +98,8 @@ public class LobbyImpl implements Lobby {
             }
         }
 
-        queuedCharacters.get(gameMode).get(character.getProperty(PropertyCategories.PC_ACTIVE_ROLE))
+        queuedCharacters.get(gameMode).get(
+                character.getProperty(PropertyCategories.PC_ACTIVE_ROLE))
                 .offerLast(character);
         return new LobbyConfirmationMessage();
     }
@@ -101,7 +113,8 @@ public class LobbyImpl implements Lobby {
             } else {
                 final List<CharactersParty> parties = new ArrayList<>();
                 parties.add(party);
-                final AbstractInstance.DungeonInstanceModel newDungeonModel = makePveInstanceModel(parties);
+                final AbstractInstance.DungeonInstanceModel newDungeonModel =
+                        makePveInstanceModel(parties);
                 final Instance newPveInstance = new DungeonInstance(newDungeonModel);
                 instancesPool.put(newPveInstance.getID(), newPveInstance);
                 // CHECKSTYLE:OFF
@@ -171,6 +184,7 @@ public class LobbyImpl implements Lobby {
     @Override
     public void tick() {
         traversePartiesQueue();
+        invitationService.update();
         traverseCharactersQueue();
     }
 
@@ -211,7 +225,7 @@ public class LobbyImpl implements Lobby {
         wipPartiesPool.put(GameModes.GM_SQUAD_PVP, new ConcurrentLinkedDeque<>());
 
         queuedCharacters.put(GameModes.GM_COOP_PVE, new ConcurrentHashMap<>());
-        queuedCharacters.put(GameModes.GM_SQUAD_PVP, new ConcurrentHashMap<>());
+        queuedCharacters.put(GameModes.GM_COOP_PVP, new ConcurrentHashMap<>());
         for (Integer gameMode : queuedCharacters.keySet()) {
             fillGameModeQueueWithRoles(queuedCharacters.get(gameMode));
         }
@@ -225,35 +239,6 @@ public class LobbyImpl implements Lobby {
             party.removeMember(roleId);
         }
     }
-    // CHECKSTYLE:OFF
-    private void sendInvitations(@NotNull Instance instance,
-                                 @NotNull List<CharactersParty> parties) {
-        final Message invitation = new LobbyConfirmationMessage(); /* TODO: change on something more correct */
-        // CHECKSTYLE:ON
-        final List<Integer> notifiedUsersList = new ArrayList<>();
-        for (CharactersParty matchedParty : parties) {
-            for (Integer roleId : matchedParty.getRoleIds()) {
-                if (!notifiedUsersList.contains(
-                        Objects.requireNonNull(matchedParty.getMember(roleId))
-                        .getProperty(PropertyCategories.PC_OWNER_ID))) {
-                    smartControllersPool.get(
-                            Objects.requireNonNull(matchedParty.getMember(roleId))
-                            .getProperty(PropertyCategories.PC_OWNER_ID)).addInboxMessage(invitation);
-                    notifiedUsersList.add(Objects.requireNonNull(matchedParty.getMember(roleId))
-                            .getProperty(PropertyCategories.PC_OWNER_ID));
-                }
-                if (Objects.requireNonNull(matchedParty.getMember(roleId))
-                        .hasProperty(PropertyCategories.PC_INSTANCE_ID)) {
-                    Objects.requireNonNull(matchedParty.getMember(roleId))
-                            .setProperty(PropertyCategories.PC_INSTANCE_ID, instance.getID());
-                } else {
-                    Objects.requireNonNull(matchedParty.getMember(roleId))
-                            .addProperty(PropertyCategories.PC_INSTANCE_ID,
-                            new SingleValueProperty(instance.getID()));
-                }
-            }
-        }
-    }
 
     private @NotNull AbstractInstance.DungeonInstanceModel makePveInstanceModel(
             @NotNull List<CharactersParty> parties) {
@@ -263,50 +248,32 @@ public class LobbyImpl implements Lobby {
                         Constants.DEFAULT_ROOMS_COUNT, factory, parties, AIBehaviors.getAllBehaviors());
     }
 
-    private @NotNull AbstractInstance.LandInstanceModel makePvpInstanceModel(
-            @NotNull List<CharactersParty> parties) {
-        final List<String> nameDescription = assetProvider.makeInstanceNameDescription();
-        return new AbstractInstance.LandInstanceModel(nameDescription.get(0),
-                        nameDescription.get(1), parties.get(0).getAverageLevel(),
-                        factory, parties);
-    }
-
     private void traversePartiesQueue() {
         for (Integer gameMode : wipPartiesPool.keySet()) {
             CharactersParty firstTeam = null;
             for (CharactersParty party : wipPartiesPool.get(gameMode)) {
                 for (Integer roleId : party.getRoleIds()) {
                     if (party.getMember(roleId) == null) {
-                        final AliveEntity candidate = queuedCharacters.get(gameMode).get(roleId).pollFirst();
+                        final AliveEntity candidate =
+                                queuedCharacters.get(gameMode).get(roleId).pollFirst();
                         if (candidate != null) {
                             party.addMember(roleId, candidate);
                         }
                     }
                 }
-                if (GameModes.isPvp(gameMode)) {
-                    if (firstTeam == null) {
-                        firstTeam = party;
+                if (party.isFull()) {
+                    if (GameModes.isPvp(gameMode)) {
+                        if (firstTeam == null) {
+                            firstTeam = party;
+                        } else {
+                            final Map<Integer, CharactersParty> parties = new HashMap<>();
+                            parties.put(firstTeam.getID(), firstTeam);
+                            parties.put(party.getID(), party);
+                            invitationService.addPoll(parties, gameMode);
+                        }
                     } else {
-                        final List<CharactersParty> parties = new ArrayList<>();
-                        parties.add(firstTeam);
-                        parties.add(party);
-                        final AbstractInstance.LandInstanceModel model = makePvpInstanceModel(parties);
-                        final Instance newPvpInstance = new LandInstance(model);
-                        wipPartiesPool.get(gameMode).remove(firstTeam);
-                        globalPartiesPool.put(firstTeam.getID(), firstTeam);
-                        globalPartiesPool.put(party.getID(), party);
-                        wipPartiesPool.get(gameMode).remove(party);
-                        instancesPool.put(newPvpInstance.getID(), newPvpInstance);
-                        sendInvitations(newPvpInstance, parties);
+                        invitationService.addPoll(party);
                     }
-                } else {
-                    final List<CharactersParty> parties = new ArrayList<>();
-                    parties.add(party);
-                    final AbstractInstance.DungeonInstanceModel model = makePveInstanceModel(parties);
-                    final Instance newPveInstance = new DungeonInstance(model);
-                    sendInvitations(newPveInstance, parties);
-                    globalPartiesPool.put(party.getID(), party);
-                    wipPartiesPool.get(gameMode).remove(party);
                 }
             }
         }

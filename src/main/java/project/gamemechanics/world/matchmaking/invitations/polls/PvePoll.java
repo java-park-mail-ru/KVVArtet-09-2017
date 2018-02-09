@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PvePoll implements Poll {
+public class PvePoll extends AbstractPoll {
     private final InvitationPoll playerStatuses = new HashInvitationPoll();
     private final CharactersParty party;
 
@@ -39,6 +39,13 @@ public class PvePoll implements Poll {
     @Override
     public @Nullable Poll.InvitationPoll getPartyAnswers(@NotNull Integer partyId) {
         return partyId == Squad.PLAYERS_SQUAD_ID ? playerStatuses : null;
+    }
+
+    @Override
+    public void update() {
+        for (Integer roleId : playerStatuses.keySet()) {
+            playerStatuses.get(roleId).update();
+        }
     }
 
     @Override

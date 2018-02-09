@@ -1,7 +1,9 @@
-package project.websocket.messages;
+package project.websocket.messages.charlist;
 
 import org.jetbrains.annotations.NotNull;
 import project.gamemechanics.aliveentities.UserCharacter;
+import project.websocket.messages.Message;
+
 import java.util.List;
 
 @SuppressWarnings("unused")

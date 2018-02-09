@@ -3,6 +3,7 @@ package project.states;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import project.websocket.handlers.MessageHandler;
+import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
 
 import java.util.HashMap;
@@ -18,10 +19,8 @@ public abstract class AbstractState implements State {
     @Override
     public @NotNull Message handleMessage(@NotNull Message message, @NotNull Integer forUser)  {
         final MessageHandler<?> messageHandler = handlersMap.get(message.getClass());
-        if (messageHandler == null) {
-            return null;
-        }
-        return messageHandler.handleMessage(message, forUser);
+        return messageHandler != null ? messageHandler.handleMessage(message, forUser)
+                : new ErrorMessage("unrecognized request");
     }
 
     @Override

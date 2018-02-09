@@ -1,8 +1,9 @@
-package project.websocket.messages;
+package project.websocket.messages.battle;
 
 import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.interfaces.Ability;
 import project.gamemechanics.interfaces.MapNode;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 

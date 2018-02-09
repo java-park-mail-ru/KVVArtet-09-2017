@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class UserInvitation implements Invitation {
     private Integer status = VS_IDLE;
+    private Integer lifetime = 0;
 
     public UserInvitation() {}
 
@@ -18,7 +19,18 @@ public class UserInvitation implements Invitation {
 
     @Override
     public void setStatus(@NotNull Integer status) {
-        this.status = status;
+        if (status != VS_EXPIRED) {
+            this.status = status;
+        }
+    }
+
+    @Override
+    public void update() {
+        if (lifetime < TIMEOUT_LOOPS_COUNT) {
+            ++lifetime;
+        } else {
+            status = VS_EXPIRED;
+        }
     }
 
     @Override
