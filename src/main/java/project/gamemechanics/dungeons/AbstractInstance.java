@@ -13,8 +13,8 @@ import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.MapNode;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
-import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.battle.ActionRequestMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

@@ -22,10 +22,10 @@ import project.gamemechanics.items.containers.MonsterLootBag;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 import project.gamemechanics.resources.pcg.items.ItemPart;
 import project.gamemechanics.resources.pcg.items.ItemsFactory;
-import project.websocket.messages.ActionConfirmationMessage;
-import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.battle.ActionConfirmationMessage;
+import project.websocket.messages.battle.ActionRequestMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

@@ -202,6 +202,15 @@ public class CharactersParty implements Countable {
         return members.keySet();
     }
 
+    public @NotNull Boolean isFull() {
+        for (Integer roleId : members.keySet()) {
+            if (members.get(roleId) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void initMembers() {
         members.put(CharacterRoleIds.CR_TANK, null);
         members.put(CharacterRoleIds.CR_SUPPORT, null);

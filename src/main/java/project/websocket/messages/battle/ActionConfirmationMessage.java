@@ -1,6 +1,7 @@
-package project.websocket.messages;
+package project.websocket.messages.battle;
 
 import org.jetbrains.annotations.NotNull;
+import project.websocket.messages.Message;
 
 @SuppressWarnings("unused")
 public class ActionConfirmationMessage extends Message {

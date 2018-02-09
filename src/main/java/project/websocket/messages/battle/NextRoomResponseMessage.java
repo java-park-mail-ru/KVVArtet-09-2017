@@ -1,8 +1,9 @@
-package project.websocket.messages;
+package project.websocket.messages.battle;
 
 import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.map.BattleMap;
 import project.gamemechanics.interfaces.AliveEntity;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 import java.util.Deque;

@@ -1,6 +1,7 @@
-package project.websocket.messages;
+package project.websocket.messages.matchmaking;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 

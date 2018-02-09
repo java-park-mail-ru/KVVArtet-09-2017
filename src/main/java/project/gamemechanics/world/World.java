@@ -4,6 +4,7 @@ import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty
 import project.gamemechanics.dungeons.Instance;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.items.loot.PendingLootPool;
+import project.gamemechanics.world.matchmaking.Lobby;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;

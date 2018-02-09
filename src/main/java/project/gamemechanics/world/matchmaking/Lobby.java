@@ -1,4 +1,4 @@
-package project.gamemechanics.world;
+package project.gamemechanics.world.matchmaking;
 
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.interfaces.AliveEntity;
