@@ -1,0 +1,473 @@
+{
+  "type" : "NpcsFactoryImpl",
+  "npcParts" : {
+    "0" : {
+      "0" : {
+        "type" : "NpcPartAsset",
+        "id" : 0,
+        "name" : "Foul",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [5, 1, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 50
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-15, -20]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 7
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 2
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "1" : {
+        "type" : "NpcPartAsset",
+        "id" : 1,
+        "name" : "Vile",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [3, 1, 1]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 40
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-25, -30]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 6
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "2" : {
+        "type" : "NpcPartAsset",
+        "id" : 2,
+        "name" : "Cursed",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [7, 2, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 34
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-17, -25]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 6
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 1
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "3" : {
+        "type" : "NpcPartAsset",
+        "id" : 3,
+        "name" : "Rotting",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [2, 0, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 30
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-10, -12]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 2
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 1
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "4" : {
+        "type" : "NpcPartAsset",
+        "id" : 4,
+        "name" : "Ferocious",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [7, 0, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 40
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-25, -35]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 5
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 5
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "5" : {
+        "type" : "NpcPartAsset",
+        "id" : 5,
+        "name" : "Grim",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [2, 1, 1]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 60
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-10, -25]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 9
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 8
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "6" : {
+        "type" : "NpcPartAsset",
+        "id" : 6,
+        "name" : "Dread",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [3, 2, 1]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 70
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-35, -45]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 8
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 6
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "7" : {
+        "type" : "NpcPartAsset",
+        "id" : 7,
+        "name" : "Limp",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [1, 1, 1]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 50
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-15, -25]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 9
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 1
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "8" : {
+        "type" : "NpcPartAsset",
+        "id" : 8,
+        "name" : "Pale",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [0, 0, 2]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 80
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-10, -15]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 9
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 2
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "9" : {
+        "type" : "NpcPartAsset",
+        "id" : 9,
+        "name" : "Shaking",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [7, 0, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 40
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-25, -35]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 5
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 5
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 3
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      },
+      "10" : {
+        "type" : "NpcPartAsset",
+        "id" : 10,
+        "name" : "Ill",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [4, 0, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 25
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-20, -35]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 5
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          },
+          "11" : {
+            "type" : "SingleValueProperty",
+            "property" : 2
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 0
+      }
+    },
+    "1" : {
+      "0" : {
+        "type" : "NpcPartAsset",
+        "id" : 0,
+        "name" : "skeleton",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [2, 1, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 30
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-5, -10]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 6
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 1
+      },
+      "1" : {
+        "type" : "NpcPartAsset",
+        "id" : 1,
+        "name" : "Ghoul",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [3, 2, 0]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 40
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-10, -12]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 7
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 4
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 1
+      },
+      "2" : {
+        "type" : "NpcPartAsset",
+        "id" : 0,
+        "name" : "Zombie",
+        "description" : "",
+        "properties" : {
+          "2" : {
+            "type" : "ListProperty",
+            "properties" : [2, 1, 2]
+          },
+          "20" : {
+            "type" : "SingleValueProperty",
+            "property" : 90
+          },
+          "6" : {
+            "type" : "ListProperty",
+            "properties" : [-3, -9]
+          },
+          "7" : {
+            "type" : "SingleValueProperty",
+            "property" : 12
+          },
+          "10" : {
+            "type" : "SingleValueProperty",
+            "property" : 1
+          }
+        },
+        "lootList" : [],
+        "partIndex" : 1
+      }
+    }
+  }
+}

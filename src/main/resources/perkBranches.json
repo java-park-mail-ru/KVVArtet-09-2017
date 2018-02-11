@@ -1,0 +1,41 @@
+{
+  "type" : "GameResourceHolder",
+  "resources" : {
+    "0" : {
+      "type" : "ForeignKeyModel",
+      "modelId" : 0,
+      "name" : "Protector",
+      "description" : "This training allows warrior to become an impenetrable wall between his fellows and enemy",
+      "mappings" : {
+        "0" : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      }
+    },
+    "1" : {
+      "type" : "ForeignKeyModel",
+      "modelId" : 1,
+      "name" : "Elementalist",
+      "description" : "School of elemental magic concentrates on dealing primal elements' damage",
+      "mappings" : {
+        "0" : [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+      }
+    },
+    "2" : {
+      "type" : "ForeignKeyModel",
+      "modelId" : 2,
+      "name" : "Duelist",
+      "description" : "These rogues concentrate on close combat mastery, avoiding enemies' attacks and delivering merciless strikes in return",
+      "mappings" : {
+        "0" : [20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+      }
+    },
+    "3" : {
+      "type" : "ForeignKeyModel",
+      "modelId" : 3,
+      "name" : "Faith",
+      "description" : "These priests excel as support for their fellows, healing their wounds from afar",
+      "mappings" : {
+        "0" : [30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type" : "GameResourceHolder",
+  "resources" : {
+    "0" : {
+      "type" : "HybridModel",
+      "modelId" : 0,
+      "name" : "Common",
+      "description" : "Common monster",
+      "properties" : {},
+      "affectors" : {
+
+      },
+      "mappings" : {
+        "4" : [12],
+        "5" : [0]
+      }
+    },
+    "1" : {
+      "type" : "HybridModel",
+      "modelId" : 1,
+      "name" : "Tank",
+      "description" : "This monster's way tougher than his fellows",
+      "properties" : {},
+      "affectors" : {
+        "16" : {
+          "type" : "SingleValueAffector",
+          "affection" : 20
+        }
+      },
+      "mappings" : {
+        "4" : [12],
+        "5" : [0]
+      }
+    }
+  }
+}

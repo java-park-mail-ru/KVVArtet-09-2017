@@ -1,0 +1,64 @@
+{
+  "assets" : {
+    "0" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 0,
+      "name" : "of forgotten King",
+      "description" : ""
+    },
+    "1" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 1,
+      "name" : "of doomed Wraith",
+      "description" : ""
+    },
+    "2" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 2,
+      "name" : "of cursed Lord",
+      "description" : ""
+    },
+    "3" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 3,
+      "name" : "of foul Mind",
+      "description" : ""
+    },
+    "4" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 4,
+      "name" : "of despair",
+      "description" : ""
+    },
+    "5" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 5,
+      "name" : "of fire",
+      "description" : ""
+    },
+    "6" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 6,
+      "name" : "of Primal Evil",
+      "description" : ""
+    },
+    "7" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 7,
+      "name" : "of fallen Knight",
+      "description" : ""
+    },
+    "8" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 8,
+      "name" : "of eternal night",
+      "description" : ""
+    },
+    "9" : {
+      "type" : "InstanceNameDescription",
+      "modelID" : 9,
+      "name" : "of darkness",
+      "description" : ""
+    }
+  }
+}

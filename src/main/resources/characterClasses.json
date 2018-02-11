@@ -1,0 +1,89 @@
+{
+  "type" : "GameResourceHolder",
+  "resources" : {
+    "0" : {
+      "type" : "HybridModel",
+      "modelId" : 0,
+      "name" : "Warrior",
+      "description" : "Warriors're party's vanguard. Being able to wear all kinds of armor (including plate), use wide range of weapons and wield shields they become an impenetrable wall between enemies and their fellow adventurers.",
+      "properties" : {
+        "33" : {
+          "type" : "SetProperty",
+          "properties" : [0, 1]
+        },
+        "29" : {
+          "type" : "SetProperty",
+          "properties" : [0, 1, 2, 3, 4, 6, 7, 8, 12, 13]
+        }
+      },
+      "affectors" : {},
+      "mappings" : {
+        "1" : [0],
+        "3" : [0, 1, 2, 12]
+      }
+    },
+    "1" : {
+      "type" : "HybridModel",
+      "modelId" : 1,
+      "name" : "Mage",
+      "description" : "Mages're party's firepower. Concentrating and focusing magical energies into powerful spells they're able to render whole squad of enemies into ashes, but due to unability to wear anything heavier than cloth armor mage shall be properly protected.",
+      "properties" : {
+        "33" : {
+          "type" : "SetProperty",
+          "properties" : [2]
+        },
+        "29" : {
+          "type" : "SetProperty",
+          "properties" : [0, 4, 9, 12]
+        }
+      },
+      "affectors" : {},
+      "mappings" : {
+        "1" : [1],
+        "3" : [3, 4, 5, 12]
+      }
+    },
+    "2" : {
+      "type" : "HybridModel",
+      "modelId" : 2,
+      "name" : "Rogue",
+      "description" : "Rogues're party's melee attackers. Combining deadly strikes' precision with high movability they dash from one enemy to another, avoiding their blows and landing their own in return.",
+      "properties" : {
+        "33" : {
+          "type" : "SetProperty",
+          "properties" : [1, 2]
+        },
+        "29" : {
+          "type" : "SetProperty",
+          "properties" : [1, 4, 5, 10, 11, 12]
+        }
+      },
+      "affectors" : {},
+      "mappings" : {
+        "1" : [2],
+        "3" : [6, 7, 8, 12]
+      }
+    },
+    "3" : {
+      "type" : "HybridModel",
+      "modelId" : 3,
+      "name" : "Priest",
+      "description" : "Priests're those who keeps the party alive. Having relatively weak damaging potential, priests concentrate on treating their fellows' wounds.",
+      "properties" : {
+        "33" : {
+          "type" : "SetProperty",
+          "properties" : [1, 2, 3]
+        },
+        "29" : {
+          "type" : "SetProperty",
+          "properties" : [0, 2, 7, 9, 12]
+        }
+      },
+      "affectors" : {},
+      "mappings" : {
+        "1" : [3],
+        "3" : [9, 10, 11, 12]
+      }
+    }
+  }
+}
