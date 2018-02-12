@@ -3,8 +3,8 @@ package project.websocket.handlers;
 import org.springframework.stereotype.Component;
 import project.gamemechanics.world.World;
 import project.states.LobbyState;
-import project.websocket.messages.LobbyRequestMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.matchmaking.LobbyRequestMessage;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;

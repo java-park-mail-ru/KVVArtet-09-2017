@@ -5,8 +5,8 @@ import project.gamemechanics.battlefield.actionresults.ActionResult;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.interfaces.Levelable;
 import project.gamemechanics.interfaces.Updateable;
-import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.battle.ActionRequestMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;

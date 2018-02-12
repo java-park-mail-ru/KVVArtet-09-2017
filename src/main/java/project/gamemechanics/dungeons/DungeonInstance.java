@@ -12,9 +12,9 @@ import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.UserCharacterStatistics;
 import project.gamemechanics.interfaces.AliveEntity;
-import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.battle.ActionRequestMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

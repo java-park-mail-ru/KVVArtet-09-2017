@@ -23,7 +23,6 @@ public class ItemPartAsset implements ItemPart {
     private final Map<Integer, Affector> affectors;
     private final Map<Integer, Property> properties;
 
-
     public ItemPartAsset(@JsonProperty("itemPartId") @NotNull Integer itemPartId,
                          @JsonProperty("name") @NotNull String name,
                          @JsonProperty("description") @NotNull String description,

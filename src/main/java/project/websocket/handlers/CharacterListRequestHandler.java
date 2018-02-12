@@ -3,9 +3,9 @@ package project.websocket.handlers;
 import org.springframework.stereotype.Component;
 import project.gamemechanics.smartcontroller.SmartController;
 import project.states.CharacterListState;
-import project.websocket.messages.CharacterListRequestMessage;
-import project.websocket.messages.CharacterListResponseMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.charlist.CharacterListRequestMessage;
+import project.websocket.messages.charlist.CharacterListResponseMessage;
 import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;

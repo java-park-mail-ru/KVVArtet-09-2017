@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.world.World;
 import project.states.DungeonState;
-import project.websocket.messages.ActionRequestMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.battle.ActionRequestMessage;
 import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;

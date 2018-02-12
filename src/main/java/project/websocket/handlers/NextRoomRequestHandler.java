@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import project.gamemechanics.world.World;
 import project.states.DungeonState;
 import project.websocket.messages.Message;
-import project.websocket.messages.NextRoomRequestMessage;
+import project.websocket.messages.battle.NextRoomRequestMessage;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;

@@ -3,8 +3,8 @@ package project.websocket.handlers;
 import org.springframework.stereotype.Component;
 import project.gamemechanics.world.World;
 import project.states.CharacterListState;
-import project.websocket.messages.CreateCharacterRequestMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.charlist.CreateCharacterRequestMessage;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
