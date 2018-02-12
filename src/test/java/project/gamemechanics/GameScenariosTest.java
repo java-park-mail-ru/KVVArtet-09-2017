@@ -53,20 +53,24 @@ public class GameScenariosTest {
                 .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
 
         final CharactersParty party = new CharactersParty(lootPool);
-        party.addMember(firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE), firstUserCharacter);
+        assertTrue(party.addMember(
+                firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE), firstUserCharacter));
         assertEquals(party.getID(), firstUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID));
-        party.addMember(secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE), secondUserCharacter);
+        assertTrue(party.addMember(
+                secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE), secondUserCharacter));
         assertEquals(party.getID(), secondUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID));
 
         assertEquals(firstUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID),
                 secondUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID));
 
-        party.removeMember(firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE));
+        assertTrue(party.removeMember(
+                firstUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE)));
         assertNotEquals(firstUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID),
                 secondUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID));
         assertEquals(Constants.UNDEFINED_ID, Objects.requireNonNull(firstUserCharacter)
                 .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
-        party.removeMember(secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE));
+        assertTrue(party.removeMember(
+                secondUserCharacter.getProperty(PropertyCategories.PC_ACTIVE_ROLE)));
         assertNotEquals(party.getID(), secondUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID));
 
         assertEquals(firstUserCharacter.getProperty(PropertyCategories.PC_PARTY_ID),
@@ -79,7 +83,8 @@ public class GameScenariosTest {
         final DummiesFactory dummiesFactory = new DummiesFactory(assets);
         final PendingLootPool lootPool = new PendingLootPoolImpl();
 
-        final AliveEntity firstUserCharacter = dummiesFactory.makeNewDummy(0, "warrior", "");
+        final AliveEntity firstUserCharacter =
+                dummiesFactory.makeNewDummy(0, "warrior", "");
         assertNotEquals(null, firstUserCharacter );
         assertEquals(Constants.UNDEFINED_ID, Objects.requireNonNull(firstUserCharacter)
                 .getProperty(PropertyCategories.PC_PARTY_ID).intValue());
