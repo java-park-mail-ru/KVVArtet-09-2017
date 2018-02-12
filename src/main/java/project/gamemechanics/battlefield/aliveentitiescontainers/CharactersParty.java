@@ -65,16 +65,22 @@ public class CharactersParty implements Countable {
         return parsedRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
                 ? members.getOrDefault(parsedRoleId, null) != null
                 : members.getOrDefault(parsedRoleId, null) != null
-                && members.getOrDefault(CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null) != null;
+                || members.getOrDefault(
+                        CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null) != null;
     }
 
     public @NotNull Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
         Integer realRoleId = parseRoleId(roleId);
-        if (hasRole(realRoleId) || !members.containsKey(realRoleId)) {
+        if (realRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                && hasRole(realRoleId) || !members.containsKey(realRoleId)) {
             return false;
         }
-        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE && members.containsKey(realRoleId)) {
+        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                && members.get(realRoleId) != null) {
             realRoleId = CharacterRoleIds.CR_DAMAGE_DEALER_TWO;
+            if (members.get(realRoleId) != null) {
+                return false;
+            }
         }
         members.replace(realRoleId, member);
         if (member.hasProperty(PropertyCategories.PC_PARTY_ID)) {
@@ -96,7 +102,8 @@ public class CharactersParty implements Countable {
             return false;
         }
         if (members.get(realRoleId).hasProperty(PropertyCategories.PC_PARTY_ID)) {
-            members.get(realRoleId).setProperty(PropertyCategories.PC_PARTY_ID, Constants.UNDEFINED_ID);
+            members.get(realRoleId).setProperty(PropertyCategories.PC_PARTY_ID,
+                    Constants.UNDEFINED_ID);
         } else {
             members.get(realRoleId).addProperty(PropertyCategories.PC_PARTY_ID,
                     new SingleValueProperty(Constants.UNDEFINED_ID));
