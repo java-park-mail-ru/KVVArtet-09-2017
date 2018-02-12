@@ -71,8 +71,8 @@ public class CharactersParty implements Countable {
 
     public @NotNull Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
         Integer realRoleId = parseRoleId(roleId);
-        if (realRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE &&
-                hasRole(realRoleId) || !members.containsKey(realRoleId)) {
+        if (realRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                && hasRole(realRoleId) || !members.containsKey(realRoleId)) {
             return false;
         }
         if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE
