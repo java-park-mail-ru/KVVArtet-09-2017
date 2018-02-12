@@ -73,7 +73,8 @@ public class CharactersParty implements Countable {
         if (hasRole(realRoleId) || !members.containsKey(realRoleId)) {
             return false;
         }
-        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE && members.containsKey(realRoleId)) {
+        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                && members.get(realRoleId) != null) {
             realRoleId = CharacterRoleIds.CR_DAMAGE_DEALER_TWO;
         }
         members.replace(realRoleId, member);
