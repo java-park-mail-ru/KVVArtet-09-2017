@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class SerializedItemBlueprint {
-    private Integer itemId;
-    private Integer ownerID;
+    private final Integer itemId;
+    private final Integer ownerID;
     private final Integer level;
     private final Map<Integer, Integer> itemPartsIdToRarityMap;
 
