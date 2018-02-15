@@ -34,7 +34,8 @@ public class ItemFactoryImpl implements ItemsFactory {
                 ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty()
                 : EquipmentKind.EK_UNDEFINED.asInt();
 
-        final List<ItemPart> itemPartsList = getItemParts(rarity, kind, blueprint.getItemParts());
+        final List<ItemPart> itemPartsList = getItemParts(rarity, kind,
+                Objects.requireNonNull(blueprint.getItemParts()));
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));
     }
 
