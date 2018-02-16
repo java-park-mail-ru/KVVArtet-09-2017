@@ -1,6 +1,7 @@
 package project.websocket;
 
 import project.gamemechanics.smartcontroller.SmartController;
+import project.gamemechanics.smartcontroller.SmartControllerImpl;
 
 import javax.validation.constraints.NotNull;
 import java.util.Deque;
@@ -21,7 +22,7 @@ public class ConnectionPool implements ObjectivePool.SmartControllersPool {
     private void initializeNewElements() {
         final Integer fixedSize = connectionPool.size();
         for (int i = 0; i < capacity - fixedSize; ++i) {
-            connectionPool.add(new SmartController());
+            connectionPool.add(new SmartControllerImpl());
         }
     }
 
