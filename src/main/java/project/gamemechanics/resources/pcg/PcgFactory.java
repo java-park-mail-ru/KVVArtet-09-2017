@@ -67,7 +67,8 @@ public class PcgFactory implements PcgContentFactory {
                 new SingleValueProperty(ItemRarity.IR_UNDEFINED.asInt()));
         properties.put(PropertyCategories.PC_ITEM_KIND,
                 new SingleValueProperty(EquipmentKind.EK_UNDEFINED.asInt()));
-        return itemsFactory.makeItem(new ItemBlueprint(Constants.UNDEFINED_RARITY_DEFAULT_DROP_CHANCE,
+        return itemsFactory.makeItem(new ItemBlueprint(
+                Constants.UNDEFINED_RARITY_DEFAULT_DROP_CHANCE,
                 properties, parts));
     }
 
