@@ -57,6 +57,7 @@ public class UserServiceTest {
         final User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         final User settedUser = dao.setUser(newUser);
         final User user = dao.getUserByUsernameOrEmail(settedUser.getUsername());
+        //noinspection ConstantConditions,ConstantConditions
         assertTrue(user.getId() > 0);
         assertEquals("testname", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());

@@ -129,6 +129,7 @@ public class FoVTileset implements FieldOfVision {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     private static class Octant {
         private final Integer direction;
         private final MapNode source;
