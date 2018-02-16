@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class AbstractPvpPoll extends AbstractPoll {
     private final Map<Integer, CharactersParty> parties;
     private final Map<Integer, InvitationPoll> playersStatus = new HashMap<>();
