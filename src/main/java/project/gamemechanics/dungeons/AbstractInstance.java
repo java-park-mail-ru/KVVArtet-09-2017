@@ -217,10 +217,10 @@ public abstract class AbstractInstance implements Instance {
         final Integer mapWidth = map.getSize().get(DigitsPairIndices.ROW_COORD_INDEX);
         final Integer mapHeight = map.getSize().get(DigitsPairIndices.COL_COORD_INDEX);
 
-        final Integer halfWidthBegin = squad.getSquadID() ==
-                Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
-        final Integer halfWidthEnd = squad.getSquadID() ==
-                Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
+        final Integer halfWidthBegin = squad.getSquadID()
+                == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
+        final Integer halfWidthEnd = squad.getSquadID()
+                == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
 
         final Random random = new Random(System.currentTimeMillis());
 

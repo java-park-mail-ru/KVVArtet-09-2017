@@ -113,17 +113,17 @@ public class SmartControllerImpl implements SmartController {
     }
 
     @Override
-    public @NotNull Boolean set(@NotNull Integer ownerID,
-                                @NotNull WebSocketSession webSocketSession,
-                                @Nullable CharacterList characterList) {
+    public @NotNull Boolean set(@NotNull Integer newOwnerID,
+                                @NotNull WebSocketSession newWebSocketSession,
+                                @Nullable CharacterList newCharacterList) {
         if (!isValid()) {
-            this.ownerID = ownerID;
-            if (this.webSocketSession != null) {
+            ownerID = newOwnerID;
+            if (webSocketSession != null) {
                 closeConnection(CloseStatus.NORMAL);
-                this.webSocketSession = null;
+                webSocketSession = null;
             }
-            this.webSocketSession = webSocketSession;
-            this.characterList = characterList;
+            webSocketSession = newWebSocketSession;
+            characterList = newCharacterList;
             if (activeChar != null) {
                 activeChar = null;
             }
