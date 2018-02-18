@@ -3,7 +3,6 @@ package project.gamemechanics.world.matchmaking.invitations.polls;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
-import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.globals.GameModes;
 import project.gamemechanics.world.matchmaking.invitations.invitations.UserInvitation;
 
@@ -32,13 +31,13 @@ public class PvePoll extends AbstractPoll {
     @Override
     public @NotNull Map<Integer, InvitationPoll> getStatus() {
         final Map<Integer, InvitationPoll> pollStatus = new HashMap<>();
-        pollStatus.put(Squad.PLAYERS_SQUAD_ID, playerStatuses);
+        pollStatus.put(party.getID(), playerStatuses);
         return pollStatus;
     }
 
     @Override
     public @Nullable Poll.InvitationPoll getPartyAnswers(@NotNull Integer partyId) {
-        return partyId == Squad.PLAYERS_SQUAD_ID ? playerStatuses : null;
+        return partyId.equals(party.getID()) ? playerStatuses : null;
     }
 
     @Override
@@ -87,7 +86,7 @@ public class PvePoll extends AbstractPoll {
     @Override
     @JsonIgnore
     public @Nullable CharactersParty getParty(@NotNull Integer partyId) {
-        return null;
+        return partyId.equals(party.getID()) ? party : null;
     }
 
     @Override

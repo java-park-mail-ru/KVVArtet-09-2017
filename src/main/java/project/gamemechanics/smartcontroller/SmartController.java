@@ -1,6 +1,7 @@
 package project.gamemechanics.smartcontroller;
 
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
@@ -13,25 +14,29 @@ public interface SmartController {
 
     void tick();
 
-    Message getOutboxMessage();
+    @Nullable Message getOutboxMessage();
 
-    void addInboxMessage(Message message);
+    void addInboxMessage(@NotNull Message message);
 
-    UserCharacter getActiveChar();
+    @Nullable UserCharacter getActiveChar();
 
     void setActiveChar(@Nullable UserCharacter activeChar);
 
-    @NotNull CharacterList getCharacterList();
+    @Nullable CharacterList getCharacterList();
 
     void setCharacterList(@NotNull CharacterList characterList);
 
     @Nullable WebSocketSession getWebSocketSession();
 
-    void setWebSocketSession(@NotNull WebSocketSession webSocketSession);
-
     @NotNull Boolean isValid();
 
-    void setOwnerID(@NotNull Integer ownerID);
-
     @NotNull Integer getOwnerID();
+
+    void reset(@NotNull CloseStatus closeStatus);
+
+    void reset();
+
+    @NotNull Boolean set(@NotNull Integer ownerID,
+                         @NotNull WebSocketSession webSocketSession,
+                         @Nullable CharacterList characterList);
 }
