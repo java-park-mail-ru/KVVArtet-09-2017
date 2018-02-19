@@ -12,11 +12,12 @@ import java.io.IOException;
 import java.sql.ResultSet;
 
 @Service
+@SuppressWarnings("unused")
 public class ItemService implements ItemDAO {
 
-    Logger logger = Logger.getLogger(ItemService.class);
-    private JdbcTemplate jdbcTemplate;
-    private ObjectMapper mapper = new ObjectMapper();
+    private Logger logger = Logger.getLogger(ItemService.class);
+    private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper mapper = new ObjectMapper();
     private PcgFactory pcgFactory;
 
     public ItemService(JdbcTemplate jdbcTemplate) {
@@ -31,7 +32,9 @@ public class ItemService implements ItemDAO {
             try {
                 itemBlueprint = mapper.readValue(rs.getString("blueprint_json_model"), ItemBlueprint.class);
             } catch (IOException e) {
+                //CHECKSTYLE:OFF
                 //TODO: Logger
+                //CHECKSTYLE:ON
             }
             return pcgFactory.getItemsFactory().makeItem(itemBlueprint);
         });
@@ -42,7 +45,7 @@ public class ItemService implements ItemDAO {
         return null;
     }
 
-    public void bindPcgFactory(PcgFactory pcgFactory) {
-        this.pcgFactory = pcgFactory;
+    public void bindPcgFactory(PcgFactory factory) {
+        this.pcgFactory = factory;
     }
 }

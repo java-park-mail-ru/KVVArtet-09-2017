@@ -14,7 +14,7 @@ import java.util.List;
 public class BagService implements BagDAO {
 
    private final JdbcTemplate jdbcTemplate;
-   private ItemService itemService;
+   private final ItemService itemService;
 
     public BagService(JdbcTemplate jdbcTemplate, ItemService itemService) {
         this.jdbcTemplate = jdbcTemplate;
