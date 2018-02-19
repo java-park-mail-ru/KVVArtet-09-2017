@@ -2,6 +2,7 @@ package project.websocket.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -40,6 +41,7 @@ public class ConnectionPoolService {
                     }
                 }
             } else {
+                smart.reset();
                 removeUser(smart.getOwnerID());
             }
         }
@@ -52,8 +54,13 @@ public class ConnectionPoolService {
 
     public void registerUser(@NotNull Integer userId, @NotNull WebSocketSession webSocketSession) {
         final SmartController smartControllerForUser = connectionPool.getElement();
-        smartControllerForUser.setWebSocketSession(webSocketSession);
-        smartControllerForUser.setOwnerID(userId);
+        smartControllerForUser.reset();
+        //CHECKSTYLE:OFF
+        /* TODO: add some logic to load or init CharacterList
+           in order to get rid of SmartController.setCharacterList() method
+        */
+        //CHECKSTYLE:ON
+        smartControllerForUser.set(userId, webSocketSession, null);
         sessions.put(userId, smartControllerForUser);
     }
 
@@ -100,7 +107,7 @@ public class ConnectionPoolService {
         return sessions;
     }
 
-    public @NotNull SmartController getSmartController(@NotNull Integer userID) {
+    public @Nullable SmartController getSmartController(@NotNull Integer userID) {
         return sessions.get(userID);
     }
 

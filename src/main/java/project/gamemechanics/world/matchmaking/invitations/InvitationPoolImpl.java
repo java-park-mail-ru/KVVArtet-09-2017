@@ -1,5 +1,6 @@
 package project.gamemechanics.world.matchmaking.invitations;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.npcs.ai.AIBehaviors;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.dungeons.AbstractInstance;
@@ -55,27 +56,32 @@ public class InvitationPoolImpl implements InvitationPool {
     }
 
     @Override
-    public void addPoll(@NotNull CharactersParty party) {
+    public @NotNull Integer addPoll(@NotNull CharactersParty party) {
         if (!contains(party, GameModes.GM_COOP_PVE)) {
             final Poll pvePoll = new PvePoll(party);
             polls.get(GameModes.GM_COOP_PVE).put(pvePoll.getID(), pvePoll);
+            return pvePoll.getID();
         }
+        return Constants.UNDEFINED_ID;
     }
 
     @Override
-    public void addPoll(@NotNull Map<Integer, CharactersParty> parties, @NotNull Integer gameMode) {
-        if (parties.size() > DigitsPairIndices.PAIR_SIZE || gameMode == GameModes.GM_COOP_PVE
+    public @NotNull Integer addPoll(@NotNull Map<Integer, CharactersParty> parties,
+                                    @NotNull Integer gameMode) {
+        if (parties.size() > DigitsPairIndices.PAIR_SIZE
+                || gameMode == GameModes.GM_COOP_PVE
                 || gameMode == GameModes.GM_SOLO_PVE) {
-            return;
+            return Constants.UNDEFINED_ID;
         }
         for (Integer partyId : parties.keySet()) {
             if (contains(parties.get(partyId), gameMode)) {
-                return;
+                return Constants.UNDEFINED_ID;
             }
         }
         final Poll pvpPoll = gameMode == GameModes.GM_SQUAD_PVP
                 ? new SquadPvpPoll(parties) : new CoopPvpPoll(parties);
         polls.get(pvpPoll.getGameMode()).put(pvpPoll.getID(), pvpPoll);
+        return pvpPoll.getID();
     }
 
     @Override
@@ -86,6 +92,11 @@ public class InvitationPoolImpl implements InvitationPool {
                 if (poll.isReady()) {
                     final Instance instance = makeInstance(poll);
                     instancesPool.put(instance.getID(), instance);
+                    for (Integer teamId : poll.getParties().keySet()) {
+                        globalPartiesPool.put(Objects.requireNonNull(
+                                poll.getParty(teamId)).getID(),
+                                poll.getParty(teamId));
+                    }
                     // CHECKSTYLE:OFF
                     // TODO: broadcast NewInstanceMessage to all participants
                     // CHECKSTYLE:ON
@@ -101,13 +112,14 @@ public class InvitationPoolImpl implements InvitationPool {
     }
 
     @Override
-    public void updatePoll(@NotNull Integer pollId, @NotNull Integer gameMode,
-                           @NotNull Integer characterId, @NotNull Integer newStatus) {
+    public @NotNull Boolean updatePoll(@NotNull Integer pollId, @NotNull Integer gameMode,
+                                       @NotNull Integer characterId,
+                                       @NotNull Integer newStatus) {
         if (!polls.containsKey(gameMode)) {
-            return;
+            return false;
         }
         if (!polls.get(gameMode).containsKey(pollId)) {
-            return;
+            return false;
         }
         final Poll requestedPoll = polls.get(gameMode).get(pollId);
         for (Integer partyId : requestedPoll.getParties().keySet()) {
@@ -117,10 +129,22 @@ public class InvitationPoolImpl implements InvitationPool {
                         party.getMember(roleId)).getID().equals(characterId)) {
                     Objects.requireNonNull(requestedPoll.getPartyAnswers(partyId))
                             .get(roleId).setStatus(newStatus);
-                    return;
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    @Override
+    public @Nullable Poll getPoll(@NotNull Integer pollId) {
+        for (Integer gameMode : polls.keySet()) {
+           final Poll poll = polls.get(gameMode).getOrDefault(pollId, null);
+           if (poll != null) {
+               return poll;
+           }
+        }
+        return null;
     }
 
     private Boolean contains(@NotNull CharactersParty party, @NotNull Integer gameMode) {
@@ -129,7 +153,8 @@ public class InvitationPoolImpl implements InvitationPool {
             return true;
         }
         for (Integer pollId : gameModePolls.keySet()) {
-            final Map<Integer, CharactersParty> parties = gameModePolls.get(pollId).getParties();
+            final Map<Integer, CharactersParty> parties =
+                    gameModePolls.get(pollId).getParties();
             for (Integer partyId : parties.keySet()) {
                 if (parties.get(partyId).equals(party)) {
                     return true;
