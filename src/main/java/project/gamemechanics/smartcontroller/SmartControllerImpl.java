@@ -1,15 +1,18 @@
 package project.gamemechanics.smartcontroller;
 
 import org.jetbrains.annotations.Nullable;
+
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
 import project.gamemechanics.globals.Constants;
+
 import project.statemachine.StateService;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -53,6 +56,7 @@ public class SmartControllerImpl implements SmartController {
 
     @Override
     public void setActiveChar(@Nullable UserCharacter activeChar) {
+
         final Boolean belongsToUser = activeChar != null
                 && characterList.getCharacterList().contains(activeChar)
                 && activeChar.getOwnerID().equals(ownerID);
@@ -68,6 +72,7 @@ public class SmartControllerImpl implements SmartController {
 
     @Override
     public void setCharacterList(@NotNull CharacterList characterList) {
+
         if (this.characterList == null) {
             this.characterList = characterList;
         }
