@@ -20,7 +20,7 @@ public class UserInvitation implements Invitation {
 
     @Override
     public void setStatus(@NotNull Integer status) {
-        if (status != VS_EXPIRED) {
+        if (this.status != VS_EXPIRED) {
             this.status = status;
         }
     }

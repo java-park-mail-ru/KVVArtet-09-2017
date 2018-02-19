@@ -254,7 +254,7 @@ public class Battlefield implements Updateable {
                 }
             }
         }
-        squads.set(Squad.MONSTER_SQUAD_ID, monsterSquad);
+        squads.add(Squad.MONSTER_SQUAD_ID, monsterSquad);
     }
 
     private void removeDead() {

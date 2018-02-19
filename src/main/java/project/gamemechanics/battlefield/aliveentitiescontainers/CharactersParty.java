@@ -65,27 +65,35 @@ public class CharactersParty implements Countable {
         return parsedRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
                 ? members.getOrDefault(parsedRoleId, null) != null
                 : members.getOrDefault(parsedRoleId, null) != null
-                && members.getOrDefault(CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null) != null;
+                || members.getOrDefault(
+                        CharacterRoleIds.CR_DAMAGE_DEALER_TWO, null) != null;
     }
 
     public @NotNull Boolean addMember(@NotNull Integer roleId, @NotNull AliveEntity member) {
         Integer realRoleId = parseRoleId(roleId);
-        if (hasRole(realRoleId) || !members.containsKey(realRoleId)) {
+        if (realRoleId != CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                && hasRole(realRoleId) || !members.containsKey(realRoleId)) {
             return false;
         }
-        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE && members.containsKey(realRoleId)) {
+        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                && members.get(realRoleId) != null) {
             realRoleId = CharacterRoleIds.CR_DAMAGE_DEALER_TWO;
+            if (members.get(realRoleId) != null) {
+                return false;
+            }
         }
         members.replace(realRoleId, member);
         if (member.hasProperty(PropertyCategories.PC_PARTY_ID)) {
             member.setProperty(PropertyCategories.PC_PARTY_ID, partyID);
         } else {
-            member.addProperty(PropertyCategories.PC_PARTY_ID, new SingleValueProperty(partyID));
+            member.addProperty(PropertyCategories.PC_PARTY_ID,
+                    new SingleValueProperty(partyID));
         }
         if (member.hasProperty(PropertyCategories.PC_ACTIVE_ROLE)) {
             member.setProperty(PropertyCategories.PC_ACTIVE_ROLE, realRoleId);
         } else {
-            member.addProperty(PropertyCategories.PC_ACTIVE_ROLE, new SingleValueProperty(realRoleId));
+            member.addProperty(PropertyCategories.PC_ACTIVE_ROLE,
+                    new SingleValueProperty(realRoleId));
         }
         return true;
     }
@@ -96,7 +104,8 @@ public class CharactersParty implements Countable {
             return false;
         }
         if (members.get(realRoleId).hasProperty(PropertyCategories.PC_PARTY_ID)) {
-            members.get(realRoleId).setProperty(PropertyCategories.PC_PARTY_ID, Constants.UNDEFINED_ID);
+            members.get(realRoleId).setProperty(PropertyCategories.PC_PARTY_ID,
+                    Constants.UNDEFINED_ID);
         } else {
             members.get(realRoleId).addProperty(PropertyCategories.PC_PARTY_ID,
                     new SingleValueProperty(Constants.UNDEFINED_ID));
@@ -146,7 +155,8 @@ public class CharactersParty implements Countable {
     }
 
     public void giveRewardForInstance(@NotNull Integer roleId, @NotNull Integer extraExp,
-                                      @NotNull Integer extraGold, @Nullable ItemsFactory itemsFactory) {
+                                      @NotNull Integer extraGold,
+                                      @Nullable ItemsFactory itemsFactory) {
         final AliveEntity member = members.get(roleId);
         if (member == null) {
             return;
@@ -161,7 +171,8 @@ public class CharactersParty implements Countable {
             for (Integer i = ItemPart.FIRST_PART_ID; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
                 itemParts.put(i, Constants.UNDEFINED_ID);
             }
-            final Set<Integer> equipableKinds = member.getCharacterRole().getEquipableKinds();
+            final Set<Integer> equipableKinds =
+                    member.getCharacterRole().getEquipableKinds();
             final List<Integer> availableEquipmentKinds;
             if (equipableKinds != null) {
                 availableEquipmentKinds = new ArrayList<>(equipableKinds);
@@ -190,7 +201,8 @@ public class CharactersParty implements Countable {
                         new SingleValueProperty(ItemRarity.IR_UNDEFINED.asInt());
                 properties.put(PropertyCategories.PC_ITEM_RARITY, rarityProperty);
 
-                properties.put(PropertyCategories.PC_ITEM_KIND, new SingleValueProperty(equipmentKind));
+                properties.put(PropertyCategories.PC_ITEM_KIND,
+                        new SingleValueProperty(equipmentKind));
                 lootPool.offerItemToPool(member, itemsFactory.makeItem(new ItemBlueprint(
                         Constants.WIDE_PERCENTAGE_CAP_INT, properties, itemParts)));
             }

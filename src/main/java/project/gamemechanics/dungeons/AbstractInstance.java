@@ -58,7 +58,8 @@ public abstract class AbstractInstance implements Instance {
 
         AbstractInstanceModel(@NotNull String name, @NotNull String description,
                               @NotNull Integer gameMode, @NotNull Integer level,
-                              @NotNull Integer roomsCount, @NotNull PcgContentFactory factory,
+                              @NotNull Integer roomsCount,
+                              @NotNull PcgContentFactory factory,
                               @NotNull List<CharactersParty> squads) {
             this.name = name;
             this.description = description;
@@ -78,7 +79,8 @@ public abstract class AbstractInstance implements Instance {
                                     @NotNull PcgContentFactory factory,
                                     @NotNull List<CharactersParty> squads,
                                     @NotNull Map<Integer, AI.BehaviorFunction> behaviors) {
-            super(name, description, Battlefield.PVE_GAME_MODE, level, roomsCount, factory, squads);
+            super(name, description, Battlefield.PVE_GAME_MODE, level,
+                    roomsCount, factory, squads);
             this.behaviors = behaviors;
         }
     }
@@ -89,7 +91,8 @@ public abstract class AbstractInstance implements Instance {
                                  @NotNull Integer level,
                                  @NotNull PcgContentFactory factory,
                                  @NotNull List<CharactersParty> squads) {
-            super(name, description, Battlefield.PVP_GAME_MODE, level, 1, factory, squads);
+            super(name, description, Battlefield.PVP_GAME_MODE,
+                    level, 1, factory, squads);
         }
     }
 
@@ -203,7 +206,9 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
-    private @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
+    private @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad,
+                                                @NotNull Integer sideSize,
+                                                @NotNull BattleMap map,
                                                 @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
@@ -212,8 +217,10 @@ public abstract class AbstractInstance implements Instance {
         final Integer mapWidth = map.getSize().get(DigitsPairIndices.ROW_COORD_INDEX);
         final Integer mapHeight = map.getSize().get(DigitsPairIndices.COL_COORD_INDEX);
 
-        final Integer halfWidthBegin = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
-        final Integer halfWidthEnd = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
+        final Integer halfWidthBegin = squad.getSquadID()
+                == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
+        final Integer halfWidthEnd = squad.getSquadID()
+                == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
 
         final Random random = new Random(System.currentTimeMillis());
 
@@ -229,7 +236,8 @@ public abstract class AbstractInstance implements Instance {
             final Set<MapNode> rowCenters = new HashSet<>();
             rowCenters.add(spawnPointCenter);
             final Integer halfSide = (sideSize - 1) / 2;
-            MapNode upperRowCenter = Objects.requireNonNull(spawnPointCenter).getAdjacent(Directions.UP);
+            MapNode upperRowCenter = Objects.requireNonNull(spawnPointCenter)
+                    .getAdjacent(Directions.UP);
             MapNode lowerRowCenter = spawnPointCenter.getAdjacent(Directions.DOWN);
             for (Integer i = 0; i < halfSide; ++i) {
                 if (upperRowCenter != null) {
@@ -279,11 +287,13 @@ public abstract class AbstractInstance implements Instance {
     }
 
 
-    @NotNull List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
+    @NotNull List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList,
+                                                    @NotNull BattleMap map) {
         final List<SpawnPoint> spawnPoints = new ArrayList<>();
         final Set<MapNode> reservedNodes = new HashSet<>();
         for (Squad squad : squadList) {
-            final SpawnPoint spawnPoint = new SpawnPoint(Objects.requireNonNull(emplaceSpawnPoint(squad,
+            final SpawnPoint spawnPoint = new SpawnPoint(
+                    Objects.requireNonNull(emplaceSpawnPoint(squad,
                     Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, map, reservedNodes)),
                     Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
             spawnPoints.add(spawnPoint);

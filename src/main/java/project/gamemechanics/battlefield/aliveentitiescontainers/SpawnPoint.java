@@ -1,6 +1,5 @@
 package project.gamemechanics.battlefield.aliveentitiescontainers;
 
-import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
 import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.MapNode;
@@ -33,21 +32,13 @@ public class SpawnPoint {
         final Integer halfSide = (spawnAreaSide - 1) / 2;
         // get all spawn area row centers
         MapNode upperRow = center.getAdjacent(Directions.UP);
-        while (center.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
-                - upperRow.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX) < halfSide) {
-            if (upperRow == null) {
-                break;
-            }
+        while (upperRow != null && center.getH(upperRow) <= halfSide) {
             rowCenters.add(upperRow);
             upperRow = upperRow.getAdjacent(Directions.UP);
         }
         rowCenters.add(center);
         MapNode lowerRow = center.getAdjacent(Directions.DOWN);
-        while (lowerRow.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX)
-                - center.getCoordinate(DigitsPairIndices.ROW_COORD_INDEX) < halfSide) {
-            if (lowerRow == null) {
-                break;
-            }
+        while (lowerRow != null && center.getH(lowerRow) <= halfSide) {
             rowCenters.add(lowerRow);
             lowerRow = lowerRow.getAdjacent(Directions.DOWN);
         }
@@ -55,21 +46,13 @@ public class SpawnPoint {
         // via each row center get a spawn area row
         for (MapNode tile : rowCenters) {
             MapNode leftCol = tile.getAdjacent(Directions.LEFT);
-            while (tile.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
-                    - leftCol.getCoordinate(DigitsPairIndices.COL_COORD_INDEX) < halfSide) {
-                if (leftCol == null) {
-                    break;
-                }
+            while (leftCol != null && tile.getH(leftCol) <= halfSide) {
                 spawnArea.add(leftCol);
                 leftCol = leftCol.getAdjacent(Directions.LEFT);
             }
             spawnArea.add(tile);
             MapNode rightCol = tile.getAdjacent(Directions.RIGHT);
-            while (rightCol.getCoordinate(DigitsPairIndices.COL_COORD_INDEX)
-                    - tile.getCoordinate(DigitsPairIndices.COL_COORD_INDEX) < halfSide) {
-                if (rightCol == null) {
-                    break;
-                }
+            while (rightCol != null && tile.getH(rightCol) <= halfSide) {
                 spawnArea.add(rightCol);
                 rightCol = rightCol.getAdjacent(Directions.RIGHT);
             }
@@ -81,7 +64,7 @@ public class SpawnPoint {
                 final Random random = new Random(System.currentTimeMillis());
                 Integer randomTileIndex = random.nextInt(spawnArea.size());
                 while (spawnArea.get(randomTileIndex).isOccupied()
-                        || spawnArea.get(randomTileIndex).getIsPassable()) {
+                        || !spawnArea.get(randomTileIndex).getIsPassable()) {
                     randomTileIndex = random.nextInt(spawnArea.size());
                 }
                 // placing battler on the tile and give him its coordinates
