@@ -45,8 +45,9 @@ public class StorageBag implements Bag {
         final List<EquipableItem> contents;
         // CHECKSTYLE:ON
 
-        public FilledBagModel(@NotNull Integer id, @NotNull String name,
-                              @NotNull String description, @NotNull List<EquipableItem> contents) {
+        public FilledBagModel(@JsonProperty("id") @NotNull Integer id, @JsonProperty("name") @NotNull String name,
+                              @JsonProperty("description") @NotNull String description,
+                              @JsonProperty("contents") @NotNull List<EquipableItem> contents) {
             this.id = id;
             this.name = name;
             this.description = description;
