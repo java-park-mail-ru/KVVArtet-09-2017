@@ -15,8 +15,6 @@ import project.websocket.services.ConnectionPoolService;
 
 import java.io.IOException;
 
-import static org.springframework.web.socket.CloseStatus.SERVER_ERROR;
-
 
 @SuppressWarnings("OverlyBroadCatchBlock")
 public class GameSocketHandler extends TextWebSocketHandler {
@@ -41,7 +39,8 @@ public class GameSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(@NotNull WebSocketSession webSocketSession) {
         final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
         if (userId == null || userService.getUserById(userId) == null) {
-            LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
+            LOGGER.warn("User requested websocket is not registred or not logged in."
+                    + "Openning websocket session is denied.");
             closeSessionSilently(webSocketSession);
             return;
         }
@@ -96,10 +95,9 @@ public class GameSocketHandler extends TextWebSocketHandler {
     }
 
     private void closeSessionSilently(@NotNull WebSocketSession session) {
-        final CloseStatus status = GameSocketHandler.ACCESS_DENIED == null ? SERVER_ERROR : GameSocketHandler.ACCESS_DENIED;
         // CHECKSTYLE:OFF
         try {
-            session.close(status);
+            session.close(GameSocketHandler.ACCESS_DENIED);
         } catch (Exception ignore) {
         }
         // CHECKSTYLE:ON

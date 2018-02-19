@@ -63,7 +63,8 @@ public class LobbyImpl implements Lobby {
 
     @Override
     @SuppressWarnings("OverlyComplexMethod")
-    public @NotNull Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
+    public @NotNull Message enqueue(@NotNull AliveEntity character,
+                                    @NotNull Integer gameMode) {
         if (!queuedCharacters.containsKey(gameMode)) {
             return new ErrorMessage("unknown game mode");
         }
@@ -105,9 +106,11 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public @NotNull Message enqueue(@NotNull CharactersParty party, @NotNull Integer gameMode) {
+    public @NotNull Message enqueue(@NotNull CharactersParty party,
+                                    @NotNull Integer gameMode) {
         if (!wipPartiesPool.containsKey(gameMode)) {
-            // as PvP modes always require enqueuing, we check if that non-enqueuing mode is a PvE one
+            // as PvP modes always require enqueuing,
+            // we check if that non-enqueuing mode is a PvE one
             if (!GameModes.isPve(gameMode)) {
                 return new ErrorMessage("unknown game mode");
             } else {
@@ -145,14 +148,16 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public @NotNull Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode) {
+    public @NotNull Message dequeue(@NotNull AliveEntity character,
+                                    @NotNull Integer gameMode) {
         dequeueCharacterFromQueue(character, gameMode);
         dequeueCharacterFromParties(character, gameMode);
         return new LobbyConfirmationMessage();
     }
 
     @Override
-    public @NotNull Message dequeue(@NotNull CharactersParty party, @NotNull Boolean dismissParty) {
+    public @NotNull Message dequeue(@NotNull CharactersParty party,
+                                    @NotNull Boolean dismissParty) {
         for (Integer gameMode : wipPartiesPool.keySet()) {
             if (wipPartiesPool.get(gameMode).contains(party)) {
                 wipPartiesPool.get(gameMode).remove(party);
@@ -212,10 +217,13 @@ public class LobbyImpl implements Lobby {
         }
     }
 
-    private void fillGameModeQueueWithRoles(@NotNull Map<Integer, Deque<AliveEntity>> gameModeQueue) {
+    private void fillGameModeQueueWithRoles(
+            @NotNull Map<Integer, Deque<AliveEntity>> gameModeQueue) {
         gameModeQueue.put(CharacterRoleIds.CR_TANK, new ConcurrentLinkedDeque<>());
-        gameModeQueue.put(CharacterRoleIds.CR_MELEE_DAMAGE_DEALER, new ConcurrentLinkedDeque<>());
-        gameModeQueue.put(CharacterRoleIds.CR_RANGED_DAMAGE_DEALER, new ConcurrentLinkedDeque<>());
+        gameModeQueue.put(CharacterRoleIds.CR_MELEE_DAMAGE_DEALER,
+                new ConcurrentLinkedDeque<>());
+        gameModeQueue.put(CharacterRoleIds.CR_RANGED_DAMAGE_DEALER,
+                new ConcurrentLinkedDeque<>());
         gameModeQueue.put(CharacterRoleIds.CR_SUPPORT, new ConcurrentLinkedDeque<>());
     }
 
@@ -242,10 +250,12 @@ public class LobbyImpl implements Lobby {
 
     private @NotNull AbstractInstance.DungeonInstanceModel makePveInstanceModel(
             @NotNull List<CharactersParty> parties) {
-        final List<String> instanceNameDescription = assetProvider.makeInstanceNameDescription();
+        final List<String> instanceNameDescription =
+                assetProvider.makeInstanceNameDescription();
         return new AbstractInstance.DungeonInstanceModel(instanceNameDescription.get(0),
                         instanceNameDescription.get(1), parties.get(0).getAverageLevel(),
-                        Constants.DEFAULT_ROOMS_COUNT, factory, parties, AIBehaviors.getAllBehaviors());
+                        Constants.DEFAULT_ROOMS_COUNT, factory,
+                parties, AIBehaviors.getAllBehaviors());
     }
 
     private void traversePartiesQueue() {
@@ -274,6 +284,7 @@ public class LobbyImpl implements Lobby {
                     } else {
                         invitationService.addPoll(party);
                     }
+                    wipPartiesPool.get(gameMode).remove(party);
                 }
             }
         }

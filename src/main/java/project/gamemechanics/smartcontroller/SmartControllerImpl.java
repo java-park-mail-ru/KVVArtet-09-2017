@@ -1,33 +1,37 @@
 package project.gamemechanics.smartcontroller;
 
 import org.jetbrains.annotations.Nullable;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.globals.Constants;
 import project.statemachine.StateService;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class SmartControllerImpl implements SmartController {
     private final Deque<Message> inboxMessageQueue = new ArrayDeque<>();
     private final Deque<Message> outboxMessageQueue = new ArrayDeque<>();
-    private UserCharacter activeChar;
-    private CharacterList characterList;
+
+    private UserCharacter activeChar = null;
+    private CharacterList characterList = null;
     private final StateService stateService = new StateService();
-    private WebSocketSession webSocketSession;
-    private Integer ownerID;
+    private WebSocketSession webSocketSession = null;
+    private Integer ownerID = Constants.UNDEFINED_ID;
 
     @Override
     public void tick() {
         while (!inboxMessageQueue.isEmpty()) {
-            outboxMessageQueue.add(stateService.handleMessage(inboxMessageQueue.getFirst(), this.ownerID));
+            outboxMessageQueue.add(stateService
+                    .handleMessage(inboxMessageQueue.getFirst(), this.ownerID));
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public @Nullable Message getOutboxMessage() {
         if (outboxMessageQueue.isEmpty()) {
@@ -49,17 +53,24 @@ public class SmartControllerImpl implements SmartController {
 
     @Override
     public void setActiveChar(@Nullable UserCharacter activeChar) {
-        this.activeChar = activeChar;
+        final Boolean belongsToUser = activeChar != null
+                && characterList.getCharacterList().contains(activeChar)
+                && activeChar.getOwnerID().equals(ownerID);
+        if (isValid() && (activeChar == null || belongsToUser)) {
+            this.activeChar = activeChar;
+        }
     }
 
     @Override
-    public @NotNull CharacterList getCharacterList() {
+    public @Nullable CharacterList getCharacterList() {
         return characterList;
     }
 
     @Override
     public void setCharacterList(@NotNull CharacterList characterList) {
-        this.characterList = characterList;
+        if (this.characterList == null) {
+            this.characterList = characterList;
+        }
     }
 
     @Override
@@ -68,22 +79,72 @@ public class SmartControllerImpl implements SmartController {
     }
 
     @Override
-    public void setWebSocketSession(@NotNull WebSocketSession webSocketSession) {
-        this.webSocketSession = webSocketSession;
-    }
-
-    @Override
     public @NotNull Boolean isValid() {
-        return webSocketSession.isOpen();
-    }
-
-    @Override
-    public void setOwnerID(@NotNull Integer ownerID) {
-        this.ownerID = ownerID;
+        //noinspection OverlyComplexBooleanExpression
+        return ownerID != Constants.UNDEFINED_ID
+                && webSocketSession != null
+                && webSocketSession.isOpen()
+                && characterList != null;
     }
 
     @Override
     public @NotNull Integer getOwnerID() {
         return ownerID;
+    }
+
+    @Override
+    public void reset(@NotNull CloseStatus closeStatus) {
+        ownerID = Constants.UNDEFINED_ID;
+        closeConnection(closeStatus);
+        webSocketSession = null;
+        characterList = null;
+        activeChar = null;
+        if (!inboxMessageQueue.isEmpty()) {
+            inboxMessageQueue.clear();
+        }
+        if (!outboxMessageQueue.isEmpty()) {
+            outboxMessageQueue.clear();
+        }
+    }
+
+    @Override
+    public void reset() {
+        reset(CloseStatus.NORMAL);
+    }
+
+    @Override
+    public @NotNull Boolean set(@NotNull Integer newOwnerID,
+                                @NotNull WebSocketSession newWebSocketSession,
+                                @Nullable CharacterList newCharacterList) {
+        if (!isValid()) {
+            ownerID = newOwnerID;
+            if (webSocketSession != null) {
+                closeConnection(CloseStatus.NORMAL);
+                webSocketSession = null;
+            }
+            webSocketSession = newWebSocketSession;
+            characterList = newCharacterList;
+            if (activeChar != null) {
+                activeChar = null;
+            }
+            if (!inboxMessageQueue.isEmpty()) {
+                inboxMessageQueue.clear();
+            }
+            if (!outboxMessageQueue.isEmpty()) {
+                outboxMessageQueue.clear();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void closeConnection(@NotNull CloseStatus closeStatus) {
+        if (isValid()) {
+            try {
+                webSocketSession.close(closeStatus);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
