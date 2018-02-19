@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS JSONB;
-
 CREATE TABLE IF NOT EXISTS public.character_list (
   id serial PRIMARY KEY NOT NULL,
   characters_ids integer[]
