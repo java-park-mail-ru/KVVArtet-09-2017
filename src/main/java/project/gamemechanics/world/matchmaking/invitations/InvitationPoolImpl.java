@@ -7,6 +7,7 @@ import project.gamemechanics.dungeons.AbstractInstance;
 import project.gamemechanics.dungeons.DungeonInstance;
 import project.gamemechanics.dungeons.Instance;
 import project.gamemechanics.dungeons.LandInstance;
+import project.gamemechanics.globals.CharacterRoleIds;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.GameModes;
@@ -101,6 +102,7 @@ public class InvitationPoolImpl implements InvitationPool {
                     // TODO: broadcast NewInstanceMessage to all participants
                     // CHECKSTYLE:ON
                     polls.get(gameMode).remove(pollId);
+                    continue;
                 }
                 poll.update();
                 if (poll.isExpired() || poll.isCanceled()) {
@@ -168,12 +170,14 @@ public class InvitationPoolImpl implements InvitationPool {
     private void broadcast(@NotNull CharactersParty party, @NotNull Message message) {
         final Map<Integer, SmartController> broadcastPool = new HashMap<>();
         for (Integer roleId : party.getRoleIds()) {
-            final Integer ownerId = Objects.requireNonNull(party.getMember(roleId))
-                    .getOwnerID();
-            final SmartController controller = smartControllersPool.getOrDefault(ownerId,
-                    null);
-            if (controller != null && !broadcastPool.containsKey(ownerId)) {
-                broadcastPool.put(ownerId, controller);
+            if (party.getMember(roleId) != null) {
+                final Integer ownerId = Objects.requireNonNull(
+                        party.getMember(roleId)).getOwnerID();
+                final SmartController controller =
+                        smartControllersPool.getOrDefault(ownerId,null);
+                if (controller != null && !broadcastPool.containsKey(ownerId)) {
+                    broadcastPool.put(ownerId, controller);
+                }
             }
         }
         for (Integer userId : broadcastPool.keySet()) {
@@ -246,12 +250,18 @@ public class InvitationPoolImpl implements InvitationPool {
         }
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private void processCanceledOrExpired(@NotNull Poll poll) {
         final Map<Integer, Poll.InvitationPoll> answers = poll.getStatus();
         final Map<Integer, CharactersParty> parties = poll.getParties();
+        final List<Integer> ownerId = new ArrayList<>();
 
         for (Integer partyId : answers.keySet()) {
             final Boolean isExpired = poll.isExpired();
+            if (poll.getGameMode() == GameModes.GM_SQUAD_PVP) {
+                ownerId.add(Objects.requireNonNull(parties.get(partyId)
+                        .getMember(CharacterRoleIds.CR_TANK)).getOwnerID());
+            }
             for (Integer roleId : answers.get(partyId).keySet()) {
                 if (answers.get(partyId).get(roleId).isCancel()
                         || answers.get(partyId).get(roleId).isExpired()) {
@@ -263,26 +273,40 @@ public class InvitationPoolImpl implements InvitationPool {
                                 "you were removed from queue. Reason: timeout expired";
                     } else {
                         notification =
-                                "you've declined the invitation and were removed from the queue";
+                                "you've declined the invitation "
+                                        + "and were removed from the queue";
                     }
-                    sendMessageTo(member, new MatchmakingNotificationMessage(notification));
+                    if (roleId == CharacterRoleIds.CR_TANK
+                            || poll.getGameMode() != GameModes.GM_SQUAD_PVP) {
+                        sendMessageTo(member,
+                                new MatchmakingNotificationMessage(notification));
+                    }
                     parties.get(partyId).removeMember(roleId);
                 }
             }
             if (globalPartiesPool.containsKey(partyId)) {
                 globalPartiesPool.remove(partyId);
             }
-            if (!wipPartiesPool.get(poll.getGameMode()).contains(parties.get(partyId))) {
+            if (!wipPartiesPool.get(poll.getGameMode()).contains(parties.get(partyId))
+                    && parties.get(partyId).getPartySize() > 0) {
                 wipPartiesPool.get(poll.getGameMode()).offerFirst(parties.get(partyId));
             }
             final String notification;
             if (isExpired) {
-                notification = "your party was returned to the queue. Reason: timeout expired";
+                notification = "your party was returned to "
+                        + "the queue. Reason: timeout expired";
             } else {
                 notification = "someone has declined an invitation."
                         + " Your party was returned to the top of the queue.";
             }
-            broadcast(parties.get(partyId), new MatchmakingNotificationMessage(notification));
+            broadcast(parties.get(partyId),
+                    new MatchmakingNotificationMessage(notification));
+            if (poll.getGameMode() == GameModes.GM_SQUAD_PVP) {
+                for (Integer address : ownerId) {
+                    smartControllersPool.get(address).addInboxMessage(
+                            new MatchmakingNotificationMessage(notification));
+                }
+            }
         }
     }
 }

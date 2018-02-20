@@ -27,7 +27,7 @@ public class UserInvitation implements Invitation {
 
     @Override
     public void update() {
-        if (lifetime < TIMEOUT_LOOPS_COUNT) {
+        if (lifetime < TIMEOUT_LOOPS_COUNT - 1) {
             ++lifetime;
         } else {
             status = VS_EXPIRED;
