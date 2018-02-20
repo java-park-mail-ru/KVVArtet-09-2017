@@ -174,7 +174,7 @@ public class InvitationPoolImpl implements InvitationPool {
                 final Integer ownerId = Objects.requireNonNull(
                         party.getMember(roleId)).getOwnerID();
                 final SmartController controller =
-                        smartControllersPool.getOrDefault(ownerId,null);
+                        smartControllersPool.getOrDefault(ownerId, null);
                 if (controller != null && !broadcastPool.containsKey(ownerId)) {
                     broadcastPool.put(ownerId, controller);
                 }
