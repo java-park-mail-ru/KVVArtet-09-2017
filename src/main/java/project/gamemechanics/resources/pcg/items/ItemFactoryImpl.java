@@ -15,7 +15,8 @@ import java.util.*;
 public class ItemFactoryImpl implements ItemsFactory {
     private final Map<Integer, Map<Integer, ItemPart>> itemParts;
 
-    public ItemFactoryImpl(@JsonProperty("itemParts") @NotNull Map<Integer, Map<Integer, ItemPart>> itemParts) {
+    public ItemFactoryImpl(@JsonProperty("itemParts")
+                           @NotNull Map<Integer, Map<Integer, ItemPart>> itemParts) {
         this.itemParts = itemParts;
     }
 
@@ -27,16 +28,21 @@ public class ItemFactoryImpl implements ItemsFactory {
         }
 
         final Random random = new Random(System.currentTimeMillis());
-        final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL)
+        final Integer level = blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_LEVEL)
                 ? blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty()
                 : random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
 
-        final Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY)
-                ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_RARITY).getProperty()
+        final Integer rarity = blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_ITEM_RARITY)
+                ? blueprint.getProperties().get(
+                        PropertyCategories.PC_ITEM_RARITY).getProperty()
                 : ItemRarity.IR_UNDEFINED.asInt();
 
-        final Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND)
-                ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty()
+        final Integer kind = blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_ITEM_KIND)
+                ? blueprint.getProperties().get(
+                        PropertyCategories.PC_ITEM_KIND).getProperty()
                 : EquipmentKind.EK_UNDEFINED.asInt();
 
         final List<ItemPart> itemPartsList = getItemParts(rarity, kind,
@@ -53,34 +59,43 @@ public class ItemFactoryImpl implements ItemsFactory {
         return parts;
     }
 
-    private @NotNull List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
+    private @NotNull List<ItemPart> getItemParts(@NotNull Integer rarity,
+                                                 @NotNull Integer kind,
                                                  @NotNull Map<Integer, Integer> itemPartsList) {
         final Random random = new Random(System.currentTimeMillis());
         final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
 
-        for (Integer itemPartIndex = ItemPart.FIRST_PART_ID; itemPartIndex < ItemPart.ITEM_PARTS_COUNT;
-             ++itemPartIndex) {
+        for (Integer itemPartIndex = ItemPart.FIRST_PART_ID;
+             itemPartIndex < ItemPart.ITEM_PARTS_COUNT; ++itemPartIndex) {
             final Map<Integer, ItemPart> partsScope = this.itemParts.get(itemPartIndex);
             final List<Integer> scopePartsIds = new ArrayList<>(partsScope.keySet());
 
             Integer partId = itemPartsList.get(itemPartIndex);
             if (partId < Constants.MIN_ID_VALUE) {
                 while (true) {
-                    final Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
+                    final Integer tmpId = scopePartsIds.get(
+                            random.nextInt(scopePartsIds.size()));
                     if (kind.equals(EquipmentKind.EK_UNDEFINED.asInt())) {
-                        kind = partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND);
+                        kind = partsScope.get(tmpId).getProperty(
+                                PropertyCategories.PC_ITEM_KIND);
                         partId = tmpId;
                         break;
                     }
-                    if (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND).equals(kind)
-                            && (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY).equals(rarity)
-                                || partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY)
+                    if (partsScope.get(tmpId).getProperty(
+                            PropertyCategories.PC_ITEM_KIND).equals(kind)
+                            && (partsScope.get(tmpId).getProperty(
+                                    PropertyCategories.PC_ITEM_RARITY).equals(rarity)
+                                || partsScope.get(tmpId).getProperty(
+                                        PropertyCategories.PC_ITEM_RARITY)
                                 <= ItemRarity.IR_COMMON.asInt())) {
                         if (!parts.isEmpty()
-                                && Objects.requireNonNull(partsScope.get(tmpId).getAllProperties()
-                                .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet())
+                                && Objects.requireNonNull(
+                                        partsScope.get(tmpId).getAllProperties()
+                                .get(PropertyCategories.PC_ITEM_SLOTS)
+                                                .getPropertySet())
                                 .equals(parts.get(itemPartIndex - 1).getAllProperties()
-                                        .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet())) {
+                                        .get(PropertyCategories.PC_ITEM_SLOTS)
+                                        .getPropertySet())) {
                             partId = tmpId;
                             break;
                         }
@@ -88,18 +103,21 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
                 parts.add(partsScope.get(partId));
             } else {
-                parts.add(this.itemParts.get(itemPartIndex).get(itemPartsList.get(itemPartIndex)));
+                parts.add(this.itemParts.get(itemPartIndex)
+                        .get(itemPartsList.get(itemPartIndex)));
             }
         }
 
         return parts;
     }
 
-    private @NotNull IngameItem.ItemModel restoreItemModel(@NotNull Map<Integer, Property> properties) {
+    private @NotNull IngameItem.ItemModel restoreItemModel(
+            @NotNull Map<Integer, Property> properties) {
         final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
         for (Integer i : Objects.requireNonNull(properties.get(
                 PropertyCategories.PC_ITEM_PARTS_IDS).getPropertyMap()).keySet()) {
-            partRarities.add(i, properties.get(PropertyCategories.PC_ITEM_PARTS_IDS).getProperty(i));
+            partRarities.add(i, properties.get(
+                    PropertyCategories.PC_ITEM_PARTS_IDS).getProperty(i));
         }
 
         final List<ItemPart> parts = getItemParts(Objects.requireNonNull(
@@ -127,13 +145,17 @@ public class ItemFactoryImpl implements ItemsFactory {
         }
         description.deleteCharAt(description.length() - 1);
         final Integer level = properties.get(PropertyCategories.PC_LEVEL).getProperty();
-        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
-        final Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
-        final Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
+        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL
+                * (level - Constants.START_LEVEL);
+        final Map<Integer, Affector> mergedAffectors =
+                mergeAffectors(parts, partRarities, percentage);
+        final Map<Integer, Property> mergedProperties =
+                mergeProperties(parts, partRarities, percentage);
         if (mergedProperties.containsKey(PropertyCategories.PC_LEVEL)) {
             mergedProperties.get(PropertyCategories.PC_LEVEL).setSingleProperty(level);
         } else {
-            mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+            mergedProperties.put(PropertyCategories.PC_LEVEL,
+                    new SingleValueProperty(level));
         }
         if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_IDS)) {
             mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_IDS,
@@ -189,13 +211,17 @@ public class ItemFactoryImpl implements ItemsFactory {
         }
         description.deleteCharAt(description.length() - 1);
 
-        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
-        final Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
-        final Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
+        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL
+                * (level - Constants.START_LEVEL);
+        final Map<Integer, Affector> mergedAffectors =
+                mergeAffectors(parts, partRarities, percentage);
+        final Map<Integer, Property> mergedProperties =
+                mergeProperties(parts, partRarities, percentage);
         if (mergedProperties.containsKey(PropertyCategories.PC_LEVEL)) {
                 mergedProperties.get(PropertyCategories.PC_LEVEL).setSingleProperty(level);
         } else {
-            mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+            mergedProperties.put(PropertyCategories.PC_LEVEL,
+                    new SingleValueProperty(level));
         }
         final Map<Integer, Integer> itemPartsRarities = new HashMap<>();
         for (Integer i = 0; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
@@ -219,7 +245,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_RARITIES,
                     new MapProperty(itemPartsRarities));
         }
-        return new IngameItem.ItemModel(name.toString(), description.toString(), mergedProperties, mergedAffectors);
+        return new IngameItem.ItemModel(name.toString(), description.toString(),
+                mergedProperties, mergedAffectors);
     }
 
     @SuppressWarnings("OverlyComplexMethod")
@@ -246,7 +273,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             for (ItemPart part : parts) {
                 affectors.add(null);
                 if (part.getAvailableAffectors().contains(affectorId)) {
-                    affectors.set(part.getPartIndex(), part.getAllAffectors().get(affectorId));
+                    affectors.set(part.getPartIndex(),
+                            part.getAllAffectors().get(affectorId));
                 }
             }
             final List<Integer> affectionsList = new ArrayList<>();
@@ -262,13 +290,15 @@ public class ItemFactoryImpl implements ItemsFactory {
                     if (affectionsList.isEmpty()) {
                         affectionsList.addAll(affector.getAffectionsList());
                         for (Integer j = 0; j < affectionsList.size(); ++j) {
-                            affectionsList.set(j, applyRarityBonus(affectionsList.get(j), rarities.get(i)));
+                            affectionsList.set(j, applyRarityBonus(
+                                    affectionsList.get(j), rarities.get(i)));
                         }
                     } else {
                         if (affectionsList.size() == affector.getAffectionsList().size()) {
                             for (Integer j = 0; j < affectionsList.size(); ++j) {
                                 affectionsList.set(j, affectionsList.get(j)
-                                        + applyRarityBonus(affector.getAffection(j), rarities.get(i)));
+                                        + applyRarityBonus(
+                                                affector.getAffection(j), rarities.get(i)));
                             }
                         }
                     }
@@ -276,22 +306,28 @@ public class ItemFactoryImpl implements ItemsFactory {
                     if (affectionsMap.isEmpty()) {
                         affectionsMap.putAll(affector.getAffectionsMap());
                         for (Integer affectionId : affectionsMap.keySet()) {
-                            affectionsMap.replace(affectionId, applyRarityBonus(affectionsMap.get(affectionId),
+                            affectionsMap.replace(affectionId,
+                                    applyRarityBonus(affectionsMap.get(affectionId),
                                     rarities.get(i)));
                         }
                     } else {
-                        if (affectionsMap.keySet().equals(affector.getAffectionsMap().keySet())) {
+                        if (affectionsMap.keySet().equals(affector
+                                .getAffectionsMap().keySet())) {
                             for (Integer affectionId : affectionsMap.keySet()) {
-                                affectionsMap.replace(affectionId, affectionsMap.get(affectionId)
-                                        + applyRarityBonus(affector.getAffection(affectionId), rarities.get(i)));
+                                affectionsMap.replace(affectionId,
+                                        affectionsMap.get(affectionId)
+                                        + applyRarityBonus(affector.getAffection(
+                                                affectionId), rarities.get(i)));
                             }
                         }
                     }
                 } else {
                     if (affection == null) {
-                        affection = applyRarityBonus(affector.getAffection(), rarities.get(i));
+                        affection = applyRarityBonus(affector.getAffection(),
+                                rarities.get(i));
                     } else {
-                        affection += applyRarityBonus(affector.getAffection(), rarities.get(i));
+                        affection += applyRarityBonus(affector.getAffection(),
+                                rarities.get(i));
                     }
                 }
             }
@@ -342,7 +378,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             for (ItemPart part : parts) {
                 partProperties.add(null);
                 if (part.getAvailableProperties().contains(propertyId)) {
-                    partProperties.set(part.getPartIndex(), part.getAllProperties().get(propertyId));
+                    partProperties.set(part.getPartIndex(),
+                            part.getAllProperties().get(propertyId));
                 }
             }
 
@@ -361,16 +398,20 @@ public class ItemFactoryImpl implements ItemsFactory {
                         propertiesList.addAll(property.getPropertyList());
                         for (Integer j = 0; j < propertiesList.size(); ++j) {
                             if (isPropertyAlterable(propertyId)) {
-                                propertiesList.set(j, applyRarityBonus(propertiesList.get(j), rarities.get(i)));
+                                propertiesList.set(j, applyRarityBonus(
+                                        propertiesList.get(j), rarities.get(i)));
                             }
                         }
-                    } else if (propertiesList.size() == property.getPropertyList().size()) {
+                    } else if (propertiesList.size() == property
+                            .getPropertyList().size()) {
                         for (Integer j = 0; j < propertiesList.size(); ++j) {
                             if (isPropertyAlterable(propertyId)) {
                                 propertiesList.set(j, propertiesList.get(j)
-                                        + applyRarityBonus(property.getProperty(j), rarities.get(i)));
+                                        + applyRarityBonus(property.getProperty(j),
+                                        rarities.get(i)));
                             } else if (!isPropertyNonSummable(propertyId)) {
-                                propertiesList.set(j, propertiesList.get(j) + property.getProperty(j));
+                                propertiesList.set(j, propertiesList.get(j)
+                                        + property.getProperty(j));
                             }
                         }
                     }
@@ -380,16 +421,21 @@ public class ItemFactoryImpl implements ItemsFactory {
                         if (isPropertyAlterable(propertyId)) {
                             for (Integer propertyIndex : propertiesMap.keySet()) {
                                 propertiesMap.replace(propertyIndex,
-                                        applyRarityBonus(propertiesMap.get(propertyIndex), rarities.get(i)));
+                                        applyRarityBonus(propertiesMap.get(
+                                                propertyIndex), rarities.get(i)));
                             }
                         }
-                    } else if (propertiesMap.keySet().equals(property.getPropertyMap().keySet())) {
+                    } else if (propertiesMap.keySet().equals(
+                            property.getPropertyMap().keySet())) {
                         for (Integer propertyIndex : propertiesMap.keySet()) {
                             if (isPropertyAlterable(propertyId)) {
-                                propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
-                                        + applyRarityBonus(property.getProperty(propertyIndex), rarities.get(i)));
+                                propertiesMap.replace(propertyIndex,
+                                        propertiesMap.get(propertyIndex)
+                                        + applyRarityBonus(property.getProperty(
+                                                propertyIndex), rarities.get(i)));
                             } else if (!isPropertyNonSummable(propertyId)) {
-                                propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
+                                propertiesMap.replace(propertyIndex,
+                                        propertiesMap.get(propertyIndex)
                                         + property.getProperty(propertyIndex));
                             }
                         }
@@ -408,13 +454,15 @@ public class ItemFactoryImpl implements ItemsFactory {
                 } else {
                     if (propertyValue == null) {
                         if (isPropertyAlterable(propertyId)) {
-                            propertyValue = applyRarityBonus(property.getProperty(), rarities.get(i));
+                            propertyValue = applyRarityBonus(property.getProperty(),
+                                    rarities.get(i));
                         } else {
                             propertyValue = property.getProperty();
                         }
                     } else if (!isPropertyNonSummable(propertyId)) {
                         if (isPropertyAlterable(propertyId)) {
-                            propertyValue += applyRarityBonus(property.getProperty(), rarities.get(i));
+                            propertyValue += applyRarityBonus(property.getProperty(),
+                                    rarities.get(i));
                         } else {
                             propertyValue += property.getProperty();
                         }
@@ -431,7 +479,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             } else if (!propertiesSet.isEmpty()) {
                 mergedProperty = new SetProperty(propertiesSet);
             } else {
-                mergedProperty = new SingleValueProperty(Objects.requireNonNull(propertyValue));
+                mergedProperty = new SingleValueProperty(
+                        Objects.requireNonNull(propertyValue));
             }
 
             if (isPropertyLevelable(propertyId)) {
@@ -445,7 +494,8 @@ public class ItemFactoryImpl implements ItemsFactory {
     }
 
     private @NotNull Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
-        return propertyKind == PropertyCategories.PC_LEVEL || propertyKind == PropertyCategories.PC_ITEM_KIND
+        return propertyKind == PropertyCategories.PC_LEVEL
+                || propertyKind == PropertyCategories.PC_ITEM_KIND
                 || propertyKind == PropertyCategories.PC_ITEM_SLOTS;
     }
 
@@ -457,8 +507,11 @@ public class ItemFactoryImpl implements ItemsFactory {
         return propertyKind == PropertyCategories.PC_ITEM_PRICE;
     }
 
-    private @NotNull Integer applyRarityBonus(@NotNull Integer baseValue, @NotNull Integer rarity) {
-        return Long.valueOf(Math.round(baseValue.floatValue() * Math.pow(Constants.STATS_GROWTH_PER_LEVEL,
-                rarity.floatValue() - ItemRarity.IR_COMMON.asInt().floatValue()))).intValue();
+    private @NotNull Integer applyRarityBonus(@NotNull Integer baseValue,
+                                              @NotNull Integer rarity) {
+        return Long.valueOf(Math.round(baseValue.floatValue()
+                * Math.pow(Constants.STATS_GROWTH_PER_LEVEL,
+                rarity.floatValue() - ItemRarity.IR_COMMON
+                        .asInt().floatValue()))).intValue();
     }
 }

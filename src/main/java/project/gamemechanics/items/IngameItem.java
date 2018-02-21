@@ -6,10 +6,12 @@ import project.gamemechanics.components.affectors.Affector;
 import project.gamemechanics.components.affectors.AffectorCategories;
 import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.EquipmentKind;
 import project.gamemechanics.interfaces.EquipableItem;
+import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -182,5 +184,24 @@ public class IngameItem implements EquipableItem {
     public @NotNull Boolean isTrinket() {
         final Integer kind = getProperty(PropertyCategories.PC_ITEM_KIND);
         return kind.equals(EquipmentKind.EK_TRINKET.asInt());
+    }
+
+    @Override
+    @JsonIgnore
+    public @NotNull ItemBlueprint pack() {
+        final Map<Integer, Property> blueprintProps = new HashMap<>();
+
+        blueprintProps.put(PropertyCategories.PC_ITEM_ID,
+                new SingleValueProperty(itemID));
+        blueprintProps.put(PropertyCategories.PC_LEVEL,
+                properties.get(PropertyCategories.PC_LEVEL));
+        blueprintProps.put(PropertyCategories.PC_ITEM_PARTS_IDS,
+                properties.get(PropertyCategories.PC_ITEM_PARTS_IDS));
+        blueprintProps.put(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                properties.get(PropertyCategories.PC_ITEM_PARTS_RARITIES));
+        blueprintProps.put(PropertyCategories.PC_ITEM_KIND,
+                properties.get(PropertyCategories.PC_ITEM_KIND));
+
+        return new ItemBlueprint(blueprintProps);
     }
 }
