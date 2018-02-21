@@ -21,6 +21,11 @@ public class ItemFactoryImpl implements ItemsFactory {
 
     @Override
     public @NotNull EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
+        if (blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_ITEM_ID)) {
+            return new IngameItem(restoreItemModel(blueprint.getProperties()));
+        }
+
         final Random random = new Random(System.currentTimeMillis());
         final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL)
                 ? blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty()
@@ -37,6 +42,15 @@ public class ItemFactoryImpl implements ItemsFactory {
         final List<ItemPart> itemPartsList = getItemParts(rarity, kind,
                 Objects.requireNonNull(blueprint.getItemParts()));
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));
+    }
+
+    private @NotNull List<ItemPart> getItemParts(@NotNull Map<Integer, Integer> partIds) {
+        final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer partPos : partIds.keySet()) {
+            final Integer partId = partIds.get(partPos);
+            parts.add(itemParts.get(partPos).get(partId));
+        }
+        return parts;
     }
 
     private @NotNull List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
@@ -81,7 +95,68 @@ public class ItemFactoryImpl implements ItemsFactory {
         return parts;
     }
 
-    private @NotNull IngameItem.ItemModel makeItemModel(@NotNull Integer level, @NotNull Integer rarity,
+    private @NotNull IngameItem.ItemModel restoreItemModel(@NotNull Map<Integer, Property> properties) {
+        final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer i : Objects.requireNonNull(properties.get(
+                PropertyCategories.PC_ITEM_PARTS_IDS).getPropertyMap()).keySet()) {
+            partRarities.add(i, properties.get(PropertyCategories.PC_ITEM_PARTS_IDS).getProperty(i));
+        }
+
+        final List<ItemPart> parts = getItemParts(Objects.requireNonNull(
+                properties.get(PropertyCategories.PC_ITEM_PARTS_IDS)
+                        .getPropertyMap()));
+
+        final StringBuilder name = new StringBuilder();
+        //noinspection Duplicates
+        for (Integer partIndex = 0; partIndex < parts.size(); ++partIndex) {
+            final ItemPart part = parts.get(partIndex);
+            if (!part.getName().isEmpty()) {
+                if (partIndex == ItemPart.SECOND_PART_ID) {
+                    name.append(" with ");
+                } else if (partIndex == ItemPart.THIRD_PART_ID) {
+                    name.append(" and ");
+                }
+            }
+            name.append(part.getName());
+        }
+
+        final StringBuilder description = new StringBuilder();
+        for (ItemPart part : parts) {
+            description.append(part.getDescription());
+            description.append(' ');
+        }
+        description.deleteCharAt(description.length() - 1);
+        final Integer level = properties.get(PropertyCategories.PC_LEVEL).getProperty();
+        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
+        final Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
+        final Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
+        if (mergedProperties.containsKey(PropertyCategories.PC_LEVEL)) {
+            mergedProperties.get(PropertyCategories.PC_LEVEL).setSingleProperty(level);
+        } else {
+            mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_IDS)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_IDS));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_IDS));
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_RARITIES)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_RARITIES));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_RARITIES));
+        }
+        return new IngameItem.ItemModel(properties.get(PropertyCategories.PC_ITEM_ID)
+                .getProperty(), name.toString(), description.toString(),
+                mergedProperties, mergedAffectors);
+    }
+
+    @SuppressWarnings("OverlyComplexMethod")
+    private @NotNull IngameItem.ItemModel makeItemModel(@NotNull Integer level,
+                                                        @NotNull Integer rarity,
                                                         @NotNull List<ItemPart> parts) {
         final Random random = new Random(System.currentTimeMillis());
         final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
@@ -94,6 +169,7 @@ public class ItemFactoryImpl implements ItemsFactory {
         }
 
         final StringBuilder name = new StringBuilder();
+        //noinspection Duplicates
         for (Integer partIndex = 0; partIndex < parts.size(); ++partIndex) {
             final ItemPart part = parts.get(partIndex);
             if (!part.getName().isEmpty()) {
@@ -120,6 +196,28 @@ public class ItemFactoryImpl implements ItemsFactory {
                 mergedProperties.get(PropertyCategories.PC_LEVEL).setSingleProperty(level);
         } else {
             mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+        }
+        final Map<Integer, Integer> itemPartsRarities = new HashMap<>();
+        for (Integer i = 0; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
+            itemPartsRarities.put(i, partRarities.get(i));
+        }
+        final Map<Integer, Integer> itemPartsIds = new HashMap<>();
+        for (ItemPart part : parts) {
+            itemPartsIds.put(part.getPartIndex(), part.getID());
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_IDS)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    new MapProperty(itemPartsIds));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    new MapProperty(itemPartsIds));
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_RARITIES)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    new MapProperty(itemPartsRarities));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    new MapProperty(itemPartsRarities));
         }
         return new IngameItem.ItemModel(name.toString(), description.toString(), mergedProperties, mergedAffectors);
     }
