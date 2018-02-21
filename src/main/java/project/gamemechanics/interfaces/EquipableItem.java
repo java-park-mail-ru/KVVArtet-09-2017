@@ -56,8 +56,9 @@ public interface EquipableItem extends Levelable, AffectorProvider, PropertyProv
     }
 
     /**
-     * serializes an item into {@link ItemBlueprint} object to put it to the database
-     * @return serialized {@link ItemBlueprint} object
+     * serializes an item into {@link ItemBlueprint} object to put it to the database.
+     *
+     * @return serialized {@link ItemBlueprint} object.
      * @see ItemBlueprint
      */
     @JsonIgnore
