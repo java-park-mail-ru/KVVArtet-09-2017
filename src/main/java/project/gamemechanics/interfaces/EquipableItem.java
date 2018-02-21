@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import project.gamemechanics.items.IngameItem;
+import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 
 import javax.validation.constraints.NotNull;
 
@@ -53,4 +54,13 @@ public interface EquipableItem extends Levelable, AffectorProvider, PropertyProv
     default @NotNull Boolean isTrinket() {
         return false;
     }
+
+    /**
+     * serializes an item into {@link ItemBlueprint} object to put it to the database.
+     *
+     * @return serialized {@link ItemBlueprint} object.
+     * @see ItemBlueprint
+     */
+    @JsonIgnore
+    @NotNull ItemBlueprint pack();
 }
