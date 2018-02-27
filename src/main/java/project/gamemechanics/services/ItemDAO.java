@@ -6,5 +6,5 @@ import project.gamemechanics.resources.pcg.items.ItemBlueprint;
 public interface ItemDAO {
     EquipableItem getItemById(Integer id);
 
-    EquipableItem setItem(Integer id, ItemBlueprint itemBlueprint);
+    Integer setItem(ItemBlueprint itemBlueprint);
 }
