@@ -37,7 +37,7 @@ public class ActionRequestHandler extends MessageHandler<ActionRequestMessage> {
     @Override
     public @NotNull Message handle(@NotNull ActionRequestMessage message, @NotNull Integer forUser) {
         final Integer dungeonID =
-                Objects.requireNonNull(connectionPoolService.getSmartController(forUser)
+                Objects.requireNonNull(Objects.requireNonNull(connectionPoolService.getSmartController(forUser))
                         .getActiveChar()).getProperty(PropertyCategories.PC_INSTANCE_ID);
         return world.getActiveInstances().get(dungeonID).handleMessage(message);
     }

@@ -2,6 +2,7 @@ package project.websocket.messages;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public abstract class TextMessage extends Message {
     private final String message;
 

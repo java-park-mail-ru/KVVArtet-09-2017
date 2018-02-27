@@ -2,6 +2,7 @@ package project.gamemechanics.globals;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public final class GameModes {
     public static final int GM_COOP_PVE = 0;
     public static final int GM_SOLO_PVE = 1;
