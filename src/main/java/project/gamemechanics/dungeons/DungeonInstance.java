@@ -107,7 +107,11 @@ public class DungeonInstance extends AbstractInstance {
         if (!isInstanceCleared() && !isInstanceFailed()) {
             return currentRoom.pushAction(message);
         } else {
-            return new ErrorMessage("dungeon cleared");
+            if (isInstanceCleared()) {
+                return new ErrorMessage("dungeon cleared");
+            } else {
+                return new ErrorMessage("dungeon failed");
+            }
         }
     }
 

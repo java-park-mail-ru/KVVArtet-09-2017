@@ -50,16 +50,19 @@ public class DummiesFactory {
             bags.add(new StorageBag(new StorageBag.EmptyBagModel("Common bag",
                     "Common 16-slot bag", bagsCapacity)));
         }
-        final Integer raceId = dummyProps.getProperties().get(PropertyCategories.PC_CHARACTER_RACE_ID).getProperty();
+        final Integer raceId = dummyProps.getProperties().get(
+                PropertyCategories.PC_CHARACTER_RACE_ID).getProperty();
         dummyProps.getProperties().remove(PropertyCategories.PC_CHARACTER_RACE_ID);
         dummyProps.getProperties().put(PropertyCategories.PC_ACTIVE_ROLE,
-                new SingleValueProperty(new ArrayList<>(Objects.requireNonNull(role.getAvailableRoles())).get(0)));
+                new SingleValueProperty(new ArrayList<>(Objects.requireNonNull(
+                        role.getAvailableRoles())).get(0)));
         dummyProps.getProperties().put(PropertyCategories.PC_ABILITIES_COOLDOWN,
                 new MapProperty(initAbilitiesCooldown(role)));
 
         final AbstractAliveEntity.UserCharacterModel model =
                 new AbstractAliveEntity.UserCharacterModel(Constants.UNDEFINED_ID, name, description,
-                        dummyProps.getProperties(), bags, role, assets.getCharacterRace(raceId),
+                        dummyProps.getProperties(), bags, role, Objects.requireNonNull(
+                                assets.getCharacterRace(raceId)),
                         new CharacterDoll(), initPerkRanks(role));
         return new UserCharacter(model);
     }
