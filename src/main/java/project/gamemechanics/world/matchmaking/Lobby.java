@@ -94,7 +94,7 @@ public interface Lobby {
                                 @NotNull Integer newStatus);
 
     /**
-     * checks if character {@see AliveEntity} is queued for any game mode by character ID
+     * checks if character {@see AliveEntity} is queued for any game mode by character ID.
      *
      * @param characterId - Id of character to search
      * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
