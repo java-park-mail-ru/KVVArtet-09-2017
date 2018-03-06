@@ -26,7 +26,7 @@ public interface Invitation {
 
     /**
      * get current user response status
-     * (no answer, confirmed, canceled or expired)
+     * (no answer, confirmed, canceled or expired).
      *
      * @return invitation status
      */
@@ -34,7 +34,7 @@ public interface Invitation {
 
     /**
      * change current user response status
-     * to specified one
+     * to specified one.
      *
      * @param status - new user response status
      */
@@ -46,7 +46,7 @@ public interface Invitation {
     void update();
 
     /**
-     * checks if the invitation still isn't responded
+     * checks if the invitation still isn't responded.
      *
      * @return true if current status is VS_IDLE, or false otherwise
      */
@@ -54,21 +54,21 @@ public interface Invitation {
     @NotNull Boolean isIdle();
 
     /**
-     * checks if the invitation is confirmed
+     * checks if the invitation is confirmed.
      *
      * @return true if current status is VS_CONFIRM, or false otherwise
      */
     @NotNull Boolean isConfirm();
 
     /**
-     * checks if the invitation is rejected
+     * checks if the invitation is rejected.
      *
      * @return true if current status is VS_CANCEL, or false otherwise
      */
     @NotNull Boolean isCancel();
 
     /**
-     * checks if the invitation has expired
+     * checks if the invitation has expired.
      *
      * @return true if current status is VS_EXPIRED, or false otherwise
      */

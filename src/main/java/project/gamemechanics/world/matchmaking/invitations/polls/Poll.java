@@ -32,15 +32,16 @@ public interface Poll extends Countable {
     }
 
     /**
+     * get poll's game mode.
      *
      * @return game mode of the instance {@see Instance}
-     * that'll be created when after all users send confirmations
+     * that'll be created when after all users send confirmations.
      */
     @JsonProperty("mode")
     @NotNull Integer getGameMode();
 
     /**
-     * get all users' invitation statuses
+     * get all users' invitation statuses.
      *
      * @return invitation polls map
      * (invitation poll is character IDs mapped
@@ -50,7 +51,7 @@ public interface Poll extends Countable {
     @NotNull Map<Integer, InvitationPoll> getStatus();
 
     /**
-     * get single party invitation statuses by party ID
+     * get single party invitation statuses by party ID.
      *
      * @param partyId - party ID to get invitation poll for
      * @return party invitation poll (character IDs mapped
@@ -65,7 +66,7 @@ public interface Poll extends Countable {
     void update();
 
     /**
-     * checks if poll is expired
+     * checks if poll is expired.
      *
      * @return true if one or more invitations're expired
      * or false if there're no expired invitations
@@ -73,7 +74,7 @@ public interface Poll extends Countable {
     @NotNull Boolean isExpired();
 
     /**
-     * checks if poll is canceled
+     * checks if poll is canceled.
      *
      * @return true if there's one or more canceled invitations
      * or false if there're no canceled invitations
@@ -81,14 +82,14 @@ public interface Poll extends Countable {
     @NotNull Boolean isCanceled();
 
     /**
-     * checks if all users're ready
+     * checks if all users're ready.
      *
      * @return true if all invitations're confirmed or false otherwise
      */
     @NotNull Boolean isReady();
 
     /**
-     * get party {@see CharactersParty} attached to this poll
+     * get party {@see CharactersParty} attached to this poll.
      *
      * @return attached party or null otherwise (works only with coop PvE mode)
      */
@@ -96,7 +97,7 @@ public interface Poll extends Countable {
     @Nullable CharactersParty getParty();
 
     /**
-     * get party {@see CharacterParty} attached to this poll by party ID
+     * get party {@see CharacterParty} attached to this poll by party ID.
      *
      * @param partyID - party ID to look for
      * @return party or null if invalid ID

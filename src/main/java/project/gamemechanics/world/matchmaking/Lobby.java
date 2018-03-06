@@ -8,13 +8,13 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Matchmaking lobby interface. Allows automatical forming balanced character parties
- * {@see CharacterParty} and updating invitation statuses {@see InvitationPool}
+ * {@see CharacterParty} and updating invitation statuses {@see InvitationPool}.
  */
 @SuppressWarnings("unused")
 public interface Lobby {
     /**
      * Enqueue character {@see AliveEntity} into certain game mode queue
-     * in his active role (tank, support or damage dealer)
+     * in his active role (tank, support or damage dealer).
      *
      * @param character - character to enqueue
      * @param gameMode - game mode to enqueue character in.
@@ -47,7 +47,7 @@ public interface Lobby {
 
     /**
      * Dequeue character {@see AliveEntity} from specific game mode queue
-     * (character may still be queued for other game modes)
+     * (character may still be queued for other game modes).
      *
      * @param character - character to dequeue
      * @param gameMode - game mode to dequeue character from
@@ -68,7 +68,7 @@ public interface Lobby {
 
     /**
      * Dequeue party {@see CharactersParty} from specific game mode queue
-     * (party may still be queued for other game modes)
+     * (party may still be queued for other game modes).
      *
      * @param party - party to dequeue
      * @param gameMode - game mode to dequeue party from
@@ -104,7 +104,7 @@ public interface Lobby {
     @NotNull Message isQueued(@NotNull Integer characterId);
 
     /**
-     * checks if character {@see AliveEntity} is queued for specified game mode by character ID
+     * checks if character {@see AliveEntity} is queued for specified game mode by character ID.
      *
      * @param characterId - Id of character to search
      * @param gameMode - game mode to search in

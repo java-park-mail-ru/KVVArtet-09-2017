@@ -17,7 +17,7 @@ import java.util.Map;
 public interface InvitationPool {
     /**
      * adds a new poll {@see Poll} for specified party {@see CharactersParty}
-     * overload for coop PvE game mode
+     * overload for coop PvE game mode.
      *
      * @param party - party to create new poll for
      * @return created poll ID if successful or Constants.UNDEFINED_ID (-1) otherwise
@@ -26,7 +26,7 @@ public interface InvitationPool {
 
     /**
      * adds a new poll {@see Poll} for specified parties
-     * {@see CharactersParty} in specified game mode
+     * {@see CharactersParty} in specified game mode.
      *
      * @param parties - parties to create new poll for
      * @param gameMode - gameMode to create poll in
