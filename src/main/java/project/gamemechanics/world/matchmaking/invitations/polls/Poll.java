@@ -35,7 +35,7 @@ public interface Poll extends Countable {
      * get poll's game mode.
      *
      * @return game mode of the instance {@see Instance}
-     * that'll be created when after all users send confirmations.
+     *      that'll be created when after all users send confirmations.
      */
     @JsonProperty("mode")
     @NotNull Integer getGameMode();
@@ -44,8 +44,8 @@ public interface Poll extends Countable {
      * get all users' invitation statuses.
      *
      * @return invitation polls map
-     * (invitation poll is character IDs mapped
-     * to respective characters' invitation statuses)
+     *      (invitation poll is character IDs mapped
+     *      to respective characters' invitation statuses)
      */
     @JsonProperty("status")
     @NotNull Map<Integer, InvitationPoll> getStatus();
@@ -55,8 +55,8 @@ public interface Poll extends Countable {
      *
      * @param partyId - party ID to get invitation poll for
      * @return party invitation poll (character IDs mapped
-     * to respective characters' invitation statuses)
-     * or null if partyId is invalid
+     *      to respective characters' invitation statuses)
+     *      or null if partyId is invalid
      */
     @Nullable InvitationPoll getPartyAnswers(@NotNull Integer partyId);
 
@@ -69,7 +69,7 @@ public interface Poll extends Countable {
      * checks if poll is expired.
      *
      * @return true if one or more invitations're expired
-     * or false if there're no expired invitations
+     *      or false if there're no expired invitations
      */
     @NotNull Boolean isExpired();
 
@@ -77,7 +77,7 @@ public interface Poll extends Countable {
      * checks if poll is canceled.
      *
      * @return true if there's one or more canceled invitations
-     * or false if there're no canceled invitations
+     *      or false if there're no canceled invitations
      */
     @NotNull Boolean isCanceled();
 

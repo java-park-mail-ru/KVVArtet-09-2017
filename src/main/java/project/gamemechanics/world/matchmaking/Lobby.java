@@ -20,7 +20,7 @@ public interface Lobby {
      * @param gameMode - game mode to enqueue character in.
      *                 Solo PvE mode isn't supported {@see GameModes}
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message enqueue(@NotNull AliveEntity character, @NotNull Integer gameMode);
 
@@ -32,7 +32,7 @@ public interface Lobby {
      * @param party - party to enqueue. Can be full or not.
      * @param gameMode - game mode to enqueue party in.
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message enqueue(@NotNull CharactersParty party, @NotNull Integer gameMode);
 
@@ -41,7 +41,7 @@ public interface Lobby {
      *
      * @param character - character to dequeue
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message dequeue(@NotNull AliveEntity character);
 
@@ -52,7 +52,7 @@ public interface Lobby {
      * @param character - character to dequeue
      * @param gameMode - game mode to dequeue character from
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message dequeue(@NotNull AliveEntity character, @NotNull Integer gameMode);
 
@@ -62,7 +62,7 @@ public interface Lobby {
      * @param party - party to dequeue
      * @param dismissParty - flag indicating if party shall be destroyed after successful dequeuing
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message dequeue(@NotNull CharactersParty party, @NotNull Boolean dismissParty);
 
@@ -74,7 +74,7 @@ public interface Lobby {
      * @param gameMode - game mode to dequeue party from
      * @param dismissParty - flag indicating if party shall be destroyed after successful dequeuing
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message dequeue(@NotNull CharactersParty party,
                              @NotNull Integer gameMode,
@@ -88,7 +88,7 @@ public interface Lobby {
      * @param characterId - ID of character whose vote shall be updated
      * @param newStatus - new character vote status
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message updatePoll(@NotNull Integer gameMode, @NotNull Integer characterId,
                                 @NotNull Integer newStatus);
@@ -98,8 +98,8 @@ public interface Lobby {
      *
      * @param characterId - Id of character to search
      * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
-     * if input is valid (true if the character is queued for any game mode, false otherwise),
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      if input is valid (true if the character is queued for any game mode, false otherwise),
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message isQueued(@NotNull Integer characterId);
 
@@ -109,9 +109,9 @@ public interface Lobby {
      * @param characterId - Id of character to search
      * @param gameMode - game mode to search in
      * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
-     * if input is valid (flag will be set to true if there's a character
-     * with such ID, and will be false otherwise),
-     * or {@link project.websocket.messages.ErrorMessage} otherwise
+     *      if input is valid (flag will be set to true if there's a character
+     *      with such ID, and will be false otherwise),
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
     @NotNull Message isQueued(@NotNull Integer characterId, @NotNull Integer gameMode);
 

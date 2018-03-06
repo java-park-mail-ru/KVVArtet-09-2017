@@ -66,7 +66,7 @@ public interface InvitationPool {
      * @param characterId - ID of character attached to the poll we're looking for
      * @param gameMode - game mode to look for the poll
      * @return poll ID if such poll exists for the specified game mode
-     * or Constants.UNDEFINED_ID (-1) otherwise
+     *      or Constants.UNDEFINED_ID (-1) otherwise
      */
     @NotNull Integer getPollId(@NotNull Integer characterId, @NotNull Integer gameMode);
 }
