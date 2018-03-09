@@ -235,18 +235,40 @@ public class LobbyImpl implements Lobby {
 
     private @NotNull Boolean isCharacterQueued(@NotNull Integer characterId,
                                                @NotNull Integer gameMode) {
-        if (characterId <= Constants.UNDEFINED_ID || !wipPartiesPool.containsKey(gameMode)) {
-            return false;
-        }
+        return areCharacterIdAndGameModeValid(characterId, gameMode)
+                && (isCharacterQueuedInWipParties(characterId, gameMode)
+                || isCharacterQueuedInNonParty(characterId, gameMode));
+    }
 
+    private @NotNull Boolean areCharacterIdAndGameModeValid(@NotNull Integer characterId,
+                                                            @NotNull Integer gameMode) {
+        return characterId > Constants.UNDEFINED_ID && wipPartiesPool.containsKey(gameMode);
+    }
+
+    private @NotNull Boolean isCharacterQueuedInWipParties(@NotNull Integer characterId,
+                                                           @NotNull Integer gameMode) {
         final Deque<CharactersParty> wipParties = wipPartiesPool.get(gameMode);
         for (CharactersParty party : wipParties) {
-           for (Integer roleId : party.getRoleIds()) {
-               final AliveEntity member = party.getMember(roleId);
-               if (member != null && member.getID().equals(characterId)) {
-                   return true;
-               }
-           }
+            for (Integer roleId : party.getRoleIds()) {
+                final AliveEntity member = party.getMember(roleId);
+                if (member != null && member.getID().equals(characterId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private @NotNull Boolean isCharacterQueuedInNonParty(@NotNull Integer characterId,
+                                                         @NotNull Integer gameMode) {
+        final Map<Integer, Deque<AliveEntity>> queuedForGameMode = queuedCharacters.get(gameMode);
+        for (Integer roleId : queuedForGameMode.keySet()) {
+            final Deque<AliveEntity> roleQueuedForGameMode = queuedForGameMode.get(roleId);
+            for (AliveEntity queuedCharacter : roleQueuedForGameMode) {
+                if (queuedCharacter.getID().equals(characterId)) {
+                    return true;
+                }
+            }
         }
 
         return false;
