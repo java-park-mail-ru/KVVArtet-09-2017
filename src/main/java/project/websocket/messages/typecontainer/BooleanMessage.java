@@ -1,20 +1,15 @@
-package project.websocket.messages.bool;
+package project.websocket.messages.typecontainer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 
-public class BooleanMessage extends Message {
-    private final Boolean flag;
+public class BooleanMessage extends TypeContainerMessage<Boolean> {
 
-    public BooleanMessage(@JsonProperty("flag")
-                          @NotNull Boolean flag) {
-        this.flag = flag;
-    }
-
-    public @NotNull Boolean getFlag() {
-        return flag;
+    public BooleanMessage(@JsonProperty("value")
+                          @NotNull Boolean value) {
+        super(value);
     }
 
     public static @NotNull Message createPositiveResponse() {

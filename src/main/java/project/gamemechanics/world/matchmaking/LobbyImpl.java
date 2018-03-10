@@ -19,8 +19,8 @@ import project.gamemechanics.world.matchmaking.invitations.InvitationPoolImpl;
 import project.gamemechanics.world.matchmaking.invitations.invitations.Invitation;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
-import project.websocket.messages.bool.BooleanMessage;
 import project.websocket.messages.matchmaking.LobbyConfirmationMessage;
+import project.websocket.messages.typecontainer.BooleanMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

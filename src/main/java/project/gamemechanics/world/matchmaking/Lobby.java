@@ -97,7 +97,7 @@ public interface Lobby {
      * checks if character {@see AliveEntity} is queued for any game mode by character ID.
      *
      * @param characterId - Id of character to search
-     * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
+     * @return {@link project.websocket.messages.typecontainer.BooleanMessage} with flag containing the result
      *      if input is valid (true if the character is queued for any game mode, false otherwise),
      *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
@@ -108,7 +108,7 @@ public interface Lobby {
      *
      * @param characterId - Id of character to search
      * @param gameMode - game mode to search in
-     * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
+     * @return {@link project.websocket.messages.typecontainer.BooleanMessage} with flag containing the result
      *      if input is valid (flag will be set to true if there's a character
      *      with such ID, and will be false otherwise),
      *      or {@link project.websocket.messages.ErrorMessage} otherwise
