@@ -82,6 +82,20 @@ public interface Lobby {
 
     /**
      * Updates character's vote {@see Invitation} in in specified game mode to given
+     * new status by character ID and poll ID.
+     *
+     * @param pollId - ID of poll to update
+     * @param gameMode - game mode to look for character in
+     * @param characterId - ID of character whose vote shall be updated
+     * @param newStatus - new character vote status
+     * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
+     */
+    @NotNull Message updatePoll(@NotNull Integer pollId, @NotNull Integer characterId,
+                                @NotNull Integer gameMode, @NotNull Integer newStatus);
+
+    /**
+     * Updates character's vote {@see Invitation} in in specified game mode to given
      * new status by character ID.
      *
      * @param gameMode - game mode to look for character in
@@ -90,7 +104,7 @@ public interface Lobby {
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
      *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
-    @NotNull Message updatePoll(@NotNull Integer gameMode, @NotNull Integer characterId,
+    @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
                                 @NotNull Integer newStatus);
 
     /**

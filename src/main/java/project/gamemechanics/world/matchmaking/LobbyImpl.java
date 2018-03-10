@@ -196,10 +196,9 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
-                                       @NotNull Integer newStatus) {
-        if (characterId <= Constants.UNDEFINED_ID
-                || !wipPartiesPool.containsKey(gameMode)) {
+    public @NotNull Message updatePoll(@NotNull Integer pollId, @NotNull Integer characterId,
+                                       @NotNull Integer gameMode, @NotNull Integer newStatus) {
+        if (!areCharacterIdAndGameModeValid(characterId, gameMode)) {
             final String error = characterId <= Constants.UNDEFINED_ID
                     ? "invalid character id" : "invalid game mode";
             return new ErrorMessage(error);
@@ -207,15 +206,24 @@ public class LobbyImpl implements Lobby {
         if (!isNewStatusValid(newStatus)) {
             return new ErrorMessage("invalid new status");
         }
+        if (invitationService.getPoll(pollId) == null) {
+           return new ErrorMessage("invalid poll id");
+        }
 
+        invitationService.updatePoll(pollId, gameMode, characterId, newStatus);
+
+        return new LobbyConfirmationMessage();
+    }
+
+    @Override
+    public @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
+                                       @NotNull Integer newStatus) {
         final Integer pollId = getPollIdByCharacterId(characterId, gameMode);
         if (pollId == Constants.UNDEFINED_ID) {
             return new ErrorMessage("this character isn\'t queued in any prepared match");
         }
 
-        return invitationService.updatePoll(pollId, characterId, gameMode, newStatus)
-                ? new LobbyConfirmationMessage()
-                : new ErrorMessage("unable to update poll for this character");
+        return updatePoll(pollId, characterId, gameMode, newStatus);
     }
 
     @Override

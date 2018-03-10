@@ -102,6 +102,7 @@ public class LobbyTest {
     @Test
     public void partyEnqueueTest() {
         final Lobby testLobby = makeLobby();
+
     }
 
     private @NotNull Lobby makeLobby() {
