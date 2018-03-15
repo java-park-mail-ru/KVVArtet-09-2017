@@ -8,9 +8,12 @@ import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty
 import project.gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.MapNode;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.websocket.messages.Message;
@@ -104,6 +107,7 @@ public abstract class AbstractInstance implements Instance {
         roomsCount = model.roomsCount;
         factory = model.factory;
         squads.addAll(model.squads);
+        setInstanceIdToParticipants();
     }
 
     AbstractInstance(@NotNull LandInstanceModel model) {
@@ -114,6 +118,7 @@ public abstract class AbstractInstance implements Instance {
         roomsCount = model.roomsCount;
         factory = model.factory;
         squads.addAll(model.squads);
+        setInstanceIdToParticipants();
     }
 
     @Override
@@ -299,5 +304,19 @@ public abstract class AbstractInstance implements Instance {
             spawnPoints.add(spawnPoint);
         }
         return spawnPoints;
+    }
+
+    private void setInstanceIdToParticipants() {
+        for (CharactersParty squad : squads) {
+            for (Integer roleId : squad.getRoleIds()) {
+                final AliveEntity member = Objects.requireNonNull(squad.getMember(roleId));
+                if (member.hasProperty(PropertyCategories.PC_INSTANCE_ID)) {
+                    member.setProperty(PropertyCategories.PC_INSTANCE_ID, instanceID);
+                } else {
+                    member.addProperty(PropertyCategories.PC_INSTANCE_ID,
+                            new SingleValueProperty(instanceID));
+                }
+            }
+        }
     }
 }

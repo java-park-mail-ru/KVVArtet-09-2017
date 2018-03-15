@@ -16,8 +16,10 @@ import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.smartcontroller.SmartController;
 import project.gamemechanics.world.matchmaking.invitations.InvitationPool;
 import project.gamemechanics.world.matchmaking.invitations.InvitationPoolImpl;
+import project.gamemechanics.world.matchmaking.invitations.invitations.Invitation;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
+import project.websocket.messages.bool.BooleanMessage;
 import project.websocket.messages.matchmaking.LobbyConfirmationMessage;
 
 import javax.validation.constraints.NotNull;
@@ -76,7 +78,7 @@ public class LobbyImpl implements Lobby {
         if (!character.hasProperty(PropertyCategories.PC_ACTIVE_ROLE)
                 || character.getProperty(PropertyCategories.PC_ACTIVE_ROLE)
                 == Constants.UNDEFINED_ID) {
-            return new ErrorMessage("uknown character role");
+            return new ErrorMessage("unknown character role");
         }
         // note: do we need to actually check character's presence in currently WIP parties?
         if (character.hasProperty(PropertyCategories.PC_PARTY_ID)
@@ -193,6 +195,76 @@ public class LobbyImpl implements Lobby {
         traverseCharactersQueue();
     }
 
+    @Override
+    public @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
+                                       @NotNull Integer newStatus) {
+        if (characterId <= Constants.UNDEFINED_ID
+                || !wipPartiesPool.containsKey(gameMode)) {
+            final String error = characterId <= Constants.UNDEFINED_ID
+                    ? "invalid character id" : "invalid game mode";
+            return new ErrorMessage(error);
+        }
+        if (!isNewStatusValid(newStatus)) {
+            return new ErrorMessage("invalid new status");
+        }
+
+        final Integer pollId = getPollIdByCharacterId(characterId, gameMode);
+        if (pollId == Constants.UNDEFINED_ID) {
+            return new ErrorMessage("this character isn\'t queued in any prepared match");
+        }
+
+        return invitationService.updatePoll(pollId, characterId, gameMode, newStatus)
+                ? new LobbyConfirmationMessage()
+                : new ErrorMessage("unable to update poll for this character");
+    }
+
+    @Override
+    public @NotNull Message isQueued(@NotNull Integer characterId) {
+        for (Integer gameMode : wipPartiesPool.keySet()) {
+            if (isCharacterQueued(characterId, gameMode)) {
+                return BooleanMessage.createPositiveResponse();
+            }
+        }
+        return BooleanMessage.createNegativeResponse();
+    }
+
+    @Override
+    public @NotNull Message isQueued(@NotNull Integer characterId, @NotNull Integer gameMode) {
+        return new BooleanMessage(isCharacterQueued(characterId, gameMode));
+    }
+
+    private @NotNull Boolean isCharacterQueued(@NotNull Integer characterId,
+                                               @NotNull Integer gameMode) {
+        if (characterId <= Constants.UNDEFINED_ID || !wipPartiesPool.containsKey(gameMode)) {
+            return false;
+        }
+
+        final Deque<CharactersParty> wipParties = wipPartiesPool.get(gameMode);
+        for (CharactersParty party : wipParties) {
+           for (Integer roleId : party.getRoleIds()) {
+               final AliveEntity member = party.getMember(roleId);
+               if (member != null && member.getID().equals(characterId)) {
+                   return true;
+               }
+           }
+        }
+
+        return false;
+    }
+
+    private @NotNull Boolean isNewStatusValid(@NotNull Integer newStatus) {
+        final Boolean isIdleOrConfirm = newStatus == Invitation.VS_IDLE
+                || newStatus == Invitation.VS_CONFIRM;
+        final Boolean isExpiredOrCancel = newStatus == Invitation.VS_CANCEL
+                || newStatus == Invitation.VS_EXPIRED;
+        return isIdleOrConfirm || isExpiredOrCancel;
+    }
+
+    private @NotNull Integer getPollIdByCharacterId(@NotNull Integer characterId,
+                                                    @NotNull Integer gameMode) {
+        return invitationService.getPollId(characterId, gameMode);
+    }
+
     private @NotNull Boolean dequeueCharacterFromParties(@NotNull AliveEntity character,
                                                          @NotNull Integer gameMode) {
         for (CharactersParty party : wipPartiesPool.get(gameMode)) {
@@ -298,6 +370,7 @@ public class LobbyImpl implements Lobby {
                         final CharactersParty party = new CharactersParty(lootPool);
                         party.addMember(roleId, character);
                         queuedCharacters.get(gameMode).get(roleId).remove(character);
+                        wipPartiesPool.get(gameMode).offerLast(party);
                     } else {
                         for (CharactersParty party : wipPartiesPool.get(gameMode)) {
                             if (!party.hasRole(roleId)) {

@@ -36,6 +36,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class InvitationsPoolTest {
     private static final int DEFAULT_TEST_USERS_COUNT = 16;
     private static final int CHARACTER_LIST_SIZE = 4;
@@ -645,5 +646,4 @@ public class InvitationsPoolTest {
                     controller.getOutboxMessage().getClass());
         }
     }
-
 }

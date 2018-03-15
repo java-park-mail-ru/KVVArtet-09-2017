@@ -149,6 +149,33 @@ public class InvitationPoolImpl implements InvitationPool {
         return null;
     }
 
+    @Override
+    public @NotNull Integer getPollId(@NotNull Integer characterId,
+                                      @NotNull Integer gameMode) {
+        if (characterId < Constants.MIN_ID_VALUE || !polls.containsKey(gameMode)) {
+            return Constants.UNDEFINED_ID;
+        }
+
+        final Map<Integer, Poll> pendingPolls = polls.get(gameMode);
+        for (Integer pollId : pendingPolls.keySet()) {
+            final Poll poll = pendingPolls.get(pollId);
+            for (Integer partyId : poll.getParties().keySet()) {
+                final CharactersParty party = poll.getParty(partyId);
+                if (party == null) {
+                    return Constants.UNDEFINED_ID;
+                }
+                for (Integer roleId : party.getRoleIds()) {
+                    final AliveEntity member = party.getMember(roleId);
+                    if (member != null && member.getID().equals(characterId)) {
+                        return pollId;
+                    }
+                }
+            }
+        }
+
+        return Constants.UNDEFINED_ID;
+    }
+
     private Boolean contains(@NotNull CharactersParty party, @NotNull Integer gameMode) {
         final Map<Integer, Poll> gameModePolls = polls.getOrDefault(gameMode, null);
         if (gameModePolls == null) {

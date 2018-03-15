@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import project.websocket.messages.battle.*;
+import project.websocket.messages.bool.BooleanMessage;
 import project.websocket.messages.charlist.CharacterListRequestMessage;
 import project.websocket.messages.charlist.CharacterListResponseMessage;
 import project.websocket.messages.charlist.CreateCharacterRequestMessage;
@@ -26,7 +27,8 @@ import project.websocket.messages.matchmaking.MatchmakingNotificationMessage;
         @Type(NextRoomResponseMessage.class),
         @Type(LobbyConfirmationMessage.class),
         @Type(ActionConfirmationMessage.class),
-        @Type(MatchmakingNotificationMessage.class)
+        @Type(MatchmakingNotificationMessage.class),
+        @Type(BooleanMessage.class)
 })
 public abstract class Message {
     // CHECKSTYLE:OFF
