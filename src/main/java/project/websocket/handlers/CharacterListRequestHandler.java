@@ -10,6 +10,7 @@ import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Component
 public class CharacterListRequestHandler extends MessageHandler<CharacterListRequestMessage> {
@@ -33,6 +34,6 @@ public class CharacterListRequestHandler extends MessageHandler<CharacterListReq
     @Override
     public @NotNull Message handle(@NotNull CharacterListRequestMessage message, @NotNull Integer forUser) {
         final SmartController activeSmart = connectionPoolService.getActiveSmartControllers().get(forUser);
-        return new CharacterListResponseMessage(activeSmart.getCharacterList().getCharacterList());
+        return new CharacterListResponseMessage(Objects.requireNonNull(activeSmart.getCharacterList()).getCharacterList());
     }
 }

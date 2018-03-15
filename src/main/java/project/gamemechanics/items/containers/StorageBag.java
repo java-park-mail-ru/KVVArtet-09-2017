@@ -39,10 +39,10 @@ public class StorageBag implements Bag {
     @SuppressWarnings("unused")
     public static class FilledBagModel {
         // CHECKSTYLE:OFF
-        final Integer id;
-        final String name;
-        final String description;
-        final List<EquipableItem> contents;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        public final List<EquipableItem> contents;
         // CHECKSTYLE:ON
 
         public FilledBagModel(@JsonProperty("id") @NotNull Integer id, @JsonProperty("name") @NotNull String name,

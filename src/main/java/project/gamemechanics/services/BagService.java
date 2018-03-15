@@ -6,6 +6,7 @@ import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.items.containers.StorageBag;
 
 import javax.validation.constraints.NotNull;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,16 @@ public class BagService implements BagDAO {
     }
 
     @Override
-    public @NotNull StorageBag.FilledBagModel setFilledBag(StorageBag.@NotNull FilledBagModel newBag) {
-        return null;
+    public void setFilledBag(@NotNull StorageBag.FilledBagModel newBag) {
+        final String sql = "INSERT into public.bag(name, description, items_ids)" + "values(?,?,?)";
+        jdbcTemplate.update(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setObject(1, newBag.name);
+                preparedStatement.setObject(2, newBag.description);
+                //CHECKSTYLE:OFF
+                preparedStatement.setObject(3, newBag.contents);
+                //CHECKSTYLE:ON
+                return  preparedStatement;
+        });
     }
 }

@@ -1,5 +1,4 @@
 language: java
-dist: trusty
 addons:
   postgresql: "9.6"
 services:
