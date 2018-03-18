@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS public.user (
 );
 
 CREATE TABLE IF NOT EXISTS public.character_list (
-  id serial PRIMARY KEY NOT NULL,
+  id INTEGER NOT NULL,
   characters_ids integer[]
 );
 

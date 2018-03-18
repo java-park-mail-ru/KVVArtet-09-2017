@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@Service
 @SuppressWarnings("unused")
+@Service
 public class ItemService implements ItemDAO {
 
     private final Logger logger = Logger.getLogger(ItemService.class);

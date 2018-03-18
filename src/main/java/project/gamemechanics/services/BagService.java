@@ -1,11 +1,13 @@
 package project.gamemechanics.services;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.items.containers.StorageBag;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class BagService implements BagDAO {
         final String sql = "SELECT * FROM public.bag WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (ResultSet rs, int rwNumber) -> {
             List<EquipableItem> equipableItems = new ArrayList<>();
-            List<Integer> itemsIds =  (List<Integer>) rs.getArray("items_ids");
+            Integer[] itemsIds = (Integer[]) rs.getArray("items_ids").getArray();
             for (Integer item : itemsIds) {
                 equipableItems.add(itemService.getItemById(item));
             }
@@ -37,16 +39,68 @@ public class BagService implements BagDAO {
     }
 
     @Override
-    public void setFilledBag(@NotNull StorageBag.FilledBagModel newBag) {
-        final String sql = "INSERT into public.bag(name, description, items_ids)" + "values(?,?,?)";
+    public Integer setFilledBagWithItems(@NotNull StorageBag.EmptyBagModel newBag, @NotNull List<EquipableItem> contents) {
+        final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        final String sql = "INSERT into public.bag(name, description, items_ids)" + "values(?,?,?) RETURNING id";
         jdbcTemplate.update(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setObject(1, newBag.name);
-                preparedStatement.setObject(2, newBag.description);
-                //CHECKSTYLE:OFF
-                preparedStatement.setObject(3, newBag.contents);
-                //CHECKSTYLE:ON
-                return  preparedStatement;
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setObject(1, newBag.name);
+            preparedStatement.setObject(2, newBag.description);
+            //CHECKSTYLE:OFF
+            Integer[] items_ids = new Integer[contents.size()];
+            for (int i = 0; i < contents.size(); i++) {
+                items_ids[i] = contents.get(i).getID();
+            }
+            Array items_array = connection.createArrayOf("INTEGER", items_ids);
+            preparedStatement.setArray(3, items_array);
+            //CHECKSTYLE:ON
+            return  preparedStatement;
+        }, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    @NotNull
+    public Integer setFilledBag(@NotNull StorageBag.EmptyBagModel newBag) {
+        final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        final String sql = "INSERT into public.bag(name, description, items_ids)" + "values(?,?,?) RETURNING id";
+        jdbcTemplate.update(connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            preparedStatement.setObject(1, newBag.name);
+            preparedStatement.setObject(2, newBag.description);
+            //CHECKSTYLE:OFF
+            Integer[] items_ids = new Integer[0];
+            Array items_array = connection.createArrayOf("INTEGER", items_ids);
+            preparedStatement.setObject(3, items_array);
+            //CHECKSTYLE:ON
+            return  preparedStatement;
+        }, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    @SuppressWarnings("Duplicates")
+    public void addItemsArrayToBag(@NotNull Integer bagId, @NotNull Integer[] itemsIds) {
+        final String sql = "UPDATE public.bag SET items_ids = array_cat(items_ids, ?) WHERE id = ?";
+        jdbcTemplate.update(connection -> {
+            final PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            Array items_array = connection.createArrayOf("INTEGER", itemsIds);
+            preparedStatement.setArray(1, items_array);
+            preparedStatement.setObject(2, bagId);
+            return preparedStatement;
+        });
+    }
+
+    @Override
+    @SuppressWarnings("Duplicates")
+    public void deleteItemsArrayFromBag(@NotNull Integer bagId, @NotNull Integer[] itemsIds){
+        final String sql = "UPDATE public.bag SET items_ids = array_remove(items_ids, ?) WHERE id = ?";
+        jdbcTemplate.update(connection -> {
+            final PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            Array items_array = connection.createArrayOf("INTEGER", itemsIds);
+            preparedStatement.setArray(1, items_array);
+            preparedStatement.setObject(2, bagId);
+            return preparedStatement;
         });
     }
 }
