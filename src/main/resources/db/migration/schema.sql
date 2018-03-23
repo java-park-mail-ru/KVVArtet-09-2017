@@ -23,9 +23,7 @@ CREATE TABLE IF NOT EXISTS public.character (
 
 CREATE TABLE IF NOT EXISTS public.bag (
   id SERIAL PRIMARY KEY NOT NULL,
-  name TEXT NOT NULL,
-  description TEXT NOT NULL,
-  items_ids integer[]
+  bag_json_model JSON NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.item (

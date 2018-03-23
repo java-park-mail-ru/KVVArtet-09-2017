@@ -71,24 +71,13 @@ public class BagServiceTest {
     }
 
     @Test
-    public void deleteOneItemInBagSuccessful() {
+    public void deleteItemFromBagSuccessful() {
         StorageBag.EmptyBagModel emptyBagModel = new StorageBag.EmptyBagModel("my", "MY BEST BAG", 16);
         Integer bagId = bagDAO.setFilledBag(emptyBagModel);
         final Random random = new Random(System.currentTimeMillis());
         final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
         bagDAO.addItemsArrayToBag(bagId, new Integer[]{equipableItem.getID()});
-        bagDAO.deleteItemsArrayFromBag(bagId, new Integer[]{equipableItem.getID()});
-    }
-
-    @Test
-    public void deleteManyItemsInBagSuccessful() {
-        StorageBag.EmptyBagModel emptyBagModel = new StorageBag.EmptyBagModel("my", "MY BEST BAG", 16);
-        Integer bagId = bagDAO.setFilledBag(emptyBagModel);
-        final Random random = new Random(System.currentTimeMillis());
-        final EquipableItem equipableItem1 = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
-        final EquipableItem equipableItem2 = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
-        bagDAO.addItemsArrayToBag(bagId, new Integer[]{equipableItem1.getID(), equipableItem2.getID()});
-        bagDAO.deleteItemsArrayFromBag(bagId, new Integer[]{equipableItem1.getID(), equipableItem2.getID()});
+        bagDAO.deleteItemFromBag(bagId, equipableItem.getID());
     }
 
 

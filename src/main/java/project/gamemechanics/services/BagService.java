@@ -5,6 +5,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.items.containers.StorageBag;
+import project.gamemechanics.services.databaseModels.BagDatabaseModel;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Array;
@@ -39,21 +40,13 @@ public class BagService implements BagDAO {
     }
 
     @Override
-    public Integer setFilledBagWithItems(@NotNull StorageBag.EmptyBagModel newBag, @NotNull List<EquipableItem> contents) {
+    public Integer setFilledBagWithItems(@NotNull BagDatabaseModel newBag, @NotNull List<EquipableItem> contents) {
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        final String sql = "INSERT into public.bag(name, description, items_ids)" + "values(?,?,?) RETURNING id";
+        final String sql = "INSERT into public.bag(bag_json_model)" + "values(?) RETURNING id";
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setObject(1, newBag.name);
-            preparedStatement.setObject(2, newBag.description);
-            //CHECKSTYLE:OFF
-            Integer[] items_ids = new Integer[contents.size()];
-            for (int i = 0; i < contents.size(); i++) {
-                items_ids[i] = contents.get(i).getID();
-            }
-            Array items_array = connection.createArrayOf("INTEGER", items_ids);
-            preparedStatement.setArray(3, items_array);
-            //CHECKSTYLE:ON
+
+            preparedStatement.setObject(1, newBag.getName());
             return  preparedStatement;
         }, keyHolder);
         return keyHolder.getKey().intValue();
@@ -61,18 +54,12 @@ public class BagService implements BagDAO {
 
     @Override
     @NotNull
-    public Integer setFilledBag(@NotNull StorageBag.EmptyBagModel newBag) {
+    public Integer setFilledBag(@NotNull BagDatabaseModel newBag) {
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        final String sql = "INSERT into public.bag(name, description, items_ids)" + "values(?,?,?) RETURNING id";
+        final String sql = "INSERT into public.bag(bag_json_model)" + "values(?) RETURNING id";
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setObject(1, newBag.name);
-            preparedStatement.setObject(2, newBag.description);
-            //CHECKSTYLE:OFF
-            Integer[] items_ids = new Integer[0];
-            Array items_array = connection.createArrayOf("INTEGER", items_ids);
-            preparedStatement.setObject(3, items_array);
-            //CHECKSTYLE:ON
+            preparedStatement.setObject(1, newBag.getName());
             return  preparedStatement;
         }, keyHolder);
         return keyHolder.getKey().intValue();
@@ -93,12 +80,11 @@ public class BagService implements BagDAO {
 
     @Override
     @SuppressWarnings("Duplicates")
-    public void deleteItemsArrayFromBag(@NotNull Integer bagId, @NotNull Integer[] itemsIds){
+    public void deleteItemFromBag(@NotNull Integer bagId, @NotNull Integer itemId){
         final String sql = "UPDATE public.bag SET items_ids = array_remove(items_ids, ?) WHERE id = ?";
         jdbcTemplate.update(connection -> {
             final PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            Array items_array = connection.createArrayOf("INTEGER", itemsIds);
-            preparedStatement.setArray(1, items_array);
+            preparedStatement.setInt(1, itemId);
             preparedStatement.setObject(2, bagId);
             return preparedStatement;
         });
