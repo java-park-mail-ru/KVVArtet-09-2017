@@ -140,7 +140,7 @@ public class AssetsSerializationTest {
                     .get(AssetProvider.PERK_RESOURCE_NAME));
         assertFalse(testHolder.getAllAssets().isEmpty());
         final Random random = new Random(System.currentTimeMillis());
-        assertTrue(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size()))
+        assertTrue(Objects.requireNonNull(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size())))
                 .getAvailableAffectors().isEmpty());
     }
 
@@ -153,8 +153,8 @@ public class AssetsSerializationTest {
                 .getAssetHoldersFileNames().get(AssetProvider.PERK_BRANCH_RESOURCE_NAME), perkHolder.getAllAssets());
         assertFalse(testHolder.getAllAssets().isEmpty());
         final Random random = new Random(System.currentTimeMillis());
-        assertTrue(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size()))
-                .getPerk(0).getAvailableAffectors().isEmpty());
+        assertTrue(Objects.requireNonNull(Objects.requireNonNull(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size())))
+                .getPerk(0)).getAvailableAffectors().isEmpty());
     }
 
     @SuppressWarnings("unused")
@@ -173,7 +173,7 @@ public class AssetsSerializationTest {
         assertFalse(testHolder.getAllAssets().isEmpty());
         final Random random = new Random(System.currentTimeMillis());
         assertFalse(testHolder.getAllAssets().isEmpty());
-        assertTrue(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size()))
+        assertTrue(Objects.requireNonNull(testHolder.getAsset(random.nextInt(testHolder.getAllAssets().size())))
                 .getAppliedEffects().isEmpty());
     }
 

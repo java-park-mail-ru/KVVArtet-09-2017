@@ -15,6 +15,7 @@ import project.gamemechanics.resources.assets.AssetProvider;
 import project.gamemechanics.resources.assets.AssetProviderImpl;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
+import project.gamemechanics.services.interfaces.ItemDAO;
 import project.gamemechanics.world.config.ResourcesConfig;
 
 import java.util.Map;
@@ -70,5 +71,11 @@ public class ItemServiceTest {
         }
     }
 
-
+    @Test
+    public void deleteItem_Successful() {
+        final Random random = new Random(System.currentTimeMillis());
+        final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
+        Integer id = itemDAO.setItem(equipableItem.pack());
+        itemDAO.deleteItem(id);
+    }
 }

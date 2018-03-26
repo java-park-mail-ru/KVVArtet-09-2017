@@ -1,4 +1,4 @@
-package project.gamemechanics.services.databaseModels;
+package project.gamemechanics.services.dbmodels;
 
 import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.interfaces.Slot;
@@ -16,18 +16,18 @@ public class SlotImpl implements Slot {
 
     private Map<Integer, SingleValueProperty> itemsToQuantity = new HashMap<>();
 
-    public SlotImpl(){
+    SlotImpl() {
 
-    };
+    }
 
-    public SlotImpl(Integer itemID, Integer itemsQuantity){
+    public SlotImpl(Integer itemID, Integer itemsQuantity) {
        itemsToQuantity.put(PC_ITEM_ID, new SingleValueProperty(itemID));
        itemsToQuantity.put(PC_ITEMS_QUANTITY, new SingleValueProperty(itemsQuantity));
-    };
+    }
 
-    public SlotImpl(Map<Integer, SingleValueProperty> inputMap){
+    public SlotImpl(Map<Integer, SingleValueProperty> inputMap) {
         itemsToQuantity = inputMap;
-    };
+    }
 
     @Override
     public Map<Integer, SingleValueProperty> getAllProperties() {
@@ -46,11 +46,23 @@ public class SlotImpl implements Slot {
 
     @Override
     public @NotNull Integer getProperty(@NotNull Integer propertyKind, @NotNull Integer propertyIndex) {
-        return (hasProperty(propertyKind)) ? itemsToQuantity.get(propertyKind).getProperty(propertyIndex) : null;
+        return 0;
     }
 
     @Override
     public @NotNull Integer getProperty(@NotNull Integer propertyIndex) {
-        return null;
+        return 0;
+    }
+
+    @Override
+    public @NotNull Integer getPropertyValueByKind(@NotNull Integer propertyKind) {
+        return itemsToQuantity.get(propertyKind).getProperty();
+    }
+
+    @Override
+    public void resetProperties(Integer itemId, Integer itemQuantity) {
+        itemsToQuantity.clear();
+        itemsToQuantity.put(PC_ITEM_ID, new SingleValueProperty(itemId));
+        itemsToQuantity.put(PC_ITEMS_QUANTITY, new SingleValueProperty(itemQuantity));
     }
 }

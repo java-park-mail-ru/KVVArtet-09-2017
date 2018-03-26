@@ -2,6 +2,7 @@ package project.gamemechanics.services;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.lang.Nullable;
+import project.gamemechanics.services.interfaces.CharacterListDAO;
 
 import javax.validation.constraints.NotNull;
 import java.sql.PreparedStatement;
@@ -9,9 +10,10 @@ import java.util.List;
 
 import static java.sql.Types.NULL;
 
+@SuppressWarnings("unused")
 public class CharacterListService implements CharacterListDAO {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public CharacterListService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

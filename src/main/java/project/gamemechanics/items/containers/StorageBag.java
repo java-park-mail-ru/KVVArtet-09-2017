@@ -22,8 +22,8 @@ public class StorageBag implements Bag {
 
     public static class EmptyBagModel {
         // CHECKSTYLE:OFF
-        public final String name;
-        public final String description;
+        final String name;
+        final String description;
         final Integer bagSize;
         // CHECKSTYLE:ON
 

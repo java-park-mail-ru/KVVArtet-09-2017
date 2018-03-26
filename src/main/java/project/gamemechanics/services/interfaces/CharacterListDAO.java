@@ -1,4 +1,4 @@
-package project.gamemechanics.services;
+package project.gamemechanics.services.interfaces;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Service
 public interface CharacterListDAO {
 

@@ -5,6 +5,7 @@ import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public class BooleanMessage extends Message {
     private final Boolean flag;
 

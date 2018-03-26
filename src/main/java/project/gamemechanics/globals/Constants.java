@@ -19,6 +19,8 @@ public final class Constants {
 
     public static final int PERPETUAL_EFFECT_DURATION = -1;
 
+    public static final int DEFAULT_NUMBER_OF_SLOTS_IN_BAG = 20;
+
     public static final int START_LEVEL = 1;
     public static final int MAX_LEVEL = 60;
     public static final int FIRST_LEVEL_UP_CAP = 100;

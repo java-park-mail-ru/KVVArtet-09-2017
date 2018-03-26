@@ -34,7 +34,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "unused"})
 public class LobbyTest {
 
     private static final int DEFAULT_TEST_USERS_COUNT = 16;

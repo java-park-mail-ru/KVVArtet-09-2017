@@ -16,6 +16,7 @@ import project.gamemechanics.resources.assets.AssetProviderImpl;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
 import project.gamemechanics.resources.pcg.items.ItemBlueprint;
+import project.gamemechanics.services.interfaces.ItemDAO;
 import project.gamemechanics.world.config.ResourcesConfig;
 
 import java.io.IOException;
@@ -82,7 +83,16 @@ public class ItemService implements ItemDAO {
             return Constants.UNDEFINED_ID;
         }
         return keyHolder.getKey().intValue();
+    }
 
+    @Override
+    public void deleteItem(Integer id) {
+        final String sql = "DELETE from public.item WHERE id = ?";
+        jdbcTemplate.update(connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setObject(1, id);
+            return preparedStatement;
+        });
     }
 
     public void bindPcgFactory(PcgFactory factory) {
