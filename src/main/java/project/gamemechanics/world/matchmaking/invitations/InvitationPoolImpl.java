@@ -327,9 +327,7 @@ public class InvitationPoolImpl implements InvitationPool {
                     parties.get(partyId).removeMember(roleId);
                 }
             }
-            if (globalPartiesPool.containsKey(partyId)) {
-                globalPartiesPool.remove(partyId);
-            }
+            globalPartiesPool.remove(partyId);
             if (!wipPartiesPool.get(poll.getGameMode()).contains(parties.get(partyId))
                     && parties.get(partyId).getPartySize() > 0) {
                 wipPartiesPool.get(poll.getGameMode()).offerFirst(parties.get(partyId));
