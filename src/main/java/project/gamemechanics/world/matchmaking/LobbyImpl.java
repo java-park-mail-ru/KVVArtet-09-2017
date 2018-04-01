@@ -19,8 +19,8 @@ import project.gamemechanics.world.matchmaking.invitations.InvitationPoolImpl;
 import project.gamemechanics.world.matchmaking.invitations.invitations.Invitation;
 import project.websocket.messages.ErrorMessage;
 import project.websocket.messages.Message;
-import project.websocket.messages.bool.BooleanMessage;
 import project.websocket.messages.matchmaking.LobbyConfirmationMessage;
+import project.websocket.messages.typecontainer.BooleanMessage;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -161,9 +161,7 @@ public class LobbyImpl implements Lobby {
     public @NotNull Message dequeue(@NotNull CharactersParty party,
                                     @NotNull Boolean dismissParty) {
         for (Integer gameMode : wipPartiesPool.keySet()) {
-            if (wipPartiesPool.get(gameMode).contains(party)) {
-                wipPartiesPool.get(gameMode).remove(party);
-            }
+            wipPartiesPool.get(gameMode).remove(party);
         }
         if (dismissParty) {
             dismissCharactersParty(party);
@@ -196,10 +194,9 @@ public class LobbyImpl implements Lobby {
     }
 
     @Override
-    public @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
-                                       @NotNull Integer newStatus) {
-        if (characterId <= Constants.UNDEFINED_ID
-                || !wipPartiesPool.containsKey(gameMode)) {
+    public @NotNull Message updatePoll(@NotNull Integer pollId, @NotNull Integer characterId,
+                                       @NotNull Integer gameMode, @NotNull Integer newStatus) {
+        if (!areCharacterIdAndGameModeValid(characterId, gameMode)) {
             final String error = characterId <= Constants.UNDEFINED_ID
                     ? "invalid character id" : "invalid game mode";
             return new ErrorMessage(error);
@@ -207,15 +204,24 @@ public class LobbyImpl implements Lobby {
         if (!isNewStatusValid(newStatus)) {
             return new ErrorMessage("invalid new status");
         }
+        if (invitationService.getPoll(pollId) == null) {
+           return new ErrorMessage("invalid poll id");
+        }
 
+        return invitationService.updatePoll(pollId, gameMode, characterId, newStatus)
+                ? new LobbyConfirmationMessage()
+                : new ErrorMessage("failed to update (invalid character id)");
+    }
+
+    @Override
+    public @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
+                                       @NotNull Integer newStatus) {
         final Integer pollId = getPollIdByCharacterId(characterId, gameMode);
         if (pollId == Constants.UNDEFINED_ID) {
             return new ErrorMessage("this character isn\'t queued in any prepared match");
         }
 
-        return invitationService.updatePoll(pollId, characterId, gameMode, newStatus)
-                ? new LobbyConfirmationMessage()
-                : new ErrorMessage("unable to update poll for this character");
+        return updatePoll(pollId, characterId, gameMode, newStatus);
     }
 
     @Override
@@ -235,18 +241,43 @@ public class LobbyImpl implements Lobby {
 
     private @NotNull Boolean isCharacterQueued(@NotNull Integer characterId,
                                                @NotNull Integer gameMode) {
-        if (characterId <= Constants.UNDEFINED_ID || !wipPartiesPool.containsKey(gameMode)) {
-            return false;
-        }
+        return areCharacterIdAndGameModeValid(characterId, gameMode)
+                && (isCharacterQueuedInWipParties(characterId, gameMode)
+                || isCharacterQueuedInNonParty(characterId, gameMode));
+    }
 
+    private @NotNull Boolean areCharacterIdAndGameModeValid(@NotNull Integer characterId,
+                                                            @NotNull Integer gameMode) {
+        return characterId > Constants.UNDEFINED_ID && wipPartiesPool.containsKey(gameMode);
+    }
+
+    private @NotNull Boolean isCharacterQueuedInWipParties(@NotNull Integer characterId,
+                                                           @NotNull Integer gameMode) {
         final Deque<CharactersParty> wipParties = wipPartiesPool.get(gameMode);
         for (CharactersParty party : wipParties) {
-           for (Integer roleId : party.getRoleIds()) {
-               final AliveEntity member = party.getMember(roleId);
-               if (member != null && member.getID().equals(characterId)) {
-                   return true;
-               }
-           }
+            for (Integer roleId : party.getRoleIds()) {
+                final AliveEntity member = party.getMember(roleId);
+                if (member != null && member.getID().equals(characterId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private @NotNull Boolean isCharacterQueuedInNonParty(@NotNull Integer characterId,
+                                                         @NotNull Integer gameMode) {
+        if (!queuedCharacters.containsKey(gameMode)) {
+            return false;
+        }
+        final Map<Integer, Deque<AliveEntity>> queuedForGameMode = queuedCharacters.get(gameMode);
+        for (Integer roleId : queuedForGameMode.keySet()) {
+            final Deque<AliveEntity> roleQueuedForGameMode = queuedForGameMode.get(roleId);
+            for (AliveEntity queuedCharacter : roleQueuedForGameMode) {
+                if (queuedCharacter.getID().equals(characterId)) {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -283,9 +314,7 @@ public class LobbyImpl implements Lobby {
                                            @NotNull Integer gameMode) {
         for (Integer roleId : queuedCharacters.get(gameMode).keySet()) {
             final Deque<AliveEntity> queuedForRole = queuedCharacters.get(gameMode).get(roleId);
-            if (queuedForRole.contains(character)) {
-                queuedForRole.remove(character);
-            }
+            queuedForRole.remove(character);
         }
     }
 
@@ -312,9 +341,7 @@ public class LobbyImpl implements Lobby {
     }
 
     private void dismissCharactersParty(@NotNull CharactersParty party) {
-        if (globalPartiesPool.containsKey(party.getID())) {
-            globalPartiesPool.remove(party.getID());
-        }
+        globalPartiesPool.remove(party.getID());
         for (Integer roleId : party.getRoleIds()) {
             party.removeMember(roleId);
         }
@@ -352,11 +379,13 @@ public class LobbyImpl implements Lobby {
                             parties.put(firstTeam.getID(), firstTeam);
                             parties.put(party.getID(), party);
                             invitationService.addPoll(parties, gameMode);
+                            wipPartiesPool.get(gameMode).remove(party);
+                            wipPartiesPool.get(gameMode).remove(firstTeam);
                         }
                     } else {
                         invitationService.addPoll(party);
+                        wipPartiesPool.get(gameMode).remove(party);
                     }
-                    wipPartiesPool.get(gameMode).remove(party);
                 }
             }
         }

@@ -82,6 +82,20 @@ public interface Lobby {
 
     /**
      * Updates character's vote {@see Invitation} in in specified game mode to given
+     * new status by character ID and poll ID.
+     *
+     * @param pollId - ID of poll to update
+     * @param gameMode - game mode to look for character in
+     * @param characterId - ID of character whose vote shall be updated
+     * @param newStatus - new character vote status
+     * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
+     *      or {@link project.websocket.messages.ErrorMessage} otherwise
+     */
+    @NotNull Message updatePoll(@NotNull Integer pollId, @NotNull Integer characterId,
+                                @NotNull Integer gameMode, @NotNull Integer newStatus);
+
+    /**
+     * Updates character's vote {@see Invitation} in in specified game mode to given
      * new status by character ID.
      *
      * @param gameMode - game mode to look for character in
@@ -90,14 +104,14 @@ public interface Lobby {
      * @return {@link project.websocket.messages.matchmaking.LobbyConfirmationMessage} if successful,
      *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
-    @NotNull Message updatePoll(@NotNull Integer gameMode, @NotNull Integer characterId,
+    @NotNull Message updatePoll(@NotNull Integer characterId, @NotNull Integer gameMode,
                                 @NotNull Integer newStatus);
 
     /**
      * checks if character {@see AliveEntity} is queued for any game mode by character ID.
      *
      * @param characterId - Id of character to search
-     * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
+     * @return {@link project.websocket.messages.typecontainer.BooleanMessage} with flag containing the result
      *      if input is valid (true if the character is queued for any game mode, false otherwise),
      *      or {@link project.websocket.messages.ErrorMessage} otherwise
      */
@@ -108,7 +122,7 @@ public interface Lobby {
      *
      * @param characterId - Id of character to search
      * @param gameMode - game mode to search in
-     * @return {@link project.websocket.messages.bool.BooleanMessage} with flag containing the result
+     * @return {@link project.websocket.messages.typecontainer.BooleanMessage} with flag containing the result
      *      if input is valid (flag will be set to true if there's a character
      *      with such ID, and will be false otherwise),
      *      or {@link project.websocket.messages.ErrorMessage} otherwise

@@ -37,6 +37,7 @@ public class InvitationPoolImpl implements InvitationPool {
     private final Map<Integer, Instance> instancesPool;
 
     private final Map<Integer, Map<Integer, Poll>> polls = new HashMap<>();
+    private final Map<Integer, Map<Integer, Poll>> pollsToCharIds = new HashMap<>();
 
     public InvitationPoolImpl(@NotNull AssetProvider assetProvider,
                               @NotNull PcgContentFactory factory,
@@ -54,6 +55,10 @@ public class InvitationPoolImpl implements InvitationPool {
         polls.put(GameModes.GM_COOP_PVE, new ConcurrentHashMap<>());
         polls.put(GameModes.GM_COOP_PVP, new ConcurrentHashMap<>());
         polls.put(GameModes.GM_SQUAD_PVP, new ConcurrentHashMap<>());
+
+        pollsToCharIds.put(GameModes.GM_COOP_PVE, new ConcurrentHashMap<>());
+        pollsToCharIds.put(GameModes.GM_COOP_PVP, new ConcurrentHashMap<>());
+        pollsToCharIds.put(GameModes.GM_SQUAD_PVP, new ConcurrentHashMap<>());
     }
 
     @Override
@@ -61,6 +66,7 @@ public class InvitationPoolImpl implements InvitationPool {
         if (!contains(party, GameModes.GM_COOP_PVE)) {
             final Poll pvePoll = new PvePoll(party);
             polls.get(GameModes.GM_COOP_PVE).put(pvePoll.getID(), pvePoll);
+            mapPollToCharacterIds(pvePoll);
             return pvePoll.getID();
         }
         return Constants.UNDEFINED_ID;
@@ -82,6 +88,7 @@ public class InvitationPoolImpl implements InvitationPool {
         final Poll pvpPoll = gameMode == GameModes.GM_SQUAD_PVP
                 ? new SquadPvpPoll(parties) : new CoopPvpPoll(parties);
         polls.get(pvpPoll.getGameMode()).put(pvpPoll.getID(), pvpPoll);
+        mapPollToCharacterIds(pvpPoll);
         return pvpPoll.getID();
     }
 
@@ -102,6 +109,7 @@ public class InvitationPoolImpl implements InvitationPool {
                     // TODO: broadcast NewInstanceMessage to all participants
                     // CHECKSTYLE:ON
                     polls.get(gameMode).remove(pollId);
+                    unmapPollFromCharacterIds(poll);
                     continue;
                 }
                 poll.update();
@@ -155,25 +163,33 @@ public class InvitationPoolImpl implements InvitationPool {
         if (characterId < Constants.MIN_ID_VALUE || !polls.containsKey(gameMode)) {
             return Constants.UNDEFINED_ID;
         }
+        final Map<Integer, Poll> pendingPolls = pollsToCharIds.get(gameMode);
+        return pendingPolls.containsKey(characterId)
+                ? pendingPolls.get(characterId).getID() : Constants.UNDEFINED_ID;
+    }
 
-        final Map<Integer, Poll> pendingPolls = polls.get(gameMode);
-        for (Integer pollId : pendingPolls.keySet()) {
-            final Poll poll = pendingPolls.get(pollId);
-            for (Integer partyId : poll.getParties().keySet()) {
-                final CharactersParty party = poll.getParty(partyId);
-                if (party == null) {
-                    return Constants.UNDEFINED_ID;
-                }
-                for (Integer roleId : party.getRoleIds()) {
-                    final AliveEntity member = party.getMember(roleId);
-                    if (member != null && member.getID().equals(characterId)) {
-                        return pollId;
-                    }
+    private void mapPollToCharacterIds(@NotNull Poll poll) {
+        final Map<Integer, CharactersParty> parties = poll.getParties();
+        for (Integer partyId : parties.keySet()) {
+            for (Integer roleId : parties.get(partyId).getRoleIds()) {
+                final AliveEntity member = parties.get(partyId).getMember(roleId);
+                if (member != null) {
+                    pollsToCharIds.get(poll.getGameMode()).put(member.getID(), poll);
                 }
             }
         }
+    }
 
-        return Constants.UNDEFINED_ID;
+    private void unmapPollFromCharacterIds(@NotNull Poll poll) {
+        final Map<Integer, CharactersParty> parties = poll.getParties();
+        for (Integer partyId : parties.keySet()) {
+            for (Integer roleId : parties.get(partyId).getRoleIds()) {
+                final AliveEntity member = parties.get(partyId).getMember(roleId);
+                if (member != null) {
+                    pollsToCharIds.remove(member.getID());
+                }
+            }
+        }
     }
 
     private Boolean contains(@NotNull CharactersParty party, @NotNull Integer gameMode) {
@@ -311,9 +327,7 @@ public class InvitationPoolImpl implements InvitationPool {
                     parties.get(partyId).removeMember(roleId);
                 }
             }
-            if (globalPartiesPool.containsKey(partyId)) {
-                globalPartiesPool.remove(partyId);
-            }
+            globalPartiesPool.remove(partyId);
             if (!wipPartiesPool.get(poll.getGameMode()).contains(parties.get(partyId))
                     && parties.get(partyId).getPartySize() > 0) {
                 wipPartiesPool.get(poll.getGameMode()).offerFirst(parties.get(partyId));
@@ -335,5 +349,6 @@ public class InvitationPoolImpl implements InvitationPool {
                 }
             }
         }
+        unmapPollFromCharacterIds(poll);
     }
 }
