@@ -22,8 +22,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class WorldImpl implements World {
-    private final AssetProvider assetProvider = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
-    private final PcgContentFactory pcgContentFactory = new PcgFactory(ResourcesConfig.getItemPartsFilename(),
+    private final AssetProvider assetProvider =
+            new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
+    private final PcgContentFactory pcgContentFactory =
+            new PcgFactory(ResourcesConfig.getItemPartsFilename(),
             ResourcesConfig.getNpcPartsFilename(), assetProvider);
 
     private final ConnectionPoolService connectionPoolService;

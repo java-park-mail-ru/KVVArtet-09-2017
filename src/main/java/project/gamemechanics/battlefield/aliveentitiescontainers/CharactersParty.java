@@ -110,6 +110,16 @@ public class CharactersParty implements Countable {
             members.get(realRoleId).addProperty(PropertyCategories.PC_PARTY_ID,
                     new SingleValueProperty(Constants.UNDEFINED_ID));
         }
+        if (realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_ONE
+                || realRoleId == CharacterRoleIds.CR_DAMAGE_DEALER_TWO) {
+            final Integer semanticRole = Objects.requireNonNull(members.get(realRoleId)
+                    .getCharacterRole().getAvailableRoles())
+                    .contains(CharacterRoleIds.CR_RANGED_DAMAGE_DEALER)
+                    ? CharacterRoleIds.CR_RANGED_DAMAGE_DEALER
+                    : CharacterRoleIds.CR_MELEE_DAMAGE_DEALER;
+            members.get(realRoleId).setProperty(PropertyCategories.PC_ACTIVE_ROLE,
+                    semanticRole);
+        }
         members.replace(realRoleId, null);
         return true;
     }
