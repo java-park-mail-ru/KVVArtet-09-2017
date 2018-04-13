@@ -31,6 +31,7 @@ public class BagService implements BagDAO {
     }
 
     @Override
+    @NotNull
     public BagDatabaseModel getBagById(@NotNull Integer id) {
         final String sql = "SELECT * FROM public.bag WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (ResultSet rs, int rwNumber) -> {
@@ -40,7 +41,7 @@ public class BagService implements BagDAO {
             } catch (IOException e) {
                 logger.trace(e);
             }
-            return bagDatabaseModel;
+            return bagDatabaseModel; /*TODO: how to return not null?*/
         });
     }
 

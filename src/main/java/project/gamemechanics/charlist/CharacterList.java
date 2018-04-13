@@ -3,6 +3,7 @@ package project.gamemechanics.charlist;
 import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.interfaces.Charlist;
+import project.websocket.messages.models.UserCharacterClientModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -81,5 +82,15 @@ public class CharacterList implements Charlist {
 
     public @NotNull List<UserCharacter> getCharacterList() {
         return characterList;
+    }
+
+    public List<UserCharacterClientModel> packToUserCharacterClientModelList() {
+        List<UserCharacterClientModel> userCharacterClientModels = new ArrayList<>();
+        for (int i = 0; i < characterList.size(); i++) {
+            UserCharacterClientModel characterToAdd = this.characterList.get(i).packToClientModel();
+            characterToAdd.setCharIndexInCharist(i);
+            userCharacterClientModels.add(characterToAdd);
+        }
+        return userCharacterClientModels;
     }
 }

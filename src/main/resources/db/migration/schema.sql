@@ -8,11 +8,12 @@ CREATE TABLE IF NOT EXISTS public.user (
   id serial PRIMARY KEY NOT NULL,
   username character varying(45) NOT NULL,
   email character varying(45) NOT NULL,
-  password CHARACTER(60) NOT NULL
+  password CHARACTER(60) NOT NULL,
+  character_list_id INTEGER REFERENCES character_list(id) ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.character_list (
-  id INTEGER NOT NULL,
+  id SERIAL PRIMARY KEY NOT NULL,
   characters_ids integer[]
 );
 
