@@ -226,14 +226,14 @@ public class AssetsSerializationTest {
     @Test
     public void assetProviderTest() {
         final AssetProvider assetProvider = new AssetProviderImpl(ResourcesConfig.getAssetHoldersFileNames());
-        assertFalse(assetProvider.getNpcRole() == null);
-        assertFalse(assetProvider.getPerk(0) == null);
-        assertFalse(assetProvider.getPerkBranch(0) == null);
-        assertFalse(assetProvider.getAbility(0) == null);
-        assertFalse(assetProvider.getCharacterRace(0) == null);
-        assertFalse(assetProvider.getCharacterRace() == null);
-        assertFalse(assetProvider.getCharacterClass(0) == null);
-        assertTrue(assetProvider.makeInstanceNameDescription().size() == DigitsPairIndices.PAIR_SIZE);
+        assertNotNull(assetProvider.getNpcRole());
+        assertNotNull(assetProvider.getPerk(0));
+        assertNotNull(assetProvider.getPerkBranch(0));
+        assertNotNull(assetProvider.getAbility(0));
+        assertNotNull(assetProvider.getCharacterRace(0));
+        assertNotNull(assetProvider.getCharacterRace());
+        assertNotNull(assetProvider.getCharacterClass(0));
+        assertEquals(assetProvider.makeInstanceNameDescription().size(), DigitsPairIndices.PAIR_SIZE);
     }
 
     @Test

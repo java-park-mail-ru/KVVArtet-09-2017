@@ -1,6 +1,5 @@
 package project.gamemechanics.charlist;
 
-import project.gamemechanics.aliveentities.AbstractAliveEntity;
 import project.gamemechanics.smartcontroller.SmartController;
 import project.websocket.messages.charlist.CreateCharacterRequestMessage;
 import project.websocket.messages.charlist.DeleteCharacterRequestMessage;

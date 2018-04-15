@@ -284,6 +284,7 @@ public class PollsTest {
         assertTrue(coopPvpPoll.isReady());
     }
 
+    @SuppressWarnings("Duplicates")
     private @NotNull Map<Integer, CharactersParty> makeTestPartiesPair() {
         final CharactersParty partyOne = new CharactersParty(pendingLootPool);
         final CharactersParty partyTwo = new CharactersParty(pendingLootPool);

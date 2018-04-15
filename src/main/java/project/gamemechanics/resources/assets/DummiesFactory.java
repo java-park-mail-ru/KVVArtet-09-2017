@@ -63,6 +63,7 @@ public class DummiesFactory {
                         new CharacterDoll(), initPerkRanks(role));
         return model;
     }
+    @SuppressWarnings("WeakerAccess")
     public @Nullable AliveEntity makeNewDummy(@NotNull Integer classId, @NotNull Integer raceId, @NotNull String name,
                                               @NotNull String description) {
         final ObjectMapper mapper = new ObjectMapper();

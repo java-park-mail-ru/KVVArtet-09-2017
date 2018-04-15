@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 import project.gamemechanics.aliveentities.AbstractAliveEntity;
 import project.gamemechanics.globals.Constants;
-import project.gamemechanics.services.dbmodels.BagDatabaseModel;
 import project.gamemechanics.services.interfaces.UserCharacterDAO;
 
 import javax.validation.constraints.NotNull;
@@ -70,12 +69,18 @@ public class UserCharacterService implements UserCharacterDAO {
     }
 
     @Override
+    /*TODO updateUserChar method*/
     public void updateUserCharacter(Integer id, AbstractAliveEntity.UserCharacterModel newUserCharacterModel) {
 
     }
 
     @Override
     public void deleteUserCharacter(Integer id) {
-
+        final String sql = "DELETE FROM public.character WHERE id = ?";
+        jdbcTemplate.update(con -> {
+            final PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, id);
+            return pst;
+        });
     }
 }

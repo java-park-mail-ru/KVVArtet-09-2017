@@ -166,7 +166,11 @@ public class UserService implements UserDao {
     @Override
     public void deleteUser(@NotNull Integer id) {
         final String sql = "DELETE FROM public.user WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(con -> {
+            final PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, id);
+            return pst;
+        });
     }
 
     @Override

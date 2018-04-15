@@ -1,8 +1,6 @@
 package project.server.dao;
 
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import project.server.models.User;
 
 import javax.validation.constraints.NotNull;

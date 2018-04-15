@@ -49,6 +49,7 @@ public class BagService implements BagDAO {
     public Integer setBag(@NotNull BagDatabaseModel newBag) {
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         final String sql = "INSERT into public.bag(bag_json_model)" + "values(?) RETURNING id";
+        //noinspection Duplicates
         try {
             jdbcTemplate.update(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);

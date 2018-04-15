@@ -2,9 +2,7 @@ package project.gamemechanics.charlist;
 
 import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
 import project.gamemechanics.aliveentities.UserCharacter;
-import project.gamemechanics.services.interfaces.CharacterListDAO;
-import project.gamemechanics.services.interfaces.UserCharacterDAO;
-import project.server.dao.UserDao;
+import project.gamemechanics.globals.Constants;
 import project.websocket.messages.models.UserCharacterClientModel;
 
 import javax.validation.constraints.NotNull;
@@ -13,38 +11,19 @@ import java.util.List;
 
 public class CharacterList implements Charlist {
 
-    @NotNull
     private final Integer characterListID;
     private final List<UserCharacter> characterList;
     private final Integer ownerID;
 
     public static class CharacterListModel {
-        // CHECKSTYLE:OFF
-        List<UserCharacter> characterList = new ArrayList<>();
-        Integer ownerID;
-        Integer charlistID;
-        CharacterListDAO characterListDAO;
-        UserCharacterDAO userCharacterDAO;
-        UserDao userDao;
-        // CHECKSTYLE:ON
+        private List<UserCharacter> characterList = new ArrayList<>();
+        private final Integer ownerID;
+        private Integer charlistID = Constants.UNDEFINED_ID;
 
-        public CharacterListModel(@NotNull Integer ownerID, @NotNull List<UserCharacter> characterList) {
+        public CharacterListModel(@NotNull Integer ownerID, Integer charlistID, @NotNull List<UserCharacter> characterList) {
             this.ownerID = ownerID;
+            this.charlistID = charlistID;
             this.characterList = characterList;
-        }
-
-        CharacterListModel(@NotNull Integer ownerID) {
-            this.ownerID = ownerID;
-            this.setDefaultCharlist(ownerID);
-        }
-
-        void setDefaultCharlist(Integer ownerID) {
-            this.charlistID = userDao.getCharacaterListIdByUserId(ownerID);
-            List<Integer> charactersList = characterListDAO.getCharacters(this.charlistID);
-            for (Integer charId : charactersList) {
-                UserCharacter userCharacter = new UserCharacter(userCharacterDAO.getUserCharacterById(charId));
-                this.characterList.add(userCharacter);
-            }
         }
     }
 
@@ -71,6 +50,7 @@ public class CharacterList implements Charlist {
         return newUserCharacter;
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public void deleteCharacter(@NotNull Integer index) {
         this.characterList.remove(index);

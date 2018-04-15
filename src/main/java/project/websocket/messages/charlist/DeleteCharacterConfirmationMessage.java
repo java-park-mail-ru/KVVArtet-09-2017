@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 public class DeleteCharacterConfirmationMessage extends Message {
     private final String message;
 
+    @SuppressWarnings("WeakerAccess")
     public DeleteCharacterConfirmationMessage(@JsonProperty("message") @NotNull String message) {
         this.message = message;
     }

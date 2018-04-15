@@ -8,7 +8,7 @@ public enum ClassDescription {
     CD_Rogue(2, "Rogue"),
     CD_Priest(3, "Priest");
 
-    private ClassDescription(@NotNull Integer id, @NotNull String name) {
+    ClassDescription(@NotNull Integer id, @NotNull String name) {
         this.id = id;
         this.name = name;
     }

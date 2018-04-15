@@ -49,7 +49,7 @@ public interface Charlist extends Countable {
      *
      * @return null if there's empty list in {@link CharacterList} and list of {@link UserCharacter} otherwise
      */
-    default List<UserCharacter> getCharacterList(){ return null; };
+    default List<UserCharacter> getCharacterList(){ return null; }
 
 
     /**
@@ -57,5 +57,5 @@ public interface Charlist extends Countable {
      *
      * @return null if there's empty list in {@link CharacterList} and list of {@link UserCharacterClientModel} otherwise
      */
-    default List<UserCharacterClientModel> packToUserCharacterClientModelList() { return null; };
+    default List<UserCharacterClientModel> packToUserCharacterClientModelList() { return null; }
 }

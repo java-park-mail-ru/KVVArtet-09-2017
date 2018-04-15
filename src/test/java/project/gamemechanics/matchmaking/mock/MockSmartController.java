@@ -5,6 +5,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.charlist.Charlist;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.smartcontroller.SmartController;
 import project.websocket.messages.Message;
@@ -20,7 +21,7 @@ public class MockSmartController implements SmartController {
 
     private UserCharacter activeChar = null;
 
-    private CharacterList characterList = null;
+    private Charlist characterList = null;
 
     @Override
     public void tick() {
@@ -54,7 +55,7 @@ public class MockSmartController implements SmartController {
     }
 
     @Override
-    public @Nullable CharacterList getCharacterList() {
+    public @Nullable Charlist getCharacterList() {
         return characterList;
     }
 
@@ -97,7 +98,7 @@ public class MockSmartController implements SmartController {
     @Override
     public @NotNull Boolean set(@NotNull Integer ownerId,
                                 @NotNull WebSocketSession session,
-                                @Nullable CharacterList characterList) {
+                                @Nullable Charlist characterList) {
         if (!isValid()) {
             this.ownerId = ownerId;
             this.characterList = characterList;

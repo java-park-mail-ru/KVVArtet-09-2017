@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import project.gamemechanics.charlist.CharacterList;
 import project.gamemechanics.charlist.CharacterListPool;
 import project.gamemechanics.charlist.Charlist;
 import project.gamemechanics.smartcontroller.SmartController;
