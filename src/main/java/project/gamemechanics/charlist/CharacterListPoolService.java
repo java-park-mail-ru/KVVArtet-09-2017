@@ -50,9 +50,7 @@ public class CharacterListPoolService implements CharacterListPool {
     }
 
     @Override
-    public void updateCharacterList(Integer ownerId) {
-        Integer characterListId = characterListMap.get(ownerId).getID();
-        List<Integer> characterIdsList = characterListDAO.getCharacters(characterListId);
-
+    public void deleteCharacterList(@NotNull Integer ownerId) {
+        characterListMap.remove(ownerId);
     }
 }

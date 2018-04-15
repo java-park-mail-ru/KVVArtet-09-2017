@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings({"UnusedAssignment", "SameParameterValue", "unused"})
 @Service
 public class ConnectionPoolService {
 
@@ -36,7 +35,7 @@ public class ConnectionPoolService {
         for (SmartController smart : sessions.values()) {
             if (smart.isValid()) {
                 smart.tick();
-                Message response = null;
+                Message response;
                 while ((response = smart.getOutboxMessage()) != null) {
                     try {
                         this.sendMessageToUser(smart.getOwnerID(), response);
@@ -74,12 +73,14 @@ public class ConnectionPoolService {
         sessions.remove(userId);
     }
 
-    private void cutDownConnection(@NotNull Integer userId, @NotNull CloseStatus closeStatus) {
+    private void cutDownConnection(@NotNull Integer userId) {
+
         final WebSocketSession webSocketSession = sessions.get(userId).getWebSocketSession();
+        characterListPool.deleteCharacterList(userId);
         if (webSocketSession != null && webSocketSession.isOpen()) {
             /// CHECKSTYLE:OFF
             try {
-                webSocketSession.close(closeStatus);
+                webSocketSession.close(CloseStatus.SERVER_ERROR);
             } catch (IOException ignore) {
             }
             // CHECKSTYLE:ON
@@ -113,7 +114,7 @@ public class ConnectionPoolService {
 
     public void reset() {
         for (Map.Entry<Integer, SmartController> entry : sessions.entrySet()) {
-            cutDownConnection(entry.getKey(), CloseStatus.SERVER_ERROR);
+            cutDownConnection(entry.getKey());
         }
     }
 }
