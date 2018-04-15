@@ -7,6 +7,7 @@ import org.postgresql.util.PGobject;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.stereotype.Service;
 import project.gamemechanics.aliveentities.AbstractAliveEntity;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.services.dbmodels.BagDatabaseModel;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+@Service
 public class UserCharacterService implements UserCharacterDAO {
 
     private final Logger logger = Logger.getLogger(BagService.class);
@@ -43,6 +45,7 @@ public class UserCharacterService implements UserCharacterDAO {
 
     @Override
     @NotNull
+    @SuppressWarnings("Duplicates")
     public Integer setUserCharacter(AbstractAliveEntity.UserCharacterModel newUserCharacterModel) {
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         final String sql = "INSERT into public.character(character_json_model)" + "values(?) RETURNING id";

@@ -1,7 +1,9 @@
 package project.gamemechanics.services;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 import project.gamemechanics.services.interfaces.CharacterListDAO;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,7 @@ import java.util.List;
 import static java.sql.Types.NULL;
 
 @SuppressWarnings("unused")
+@Service
 public class CharacterListService implements CharacterListDAO {
 
     private final JdbcTemplate jdbcTemplate;
@@ -29,7 +32,7 @@ public class CharacterListService implements CharacterListDAO {
     @Override
     @SuppressWarnings("Duplicates")
     public void setCharacterInCharacterList(@NotNull Integer id, @NotNull Integer characterId) {
-        String sql = "UPDATE public.character_list SET characters_ids = array_append(characters_ids, ?) WHERE id = ?";
+        final String sql = "UPDATE public.character_list SET characters_ids = array_append(characters_ids, ?) WHERE id = ?";
         jdbcTemplate.update(connection -> {
             final PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1, characterId);
@@ -40,12 +43,25 @@ public class CharacterListService implements CharacterListDAO {
 
     @Override
     @SuppressWarnings("Duplicates")
-    public void createDefaultEmptyCharacterList(@NotNull Integer id) {
-        String sql = "INSERT INTO public.character_list VALUES(?,?)";
+    public Integer createDefaultEmptyCharacterList() {
+        final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        final String sql = "INSERT INTO public.character_list (character_ids) VALUES(?) returning id";
+        jdbcTemplate.update(connection -> {
+            final PreparedStatement pst = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, NULL);
+            return pst;
+        }, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
+
+    @Override
+    @SuppressWarnings("Duplicates")
+    public void deleteCharacterFromCharacterList(@NotNull Integer id, @NotNull Integer characterId) {
+        final String sql = "UPDATE public.character_list SET characters_ids = array_remove(characters_ids, ?) WHERE id = ?";
         jdbcTemplate.update(connection -> {
             final PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setInt(1, id);
-            pst.setInt(2, NULL);
+            pst.setInt(1, characterId);
+            pst.setInt(2, id);
             return pst;
         });
     }

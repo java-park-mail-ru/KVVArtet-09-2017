@@ -6,6 +6,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.charlist.Charlist;
 import project.gamemechanics.globals.Constants;
 
 import project.statemachine.StateService;
@@ -22,7 +23,7 @@ public class SmartControllerImpl implements SmartController {
     private final Deque<Message> outboxMessageQueue = new ArrayDeque<>();
 
     private UserCharacter activeChar = null;
-    private CharacterList characterList = null;
+    private Charlist characterList = null;
     private final StateService stateService = new StateService();
     private WebSocketSession webSocketSession = null;
     private Integer ownerID = Constants.UNDEFINED_ID;
@@ -66,7 +67,7 @@ public class SmartControllerImpl implements SmartController {
     }
 
     @Override
-    public @Nullable CharacterList getCharacterList() {
+    public @Nullable Charlist getCharacterList() {
         return characterList;
     }
 
@@ -120,7 +121,7 @@ public class SmartControllerImpl implements SmartController {
     @Override
     public @NotNull Boolean set(@NotNull Integer newOwnerID,
                                 @NotNull WebSocketSession newWebSocketSession,
-                                @Nullable CharacterList newCharacterList) {
+                                @Nullable Charlist newCharacterList) {
         if (!isValid()) {
             ownerID = newOwnerID;
             if (webSocketSession != null) {

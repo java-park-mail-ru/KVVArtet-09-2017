@@ -4,9 +4,10 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
 
-@SuppressWarnings({"EmptyMethod", "unused"})
-interface CharacterListPool {
+public interface CharacterListPool {
     @Nullable CharacterList getCharacterList(@NotNull Integer ownerID);
 
-    void initCharacterList(@NotNull Integer ownerID);
+    Charlist initCharacterList(@NotNull Integer ownerId);
+
+    void updateCharacterList(@NotNull Integer ownerId);
 }

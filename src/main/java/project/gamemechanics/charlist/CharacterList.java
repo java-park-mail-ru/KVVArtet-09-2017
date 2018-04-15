@@ -2,29 +2,30 @@ package project.gamemechanics.charlist;
 
 import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
 import project.gamemechanics.aliveentities.UserCharacter;
-import project.gamemechanics.interfaces.Charlist;
+import project.gamemechanics.services.interfaces.CharacterListDAO;
+import project.gamemechanics.services.interfaces.UserCharacterDAO;
+import project.server.dao.UserDao;
 import project.websocket.messages.models.UserCharacterClientModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings("unused")
 public class CharacterList implements Charlist {
 
-    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
-    private final Integer charlistID = INSTANCE_COUNTER.getAndIncrement();
+    @NotNull
+    private final Integer characterListID;
     private final List<UserCharacter> characterList;
     private final Integer ownerID;
 
-    @SuppressWarnings({"InstanceMethodNamingConvention", "unused", "RedundantSuppression"})
     public static class CharacterListModel {
-        //noinspection VisibilityModifier
         // CHECKSTYLE:OFF
-        @SuppressWarnings("RedundantSuppression")
         List<UserCharacter> characterList = new ArrayList<>();
-        final Integer ownerID;
+        Integer ownerID;
+        Integer charlistID;
+        CharacterListDAO characterListDAO;
+        UserCharacterDAO userCharacterDAO;
+        UserDao userDao;
         // CHECKSTYLE:ON
 
         public CharacterListModel(@NotNull Integer ownerID, @NotNull List<UserCharacter> characterList) {
@@ -32,47 +33,47 @@ public class CharacterList implements Charlist {
             this.characterList = characterList;
         }
 
-        public CharacterListModel(@NotNull Integer ownerID) {
+        CharacterListModel(@NotNull Integer ownerID) {
             this.ownerID = ownerID;
-            this.setDefaultCharacters();
+            this.setDefaultCharlist(ownerID);
         }
 
-        @SuppressWarnings("EmptyMethod")
-        void setDefaultCharacters() {
-            //TODO MAKE IT WORK
+        void setDefaultCharlist(Integer ownerID) {
+            this.charlistID = userDao.getCharacaterListIdByUserId(ownerID);
+            List<Integer> charactersList = characterListDAO.getCharacters(this.charlistID);
+            for (Integer charId : charactersList) {
+                UserCharacter userCharacter = new UserCharacter(userCharacterDAO.getUserCharacterById(charId));
+                this.characterList.add(userCharacter);
+            }
         }
     }
 
     public CharacterList(@NotNull CharacterListModel characterListModel) {
         this.characterList = characterListModel.characterList;
         this.ownerID = characterListModel.ownerID;
+        this.characterListID = characterListModel.charlistID;
     }
-
 
     @Override
     public @NotNull Integer getID() {
-        return charlistID;
+        return characterListID;
     }
 
     @Override
     public @NotNull Integer getInstancesCount() {
-        return INSTANCE_COUNTER.get();
+        return null;
     }
 
     @Override
-    public @NotNull UserCharacter createChar(@NotNull UserCharacterModel userModel) {
+    public @NotNull UserCharacter createCharacter(@NotNull UserCharacterModel userModel) {
         final UserCharacter newUserCharacter = new UserCharacter(userModel);
         this.characterList.add(newUserCharacter);
-        //insert in database
         return newUserCharacter;
     }
 
-    @SuppressWarnings("SuspiciousMethodCalls")
     @Override
-    public void deleteChar(@NotNull Integer index) {
-        final Integer charID = this.characterList.get(index).getID();
+    public void deleteCharacter(@NotNull Integer index) {
         this.characterList.remove(index);
-        //delete in database with charID
     }
 
     @Override
@@ -80,10 +81,12 @@ public class CharacterList implements Charlist {
         return ownerID;
     }
 
+    @Override
     public @NotNull List<UserCharacter> getCharacterList() {
         return characterList;
     }
 
+    @Override
     public List<UserCharacterClientModel> packToUserCharacterClientModelList() {
         List<UserCharacterClientModel> userCharacterClientModels = new ArrayList<>();
         for (int i = 0; i < characterList.size(); i++) {

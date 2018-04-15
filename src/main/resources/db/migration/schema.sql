@@ -1,8 +1,7 @@
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS forums CASCADE;
-DROP TABLE IF EXISTS threads CASCADE;
-DROP TABLE IF EXISTS posts  CASCADE;
-DROP TABLE IF EXISTS votes CASCADE;
+CREATE TABLE IF NOT EXISTS public.character_list (
+  id SERIAL PRIMARY KEY NOT NULL,
+  characters_ids integer[]
+);
 
 CREATE TABLE IF NOT EXISTS public.user (
   id serial PRIMARY KEY NOT NULL,
@@ -10,11 +9,6 @@ CREATE TABLE IF NOT EXISTS public.user (
   email character varying(45) NOT NULL,
   password CHARACTER(60) NOT NULL,
   character_list_id INTEGER REFERENCES character_list(id) ON DELETE CASCADE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS public.character_list (
-  id SERIAL PRIMARY KEY NOT NULL,
-  characters_ids integer[]
 );
 
 CREATE TABLE IF NOT EXISTS public.character (

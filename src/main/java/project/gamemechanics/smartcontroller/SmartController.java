@@ -5,6 +5,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.charlist.Charlist;
 import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public interface SmartController {
 
     void setActiveChar(@Nullable UserCharacter activeChar);
 
-    @Nullable CharacterList getCharacterList();
+    @Nullable Charlist getCharacterList();
 
     void setCharacterList(@NotNull CharacterList characterList);
 
@@ -38,5 +39,5 @@ public interface SmartController {
 
     @NotNull Boolean set(@NotNull Integer ownerID,
                          @NotNull WebSocketSession webSocketSession,
-                         @Nullable CharacterList characterList);
+                         @Nullable Charlist characterList);
 }
