@@ -1,5 +1,6 @@
 package project.websocket.messages.models;
 
+@SuppressWarnings("unused")
 public class UserCharacterClientModel {
     private String name;
     private String description;
@@ -16,7 +17,7 @@ public class UserCharacterClientModel {
         this.level = level;
     }
 
-    public UserCharacterClientModel(){
+    public UserCharacterClientModel() {
 
     }
 

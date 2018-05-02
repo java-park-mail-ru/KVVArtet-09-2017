@@ -5,7 +5,7 @@ import project.websocket.messages.Message;
 
 import javax.validation.constraints.NotNull;
 
-public class CreateCharacterConfirmationMessage extends Message{
+public class CreateCharacterConfirmationMessage extends Message {
     private final String message;
 
     @SuppressWarnings("WeakerAccess")
@@ -17,6 +17,7 @@ public class CreateCharacterConfirmationMessage extends Message{
         this("success");
     }
 
+    @SuppressWarnings("unused")
     public @NotNull String getMessage() {
         return message;
     }

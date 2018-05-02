@@ -105,7 +105,6 @@ public class BagDatabaseModel {
     public void updateSlots(List<Pair<Integer, Integer>> indexToIdItemsList) {
         for (Pair<Integer, Integer> indexToIdPair : indexToIdItemsList) {
             if (indexToIdPair.getValue() == Constants.UNDEFINED_ID) {
-                System.out.println("ID AND VALUE " +indexToIdPair.getKey() + indexToIdPair.getValue());
                 slotList.get(indexToIdPair.getKey()).resetProperties(indexToIdPair.getValue(), 0);
             } else {
                 slotList.get(indexToIdPair.getKey()).resetProperties(indexToIdPair.getValue(), 1);
@@ -123,6 +122,7 @@ public class BagDatabaseModel {
                 this.name, this.description, equipableItems);
     }
 
+    //CHECKSTYLE:OFF
     @Override
     public String toString() {
         return "BagDatabaseModel{" +
@@ -133,4 +133,6 @@ public class BagDatabaseModel {
                 ", itemDAO=" + itemDAO +
                 '}';
     }
+
+    //CHECKSTYLE:ON
 }

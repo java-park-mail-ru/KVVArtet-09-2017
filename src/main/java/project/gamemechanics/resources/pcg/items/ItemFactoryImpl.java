@@ -259,11 +259,7 @@ public class ItemFactoryImpl implements ItemsFactory {
             if (affectorIds.isEmpty()) {
                 affectorIds.addAll(itemPart.getAvailableAffectors());
             } else {
-                for (Integer affectorId : itemPart.getAvailableAffectors()) {
-                    if (!affectorIds.contains(affectorId)) {
-                        affectorIds.add(affectorId);
-                    }
-                }
+                affectorIds.addAll(itemPart.getAvailableAffectors());
             }
         }
 
@@ -353,7 +349,7 @@ public class ItemFactoryImpl implements ItemsFactory {
         return mergedAffectors;
     }
 
-    @SuppressWarnings("OverlyComplexMethod")
+    @SuppressWarnings({"OverlyComplexMethod", "ConstantConditions"})
     private @NotNull Map<Integer, Property> mergeProperties(@NotNull List<ItemPart> parts,
                                                             @NotNull List<Integer> rarities,
                                                             @NotNull Float growth) {
@@ -364,11 +360,7 @@ public class ItemFactoryImpl implements ItemsFactory {
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
             } else {
-                for (Integer propertyId : part.getAvailableProperties()) {
-                    if (!propertyIds.contains(propertyId)) {
-                        propertyIds.add(propertyId);
-                    }
-                }
+                propertyIds.addAll(part.getAvailableProperties());
             }
         }
 
@@ -445,11 +437,7 @@ public class ItemFactoryImpl implements ItemsFactory {
                     if (propertiesSet.isEmpty()) {
                         propertiesSet.addAll(property.getPropertySet());
                     } else {
-                        for (Integer propertySetValue : property.getPropertySet()) {
-                            if (!propertiesSet.contains(propertySetValue)) {
-                                propertiesSet.add(propertySetValue);
-                            }
-                        }
+                        propertiesSet.addAll(property.getPropertySet());
                     }
                 } else {
                     if (propertyValue == null) {

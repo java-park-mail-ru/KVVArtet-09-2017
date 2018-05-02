@@ -2,6 +2,7 @@ package project.websocket.messages.charlist;
 
 import project.websocket.messages.Message;
 
+@SuppressWarnings("unused")
 public class CreateCharacterRequestMessage extends Message {
     private String name;
     private String role;
@@ -13,7 +14,7 @@ public class CreateCharacterRequestMessage extends Message {
         this.race = race;
     }
 
-    public CreateCharacterRequestMessage(){
+    public CreateCharacterRequestMessage() {
 
     }
 

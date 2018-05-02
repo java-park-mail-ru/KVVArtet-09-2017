@@ -17,6 +17,7 @@ public class DeleteCharacterConfirmationMessage extends Message {
         this("success");
     }
 
+    @SuppressWarnings("unused")
     public @NotNull String getMessage() {
         return message;
     }

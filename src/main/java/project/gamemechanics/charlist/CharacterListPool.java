@@ -1,8 +1,6 @@
 package project.gamemechanics.charlist;
 
 import org.jetbrains.annotations.Nullable;
-import project.gamemechanics.aliveentities.AbstractAliveEntity;
-import project.gamemechanics.aliveentities.UserCharacter;
 
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +15,7 @@ public interface CharacterListPool {
      * @param ownerId that need to be fulfill
      * @return null if there's no {@link CharacterList} with @param in map or {@link Charlist} otherwise
      */
+    @SuppressWarnings("unused")
     @Nullable Charlist getCharacterList(@NotNull Integer ownerId);
 
     /**

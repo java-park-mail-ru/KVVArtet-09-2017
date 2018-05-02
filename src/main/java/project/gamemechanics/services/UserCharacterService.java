@@ -28,6 +28,7 @@ public class UserCharacterService implements UserCharacterDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public AbstractAliveEntity.UserCharacterModel getUserCharacterById(@NotNull Integer id) {
         final String sql = "SELECT * FROM public.character WHERE id = ?";

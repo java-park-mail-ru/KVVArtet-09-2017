@@ -32,6 +32,7 @@ public class BagService implements BagDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     @NotNull
     public BagDatabaseModel getBagById(@NotNull Integer id) {
@@ -45,7 +46,9 @@ public class BagService implements BagDAO {
                 e.printStackTrace();
                 logger.trace(e);
             }
+            //CHECKSTYLE:OFF
             return bagDatabaseModel; /*TODO: how to return not null?*/
+            //CHECKSTYLE:ON
         });
     }
 

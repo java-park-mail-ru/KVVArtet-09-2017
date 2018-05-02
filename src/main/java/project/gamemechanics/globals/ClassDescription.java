@@ -2,6 +2,7 @@ package project.gamemechanics.globals;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public enum ClassDescription {
     CD_Warrior(0, "Warrior"),
     CD_Mage(1, "Mage"),

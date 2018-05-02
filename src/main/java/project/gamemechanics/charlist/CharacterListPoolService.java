@@ -17,9 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CharacterListPoolService implements CharacterListPool {
 
     private final Map<Integer, CharacterList> characterListMap = new ConcurrentHashMap<>();
-    private CharacterListDAO characterListDAO;
-    private UserDao userDao;
-    private UserCharacterDAO userCharacterDAO;
+    private final CharacterListDAO characterListDAO;
+    private final UserDao userDao;
+    private final UserCharacterDAO userCharacterDAO;
 
     public CharacterListPoolService(CharacterListDAO characterListDAO, UserDao userDao, UserCharacterDAO userCharacterDAO) {
         this.characterListDAO = characterListDAO;

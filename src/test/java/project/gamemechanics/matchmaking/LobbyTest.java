@@ -478,7 +478,7 @@ public class LobbyTest {
                         Objects.requireNonNull(smartControllersPool.get(userId)
                                 .getCharacterList());
                 if (userIds.size() == 1) {
-                    for (Integer i = 0; i < characterList
+                    for (Integer i = 0; i < Objects.requireNonNull(characterList)
                             .getCharacterList().size(); ++i) {
                         final AliveEntity unit = characterList.getCharacterList().get(i);
                         party.addMember(roleId++, unit);
@@ -490,7 +490,7 @@ public class LobbyTest {
                 } else {
                     final Random random = new Random(System.currentTimeMillis());
                     final AliveEntity unit =
-                            characterList.getCharacterList().get(
+                            Objects.requireNonNull(characterList).getCharacterList().get(
                                     random.nextInt(characterList
                                             .getCharacterList().size()));
                     party.addMember(roleId++, unit);

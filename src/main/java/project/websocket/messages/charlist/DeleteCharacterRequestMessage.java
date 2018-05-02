@@ -13,6 +13,7 @@ public class DeleteCharacterRequestMessage extends Message {
         return charIndexInCharist;
     }
 
+    @SuppressWarnings("unused")
     public void setCharIndexInCharist(Integer charIndexInCharist) {
         this.charIndexInCharist = charIndexInCharist;
     }

@@ -2,7 +2,6 @@ package project.gamemechanics.charlist;
 
 import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
 import project.gamemechanics.aliveentities.UserCharacter;
-import project.gamemechanics.charlist.CharacterList;
 import project.gamemechanics.interfaces.Countable;
 import project.websocket.messages.models.UserCharacterClientModel;
 
@@ -49,13 +48,16 @@ public interface Charlist extends Countable {
      *
      * @return null if there's empty list in {@link CharacterList} and list of {@link UserCharacter} otherwise
      */
-    default List<UserCharacter> getCharacterList(){ return null; }
-
+    default List<UserCharacter> getCharacterList() {
+        return null;
+    }
 
     /**
      * get list of {@link UserCharacterClientModel}.
      *
      * @return null if there's empty list in {@link CharacterList} and list of {@link UserCharacterClientModel} otherwise
      */
-    default List<UserCharacterClientModel> packToUserCharacterClientModelList() { return null; }
+    default List<UserCharacterClientModel> packToUserCharacterClientModelList() {
+        return null;
+    }
 }

@@ -80,10 +80,14 @@ public class SlotImpl implements Slot {
         this.itemsToQuantity = itemsToQuantity;
     }
 
+
+    //CHECKSTYLE:OFF
     @Override
     public String toString() {
         return "SlotImpl{" +
                 "itemsToQuantity=" + itemsToQuantity +
                 '}';
     }
+
+    //CHECKSTYLE:ON
 }

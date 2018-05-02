@@ -2,12 +2,13 @@ package project.gamemechanics.globals;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("unused")
 public enum RaceDescription {
     RC_Human(0, "Human"),
     RC_Elf(1, "Elf"),
     RC_Dwarf(2, "Dwarf");
 
-    private RaceDescription(@NotNull Integer id, @NotNull String name){
+    RaceDescription(@NotNull Integer id, @NotNull String name) {
         this.id = id;
         this.name = name;
     }

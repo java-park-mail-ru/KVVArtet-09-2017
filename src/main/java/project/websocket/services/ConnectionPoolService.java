@@ -63,6 +63,7 @@ public class ConnectionPoolService {
         sessions.put(userId, smartControllerForUser);
     }
 
+    @SuppressWarnings("unused")
     public boolean isConnected(@NotNull Integer userId) {
         return sessions.containsKey(userId) && Objects.requireNonNull(
                 sessions.get(userId).getWebSocketSession()).isOpen();

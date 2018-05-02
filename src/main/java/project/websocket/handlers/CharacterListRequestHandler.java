@@ -34,6 +34,7 @@ public class CharacterListRequestHandler extends MessageHandler<CharacterListReq
     @Override
     public @NotNull Message handle(@NotNull CharacterListRequestMessage message, @NotNull Integer forUser) {
         final SmartController activeSmart = connectionPoolService.getActiveSmartControllers().get(forUser);
-        return new CharacterListResponseMessage(Objects.requireNonNull(activeSmart.getCharacterList()).packToUserCharacterClientModelList());
+        return new CharacterListResponseMessage(Objects.requireNonNull(activeSmart.getCharacterList())
+                .packToUserCharacterClientModelList());
     }
 }

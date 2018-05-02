@@ -7,11 +7,8 @@ import org.springframework.stereotype.Service;
 import project.gamemechanics.services.interfaces.CharacterListDAO;
 
 import javax.validation.constraints.NotNull;
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.util.List;
-
-import static java.sql.Types.NULL;
 
 @SuppressWarnings("unused")
 @Service
@@ -46,9 +43,7 @@ public class CharacterListService implements CharacterListDAO {
     public Integer createDefaultEmptyCharacterList() {
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         final String sql = "INSERT INTO public.character_list DEFAULT VALUES returning id";
-        jdbcTemplate.update(connection -> {
-            return connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-        }, keyHolder);
+        jdbcTemplate.update(connection -> connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS), keyHolder);
         return keyHolder.getKey().intValue();
     }
 

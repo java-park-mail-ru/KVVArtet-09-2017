@@ -27,8 +27,11 @@ public class DummiesFactory {
     public DummiesFactory(@NotNull AssetProvider assets) {
         this.assets = assets;
     }
-    public @Nullable AbstractAliveEntity.UserCharacterModel makeNewDummyModel(@NotNull Integer classId, @NotNull Integer raceId, @NotNull String name,
-                                              @NotNull String description) {
+
+    public @Nullable AbstractAliveEntity.UserCharacterModel makeNewDummyModel(@NotNull Integer classId,
+                                                                              @NotNull Integer raceId,
+                                                                              @NotNull String name,
+                                                                              @NotNull String description) {
         final ObjectMapper mapper = new ObjectMapper();
         NewCharacterModel dummyProps = null;
         // noinspection OverlyBroadCatchBlock
@@ -56,13 +59,12 @@ public class DummiesFactory {
         dummyProps.getProperties().put(PropertyCategories.PC_ABILITIES_COOLDOWN,
                 new MapProperty(initAbilitiesCooldown(role)));
 
-        final AbstractAliveEntity.UserCharacterModel model =
-                new AbstractAliveEntity.UserCharacterModel(Constants.UNDEFINED_ID, name, description,
-                        dummyProps.getProperties(), bags, role, Objects.requireNonNull(
-                        assets.getCharacterRace(raceId)),
-                        new CharacterDoll(), initPerkRanks(role));
-        return model;
+        return new AbstractAliveEntity.UserCharacterModel(Constants.UNDEFINED_ID, name, description,
+                dummyProps.getProperties(), bags, role, Objects.requireNonNull(
+                assets.getCharacterRace(raceId)),
+                new CharacterDoll(), initPerkRanks(role));
     }
+
     @SuppressWarnings("WeakerAccess")
     public @Nullable AliveEntity makeNewDummy(@NotNull Integer classId, @NotNull Integer raceId, @NotNull String name,
                                               @NotNull String description) {

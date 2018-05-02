@@ -2,7 +2,6 @@ package project.gamemechanics.charlist;
 
 import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
 import project.gamemechanics.aliveentities.UserCharacter;
-import project.gamemechanics.globals.Constants;
 import project.websocket.messages.models.UserCharacterClientModel;
 
 import javax.validation.constraints.NotNull;
@@ -16,9 +15,9 @@ public class CharacterList implements Charlist {
     private final Integer ownerID;
 
     public static class CharacterListModel {
-        private List<UserCharacter> characterList = new ArrayList<>();
+        private final List<UserCharacter> characterList;
         private final Integer ownerID;
-        private Integer charlistID = Constants.UNDEFINED_ID;
+        private final Integer charlistID;
 
         public CharacterListModel(@NotNull Integer ownerID, Integer charlistID, @NotNull List<UserCharacter> characterList) {
             this.ownerID = ownerID;
