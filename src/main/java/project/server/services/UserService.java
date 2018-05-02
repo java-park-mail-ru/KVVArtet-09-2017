@@ -92,7 +92,7 @@ public class UserService implements UserDao {
         final String encryptedPassword = encoder.encode(newUser.getPassword());
         jdbcTemplate.update(con -> {
             final PreparedStatement pst = con.prepareStatement(
-                    "insert into public.user(username, email, password, characteer_list_id)" + " values(?,?,?,?)" + " returning id",
+                    "insert into public.user(username, email, password, character_list_id)" + " values(?,?,?,?)" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, newUser.getUsername());
             pst.setString(2, newUser.getEmail());

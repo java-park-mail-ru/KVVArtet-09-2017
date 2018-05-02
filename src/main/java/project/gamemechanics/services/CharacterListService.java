@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import project.gamemechanics.services.interfaces.CharacterListDAO;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.util.List;
 
@@ -42,14 +43,11 @@ public class CharacterListService implements CharacterListDAO {
     }
 
     @Override
-    @SuppressWarnings("Duplicates")
     public Integer createDefaultEmptyCharacterList() {
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-        final String sql = "INSERT INTO public.character_list (character_ids) VALUES(?) returning id";
+        final String sql = "INSERT INTO public.character_list DEFAULT VALUES returning id";
         jdbcTemplate.update(connection -> {
-            final PreparedStatement pst = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            pst.setInt(1, NULL);
-            return pst;
+            return connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
         }, keyHolder);
         return keyHolder.getKey().intValue();
     }

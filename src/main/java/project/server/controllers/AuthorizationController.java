@@ -106,7 +106,7 @@ public class AuthorizationController {
                 .body(ApiResponse.SIGNOUT_SUCCESS.getResponse());
     }
 
-    @PostMapping("/session")
+    @GetMapping("/session")
     public @NotNull ResponseEntity<String> requestUserInCurrentSession(@NotNull HttpSession httpSession) {
         final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
 

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.character_list (
   id SERIAL PRIMARY KEY NOT NULL,
-  characters_ids integer[]
+  characters_ids integer[] DEFAULT array[]::integer[]
 );
 
 CREATE TABLE IF NOT EXISTS public.user (
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS public.user (
   username character varying(45) NOT NULL,
   email character varying(45) NOT NULL,
   password CHARACTER(60) NOT NULL,
-  character_list_id INTEGER REFERENCES character_list(id) ON DELETE CASCADE NOT NULL
+  character_list_id INTEGER REFERENCES public.character_list(id) ON DELETE CASCADE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.character (
@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS public.bag (
 CREATE TABLE IF NOT EXISTS public.item (
   id BIGINT PRIMARY KEY NOT NULL,
   blueprint_json_model JSON NOT NULL
-)
+);
