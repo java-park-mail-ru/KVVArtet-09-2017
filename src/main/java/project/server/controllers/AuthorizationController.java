@@ -1,5 +1,7 @@
 package project.server.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,15 +20,17 @@ import java.util.Objects;
 public class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
+    private final ObjectMapper objectMapper;
     @SuppressWarnings("WeakerAccess")
     static final String FRONTED_URL1 = "https://lands-dangeous.herokuapp.com";
     static final String FRONTED_URL2 = "https://dev-lands-dungeons.herokuapp.com";
 
 
-    public AuthorizationController(@NotNull UserService userService, @NotNull PasswordEncoder encoder) {
+    public AuthorizationController(@NotNull UserService userService, @NotNull PasswordEncoder encoder, ObjectMapper objectMapper) {
         super();
         this.userService = userService;
         this.encoder = encoder;
+        this.objectMapper = objectMapper;
     }
 
 
@@ -106,7 +110,7 @@ public class AuthorizationController {
                 .body(ApiResponse.SIGNOUT_SUCCESS.getResponse());
     }
 
-    @PostMapping("/session")
+    @GetMapping("/session")
     public @NotNull ResponseEntity<String> requestUserInCurrentSession(@NotNull HttpSession httpSession) {
         final Integer userIdInCurrentSession = (Integer) httpSession.getAttribute("id");
 
@@ -115,11 +119,16 @@ public class AuthorizationController {
                     .body(ApiResponse.USER_NOT_AUTHORIZED.getResponse());
         }
 
-        final String username = Objects.requireNonNull(userService
-                .getUserById(userIdInCurrentSession)).getUsername();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ApiResponse.REQUEST_FROM_SESSION_SUCCESSFUL.getResponse()
-                + ' ' + userIdInCurrentSession + "  Your login is " + username);
+        final User user = Objects.requireNonNull(userService
+                .getUserById(userIdInCurrentSession));
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(objectMapper.writeValueAsString(user));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.INTERNAL_ERROR.getResponse());
+        }
     }
 
     @PutMapping("/settings")

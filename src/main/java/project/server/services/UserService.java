@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import project.gamemechanics.services.interfaces.CharacterListDAO;
 import project.server.dao.UserDao;
 import project.server.mappers.UserMapper;
 import project.server.models.User;
@@ -19,12 +20,15 @@ public class UserService implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder encoder;
+    private final CharacterListDAO characterListDAO;
 
     public UserService(@NotNull JdbcTemplate jdbcTemplate,
-                       @NotNull PasswordEncoder encoder) {
+                       @NotNull PasswordEncoder encoder, CharacterListDAO characterListDAO) {
         this.jdbcTemplate = jdbcTemplate;
         this.encoder = encoder;
+        this.characterListDAO = characterListDAO;
     }
+
 
     @Override
     public @Nullable User getUserById(@NotNull Integer id) {
@@ -37,6 +41,12 @@ public class UserService implements UserDao {
             user.setPassword(rs.getString("password"));
             return user;
         });
+    }
+
+    @Override
+    public @NotNull Integer getCharacaterListIdByUserId(@NotNull Integer id) {
+        final String sql = "SELECT character_list_id FROM public.user WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, Integer.class);
     }
 
     @Override
@@ -74,17 +84,20 @@ public class UserService implements UserDao {
 
     @Override
     public @NotNull User setUser(@NotNull User newUser) {
+        final Integer characterListId = characterListDAO.createDefaultEmptyCharacterList();
         final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         //noinspection QuestionableName
         final Integer three = 3;
+        final Integer four = 4;
         final String encryptedPassword = encoder.encode(newUser.getPassword());
         jdbcTemplate.update(con -> {
             final PreparedStatement pst = con.prepareStatement(
-                    "insert into public.user(username, email, password)" + " values(?,?,?)" + " returning id",
+                    "insert into public.user(username, email, password, character_list_id)" + " values(?,?,?,?)" + " returning id",
                     PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, newUser.getUsername());
             pst.setString(2, newUser.getEmail());
             pst.setString(three, encryptedPassword);
+            pst.setInt(four, characterListId);
             return pst;
         }, keyHolder);
         return new User(keyHolder.getKey().intValue(),
@@ -153,7 +166,11 @@ public class UserService implements UserDao {
     @Override
     public void deleteUser(@NotNull Integer id) {
         final String sql = "DELETE FROM public.user WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(con -> {
+            final PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, id);
+            return pst;
+        });
     }
 
     @Override

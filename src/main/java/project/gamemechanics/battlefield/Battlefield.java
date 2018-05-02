@@ -145,7 +145,7 @@ public class Battlefield implements Updateable {
             if (activeBattler.isControlledByAI()) {
                 while (activeBattlerActionsPooled < ACTIONS_PER_TURN) {
                     pushAction(Objects.requireNonNull(activeBattler.makeDecision()));
-                    actionsQueue.pollFirst().execute();
+                    Objects.requireNonNull(actionsQueue.pollFirst()).execute();
                 }
             }
 

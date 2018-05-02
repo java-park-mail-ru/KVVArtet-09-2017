@@ -8,19 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import project.gamemechanics.components.properties.Property;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.resources.assets.AssetProvider;
 import project.gamemechanics.resources.assets.AssetProviderImpl;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.gamemechanics.resources.pcg.PcgFactory;
+import project.gamemechanics.services.interfaces.ItemDAO;
 import project.gamemechanics.world.config.ResourcesConfig;
 
+import java.util.Map;
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -65,8 +66,16 @@ public class ItemServiceTest {
         final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
         Integer id = itemDAO.setItem(equipableItem.pack());
         EquipableItem item = itemDAO.getItemById(id);
-        assertEquals(item.pack().getProperties(), equipableItem.pack().getProperties());
+        for(Map.Entry<Integer, Property> entry : item.pack().getProperties().entrySet()) {
+            assertEquals(entry.getValue().getProperty(), equipableItem.pack().getProperties().get(entry.getKey()).getProperty());
+        }
     }
 
-
+    @Test
+    public void deleteItem_Successful() {
+        final Random random = new Random(System.currentTimeMillis());
+        final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
+        Integer id = itemDAO.setItem(equipableItem.pack());
+        itemDAO.deleteItem(id);
+    }
 }

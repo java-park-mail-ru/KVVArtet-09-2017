@@ -231,10 +231,7 @@ public abstract class AbstractInstance implements Instance {
 
         Integer triesCount = 0;
 
-        while (true) {
-            if (triesCount > mapHeight * mapWidth) {
-                break;
-            }
+        while (triesCount <= mapHeight * mapWidth) {
             final MapNode spawnPointCenter = map.getTile(halfWidthBegin
                     + random.nextInt(halfWidthEnd
                     - halfWidthBegin), random.nextInt(mapHeight));

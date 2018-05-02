@@ -271,9 +271,9 @@ public class GameScenariosTest {
                 DigitsPairIndices.CURRENT_VALUE_INDEX));
         assertEquals(goldReward, warrior.getProperty(PropertyCategories.PC_CASH_AMOUNT));
 
-        assertFalse(attackResult.getEventsCount() == 0);
-        assertTrue(Objects.requireNonNull(attackResult
-                .getEvent(0)).getEventKind() == EventCategories.EC_HITPOINTS_CHANGE);
+        assertNotEquals(0, (int) attackResult.getEventsCount());
+        assertEquals((int) Objects.requireNonNull(attackResult
+                .getEvent(0)).getEventKind(), EventCategories.EC_HITPOINTS_CHANGE);
         assertTrue(Math.abs(Objects.requireNonNull(
                 attackResult.getEvent(0)).getAmount()) > monsterCurrentHealth);
     }
@@ -573,7 +573,7 @@ public class GameScenariosTest {
                 }
             }
         }
-        assertFalse(fovOneVisibleTilesCount == sideSize * sideSize);
+        assertNotEquals((int) fovOneVisibleTilesCount, sideSize * sideSize);
         assertNotNull(fovTwo);
 
         final List<Integer> povTwo = new ArrayList<>();
@@ -711,8 +711,7 @@ public class GameScenariosTest {
                 && Objects.equals(monsterActionOne.getTarget(), warriorTile));
         final ActionResult resultOne = monsterActionOne.execute();
         assertTrue(resultOne.getEventsCount() > 0);
-        assertTrue(Objects.requireNonNull(resultOne.getEvent(0)).getEventKind()
-                == EventCategories.EC_MOVE);
+        assertEquals((int) Objects.requireNonNull(resultOne.getEvent(0)).getEventKind(), EventCategories.EC_MOVE);
         assertTrue(!monsterTile.isOccupied());
         assertTrue(Objects.requireNonNull(warriorTile.getAdjacent(Directions.RIGHT)).isOccupied());
     }

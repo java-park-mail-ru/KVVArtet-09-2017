@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 public class TypeContainerMessage<T> extends Message {
     private final T value;
 
+    @SuppressWarnings("WeakerAccess")
     public TypeContainerMessage(@JsonProperty ("value")
                                 @NotNull T value) {
         this.value = value;

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import project.gamemechanics.charlist.CharacterListPool;
+import project.gamemechanics.charlist.Charlist;
 import project.gamemechanics.smartcontroller.SmartController;
 import project.websocket.ConnectionPool;
 import project.websocket.messages.Message;
@@ -16,23 +18,24 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings({"UnusedAssignment", "SameParameterValue", "unused"})
 @Service
 public class ConnectionPoolService {
 
     private final ConnectionPool connectionPool = new ConnectionPool();
     private final Map<Integer, SmartController> sessions = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper;
+    private final CharacterListPool characterListPool;
 
-    public ConnectionPoolService(@NotNull ObjectMapper objectMapper) {
+    public ConnectionPoolService(@NotNull ObjectMapper objectMapper, CharacterListPool characterListPool) {
         this.objectMapper = objectMapper;
+        this.characterListPool = characterListPool;
     }
 
     public void tick() {
         for (SmartController smart : sessions.values()) {
             if (smart.isValid()) {
                 smart.tick();
-                Message response = null;
+                Message response;
                 while ((response = smart.getOutboxMessage()) != null) {
                     try {
                         this.sendMessageToUser(smart.getOwnerID(), response);
@@ -55,15 +58,12 @@ public class ConnectionPoolService {
     public void registerUser(@NotNull Integer userId, @NotNull WebSocketSession webSocketSession) {
         final SmartController smartControllerForUser = connectionPool.getElement();
         smartControllerForUser.reset();
-        //CHECKSTYLE:OFF
-        /* TODO: add some logic to load or init CharacterList
-           in order to get rid of SmartController.setCharacterList() method
-        */
-        //CHECKSTYLE:ON
-        smartControllerForUser.set(userId, webSocketSession, null);
+        Charlist characterList = characterListPool.initCharacterList(userId);
+        smartControllerForUser.set(userId, webSocketSession, characterList);
         sessions.put(userId, smartControllerForUser);
     }
 
+    @SuppressWarnings("unused")
     public boolean isConnected(@NotNull Integer userId) {
         return sessions.containsKey(userId) && Objects.requireNonNull(
                 sessions.get(userId).getWebSocketSession()).isOpen();
@@ -74,12 +74,14 @@ public class ConnectionPoolService {
         sessions.remove(userId);
     }
 
-    private void cutDownConnection(@NotNull Integer userId, @NotNull CloseStatus closeStatus) {
+    private void cutDownConnection(@NotNull Integer userId) {
+
         final WebSocketSession webSocketSession = sessions.get(userId).getWebSocketSession();
+        characterListPool.deleteCharacterList(userId);
         if (webSocketSession != null && webSocketSession.isOpen()) {
             /// CHECKSTYLE:OFF
             try {
-                webSocketSession.close(closeStatus);
+                webSocketSession.close(CloseStatus.SERVER_ERROR);
             } catch (IOException ignore) {
             }
             // CHECKSTYLE:ON
@@ -113,7 +115,7 @@ public class ConnectionPoolService {
 
     public void reset() {
         for (Map.Entry<Integer, SmartController> entry : sessions.entrySet()) {
-            cutDownConnection(entry.getKey(), CloseStatus.SERVER_ERROR);
+            cutDownConnection(entry.getKey());
         }
     }
 }

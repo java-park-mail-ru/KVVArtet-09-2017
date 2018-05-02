@@ -94,6 +94,7 @@ public interface Poll extends Countable {
      * @return attached party or null otherwise (works only with coop PvE mode)
      */
     @JsonIgnore
+    @SuppressWarnings("unused")
     @Nullable CharactersParty getParty();
 
     /**

@@ -7,6 +7,7 @@ import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.charlist.Charlist;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.dungeons.Instance;
@@ -84,7 +85,7 @@ public class InvitationsPoolTest {
                 mockController.isValid());
 
         final CharacterList.CharacterListModel model =
-                new CharacterList.CharacterListModel(Constants.MIN_ID_VALUE,
+                new CharacterList.CharacterListModel(Constants.MIN_ID_VALUE, Constants.UNDEFINED_ID,
                         new ArrayList<>());
         assertTrue("set() method test",
                 mockController.set(Constants.MIN_ID_VALUE,
@@ -513,7 +514,7 @@ public class InvitationsPoolTest {
                 assertEquals(MatchmakingNotificationMessage.class,
                         Objects.requireNonNull(smartControllersPool
                                 .get(ownerId).getOutboxMessage()).getClass());
-                assertFalse(cancelerParty.getMember(cancelerRoleId) != null);
+                assertNull(cancelerParty.getMember(cancelerRoleId));
             }
         }
     }
@@ -524,7 +525,7 @@ public class InvitationsPoolTest {
         Integer roleId = CharacterRoleIds.CR_TANK;
         while (!party.isFull()) {
             for (Integer userId : userIds) {
-                final CharacterList characterList =
+                final Charlist characterList =
                         Objects.requireNonNull(smartControllersPool.get(userId)
                                 .getCharacterList());
                 if (userIds.size() == 1) {
@@ -576,7 +577,7 @@ public class InvitationsPoolTest {
     private static @NotNull CharacterList makeCharacterList(@NotNull Integer ownerId) {
         return new CharacterList(
                 new CharacterList.CharacterListModel(
-                        ownerId, new ArrayList<>()));
+                        ownerId, Constants.UNDEFINED_ID, new ArrayList<>()));
     }
 
     private void refillSmartControllersPool() {

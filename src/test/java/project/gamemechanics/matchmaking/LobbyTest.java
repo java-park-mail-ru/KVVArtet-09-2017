@@ -1,5 +1,6 @@
 package project.gamemechanics.matchmaking;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import project.gamemechanics.aliveentities.UserCharacter;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.charlist.Charlist;
 import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.dungeons.Instance;
@@ -38,7 +40,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("Duplicates")
+@SuppressWarnings({"Duplicates", "unused"})
 public class LobbyTest {
 
     private static final int DEFAULT_TEST_USERS_COUNT = 16;
@@ -94,7 +96,7 @@ public class LobbyTest {
                     break;
                 }
             }
-            final CharacterList characterList = Objects.requireNonNull(
+            final Charlist characterList = Objects.requireNonNull(
                     smartControllersPool.get(userId).getCharacterList());
             final Message message = testLobby.enqueue(
                     characterList.getCharacterList().get(random.nextInt(characterList
@@ -135,7 +137,7 @@ public class LobbyTest {
     public void singleCharacterDequeueTest() {
         final Lobby testLobby = makeLobby();
         final Integer userId = getRandomUserId();
-        final CharacterList list = Objects.requireNonNull(
+        final @Nullable Charlist list = Objects.requireNonNull(
                 smartControllersPool.get(userId)).getCharacterList();
         final Random random = new Random(System.currentTimeMillis());
         final Integer characterIndex = random.nextInt(
@@ -159,7 +161,7 @@ public class LobbyTest {
     public void singleCharacterDequeueFromGameModeTest() {
         final Lobby testLobby = makeLobby();
         final Integer userId = getRandomUserId();
-        final CharacterList list = Objects.requireNonNull(
+        final @Nullable Charlist list = Objects.requireNonNull(
                 smartControllersPool.get(userId)).getCharacterList();
         final Random random = new Random(System.currentTimeMillis());
         final Integer characterIndex = random.nextInt(
@@ -472,11 +474,11 @@ public class LobbyTest {
         Integer roleId = CharacterRoleIds.CR_TANK;
         while (!party.isFull()) {
             for (Integer userId : userIds) {
-                final CharacterList characterList =
+                final @Nullable Charlist characterList =
                         Objects.requireNonNull(smartControllersPool.get(userId)
                                 .getCharacterList());
                 if (userIds.size() == 1) {
-                    for (Integer i = 0; i < characterList
+                    for (Integer i = 0; i < Objects.requireNonNull(characterList)
                             .getCharacterList().size(); ++i) {
                         final AliveEntity unit = characterList.getCharacterList().get(i);
                         party.addMember(roleId++, unit);
@@ -488,7 +490,7 @@ public class LobbyTest {
                 } else {
                     final Random random = new Random(System.currentTimeMillis());
                     final AliveEntity unit =
-                            characterList.getCharacterList().get(
+                            Objects.requireNonNull(characterList).getCharacterList().get(
                                     random.nextInt(characterList
                                             .getCharacterList().size()));
                     party.addMember(roleId++, unit);
@@ -505,7 +507,7 @@ public class LobbyTest {
     private static @NotNull CharacterList makeCharacterList(@NotNull Integer ownerId) {
         return new CharacterList(
                 new CharacterList.CharacterListModel(
-                        ownerId, new ArrayList<>()));
+                        ownerId, Constants.UNDEFINED_ID, new ArrayList<>()));
     }
 
     private void refillSmartControllersPool() {

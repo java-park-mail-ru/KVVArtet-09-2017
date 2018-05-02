@@ -1,25 +1,26 @@
 package project.websocket.messages.charlist;
 
 import org.jetbrains.annotations.NotNull;
-import project.gamemechanics.aliveentities.UserCharacter;
 import project.websocket.messages.Message;
+import project.websocket.messages.models.UserCharacterClientModel;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class CharacterListResponseMessage extends Message {
 
-    private @NotNull List<UserCharacter> characterList;
+    private @NotNull List<UserCharacterClientModel> characterListForClient;
 
-    public CharacterListResponseMessage(@NotNull List<UserCharacter> characterList) {
-        this.characterList = characterList;
+    public CharacterListResponseMessage(@NotNull List<UserCharacterClientModel> characterList) {
+        this.characterListForClient = characterList;
     }
 
-    public @NotNull List<UserCharacter> getCharacterList() {
-        return characterList;
+    @NotNull
+    public List<UserCharacterClientModel> getCharacterListForClient() {
+        return characterListForClient;
     }
 
-    public void setCharacterList(@NotNull List<UserCharacter> characterList) {
-        this.characterList = characterList;
+    public void setCharacterListForClient(@NotNull List<UserCharacterClientModel> characterListForClient) {
+        this.characterListForClient = characterListForClient;
     }
 }

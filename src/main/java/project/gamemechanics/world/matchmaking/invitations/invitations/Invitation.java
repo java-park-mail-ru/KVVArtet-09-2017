@@ -30,6 +30,7 @@ public interface Invitation {
      *
      * @return invitation status
      */
+    @SuppressWarnings("unused")
     @NotNull Integer getStatus();
 
     /**

@@ -17,7 +17,6 @@ import java.util.Objects;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("unused")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional

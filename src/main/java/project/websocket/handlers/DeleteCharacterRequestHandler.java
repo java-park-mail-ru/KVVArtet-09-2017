@@ -5,23 +5,23 @@ import project.gamemechanics.charlist.UserCharacterFactory;
 import project.gamemechanics.smartcontroller.SmartController;
 import project.states.CharacterListState;
 import project.websocket.messages.Message;
-import project.websocket.messages.charlist.CreateCharacterConfirmationMessage;
-import project.websocket.messages.charlist.CreateCharacterRequestMessage;
+import project.websocket.messages.charlist.DeleteCharacterConfirmationMessage;
+import project.websocket.messages.charlist.DeleteCharacterRequestMessage;
 import project.websocket.services.ConnectionPoolService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 
 @Component
-public class CreateCharacterRequestHandler extends MessageHandler<CreateCharacterRequestMessage> {
+public class DeleteCharacterRequestHandler extends MessageHandler<DeleteCharacterRequestMessage> {
 
     private final @NotNull CharacterListState characterListState;
     private final @NotNull ConnectionPoolService connectionPoolService;
     private final @NotNull UserCharacterFactory userCharacterFactory;
 
-    public CreateCharacterRequestHandler(@NotNull CharacterListState characterListState,
+    public DeleteCharacterRequestHandler(@NotNull CharacterListState characterListState,
                                          @NotNull ConnectionPoolService connectionPoolService, UserCharacterFactory userCharacterFactory) {
-        super(CreateCharacterRequestMessage.class);
+        super(DeleteCharacterRequestMessage.class);
         this.characterListState = characterListState;
         this.connectionPoolService = connectionPoolService;
         this.userCharacterFactory = userCharacterFactory;
@@ -29,13 +29,13 @@ public class CreateCharacterRequestHandler extends MessageHandler<CreateCharacte
 
     @PostConstruct
     private void init() {
-        characterListState.registerHandler(CreateCharacterRequestMessage.class, this);
+        characterListState.registerHandler(DeleteCharacterRequestMessage.class, this);
     }
 
     @Override
-    public Message handle(@NotNull CreateCharacterRequestMessage message, @NotNull Integer forUser) {
+    protected @NotNull Message handle(@NotNull DeleteCharacterRequestMessage message, @NotNull Integer forUser) {
         final SmartController activeSmart = connectionPoolService.getActiveSmartControllers().get(forUser);
-        userCharacterFactory.createUserCharacter(message, activeSmart);
-        return new CreateCharacterConfirmationMessage();
+        userCharacterFactory.deleteUserCharacter(message, activeSmart);
+        return new DeleteCharacterConfirmationMessage();
     }
 }
