@@ -16,7 +16,9 @@ public interface BagDAO {
     @NotNull
     Integer setBag(@NotNull BagDatabaseModel newBag);
 
-    void updateSlotsInBag(@NotNull Integer bagId, @NotNull List<Pair<Integer, Integer>> indexToIdList);
+    void updateManySlotsInBag(@NotNull Integer bagId, @NotNull List<Pair<Integer, Integer>> indexToIdList);
+
+    void updateOneSlotInBag(@NotNull Integer bagId, @NotNull Pair<Integer, Integer> indexToIdPair);
 
     void deleteBag(@NotNull Integer id);
 }

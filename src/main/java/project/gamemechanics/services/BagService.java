@@ -17,7 +17,9 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BagService implements BagDAO {
@@ -38,7 +40,9 @@ public class BagService implements BagDAO {
             BagDatabaseModel bagDatabaseModel = null;
             try {
                 bagDatabaseModel = mapper.readValue(rs.getString("bag_json_model"), BagDatabaseModel.class);
+                Objects.requireNonNull(bagDatabaseModel).setId(rs.getInt("id"));
             } catch (IOException e) {
+                e.printStackTrace();
                 logger.trace(e);
             }
             return bagDatabaseModel; /*TODO: how to return not null?*/
@@ -59,6 +63,7 @@ public class BagService implements BagDAO {
                     jsonObject.setValue(mapper.writeValueAsString(newBag));
                     preparedStatement.setObject(1, jsonObject);
                 } catch (JsonProcessingException e) {
+                    e.printStackTrace();
                     logger.trace(e);
                 }
                 return preparedStatement;
@@ -72,7 +77,7 @@ public class BagService implements BagDAO {
 
     @Override
     @SuppressWarnings("Duplicates")
-    public void updateSlotsInBag(@NotNull Integer bagId, @NotNull List<Pair<Integer, Integer>> indexToIdItemsList) {
+    public void updateManySlotsInBag(@NotNull Integer bagId, @NotNull List<Pair<Integer, Integer>> indexToIdItemsList) {
         final String sql = "UPDATE public.bag SET bag_json_model = ? WHERE id = ?";
         jdbcTemplate.update(connection -> {
             final PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -89,6 +94,13 @@ public class BagService implements BagDAO {
             }
             return preparedStatement;
         });
+    }
+
+    @Override
+    public void updateOneSlotInBag(@NotNull Integer bagId, @NotNull Pair<Integer, Integer> indexToIdPair) {
+        List<Pair<Integer, Integer>> indexToIdList = new ArrayList<>();
+        indexToIdList.add(indexToIdPair);
+        updateManySlotsInBag(bagId, indexToIdList);
     }
 
     public void deleteBag(Integer id) {

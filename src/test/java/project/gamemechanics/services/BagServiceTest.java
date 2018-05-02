@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.interfaces.EquipableItem;
 import project.gamemechanics.resources.assets.AssetProvider;
@@ -44,9 +45,11 @@ public class BagServiceTest {
 
 
     @Test
+    @Transactional
     public void getBagAfterSet_ExpectedEqualsBags() {
         BagDatabaseModel bagBeforeDB = new BagDatabaseModel("testName", "better bag ever");
         Integer bagId = bagDAO.setBag(bagBeforeDB);
+        System.out.println(bagId + " BAG ID");
         BagDatabaseModel bagFromDB = bagDAO.getBagById(bagId);
         assertEquals(bagBeforeDB.getDescription(), bagFromDB.getDescription());
         assertEquals(bagId, bagFromDB.getId());
@@ -54,6 +57,7 @@ public class BagServiceTest {
     }
 
     @Test
+    @Transactional
     public void addOneItemInBag_Successful(){
         final Random random = new Random(System.currentTimeMillis());
         final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
@@ -61,10 +65,11 @@ public class BagServiceTest {
         Integer bagId = bagDAO.setBag(newBag);
         List<Pair<Integer, Integer>> slotIndexToItemIdList = new ArrayList<>();
         slotIndexToItemIdList.add(new Pair<>(1, equipableItem.getID()));
-        bagDAO.updateSlotsInBag(bagId, slotIndexToItemIdList);
+        bagDAO.updateManySlotsInBag(bagId, slotIndexToItemIdList);
     }
 
     @Test
+    @Transactional
     public void addManyItemsInBag_Successful(){
         final Random random = new Random(System.currentTimeMillis());
         final EquipableItem equipableItem1 = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
@@ -76,36 +81,39 @@ public class BagServiceTest {
         slotIndexToItemIdList.add(new Pair<>(1, equipableItem1.getID()));
         slotIndexToItemIdList.add(new Pair<>(2, equipableItem2.getID()));
         slotIndexToItemIdList.add(new Pair<>(3, equipableItem3.getID()));
-        bagDAO.updateSlotsInBag(bagId, slotIndexToItemIdList);
+        bagDAO.updateManySlotsInBag(bagId, slotIndexToItemIdList);
     }
 
     @Test
+    @Transactional
     public void deleteItemFromBag_Successful() {
         final Random random = new Random(System.currentTimeMillis());
         final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
         BagDatabaseModel newBag = new BagDatabaseModel("testName", "awesomeBag");
         Integer bagId = bagDAO.setBag(newBag);
-        List<Pair<Integer, Integer>> slotIndexToItemIdList = new ArrayList<>();
-        slotIndexToItemIdList.add(new Pair<>(1, equipableItem.getID()));
-        bagDAO.updateSlotsInBag(bagId, slotIndexToItemIdList);
-        List<Pair<Integer, Integer>> slotIndexToItemIdListToDelete = new ArrayList<>();
-        slotIndexToItemIdListToDelete.add(new Pair<>(1, Constants.UNDEFINED_ID));
-        bagDAO.updateSlotsInBag(bagId, slotIndexToItemIdListToDelete);
+
+        Pair<Integer, Integer> slotIndexToItemIdPair = new Pair<>(1, equipableItem.getID());
+        bagDAO.updateOneSlotInBag(bagId, slotIndexToItemIdPair);
+
+        Pair<Integer, Integer> slotIndexToItemIdPairToDelete = new Pair<>(1, Constants.UNDEFINED_ID);
+        bagDAO.updateOneSlotInBag(bagId, slotIndexToItemIdPairToDelete);
     }
 
     @Test
+    @Transactional
     public void equalsUndefinedIdAfterDeleteItemFromBag_Successful() {
         final Random random = new Random(System.currentTimeMillis());
         final EquipableItem equipableItem = pcgFactory.makeItem(random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL);
         BagDatabaseModel newBag = new BagDatabaseModel("testName", "awesomeBag");
         Integer bagId = bagDAO.setBag(newBag);
-        List<Pair<Integer, Integer>> slotIndexToItemIdList = new ArrayList<>();
-        slotIndexToItemIdList.add(new Pair<>(1, equipableItem.getID()));
-        bagDAO.updateSlotsInBag(bagId, slotIndexToItemIdList);
-        List<Pair<Integer, Integer>> slotIndexToItemIdListToDelete = new ArrayList<>();
-        slotIndexToItemIdListToDelete.add(new Pair<>(1, Constants.UNDEFINED_ID));
-        bagDAO.updateSlotsInBag(bagId, slotIndexToItemIdListToDelete);
-        assertEquals(bagDAO.getBagById(bagId).getId().intValue(), Constants.UNDEFINED_ID);
+        System.out.println("FIRST " + bagDAO.getBagById(bagId).toString());
+
+        Pair<Integer, Integer> slotIndexToItemIdPair = new Pair<>(1, equipableItem.getID());
+        bagDAO.updateOneSlotInBag(bagId, slotIndexToItemIdPair);
+
+        Pair<Integer, Integer> slotIndexToItemIdPairToDelete = new Pair<>(1, Constants.UNDEFINED_ID);
+        bagDAO.updateOneSlotInBag(bagId, slotIndexToItemIdPairToDelete);
+        assertEquals(bagDAO.getBagById(bagId).getSlotList().get(1).getItemsToQuantity().get(PropertyCategories.PC_ITEM_ID).getProperty().intValue(), Constants.UNDEFINED_ID);
     }
 
 

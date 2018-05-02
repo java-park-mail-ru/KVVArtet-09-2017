@@ -18,7 +18,7 @@ public class BagDatabaseModel {
     private Integer id;
     private String name;
     private String description;
-    private List<Slot> slotList = new ArrayList<>();
+    private List<SlotImpl> slotList = new ArrayList<>();
 
     private ItemDAO itemDAO;
 
@@ -45,7 +45,7 @@ public class BagDatabaseModel {
     }
 
     public BagDatabaseModel(@NotNull StorageBag.FilledBagModel filledBagModel) {
-        List<Slot> slots = new ArrayList<>();
+        List<SlotImpl> slots = new ArrayList<>();
         for (EquipableItem item : filledBagModel.contents) {
             final Integer itemId = item == null ? Constants.UNDEFINED_ID : item.getID();
             final Integer quantity = item == null ? 0 : 1;
@@ -86,15 +86,15 @@ public class BagDatabaseModel {
         this.id = id;
     }
 
-    public List<Slot> getSlotList() {
+    public List<SlotImpl> getSlotList() {
         return slotList;
     }
 
-    public void setSlotList(List<Slot> slotList) {
+    public void setSlotList(List<SlotImpl> slotList) {
         this.slotList = slotList;
     }
 
-    public Integer[] getAllIds() {
+    private Integer[] allIds() {
         List<Integer> itemsIds = new ArrayList<>();
         for (Slot slot : slotList) {
             itemsIds.add(slot.getPropertyValueByKind(PC_ITEM_ID));
@@ -104,7 +104,8 @@ public class BagDatabaseModel {
 
     public void updateSlots(List<Pair<Integer, Integer>> indexToIdItemsList) {
         for (Pair<Integer, Integer> indexToIdPair : indexToIdItemsList) {
-            if (indexToIdPair.getKey() == Constants.UNDEFINED_ID) {
+            if (indexToIdPair.getValue() == Constants.UNDEFINED_ID) {
+                System.out.println("ID AND VALUE " +indexToIdPair.getKey() + indexToIdPair.getValue());
                 slotList.get(indexToIdPair.getKey()).resetProperties(indexToIdPair.getValue(), 0);
             } else {
                 slotList.get(indexToIdPair.getKey()).resetProperties(indexToIdPair.getValue(), 1);
@@ -115,10 +116,21 @@ public class BagDatabaseModel {
     public StorageBag.FilledBagModel pack() {
 
         List<EquipableItem> equipableItems = new ArrayList<>();
-        for (Integer item : getAllIds()) {
+        for (Integer item : allIds()) {
             equipableItems.add(itemDAO.getItemById(item));
         }
         return new StorageBag.FilledBagModel(this.id,
                 this.name, this.description, equipableItems);
+    }
+
+    @Override
+    public String toString() {
+        return "BagDatabaseModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", slotList=" + slotList +
+                ", itemDAO=" + itemDAO +
+                '}';
     }
 }
