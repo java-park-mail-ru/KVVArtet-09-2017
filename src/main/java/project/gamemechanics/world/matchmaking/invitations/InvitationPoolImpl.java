@@ -1,11 +1,13 @@
 package project.gamemechanics.world.matchmaking.invitations;
 
+import org.jetbrains.annotations.Nullable;
 import project.gamemechanics.aliveentities.npcs.ai.AIBehaviors;
 import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty;
 import project.gamemechanics.dungeons.AbstractInstance;
 import project.gamemechanics.dungeons.DungeonInstance;
 import project.gamemechanics.dungeons.Instance;
 import project.gamemechanics.dungeons.LandInstance;
+import project.gamemechanics.globals.CharacterRoleIds;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.GameModes;
@@ -35,6 +37,7 @@ public class InvitationPoolImpl implements InvitationPool {
     private final Map<Integer, Instance> instancesPool;
 
     private final Map<Integer, Map<Integer, Poll>> polls = new HashMap<>();
+    private final Map<Integer, Map<Integer, Poll>> pollsToCharIds = new HashMap<>();
 
     public InvitationPoolImpl(@NotNull AssetProvider assetProvider,
                               @NotNull PcgContentFactory factory,
@@ -52,30 +55,41 @@ public class InvitationPoolImpl implements InvitationPool {
         polls.put(GameModes.GM_COOP_PVE, new ConcurrentHashMap<>());
         polls.put(GameModes.GM_COOP_PVP, new ConcurrentHashMap<>());
         polls.put(GameModes.GM_SQUAD_PVP, new ConcurrentHashMap<>());
+
+        pollsToCharIds.put(GameModes.GM_COOP_PVE, new ConcurrentHashMap<>());
+        pollsToCharIds.put(GameModes.GM_COOP_PVP, new ConcurrentHashMap<>());
+        pollsToCharIds.put(GameModes.GM_SQUAD_PVP, new ConcurrentHashMap<>());
     }
 
     @Override
-    public void addPoll(@NotNull CharactersParty party) {
+    public @NotNull Integer addPoll(@NotNull CharactersParty party) {
         if (!contains(party, GameModes.GM_COOP_PVE)) {
             final Poll pvePoll = new PvePoll(party);
             polls.get(GameModes.GM_COOP_PVE).put(pvePoll.getID(), pvePoll);
+            mapPollToCharacterIds(pvePoll);
+            return pvePoll.getID();
         }
+        return Constants.UNDEFINED_ID;
     }
 
     @Override
-    public void addPoll(@NotNull Map<Integer, CharactersParty> parties, @NotNull Integer gameMode) {
-        if (parties.size() > DigitsPairIndices.PAIR_SIZE || gameMode == GameModes.GM_COOP_PVE
+    public @NotNull Integer addPoll(@NotNull Map<Integer, CharactersParty> parties,
+                                    @NotNull Integer gameMode) {
+        if (parties.size() > DigitsPairIndices.PAIR_SIZE
+                || gameMode == GameModes.GM_COOP_PVE
                 || gameMode == GameModes.GM_SOLO_PVE) {
-            return;
+            return Constants.UNDEFINED_ID;
         }
         for (Integer partyId : parties.keySet()) {
             if (contains(parties.get(partyId), gameMode)) {
-                return;
+                return Constants.UNDEFINED_ID;
             }
         }
         final Poll pvpPoll = gameMode == GameModes.GM_SQUAD_PVP
                 ? new SquadPvpPoll(parties) : new CoopPvpPoll(parties);
         polls.get(pvpPoll.getGameMode()).put(pvpPoll.getID(), pvpPoll);
+        mapPollToCharacterIds(pvpPoll);
+        return pvpPoll.getID();
     }
 
     @Override
@@ -86,10 +100,17 @@ public class InvitationPoolImpl implements InvitationPool {
                 if (poll.isReady()) {
                     final Instance instance = makeInstance(poll);
                     instancesPool.put(instance.getID(), instance);
+                    for (Integer teamId : poll.getParties().keySet()) {
+                        globalPartiesPool.put(Objects.requireNonNull(
+                                poll.getParty(teamId)).getID(),
+                                poll.getParty(teamId));
+                    }
                     // CHECKSTYLE:OFF
                     // TODO: broadcast NewInstanceMessage to all participants
                     // CHECKSTYLE:ON
                     polls.get(gameMode).remove(pollId);
+                    unmapPollFromCharacterIds(poll);
+                    continue;
                 }
                 poll.update();
                 if (poll.isExpired() || poll.isCanceled()) {
@@ -101,13 +122,14 @@ public class InvitationPoolImpl implements InvitationPool {
     }
 
     @Override
-    public void updatePoll(@NotNull Integer pollId, @NotNull Integer gameMode,
-                           @NotNull Integer characterId, @NotNull Integer newStatus) {
+    public @NotNull Boolean updatePoll(@NotNull Integer pollId, @NotNull Integer gameMode,
+                                       @NotNull Integer characterId,
+                                       @NotNull Integer newStatus) {
         if (!polls.containsKey(gameMode)) {
-            return;
+            return false;
         }
         if (!polls.get(gameMode).containsKey(pollId)) {
-            return;
+            return false;
         }
         final Poll requestedPoll = polls.get(gameMode).get(pollId);
         for (Integer partyId : requestedPoll.getParties().keySet()) {
@@ -117,7 +139,54 @@ public class InvitationPoolImpl implements InvitationPool {
                         party.getMember(roleId)).getID().equals(characterId)) {
                     Objects.requireNonNull(requestedPoll.getPartyAnswers(partyId))
                             .get(roleId).setStatus(newStatus);
-                    return;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public @Nullable Poll getPoll(@NotNull Integer pollId) {
+        for (Integer gameMode : polls.keySet()) {
+           final Poll poll = polls.get(gameMode).getOrDefault(pollId, null);
+           if (poll != null) {
+               return poll;
+           }
+        }
+        return null;
+    }
+
+    @Override
+    public @NotNull Integer getPollId(@NotNull Integer characterId,
+                                      @NotNull Integer gameMode) {
+        if (characterId < Constants.MIN_ID_VALUE || !polls.containsKey(gameMode)) {
+            return Constants.UNDEFINED_ID;
+        }
+        final Map<Integer, Poll> pendingPolls = pollsToCharIds.get(gameMode);
+        return pendingPolls.containsKey(characterId)
+                ? pendingPolls.get(characterId).getID() : Constants.UNDEFINED_ID;
+    }
+
+    private void mapPollToCharacterIds(@NotNull Poll poll) {
+        final Map<Integer, CharactersParty> parties = poll.getParties();
+        for (Integer partyId : parties.keySet()) {
+            for (Integer roleId : parties.get(partyId).getRoleIds()) {
+                final AliveEntity member = parties.get(partyId).getMember(roleId);
+                if (member != null) {
+                    pollsToCharIds.get(poll.getGameMode()).put(member.getID(), poll);
+                }
+            }
+        }
+    }
+
+    private void unmapPollFromCharacterIds(@NotNull Poll poll) {
+        final Map<Integer, CharactersParty> parties = poll.getParties();
+        for (Integer partyId : parties.keySet()) {
+            for (Integer roleId : parties.get(partyId).getRoleIds()) {
+                final AliveEntity member = parties.get(partyId).getMember(roleId);
+                if (member != null) {
+                    pollsToCharIds.remove(member.getID());
                 }
             }
         }
@@ -129,7 +198,8 @@ public class InvitationPoolImpl implements InvitationPool {
             return true;
         }
         for (Integer pollId : gameModePolls.keySet()) {
-            final Map<Integer, CharactersParty> parties = gameModePolls.get(pollId).getParties();
+            final Map<Integer, CharactersParty> parties =
+                    gameModePolls.get(pollId).getParties();
             for (Integer partyId : parties.keySet()) {
                 if (parties.get(partyId).equals(party)) {
                     return true;
@@ -143,12 +213,14 @@ public class InvitationPoolImpl implements InvitationPool {
     private void broadcast(@NotNull CharactersParty party, @NotNull Message message) {
         final Map<Integer, SmartController> broadcastPool = new HashMap<>();
         for (Integer roleId : party.getRoleIds()) {
-            final Integer ownerId = Objects.requireNonNull(party.getMember(roleId))
-                    .getOwnerID();
-            final SmartController controller = smartControllersPool.getOrDefault(ownerId,
-                    null);
-            if (controller != null && !broadcastPool.containsKey(ownerId)) {
-                broadcastPool.put(ownerId, controller);
+            if (party.getMember(roleId) != null) {
+                final Integer ownerId = Objects.requireNonNull(
+                        party.getMember(roleId)).getOwnerID();
+                final SmartController controller =
+                        smartControllersPool.getOrDefault(ownerId, null);
+                if (controller != null && !broadcastPool.containsKey(ownerId)) {
+                    broadcastPool.put(ownerId, controller);
+                }
             }
         }
         for (Integer userId : broadcastPool.keySet()) {
@@ -221,12 +293,18 @@ public class InvitationPoolImpl implements InvitationPool {
         }
     }
 
+    @SuppressWarnings("OverlyComplexMethod")
     private void processCanceledOrExpired(@NotNull Poll poll) {
         final Map<Integer, Poll.InvitationPoll> answers = poll.getStatus();
         final Map<Integer, CharactersParty> parties = poll.getParties();
+        final List<Integer> ownerId = new ArrayList<>();
 
         for (Integer partyId : answers.keySet()) {
             final Boolean isExpired = poll.isExpired();
+            if (poll.getGameMode() == GameModes.GM_SQUAD_PVP) {
+                ownerId.add(Objects.requireNonNull(parties.get(partyId)
+                        .getMember(CharacterRoleIds.CR_TANK)).getOwnerID());
+            }
             for (Integer roleId : answers.get(partyId).keySet()) {
                 if (answers.get(partyId).get(roleId).isCancel()
                         || answers.get(partyId).get(roleId).isExpired()) {
@@ -238,26 +316,39 @@ public class InvitationPoolImpl implements InvitationPool {
                                 "you were removed from queue. Reason: timeout expired";
                     } else {
                         notification =
-                                "you've declined the invitation and were removed from the queue";
+                                "you've declined the invitation "
+                                        + "and were removed from the queue";
                     }
-                    sendMessageTo(member, new MatchmakingNotificationMessage(notification));
+                    if (roleId == CharacterRoleIds.CR_TANK
+                            || poll.getGameMode() != GameModes.GM_SQUAD_PVP) {
+                        sendMessageTo(member,
+                                new MatchmakingNotificationMessage(notification));
+                    }
                     parties.get(partyId).removeMember(roleId);
                 }
             }
-            if (globalPartiesPool.containsKey(partyId)) {
-                globalPartiesPool.remove(partyId);
-            }
-            if (!wipPartiesPool.get(poll.getGameMode()).contains(parties.get(partyId))) {
+            globalPartiesPool.remove(partyId);
+            if (!wipPartiesPool.get(poll.getGameMode()).contains(parties.get(partyId))
+                    && parties.get(partyId).getPartySize() > 0) {
                 wipPartiesPool.get(poll.getGameMode()).offerFirst(parties.get(partyId));
             }
             final String notification;
             if (isExpired) {
-                notification = "your party was returned to the queue. Reason: timeout expired";
+                notification = "your party was returned to "
+                        + "the queue. Reason: timeout expired";
             } else {
                 notification = "someone has declined an invitation."
                         + " Your party was returned to the top of the queue.";
             }
-            broadcast(parties.get(partyId), new MatchmakingNotificationMessage(notification));
+            broadcast(parties.get(partyId),
+                    new MatchmakingNotificationMessage(notification));
+            if (poll.getGameMode() == GameModes.GM_SQUAD_PVP) {
+                for (Integer address : ownerId) {
+                    smartControllersPool.get(address).addInboxMessage(
+                            new MatchmakingNotificationMessage(notification));
+                }
+            }
         }
+        unmapPollFromCharacterIds(poll);
     }
 }

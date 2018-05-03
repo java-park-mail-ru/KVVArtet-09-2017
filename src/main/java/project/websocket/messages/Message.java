@@ -11,6 +11,7 @@ import project.websocket.messages.charlist.DeleteCharacterRequestMessage;
 import project.websocket.messages.matchmaking.LobbyConfirmationMessage;
 import project.websocket.messages.matchmaking.LobbyRequestMessage;
 import project.websocket.messages.matchmaking.MatchmakingNotificationMessage;
+import project.websocket.messages.typecontainer.BooleanMessage;
 
 @SuppressWarnings("unused")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "class")
@@ -26,7 +27,8 @@ import project.websocket.messages.matchmaking.MatchmakingNotificationMessage;
         @Type(NextRoomResponseMessage.class),
         @Type(LobbyConfirmationMessage.class),
         @Type(ActionConfirmationMessage.class),
-        @Type(MatchmakingNotificationMessage.class)
+        @Type(MatchmakingNotificationMessage.class),
+        @Type(BooleanMessage.class)
 })
 public abstract class Message {
     // CHECKSTYLE:OFF

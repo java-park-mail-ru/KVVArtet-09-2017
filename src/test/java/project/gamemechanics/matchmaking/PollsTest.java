@@ -73,10 +73,10 @@ public class PollsTest {
 
         final List<Integer> partyRolesList = new ArrayList<>(party.getRoleIds());
         final Integer leaverRoleId = partyRolesList.get(random.nextInt(partyRolesList.size()));
-        Objects.requireNonNull(pvePoll.getPartyAnswers(Squad.PLAYERS_SQUAD_ID))
+        Objects.requireNonNull(pvePoll.getPartyAnswers(party.getID()))
                 .get(leaverRoleId).setStatus(Invitation.VS_CANCEL);
         assertTrue(pvePoll.isCanceled());
-        assertTrue(Objects.requireNonNull(pvePoll.getPartyAnswers(Squad.PLAYERS_SQUAD_ID))
+        assertTrue(Objects.requireNonNull(pvePoll.getPartyAnswers(party.getID()))
                 .get(leaverRoleId).isCancel());
     }
 
@@ -97,10 +97,10 @@ public class PollsTest {
 
         final List<Integer> partyRolesList = new ArrayList<>(party.getRoleIds());
         final Integer leaverRoleId = partyRolesList.get(random.nextInt(partyRolesList.size()));
-        Objects.requireNonNull(pvePoll.getPartyAnswers(Squad.PLAYERS_SQUAD_ID))
+        Objects.requireNonNull(pvePoll.getPartyAnswers(party.getID()))
                 .get(leaverRoleId).setStatus(Invitation.VS_EXPIRED);
         assertTrue(pvePoll.isExpired());
-        assertTrue(Objects.requireNonNull(pvePoll.getPartyAnswers(Squad.PLAYERS_SQUAD_ID))
+        assertTrue(Objects.requireNonNull(pvePoll.getPartyAnswers(party.getID()))
                 .get(leaverRoleId).isExpired());
     }
 
@@ -137,7 +137,7 @@ public class PollsTest {
         final Poll pvePoll = new PvePoll(party);
         assertFalse(pvePoll.isReady());
         for (Integer roleId : party.getRoleIds()) {
-            Objects.requireNonNull(pvePoll.getPartyAnswers(Squad.PLAYERS_SQUAD_ID))
+            Objects.requireNonNull(pvePoll.getPartyAnswers(party.getID()))
                     .get(roleId).setStatus(Invitation.VS_CONFIRM);
         }
         assertTrue(pvePoll.isReady());
@@ -284,6 +284,7 @@ public class PollsTest {
         assertTrue(coopPvpPoll.isReady());
     }
 
+    @SuppressWarnings("Duplicates")
     private @NotNull Map<Integer, CharactersParty> makeTestPartiesPair() {
         final CharactersParty partyOne = new CharactersParty(pendingLootPool);
         final CharactersParty partyTwo = new CharactersParty(pendingLootPool);

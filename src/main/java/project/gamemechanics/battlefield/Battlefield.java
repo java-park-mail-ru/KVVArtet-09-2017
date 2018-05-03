@@ -119,24 +119,8 @@ public class Battlefield implements Updateable {
             battlersQueue.addFirst(battler);
         }
 
-        final Squad monsterSquad = squads.get(Squad.MONSTER_SQUAD_ID);
-        for (Integer i = 0; i < monsterSquad.getSquadSize(); ++i) {
-            final Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
-            Integer activeBehaviorId = Constants.WRONG_INDEX;
-            for (Integer behaviorId : Objects.requireNonNull(Objects.requireNonNull(
-                    monsterSquad.getMember(i)).getCharacterRole().getBehaviorIds())) {
-                if (behaviors.containsKey(behaviorId)) {
-                    if (activeBehaviorId == Constants.WRONG_INDEX) {
-                        activeBehaviorId = behaviorId;
-                    }
-                    monsterBehaviors.put(behaviorId, behaviors.get(behaviorId));
-                }
-            }
-            Objects.requireNonNull(monsterSquad.getMember(i))
-                    .setBehavior(new AI(Objects.requireNonNull(monsterSquad.getMember(i)),
-                    monsterSquad, squads.get(Squad.PLAYERS_SQUAD_ID), map, pathfinder,
-                    Objects.requireNonNull(monsterSquad.getMember(i)).getCharacterRole().getAllAbilities(),
-                    monsterBehaviors, activeBehaviorId));
+        if (mode == PVE_GAME_MODE) {
+            initializeMonstersAI();
         }
     }
 
@@ -161,7 +145,7 @@ public class Battlefield implements Updateable {
             if (activeBattler.isControlledByAI()) {
                 while (activeBattlerActionsPooled < ACTIONS_PER_TURN) {
                     pushAction(Objects.requireNonNull(activeBattler.makeDecision()));
-                    actionsQueue.pollFirst().execute();
+                    Objects.requireNonNull(actionsQueue.pollFirst()).execute();
                 }
             }
 
@@ -254,7 +238,7 @@ public class Battlefield implements Updateable {
                 }
             }
         }
-        squads.set(Squad.MONSTER_SQUAD_ID, monsterSquad);
+        squads.add(Squad.MONSTER_SQUAD_ID, monsterSquad);
     }
 
     private void removeDead() {
@@ -439,14 +423,21 @@ public class Battlefield implements Updateable {
                                                 if (member.equals(entry.getSender().getInhabitant())) {
                                                     propertyIndex = UserCharacterStatistics.US_PVE_KILLS;
                                                 }
-                                                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                member.modifyPropertyByAddition(
+                                                        PropertyCategories.PC_STATISTICS,
                                                         propertyIndex, 1);
                                             } else {
-                                                Integer propertyIndex = UserCharacterStatistics.US_PVP_ASSISTS;
-                                                if (member.equals(entry.getSender().getInhabitant())) {
-                                                    propertyIndex = UserCharacterStatistics.US_PVP_KILLS;
+                                                Integer propertyIndex =
+                                                        UserCharacterStatistics
+                                                                .US_PVP_ASSISTS;
+                                                if (member.equals(entry.getSender()
+                                                        .getInhabitant())) {
+                                                    propertyIndex =
+                                                            UserCharacterStatistics
+                                                                    .US_PVP_KILLS;
                                                 }
-                                                member.modifyPropertyByAddition(PropertyCategories.PC_STATISTICS,
+                                                member.modifyPropertyByAddition(
+                                                        PropertyCategories.PC_STATISTICS,
                                                         propertyIndex, 1);
                                             }
                                         }
@@ -458,13 +449,15 @@ public class Battlefield implements Updateable {
                                             .getBag(Constants.PERSONAL_REWARD_LOOT_BAG_ID);
                                     if (lootBag != null) {
                                         squads.get(squadIdToReward)
-                                                .generateLootFor(entry.getSender().getInhabitant(), lootBag);
+                                                .generateLootFor(entry.getSender()
+                                                        .getInhabitant(), lootBag);
                                     }
                                 } else {
                                     generatePvpKillReward(squads.get(squadIdToReward),
                                             entry.getSender().getInhabitant());
                                 }
-                                shareGroupKillReward(squads.get(squadIdToReward), event.getWhere().getInhabitant());
+                                shareGroupKillReward(squads.get(squadIdToReward),
+                                        event.getWhere().getInhabitant());
                             }
                         }
                     }
@@ -495,7 +488,8 @@ public class Battlefield implements Updateable {
         return ItemRarity.IR_TRASH;
     }
 
-    private void generatePvpKillReward(@NotNull Squad killersSquad, @NotNull AliveEntity killer) {
+    private void generatePvpKillReward(@NotNull Squad killersSquad,
+                                       @NotNull AliveEntity killer) {
 
         final Random random = new Random(System.currentTimeMillis());
 
@@ -535,7 +529,8 @@ public class Battlefield implements Updateable {
                             ? ItemRarity.IR_UNDEFINED.asInt() : rarity.asInt());
             properties.put(PropertyCategories.PC_ITEM_RARITY, rarityProperty);
 
-            properties.put(PropertyCategories.PC_ITEM_KIND, new SingleValueProperty(equipmentKind));
+            properties.put(PropertyCategories.PC_ITEM_KIND,
+                    new SingleValueProperty(equipmentKind));
 
             lootList.set(i, new ItemBlueprint(
                     rarity == ItemRarity.IR_UNDEFINED
@@ -551,7 +546,8 @@ public class Battlefield implements Updateable {
             final AliveEntity member = killers.getMember(memberIndex);
             if (member != null && member.isAlive()) {
                 if (mode == PVE_GAME_MODE) {
-                    killers.generateLootFor(member, killed.getBag(Constants.GENERIC_REWARD_LOOT_BAG_ID));
+                    killers.generateLootFor(member, killed.getBag(
+                            Constants.GENERIC_REWARD_LOOT_BAG_ID));
                 } else {
                     generatePvpKillReward(killers, member);
                 }
@@ -569,5 +565,28 @@ public class Battlefield implements Updateable {
             }
         }
         removeExpiredEffects();
+    }
+
+    private void initializeMonstersAI() {
+        final Squad monsterSquad = squads.get(Squad.MONSTER_SQUAD_ID);
+        for (Integer i = 0; i < monsterSquad.getSquadSize(); ++i) {
+            final Map<Integer, AI.BehaviorFunction> monsterBehaviors = new HashMap<>();
+            Integer activeBehaviorId = Constants.WRONG_INDEX;
+            for (Integer behaviorId : Objects.requireNonNull(Objects.requireNonNull(
+                    monsterSquad.getMember(i)).getCharacterRole().getBehaviorIds())) {
+                if (behaviors.containsKey(behaviorId)) {
+                    if (activeBehaviorId == Constants.WRONG_INDEX) {
+                        activeBehaviorId = behaviorId;
+                    }
+                    monsterBehaviors.put(behaviorId, behaviors.get(behaviorId));
+                }
+            }
+            Objects.requireNonNull(monsterSquad.getMember(i))
+                    .setBehavior(new AI(Objects.requireNonNull(monsterSquad.getMember(i)),
+                            monsterSquad, squads.get(Squad.PLAYERS_SQUAD_ID), map, pathfinder,
+                            Objects.requireNonNull(monsterSquad.getMember(i))
+                                    .getCharacterRole().getAllAbilities(),
+                            monsterBehaviors, activeBehaviorId));
+        }
     }
 }

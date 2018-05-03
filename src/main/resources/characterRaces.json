@@ -27,7 +27,7 @@
     "1" : {
       "type" : "BasicModel",
       "modelId" : 1,
-      "name" : "elf",
+      "name" : "Elf",
       "description" : "Elves're known as wise and elegant creatures, so they excel as magic users, rangers, or scouts.",
       "affectors" : {
         "1" : {

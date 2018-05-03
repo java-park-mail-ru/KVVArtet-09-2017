@@ -28,7 +28,45 @@ public class DummiesFactory {
         this.assets = assets;
     }
 
-    public @Nullable AliveEntity makeNewDummy(@NotNull Integer classId, @NotNull String name,
+    public @Nullable AbstractAliveEntity.UserCharacterModel makeNewDummyModel(@NotNull Integer classId,
+                                                                              @NotNull Integer raceId,
+                                                                              @NotNull String name,
+                                                                              @NotNull String description) {
+        final ObjectMapper mapper = new ObjectMapper();
+        NewCharacterModel dummyProps = null;
+        // noinspection OverlyBroadCatchBlock
+        try {
+            dummyProps = mapper.readValue(Resources.getResource(
+                    ResourcesConfig.getNewCharacterPropsName()), NewCharacterModel.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        final CharacterRole role = assets.getCharacterClass(classId);
+        if (dummyProps == null || role == null) {
+            return null;
+        }
+
+        final List<Bag> bags = new ArrayList<>();
+        final Integer bagsCapacity = 16;
+        for (Integer i = 0; i < Constants.DEFAULT_PERSONAL_REWARD_BAG_SIZE; ++i) {
+            bags.add(new StorageBag(new StorageBag.EmptyBagModel("Common bag",
+                    "Common 16-slot bag", bagsCapacity)));
+        }
+        dummyProps.getProperties().remove(PropertyCategories.PC_CHARACTER_RACE_ID);
+        dummyProps.getProperties().put(PropertyCategories.PC_ACTIVE_ROLE,
+                new SingleValueProperty(new ArrayList<>(Objects.requireNonNull(
+                        role.getAvailableRoles())).get(0)));
+        dummyProps.getProperties().put(PropertyCategories.PC_ABILITIES_COOLDOWN,
+                new MapProperty(initAbilitiesCooldown(role)));
+
+        return new AbstractAliveEntity.UserCharacterModel(Constants.UNDEFINED_ID, name, description,
+                dummyProps.getProperties(), bags, role, Objects.requireNonNull(
+                assets.getCharacterRace(raceId)),
+                new CharacterDoll(), initPerkRanks(role));
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public @Nullable AliveEntity makeNewDummy(@NotNull Integer classId, @NotNull Integer raceId, @NotNull String name,
                                               @NotNull String description) {
         final ObjectMapper mapper = new ObjectMapper();
         NewCharacterModel dummyProps = null;
@@ -50,18 +88,24 @@ public class DummiesFactory {
             bags.add(new StorageBag(new StorageBag.EmptyBagModel("Common bag",
                     "Common 16-slot bag", bagsCapacity)));
         }
-        final Integer raceId = dummyProps.getProperties().get(PropertyCategories.PC_CHARACTER_RACE_ID).getProperty();
         dummyProps.getProperties().remove(PropertyCategories.PC_CHARACTER_RACE_ID);
         dummyProps.getProperties().put(PropertyCategories.PC_ACTIVE_ROLE,
-                new SingleValueProperty(new ArrayList<>(Objects.requireNonNull(role.getAvailableRoles())).get(0)));
+                new SingleValueProperty(new ArrayList<>(Objects.requireNonNull(
+                        role.getAvailableRoles())).get(0)));
         dummyProps.getProperties().put(PropertyCategories.PC_ABILITIES_COOLDOWN,
                 new MapProperty(initAbilitiesCooldown(role)));
 
         final AbstractAliveEntity.UserCharacterModel model =
                 new AbstractAliveEntity.UserCharacterModel(Constants.UNDEFINED_ID, name, description,
-                        dummyProps.getProperties(), bags, role, assets.getCharacterRace(raceId),
+                        dummyProps.getProperties(), bags, role, Objects.requireNonNull(
+                        assets.getCharacterRace(raceId)),
                         new CharacterDoll(), initPerkRanks(role));
         return new UserCharacter(model);
+    }
+
+    public @Nullable AliveEntity makeNewDummy(@NotNull Integer classId, @NotNull String name,
+                                              @NotNull String description) {
+        return makeNewDummy(classId, 0, name, description);
     }
 
     private Map<Integer, Map<Integer, Integer>> initPerkRanks(@NotNull CharacterRole role) {

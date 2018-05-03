@@ -15,57 +15,87 @@ import java.util.*;
 public class ItemFactoryImpl implements ItemsFactory {
     private final Map<Integer, Map<Integer, ItemPart>> itemParts;
 
-    public ItemFactoryImpl(@JsonProperty("itemParts") @NotNull Map<Integer, Map<Integer, ItemPart>> itemParts) {
+    public ItemFactoryImpl(@JsonProperty("itemParts")
+                           @NotNull Map<Integer, Map<Integer, ItemPart>> itemParts) {
         this.itemParts = itemParts;
     }
 
     @Override
     public @NotNull EquipableItem makeItem(@NotNull ItemBlueprint blueprint) {
+        if (blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_ITEM_ID)) {
+            return new IngameItem(restoreItemModel(blueprint.getProperties()));
+        }
+
         final Random random = new Random(System.currentTimeMillis());
-        final Integer level = blueprint.getProperties().containsKey(PropertyCategories.PC_LEVEL)
+        final Integer level = blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_LEVEL)
                 ? blueprint.getProperties().get(PropertyCategories.PC_LEVEL).getProperty()
                 : random.nextInt(Constants.MAX_LEVEL) + Constants.START_LEVEL;
 
-        final Integer rarity = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_RARITY)
-                ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_RARITY).getProperty()
+        final Integer rarity = blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_ITEM_RARITY)
+                ? blueprint.getProperties().get(
+                        PropertyCategories.PC_ITEM_RARITY).getProperty()
                 : ItemRarity.IR_UNDEFINED.asInt();
 
-        final Integer kind = blueprint.getProperties().containsKey(PropertyCategories.PC_ITEM_KIND)
-                ? blueprint.getProperties().get(PropertyCategories.PC_ITEM_KIND).getProperty()
+        final Integer kind = blueprint.getProperties()
+                .containsKey(PropertyCategories.PC_ITEM_KIND)
+                ? blueprint.getProperties().get(
+                        PropertyCategories.PC_ITEM_KIND).getProperty()
                 : EquipmentKind.EK_UNDEFINED.asInt();
 
-        final List<ItemPart> itemPartsList = getItemParts(rarity, kind, blueprint.getItemParts());
+        final List<ItemPart> itemPartsList = getItemParts(rarity, kind,
+                Objects.requireNonNull(blueprint.getItemParts()));
         return new IngameItem(makeItemModel(level, rarity, itemPartsList));
     }
 
-    private @NotNull List<ItemPart> getItemParts(@NotNull Integer rarity, @NotNull Integer kind,
+    private @NotNull List<ItemPart> getItemParts(@NotNull Map<Integer, Integer> partIds) {
+        final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer partPos : partIds.keySet()) {
+            final Integer partId = partIds.get(partPos);
+            parts.add(itemParts.get(partPos).get(partId));
+        }
+        return parts;
+    }
+
+    private @NotNull List<ItemPart> getItemParts(@NotNull Integer rarity,
+                                                 @NotNull Integer kind,
                                                  @NotNull Map<Integer, Integer> itemPartsList) {
         final Random random = new Random(System.currentTimeMillis());
         final List<ItemPart> parts = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
 
-        for (Integer itemPartIndex = ItemPart.FIRST_PART_ID; itemPartIndex < ItemPart.ITEM_PARTS_COUNT;
-             ++itemPartIndex) {
+        for (Integer itemPartIndex = ItemPart.FIRST_PART_ID;
+             itemPartIndex < ItemPart.ITEM_PARTS_COUNT; ++itemPartIndex) {
             final Map<Integer, ItemPart> partsScope = this.itemParts.get(itemPartIndex);
             final List<Integer> scopePartsIds = new ArrayList<>(partsScope.keySet());
 
             Integer partId = itemPartsList.get(itemPartIndex);
             if (partId < Constants.MIN_ID_VALUE) {
                 while (true) {
-                    final Integer tmpId = scopePartsIds.get(random.nextInt(scopePartsIds.size()));
+                    final Integer tmpId = scopePartsIds.get(
+                            random.nextInt(scopePartsIds.size()));
                     if (kind.equals(EquipmentKind.EK_UNDEFINED.asInt())) {
-                        kind = partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND);
+                        kind = partsScope.get(tmpId).getProperty(
+                                PropertyCategories.PC_ITEM_KIND);
                         partId = tmpId;
                         break;
                     }
-                    if (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_KIND).equals(kind)
-                            && (partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY).equals(rarity)
-                                || partsScope.get(tmpId).getProperty(PropertyCategories.PC_ITEM_RARITY)
+                    if (partsScope.get(tmpId).getProperty(
+                            PropertyCategories.PC_ITEM_KIND).equals(kind)
+                            && (partsScope.get(tmpId).getProperty(
+                                    PropertyCategories.PC_ITEM_RARITY).equals(rarity)
+                                || partsScope.get(tmpId).getProperty(
+                                        PropertyCategories.PC_ITEM_RARITY)
                                 <= ItemRarity.IR_COMMON.asInt())) {
                         if (!parts.isEmpty()
-                                && Objects.requireNonNull(partsScope.get(tmpId).getAllProperties()
-                                .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet())
+                                && Objects.requireNonNull(
+                                        partsScope.get(tmpId).getAllProperties()
+                                .get(PropertyCategories.PC_ITEM_SLOTS)
+                                                .getPropertySet())
                                 .equals(parts.get(itemPartIndex - 1).getAllProperties()
-                                        .get(PropertyCategories.PC_ITEM_SLOTS).getPropertySet())) {
+                                        .get(PropertyCategories.PC_ITEM_SLOTS)
+                                        .getPropertySet())) {
                             partId = tmpId;
                             break;
                         }
@@ -73,14 +103,82 @@ public class ItemFactoryImpl implements ItemsFactory {
                 }
                 parts.add(partsScope.get(partId));
             } else {
-                parts.add(this.itemParts.get(itemPartIndex).get(itemPartsList.get(itemPartIndex)));
+                parts.add(this.itemParts.get(itemPartIndex)
+                        .get(itemPartsList.get(itemPartIndex)));
             }
         }
 
         return parts;
     }
 
-    private @NotNull IngameItem.ItemModel makeItemModel(@NotNull Integer level, @NotNull Integer rarity,
+    private @NotNull IngameItem.ItemModel restoreItemModel(
+            @NotNull Map<Integer, Property> properties) {
+        final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
+        for (Integer i : Objects.requireNonNull(properties.get(
+                PropertyCategories.PC_ITEM_PARTS_IDS).getPropertyMap()).keySet()) {
+            partRarities.add(i, properties.get(
+                    PropertyCategories.PC_ITEM_PARTS_IDS).getProperty(i));
+        }
+
+        final List<ItemPart> parts = getItemParts(Objects.requireNonNull(
+                properties.get(PropertyCategories.PC_ITEM_PARTS_IDS)
+                        .getPropertyMap()));
+
+        final StringBuilder name = new StringBuilder();
+        //noinspection Duplicates
+        for (Integer partIndex = 0; partIndex < parts.size(); ++partIndex) {
+            final ItemPart part = parts.get(partIndex);
+            if (!part.getName().isEmpty()) {
+                if (partIndex == ItemPart.SECOND_PART_ID) {
+                    name.append(" with ");
+                } else if (partIndex == ItemPart.THIRD_PART_ID) {
+                    name.append(" and ");
+                }
+            }
+            name.append(part.getName());
+        }
+
+        final StringBuilder description = new StringBuilder();
+        for (ItemPart part : parts) {
+            description.append(part.getDescription());
+            description.append(' ');
+        }
+        description.deleteCharAt(description.length() - 1);
+        final Integer level = properties.get(PropertyCategories.PC_LEVEL).getProperty();
+        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL
+                * (level - Constants.START_LEVEL);
+        final Map<Integer, Affector> mergedAffectors =
+                mergeAffectors(parts, partRarities, percentage);
+        final Map<Integer, Property> mergedProperties =
+                mergeProperties(parts, partRarities, percentage);
+        if (mergedProperties.containsKey(PropertyCategories.PC_LEVEL)) {
+            mergedProperties.get(PropertyCategories.PC_LEVEL).setSingleProperty(level);
+        } else {
+            mergedProperties.put(PropertyCategories.PC_LEVEL,
+                    new SingleValueProperty(level));
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_IDS)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_IDS));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_IDS));
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_RARITIES)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_RARITIES));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    properties.get(PropertyCategories.PC_ITEM_PARTS_RARITIES));
+        }
+        return new IngameItem.ItemModel(properties.get(PropertyCategories.PC_ITEM_ID)
+                .getProperty(), name.toString(), description.toString(),
+                mergedProperties, mergedAffectors);
+    }
+
+    @SuppressWarnings("OverlyComplexMethod")
+    private @NotNull IngameItem.ItemModel makeItemModel(@NotNull Integer level,
+                                                        @NotNull Integer rarity,
                                                         @NotNull List<ItemPart> parts) {
         final Random random = new Random(System.currentTimeMillis());
         final List<Integer> partRarities = new ArrayList<>(ItemPart.ITEM_PARTS_COUNT);
@@ -93,6 +191,7 @@ public class ItemFactoryImpl implements ItemsFactory {
         }
 
         final StringBuilder name = new StringBuilder();
+        //noinspection Duplicates
         for (Integer partIndex = 0; partIndex < parts.size(); ++partIndex) {
             final ItemPart part = parts.get(partIndex);
             if (!part.getName().isEmpty()) {
@@ -112,15 +211,42 @@ public class ItemFactoryImpl implements ItemsFactory {
         }
         description.deleteCharAt(description.length() - 1);
 
-        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL * (level - Constants.START_LEVEL);
-        final Map<Integer, Affector> mergedAffectors = mergeAffectors(parts, partRarities, percentage);
-        final Map<Integer, Property> mergedProperties = mergeProperties(parts, partRarities, percentage);
+        final Float percentage = Constants.STATS_GROWTH_PER_LEVEL
+                * (level - Constants.START_LEVEL);
+        final Map<Integer, Affector> mergedAffectors =
+                mergeAffectors(parts, partRarities, percentage);
+        final Map<Integer, Property> mergedProperties =
+                mergeProperties(parts, partRarities, percentage);
         if (mergedProperties.containsKey(PropertyCategories.PC_LEVEL)) {
                 mergedProperties.get(PropertyCategories.PC_LEVEL).setSingleProperty(level);
         } else {
-            mergedProperties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
+            mergedProperties.put(PropertyCategories.PC_LEVEL,
+                    new SingleValueProperty(level));
         }
-        return new IngameItem.ItemModel(name.toString(), description.toString(), mergedProperties, mergedAffectors);
+        final Map<Integer, Integer> itemPartsRarities = new HashMap<>();
+        for (Integer i = 0; i < ItemPart.ITEM_PARTS_COUNT; ++i) {
+            itemPartsRarities.put(i, partRarities.get(i));
+        }
+        final Map<Integer, Integer> itemPartsIds = new HashMap<>();
+        for (ItemPart part : parts) {
+            itemPartsIds.put(part.getPartIndex(), part.getID());
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_IDS)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    new MapProperty(itemPartsIds));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_IDS,
+                    new MapProperty(itemPartsIds));
+        }
+        if (mergedProperties.containsKey(PropertyCategories.PC_ITEM_PARTS_RARITIES)) {
+            mergedProperties.replace(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    new MapProperty(itemPartsRarities));
+        } else {
+            mergedProperties.put(PropertyCategories.PC_ITEM_PARTS_RARITIES,
+                    new MapProperty(itemPartsRarities));
+        }
+        return new IngameItem.ItemModel(name.toString(), description.toString(),
+                mergedProperties, mergedAffectors);
     }
 
     @SuppressWarnings("OverlyComplexMethod")
@@ -133,11 +259,7 @@ public class ItemFactoryImpl implements ItemsFactory {
             if (affectorIds.isEmpty()) {
                 affectorIds.addAll(itemPart.getAvailableAffectors());
             } else {
-                for (Integer affectorId : itemPart.getAvailableAffectors()) {
-                    if (!affectorIds.contains(affectorId)) {
-                        affectorIds.add(affectorId);
-                    }
-                }
+                affectorIds.addAll(itemPart.getAvailableAffectors());
             }
         }
 
@@ -147,7 +269,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             for (ItemPart part : parts) {
                 affectors.add(null);
                 if (part.getAvailableAffectors().contains(affectorId)) {
-                    affectors.set(part.getPartIndex(), part.getAllAffectors().get(affectorId));
+                    affectors.set(part.getPartIndex(),
+                            part.getAllAffectors().get(affectorId));
                 }
             }
             final List<Integer> affectionsList = new ArrayList<>();
@@ -163,13 +286,15 @@ public class ItemFactoryImpl implements ItemsFactory {
                     if (affectionsList.isEmpty()) {
                         affectionsList.addAll(affector.getAffectionsList());
                         for (Integer j = 0; j < affectionsList.size(); ++j) {
-                            affectionsList.set(j, applyRarityBonus(affectionsList.get(j), rarities.get(i)));
+                            affectionsList.set(j, applyRarityBonus(
+                                    affectionsList.get(j), rarities.get(i)));
                         }
                     } else {
                         if (affectionsList.size() == affector.getAffectionsList().size()) {
                             for (Integer j = 0; j < affectionsList.size(); ++j) {
                                 affectionsList.set(j, affectionsList.get(j)
-                                        + applyRarityBonus(affector.getAffection(j), rarities.get(i)));
+                                        + applyRarityBonus(
+                                                affector.getAffection(j), rarities.get(i)));
                             }
                         }
                     }
@@ -177,22 +302,28 @@ public class ItemFactoryImpl implements ItemsFactory {
                     if (affectionsMap.isEmpty()) {
                         affectionsMap.putAll(affector.getAffectionsMap());
                         for (Integer affectionId : affectionsMap.keySet()) {
-                            affectionsMap.replace(affectionId, applyRarityBonus(affectionsMap.get(affectionId),
+                            affectionsMap.replace(affectionId,
+                                    applyRarityBonus(affectionsMap.get(affectionId),
                                     rarities.get(i)));
                         }
                     } else {
-                        if (affectionsMap.keySet().equals(affector.getAffectionsMap().keySet())) {
+                        if (affectionsMap.keySet().equals(affector
+                                .getAffectionsMap().keySet())) {
                             for (Integer affectionId : affectionsMap.keySet()) {
-                                affectionsMap.replace(affectionId, affectionsMap.get(affectionId)
-                                        + applyRarityBonus(affector.getAffection(affectionId), rarities.get(i)));
+                                affectionsMap.replace(affectionId,
+                                        affectionsMap.get(affectionId)
+                                        + applyRarityBonus(affector.getAffection(
+                                                affectionId), rarities.get(i)));
                             }
                         }
                     }
                 } else {
                     if (affection == null) {
-                        affection = applyRarityBonus(affector.getAffection(), rarities.get(i));
+                        affection = applyRarityBonus(affector.getAffection(),
+                                rarities.get(i));
                     } else {
-                        affection += applyRarityBonus(affector.getAffection(), rarities.get(i));
+                        affection += applyRarityBonus(affector.getAffection(),
+                                rarities.get(i));
                     }
                 }
             }
@@ -218,7 +349,7 @@ public class ItemFactoryImpl implements ItemsFactory {
         return mergedAffectors;
     }
 
-    @SuppressWarnings("OverlyComplexMethod")
+    @SuppressWarnings({"OverlyComplexMethod", "ConstantConditions"})
     private @NotNull Map<Integer, Property> mergeProperties(@NotNull List<ItemPart> parts,
                                                             @NotNull List<Integer> rarities,
                                                             @NotNull Float growth) {
@@ -229,11 +360,7 @@ public class ItemFactoryImpl implements ItemsFactory {
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
             } else {
-                for (Integer propertyId : part.getAvailableProperties()) {
-                    if (!propertyIds.contains(propertyId)) {
-                        propertyIds.add(propertyId);
-                    }
-                }
+                propertyIds.addAll(part.getAvailableProperties());
             }
         }
 
@@ -243,7 +370,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             for (ItemPart part : parts) {
                 partProperties.add(null);
                 if (part.getAvailableProperties().contains(propertyId)) {
-                    partProperties.set(part.getPartIndex(), part.getAllProperties().get(propertyId));
+                    partProperties.set(part.getPartIndex(),
+                            part.getAllProperties().get(propertyId));
                 }
             }
 
@@ -262,16 +390,20 @@ public class ItemFactoryImpl implements ItemsFactory {
                         propertiesList.addAll(property.getPropertyList());
                         for (Integer j = 0; j < propertiesList.size(); ++j) {
                             if (isPropertyAlterable(propertyId)) {
-                                propertiesList.set(j, applyRarityBonus(propertiesList.get(j), rarities.get(i)));
+                                propertiesList.set(j, applyRarityBonus(
+                                        propertiesList.get(j), rarities.get(i)));
                             }
                         }
-                    } else if (propertiesList.size() == property.getPropertyList().size()) {
+                    } else if (propertiesList.size() == property
+                            .getPropertyList().size()) {
                         for (Integer j = 0; j < propertiesList.size(); ++j) {
                             if (isPropertyAlterable(propertyId)) {
                                 propertiesList.set(j, propertiesList.get(j)
-                                        + applyRarityBonus(property.getProperty(j), rarities.get(i)));
+                                        + applyRarityBonus(property.getProperty(j),
+                                        rarities.get(i)));
                             } else if (!isPropertyNonSummable(propertyId)) {
-                                propertiesList.set(j, propertiesList.get(j) + property.getProperty(j));
+                                propertiesList.set(j, propertiesList.get(j)
+                                        + property.getProperty(j));
                             }
                         }
                     }
@@ -281,16 +413,21 @@ public class ItemFactoryImpl implements ItemsFactory {
                         if (isPropertyAlterable(propertyId)) {
                             for (Integer propertyIndex : propertiesMap.keySet()) {
                                 propertiesMap.replace(propertyIndex,
-                                        applyRarityBonus(propertiesMap.get(propertyIndex), rarities.get(i)));
+                                        applyRarityBonus(propertiesMap.get(
+                                                propertyIndex), rarities.get(i)));
                             }
                         }
-                    } else if (propertiesMap.keySet().equals(property.getPropertyMap().keySet())) {
+                    } else if (propertiesMap.keySet().equals(
+                            property.getPropertyMap().keySet())) {
                         for (Integer propertyIndex : propertiesMap.keySet()) {
                             if (isPropertyAlterable(propertyId)) {
-                                propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
-                                        + applyRarityBonus(property.getProperty(propertyIndex), rarities.get(i)));
+                                propertiesMap.replace(propertyIndex,
+                                        propertiesMap.get(propertyIndex)
+                                        + applyRarityBonus(property.getProperty(
+                                                propertyIndex), rarities.get(i)));
                             } else if (!isPropertyNonSummable(propertyId)) {
-                                propertiesMap.replace(propertyIndex, propertiesMap.get(propertyIndex)
+                                propertiesMap.replace(propertyIndex,
+                                        propertiesMap.get(propertyIndex)
                                         + property.getProperty(propertyIndex));
                             }
                         }
@@ -300,22 +437,20 @@ public class ItemFactoryImpl implements ItemsFactory {
                     if (propertiesSet.isEmpty()) {
                         propertiesSet.addAll(property.getPropertySet());
                     } else {
-                        for (Integer propertySetValue : property.getPropertySet()) {
-                            if (!propertiesSet.contains(propertySetValue)) {
-                                propertiesSet.add(propertySetValue);
-                            }
-                        }
+                        propertiesSet.addAll(property.getPropertySet());
                     }
                 } else {
                     if (propertyValue == null) {
                         if (isPropertyAlterable(propertyId)) {
-                            propertyValue = applyRarityBonus(property.getProperty(), rarities.get(i));
+                            propertyValue = applyRarityBonus(property.getProperty(),
+                                    rarities.get(i));
                         } else {
                             propertyValue = property.getProperty();
                         }
                     } else if (!isPropertyNonSummable(propertyId)) {
                         if (isPropertyAlterable(propertyId)) {
-                            propertyValue += applyRarityBonus(property.getProperty(), rarities.get(i));
+                            propertyValue += applyRarityBonus(property.getProperty(),
+                                    rarities.get(i));
                         } else {
                             propertyValue += property.getProperty();
                         }
@@ -332,7 +467,8 @@ public class ItemFactoryImpl implements ItemsFactory {
             } else if (!propertiesSet.isEmpty()) {
                 mergedProperty = new SetProperty(propertiesSet);
             } else {
-                mergedProperty = new SingleValueProperty(Objects.requireNonNull(propertyValue));
+                mergedProperty = new SingleValueProperty(
+                        Objects.requireNonNull(propertyValue));
             }
 
             if (isPropertyLevelable(propertyId)) {
@@ -346,7 +482,8 @@ public class ItemFactoryImpl implements ItemsFactory {
     }
 
     private @NotNull Boolean isPropertyNonSummable(@NotNull Integer propertyKind) {
-        return propertyKind == PropertyCategories.PC_LEVEL || propertyKind == PropertyCategories.PC_ITEM_KIND
+        return propertyKind == PropertyCategories.PC_LEVEL
+                || propertyKind == PropertyCategories.PC_ITEM_KIND
                 || propertyKind == PropertyCategories.PC_ITEM_SLOTS;
     }
 
@@ -358,8 +495,11 @@ public class ItemFactoryImpl implements ItemsFactory {
         return propertyKind == PropertyCategories.PC_ITEM_PRICE;
     }
 
-    private @NotNull Integer applyRarityBonus(@NotNull Integer baseValue, @NotNull Integer rarity) {
-        return Long.valueOf(Math.round(baseValue.floatValue() * Math.pow(Constants.STATS_GROWTH_PER_LEVEL,
-                rarity.floatValue() - ItemRarity.IR_COMMON.asInt().floatValue()))).intValue();
+    private @NotNull Integer applyRarityBonus(@NotNull Integer baseValue,
+                                              @NotNull Integer rarity) {
+        return Long.valueOf(Math.round(baseValue.floatValue()
+                * Math.pow(Constants.STATS_GROWTH_PER_LEVEL,
+                rarity.floatValue() - ItemRarity.IR_COMMON
+                        .asInt().floatValue()))).intValue();
     }
 }

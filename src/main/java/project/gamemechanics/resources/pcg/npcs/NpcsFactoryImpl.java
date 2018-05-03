@@ -120,11 +120,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
             if (propertyIds.isEmpty()) {
                 propertyIds.addAll(part.getAvailableProperties());
             } else {
-                for (Integer propertyId : part.getAvailableProperties()) {
-                    if (!propertyIds.contains(propertyId)) {
-                        propertyIds.add(propertyId);
-                    }
-                }
+                propertyIds.addAll(part.getAvailableProperties());
             }
         }
 
@@ -192,11 +188,7 @@ public class NpcsFactoryImpl implements NpcsFactory {
                     if (propertySet.isEmpty()) {
                         propertySet.addAll(partProperty.getPropertySet());
                     } else {
-                        for (Integer value : partProperty.getPropertySet()) {
-                            if (!propertySet.contains(value)) {
-                                propertySet.add(value);
-                            }
-                        }
+                        propertySet.addAll(partProperty.getPropertySet());
                     }
                 } else {
                     if (propertyValue == null) {

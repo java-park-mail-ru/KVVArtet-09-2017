@@ -10,11 +10,9 @@ import project.gamemechanics.interfaces.EquipableItem;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings({"UnusedAssignment", "RedundantSuppression"})
 public class StorageBag implements Bag {
-    private static final AtomicInteger INSTANCE_COUNTER = new AtomicInteger(0);
     private final Integer bagID;
 
     private final String name;
@@ -39,14 +37,16 @@ public class StorageBag implements Bag {
     @SuppressWarnings("unused")
     public static class FilledBagModel {
         // CHECKSTYLE:OFF
-        final Integer id;
-        final String name;
-        final String description;
-        final List<EquipableItem> contents;
+        public final Integer id;
+        public final String name;
+        public final String description;
+        public final List<EquipableItem> contents;
         // CHECKSTYLE:ON
 
-        public FilledBagModel(@NotNull Integer id, @NotNull String name,
-                              @NotNull String description, @NotNull List<EquipableItem> contents) {
+
+        public FilledBagModel(@JsonProperty("id") @NotNull Integer id, @JsonProperty("name") @NotNull String name,
+                              @JsonProperty("description") @NotNull String description,
+                              @JsonProperty("contents") @NotNull List<EquipableItem> contents) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -55,7 +55,7 @@ public class StorageBag implements Bag {
     }
 
     public StorageBag(@NotNull EmptyBagModel model) {
-        bagID = INSTANCE_COUNTER.getAndIncrement();
+        bagID = null;
         name = model.name;
         description = model.description;
         contents = new ArrayList<>(model.bagSize);
@@ -74,7 +74,7 @@ public class StorageBag implements Bag {
     @Override
     @JsonIgnore
     public @NotNull Integer getInstancesCount() {
-        return INSTANCE_COUNTER.get();
+        return null;
     }
 
     @Override

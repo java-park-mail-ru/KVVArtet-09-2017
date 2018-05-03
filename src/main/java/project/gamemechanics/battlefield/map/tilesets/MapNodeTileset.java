@@ -198,19 +198,13 @@ public abstract class MapNodeTileset implements Tileset {
     private void getReverseConeColumn(@NotNull MapNode colHead, Integer direction, Integer size) {
         if (colHead != null) {
             if (size <= 0) {
-                if (!tileset.contains(colHead)) {
-                    tileset.add(colHead);
-                }
+                tileset.add(colHead);
                 return;
             }
             final List<MapNode> column = getTilesetLine(colHead, direction,
                     size);
             if (column != null) {
-                for (MapNode node : column) {
-                    if (!tileset.contains(node)) {
-                        tileset.add(node);
-                    }
-                }
+                tileset.addAll(column);
             }
         }
     }
@@ -224,21 +218,13 @@ public abstract class MapNodeTileset implements Tileset {
         Integer sideDirection = isHorizontal ? Directions.LEFT : Directions.UP;
         List<MapNode> halfRow = getTilesetLine(rowCenter, sideDirection, halfSize);
         if (halfRow != null) {
-            for (MapNode node : halfRow) {
-                if (!tileset.contains(node)) {
-                    tileset.add(node);
-                }
-            }
+            tileset.addAll(halfRow);
             halfRow.clear();
         }
         sideDirection = sideDirection == Directions.LEFT ? Directions.RIGHT : Directions.DOWN;
         halfRow = getTilesetLine(rowCenter, sideDirection, halfSize);
         if (halfRow != null) {
-            for (MapNode node : halfRow) {
-                if (!tileset.contains(node)) {
-                    tileset.add(node);
-                }
-            }
+            tileset.addAll(halfRow);
         }
     }
 

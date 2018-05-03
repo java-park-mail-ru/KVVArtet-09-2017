@@ -8,9 +8,12 @@ import project.gamemechanics.battlefield.aliveentitiescontainers.CharactersParty
 import project.gamemechanics.battlefield.aliveentitiescontainers.SpawnPoint;
 import project.gamemechanics.battlefield.aliveentitiescontainers.Squad;
 import project.gamemechanics.battlefield.map.BattleMap;
+import project.gamemechanics.components.properties.PropertyCategories;
+import project.gamemechanics.components.properties.SingleValueProperty;
 import project.gamemechanics.globals.Constants;
 import project.gamemechanics.globals.DigitsPairIndices;
 import project.gamemechanics.globals.Directions;
+import project.gamemechanics.interfaces.AliveEntity;
 import project.gamemechanics.interfaces.MapNode;
 import project.gamemechanics.resources.pcg.PcgContentFactory;
 import project.websocket.messages.Message;
@@ -58,7 +61,8 @@ public abstract class AbstractInstance implements Instance {
 
         AbstractInstanceModel(@NotNull String name, @NotNull String description,
                               @NotNull Integer gameMode, @NotNull Integer level,
-                              @NotNull Integer roomsCount, @NotNull PcgContentFactory factory,
+                              @NotNull Integer roomsCount,
+                              @NotNull PcgContentFactory factory,
                               @NotNull List<CharactersParty> squads) {
             this.name = name;
             this.description = description;
@@ -78,7 +82,8 @@ public abstract class AbstractInstance implements Instance {
                                     @NotNull PcgContentFactory factory,
                                     @NotNull List<CharactersParty> squads,
                                     @NotNull Map<Integer, AI.BehaviorFunction> behaviors) {
-            super(name, description, Battlefield.PVE_GAME_MODE, level, roomsCount, factory, squads);
+            super(name, description, Battlefield.PVE_GAME_MODE, level,
+                    roomsCount, factory, squads);
             this.behaviors = behaviors;
         }
     }
@@ -89,7 +94,8 @@ public abstract class AbstractInstance implements Instance {
                                  @NotNull Integer level,
                                  @NotNull PcgContentFactory factory,
                                  @NotNull List<CharactersParty> squads) {
-            super(name, description, Battlefield.PVP_GAME_MODE, level, 1, factory, squads);
+            super(name, description, Battlefield.PVP_GAME_MODE,
+                    level, 1, factory, squads);
         }
     }
 
@@ -101,6 +107,7 @@ public abstract class AbstractInstance implements Instance {
         roomsCount = model.roomsCount;
         factory = model.factory;
         squads.addAll(model.squads);
+        setInstanceIdToParticipants();
     }
 
     AbstractInstance(@NotNull LandInstanceModel model) {
@@ -111,6 +118,7 @@ public abstract class AbstractInstance implements Instance {
         roomsCount = model.roomsCount;
         factory = model.factory;
         squads.addAll(model.squads);
+        setInstanceIdToParticipants();
     }
 
     @Override
@@ -203,7 +211,9 @@ public abstract class AbstractInstance implements Instance {
     }
 
     @SuppressWarnings({"SameParameterValue", "OverlyComplexMethod"})
-    private @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad, @NotNull Integer sideSize, @NotNull BattleMap map,
+    private @Nullable MapNode emplaceSpawnPoint(@NotNull Squad squad,
+                                                @NotNull Integer sideSize,
+                                                @NotNull BattleMap map,
                                                 @NotNull Set<MapNode> occupiedNodes) {
         if (sideSize <= 0 || sideSize * sideSize < squad.getSquadSize()) {
             return null;
@@ -212,24 +222,24 @@ public abstract class AbstractInstance implements Instance {
         final Integer mapWidth = map.getSize().get(DigitsPairIndices.ROW_COORD_INDEX);
         final Integer mapHeight = map.getSize().get(DigitsPairIndices.COL_COORD_INDEX);
 
-        final Integer halfWidthBegin = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
-        final Integer halfWidthEnd = squad.getSquadID() == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
+        final Integer halfWidthBegin = squad.getSquadID()
+                == Squad.PLAYERS_SQUAD_ID ? 0 : mapWidth / 2 + 1;
+        final Integer halfWidthEnd = squad.getSquadID()
+                == Squad.PLAYERS_SQUAD_ID ? mapWidth / 2 : mapWidth - 1;
 
         final Random random = new Random(System.currentTimeMillis());
 
         Integer triesCount = 0;
 
-        while (true) {
-            if (triesCount > mapHeight * mapWidth) {
-                break;
-            }
+        while (triesCount <= mapHeight * mapWidth) {
             final MapNode spawnPointCenter = map.getTile(halfWidthBegin
                     + random.nextInt(halfWidthEnd
                     - halfWidthBegin), random.nextInt(mapHeight));
             final Set<MapNode> rowCenters = new HashSet<>();
             rowCenters.add(spawnPointCenter);
             final Integer halfSide = (sideSize - 1) / 2;
-            MapNode upperRowCenter = Objects.requireNonNull(spawnPointCenter).getAdjacent(Directions.UP);
+            MapNode upperRowCenter = Objects.requireNonNull(spawnPointCenter)
+                    .getAdjacent(Directions.UP);
             MapNode lowerRowCenter = spawnPointCenter.getAdjacent(Directions.DOWN);
             for (Integer i = 0; i < halfSide; ++i) {
                 if (upperRowCenter != null) {
@@ -279,15 +289,31 @@ public abstract class AbstractInstance implements Instance {
     }
 
 
-    @NotNull List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList, @NotNull BattleMap map) {
+    @NotNull List<SpawnPoint> initializeSpawnPoints(@NotNull List<Squad> squadList,
+                                                    @NotNull BattleMap map) {
         final List<SpawnPoint> spawnPoints = new ArrayList<>();
         final Set<MapNode> reservedNodes = new HashSet<>();
         for (Squad squad : squadList) {
-            final SpawnPoint spawnPoint = new SpawnPoint(Objects.requireNonNull(emplaceSpawnPoint(squad,
+            final SpawnPoint spawnPoint = new SpawnPoint(
+                    Objects.requireNonNull(emplaceSpawnPoint(squad,
                     Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, map, reservedNodes)),
                     Constants.DEFAULT_SPAWN_POINT_SIDE_SIZE, squad);
             spawnPoints.add(spawnPoint);
         }
         return spawnPoints;
+    }
+
+    private void setInstanceIdToParticipants() {
+        for (CharactersParty squad : squads) {
+            for (Integer roleId : squad.getRoleIds()) {
+                final AliveEntity member = Objects.requireNonNull(squad.getMember(roleId));
+                if (member.hasProperty(PropertyCategories.PC_INSTANCE_ID)) {
+                    member.setProperty(PropertyCategories.PC_INSTANCE_ID, instanceID);
+                } else {
+                    member.addProperty(PropertyCategories.PC_INSTANCE_ID,
+                            new SingleValueProperty(instanceID));
+                }
+            }
+        }
     }
 }

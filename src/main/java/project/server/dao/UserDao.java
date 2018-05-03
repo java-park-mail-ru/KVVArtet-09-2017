@@ -6,10 +6,11 @@ import project.server.models.User;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public interface UserDao {
 
     @Nullable User getUserById(@NotNull Integer id);
+
+    @NotNull Integer getCharacaterListIdByUserId(@NotNull Integer id);
 
     @Nullable User getUserByUsernameOrEmail(@NotNull String usernameOrEmail);
 

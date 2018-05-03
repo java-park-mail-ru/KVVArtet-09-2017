@@ -32,13 +32,16 @@ public class PcgFactory implements PcgContentFactory {
     private NpcsFactory npcsFactory = null;
     private final AssetProvider assetProvider;
 
-    public PcgFactory(@NotNull String itemResourcesFname, @NotNull String npcsResourcesFname,
+    public PcgFactory(@NotNull String itemResourcesFname,
+                      @NotNull String npcsResourcesFname,
                       @NotNull AssetProvider assetProvider) {
         final ObjectMapper mapper = new ObjectMapper();
         this.assetProvider = assetProvider;
         try {
-            itemsFactory = mapper.readValue(Resources.getResource(itemResourcesFname), ItemFactoryImpl.class);
-            npcsFactory = mapper.readValue(Resources.getResource(npcsResourcesFname), NpcsFactoryImpl.class);
+            itemsFactory = mapper.readValue(Resources.getResource(itemResourcesFname),
+                    ItemFactoryImpl.class);
+            npcsFactory = mapper.readValue(Resources.getResource(npcsResourcesFname),
+                    NpcsFactoryImpl.class);
         } catch (IOException e) {
             e.printStackTrace();
             if (itemsFactory == null) {
@@ -67,7 +70,8 @@ public class PcgFactory implements PcgContentFactory {
                 new SingleValueProperty(ItemRarity.IR_UNDEFINED.asInt()));
         properties.put(PropertyCategories.PC_ITEM_KIND,
                 new SingleValueProperty(EquipmentKind.EK_UNDEFINED.asInt()));
-        return itemsFactory.makeItem(new ItemBlueprint(Constants.UNDEFINED_RARITY_DEFAULT_DROP_CHANCE,
+        return itemsFactory.makeItem(new ItemBlueprint(
+                Constants.UNDEFINED_RARITY_DEFAULT_DROP_CHANCE,
                 properties, parts));
     }
 
@@ -86,7 +90,8 @@ public class PcgFactory implements PcgContentFactory {
         properties.put(PropertyCategories.PC_LEVEL, new SingleValueProperty(level));
         properties.put(PropertyCategories.PC_CHARACTER_ROLE_ID,
                 new SingleValueProperty(Constants.UNDEFINED_ID));
-        return npcsFactory.makeNpc(new NpcBlueprint(properties, parts), assetProvider, itemsFactory);
+        return npcsFactory.makeNpc(new NpcBlueprint(properties, parts),
+                assetProvider, itemsFactory);
     }
 
     @Override

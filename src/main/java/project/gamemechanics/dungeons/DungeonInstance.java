@@ -64,10 +64,7 @@ public class DungeonInstance extends AbstractInstance {
         final Random random = new Random(System.currentTimeMillis());
 
         final List<AliveEntity> monsters = new ArrayList<>();
-        while (true) {
-            if (random.nextInt(Constants.PERCENTAGE_CAP_INT) > chanceToContinue) {
-                break;
-            }
+        while (random.nextInt(Constants.PERCENTAGE_CAP_INT) <= chanceToContinue) {
             monsters.add(generateMonster(level));
             chanceToContinue -= Constants.DECREMENT_PER_SPAWNED_MONSTER;
         }
@@ -107,7 +104,11 @@ public class DungeonInstance extends AbstractInstance {
         if (!isInstanceCleared() && !isInstanceFailed()) {
             return currentRoom.pushAction(message);
         } else {
-            return new ErrorMessage("dungeon cleared");
+            if (isInstanceCleared()) {
+                return new ErrorMessage("dungeon cleared");
+            } else {
+                return new ErrorMessage("dungeon failed");
+            }
         }
     }
 

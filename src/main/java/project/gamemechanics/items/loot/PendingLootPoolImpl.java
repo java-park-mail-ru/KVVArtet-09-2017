@@ -36,9 +36,7 @@ public class PendingLootPoolImpl implements PendingLootPool {
 
     @Override
     public void removeLootPool(@NotNull AliveEntity owner) {
-        if (lootPools.containsKey(owner)) {
-            lootPools.remove(owner);
-        }
+        lootPools.remove(owner);
     }
 
     @Override

@@ -1,8 +1,9 @@
 language: java
+addons:
+  postgresql: "9.6"
 services:
   - postgresql
 before_script:
   - psql -c "create user landd with password 'landd';" -U postgres
   - psql -c "create database landd;" -U postgres
   - psql -c "grant all on database landd to landd;" -U postgres
-

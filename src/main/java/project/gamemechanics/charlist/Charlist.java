@@ -1,10 +1,12 @@
-package project.gamemechanics.interfaces;
+package project.gamemechanics.charlist;
 
 import project.gamemechanics.aliveentities.AbstractAliveEntity.UserCharacterModel;
 import project.gamemechanics.aliveentities.UserCharacter;
-import project.gamemechanics.charlist.CharacterList;
+import project.gamemechanics.interfaces.Countable;
+import project.websocket.messages.models.UserCharacterClientModel;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * interface for charlist {@link CharacterList}.
@@ -19,7 +21,7 @@ public interface Charlist extends Countable {
      * @return null if there's no {@link UserCharacterModel} in @param or {@link UserCharacter} otherwise
      */
     @SuppressWarnings("ConstantConditions")
-    default @NotNull UserCharacter createChar(@NotNull UserCharacterModel userCharacterModel) {
+    default @NotNull UserCharacter createCharacter(@NotNull UserCharacterModel userCharacterModel) {
         return null;
     }
 
@@ -28,7 +30,7 @@ public interface Charlist extends Countable {
      *
      * @param index of {@link UserCharacter} in {@link CharacterList}
      */
-    default void deleteChar(@NotNull Integer index) {
+    default void deleteCharacter(@NotNull Integer index) {
 
     }
 
@@ -41,4 +43,21 @@ public interface Charlist extends Countable {
         return 0;
     }
 
+    /**
+     * get list of {@link UserCharacter}.
+     *
+     * @return null if there's empty list in {@link CharacterList} and list of {@link UserCharacter} otherwise
+     */
+    default List<UserCharacter> getCharacterList() {
+        return null;
+    }
+
+    /**
+     * get list of {@link UserCharacterClientModel}.
+     *
+     * @return null if there's empty list in {@link CharacterList} and list of {@link UserCharacterClientModel} otherwise
+     */
+    default List<UserCharacterClientModel> packToUserCharacterClientModelList() {
+        return null;
+    }
 }

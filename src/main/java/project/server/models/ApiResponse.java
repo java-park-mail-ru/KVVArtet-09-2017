@@ -18,7 +18,8 @@ public enum ApiResponse {
     REQUEST_FROM_SESSION_SUCCESSFUL(11, "User successfully requested, your ID is:"),
     PASSWORD_NOT_MATCH(12, "Password and password confirmation not match"),
     FIELD_EMPTY(13, "You're not entered some field that should be entered"),
-    SIGNUP_VALIDATION_FAILED(14, "Username should be more than 5 and CAN'T contains '@' but email SHOULD contains '@'");
+    SIGNUP_VALIDATION_FAILED(14, "Username should be more than 5 and CAN'T contains '@' but email SHOULD contains '@'"),
+    INTERNAL_ERROR(15, "Server internal error occured, try later");
 
     private final String response;
 

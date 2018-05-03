@@ -18,9 +18,7 @@ import project.server.dao.UserDao;
 import project.server.models.ApiResponse;
 import project.server.models.User;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"unused", "OverlyBroadThrowsClause", "InstanceMethodNamingConvention", "RedundantSuppression"})
@@ -182,7 +180,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(session);
         mockMvc
-                .perform(post("/session")
+                .perform(get("/session")
                         .session(session))
                 .andExpect(status().isOk());
     }
@@ -193,7 +191,7 @@ public class AuthorizationTest {
         final MockHttpSession session = new MockHttpSession();
         signIn(null);
         mockMvc
-                .perform(post("/session")
+                .perform(get("/session")
                         .session(session))
                 .andExpect(status().is(STATUS_401)).andExpect(MockMvcResultMatchers.content().string(ApiResponse.USER_NOT_AUTHORIZED.getResponse()));
     }

@@ -13,10 +13,10 @@ import project.server.dao.UserDao;
 import project.server.models.User;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("unused")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @Transactional
@@ -46,7 +46,7 @@ public class UserServiceTest {
         final User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         final User settedUser = dao.setUser(newUser);
         final User user = dao.getUserById(settedUser.getId());
-        assertTrue(user.getId() > 0);
+        assertTrue(Objects.requireNonNull(user).getId() > 0);
         assertEquals("testname", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());
         assertTrue(encoder.matches("testpassword",user.getPassword()));
@@ -57,6 +57,7 @@ public class UserServiceTest {
         final User newUser = new User("testname", "testemail@mail.ru", "testpassword");
         final User settedUser = dao.setUser(newUser);
         final User user = dao.getUserByUsernameOrEmail(settedUser.getUsername());
+        //noinspection ConstantConditions,ConstantConditions
         assertTrue(user.getId() > 0);
         assertEquals("testname", user.getUsername());
         assertEquals("testemail@mail.ru", user.getEmail());

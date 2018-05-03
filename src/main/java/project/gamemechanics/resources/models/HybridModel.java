@@ -9,7 +9,7 @@ import project.gamemechanics.components.properties.Property;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ConstantConditions"})
 public class HybridModel extends AbstractModel {
     private final Map<Integer, Property> properties = new HashMap<>();
     private final Map<Integer, Affector> affectors = new HashMap<>();

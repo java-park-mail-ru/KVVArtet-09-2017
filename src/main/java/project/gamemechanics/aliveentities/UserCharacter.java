@@ -7,6 +7,7 @@ import project.gamemechanics.components.properties.PropertyCategories;
 import project.gamemechanics.flyweights.CharacterRace;
 import project.gamemechanics.globals.*;
 import project.gamemechanics.items.containers.CharacterDoll;
+import project.websocket.messages.models.UserCharacterClientModel;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -219,5 +220,10 @@ public class UserCharacter extends AbstractAliveEntity {
             }
         }
         return perksAffection;
+    }
+
+    public UserCharacterClientModel packToClientModel() {
+        return new UserCharacterClientModel(this.getName(), this.getDescription(),
+                this.getCharacterRace().getName(), this.getCharacterRole().getName(), this.getLevel());
     }
 }
