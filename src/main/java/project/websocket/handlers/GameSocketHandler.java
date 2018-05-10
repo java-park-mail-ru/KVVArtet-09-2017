@@ -37,7 +37,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(@NotNull WebSocketSession webSocketSession) {
-        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("id");
         if (userId == null || userService.getUserById(userId) == null) {
             LOGGER.warn("User requested websocket is not registred or not logged in."
                     + "Openning websocket session is denied.");
@@ -53,7 +53,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         if (!webSocketSession.isOpen()) {
             return;
         }
-        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("id");
         final User user;
         // CHECKSTYLE:OFF
         if (userId == null || (user = userService.getUserById(userId)) == null) {
@@ -86,7 +86,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(@NotNull WebSocketSession webSocketSession,
                                       @NotNull CloseStatus closeStatus) {
-        final Integer userId = (Integer) webSocketSession.getAttributes().get("userId");
+        final Integer userId = (Integer) webSocketSession.getAttributes().get("id");
         if (userId == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + closeStatus + ')');
             return;
