@@ -16,14 +16,10 @@ import java.util.Objects;
 
 @SuppressWarnings("unused")
 @RestController
-@CrossOrigin(origins = AuthorizationController.FRONTED_URL1)
 public class AuthorizationController {
     private final UserService userService;
     private final PasswordEncoder encoder;
     private final ObjectMapper objectMapper;
-    @SuppressWarnings("WeakerAccess")
-    static final String FRONTED_URL1 = "https://lands-dangeous.herokuapp.com";
-    static final String FRONTED_URL2 = "https://dev-lands-dungeons.herokuapp.com";
 
 
     public AuthorizationController(@NotNull UserService userService, @NotNull PasswordEncoder encoder, ObjectMapper objectMapper) {
